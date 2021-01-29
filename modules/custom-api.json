@@ -25,6 +25,52 @@
         }
     },
     "paths": {
+        "/api/sites": {
+            "get": {
+                "summary": "Get list of sites",
+                "operationId": "api:sites",
+                "responses": {
+                    "200":{
+                        "description": "List of sites",
+                        "content": {
+                            "text/html":{
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/inscriptions": {
+            "get": {
+                "summary": "Get list of inscriptions for site",
+                "operationId": "api:inscriptions",
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "query",
+                        "required": true,
+                        "schema":{
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200":{
+                        "description": "List of inscriptions",
+                        "content": {
+                            "text/html":{
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     },
     "security": [
         {

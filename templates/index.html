@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald"/>
     <link rel="stylesheet" href="resources/css/theme.css"/>
     <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
+    <script type="module" src="pb-leaflet-map.js" data-template="pages:load-components"/>
+    <script src="resources/scripts/app.js"></script>
     <custom-style>
         <style>
             main {
@@ -51,12 +53,6 @@
                 margin-top: 12px;
             }
             
-            pb-results {
-                overflow: scroll;
-                margin: 0 20px;
-                height: calc(100vh - 128px);
-            }
-            
             @media (min-width: 1024px) {
                 .toolbar {
                     display: none;
@@ -72,176 +68,32 @@
             }
             
             .panels {
-                margin-bottom: 40px;
+                display: grid;
+                grid-template-columns: auto 1fr minmax(auto, 33vw);
+                height: calc(100vh - 170px);
             }
-            
-            .panels .doclist {
-                --paper-tabs-selection-bar-color: #607D8B;
-                --paper-tab-content: {
-                    font-family: "Oswald", Verdana, "Helvetica", sans-serif;
-                    font-weight: 400;
-                }
-                ;
-                --paper-card-header: {
-                    background-color: #d1dae0;
-                }
-                ;
-                --paper-card-header-text: {
-                    font-family: "Oswald", Verdana, "Helvetica", sans-serif;
-                    font-size: 16px;
-                    font-weight: 400;
-                }
-                ;
-            }
-            
-            .panels .doclist .card-content {
-                padding: 0;
-            }
-            
-            .panels .doclist .browse {
-                display: flex;
-                flex-direction: row;
-                justify-content: space-between;
-                padding: 0;
-            }
-            
-            #document-list {
-                flex: 2;
+
+            #sites {
                 margin-right: 20px;
             }
-            
-            .upload-panel {
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                min-width: 360px;
-            }
-            
-            aside .upload {
-                --paper-card-header: {
-                    background-color: #607D8B;
-                }
-                ;
-                --paper-card-header-text: {
-                    font-family: "Oswald", Verdana, "Helvetica", sans-serif;
-                    font-size: 16px;
-                    font-weight: 400;
-                    color: white;
-                }
-                ;
-            }
-            
-            aside .upload {
-                width: 100%;
-            }
-            
-            .parent-link iron-icon {
-                padding-right: 4px;
+
+            #documents {
+                margin-left: 20px;
+                overflow: auto;
             }
 
-            .parent-link {
-                display: block;
-                margin-bottom: 10px;
-                margin-top: 16px;
-                padding: 6px 0;
-                border-bottom: thin solid var(--paper-grey-300);
-            }
-
-            .documents ul {
+            .province ul {
                 list-style: none;
-            }
-            
-            .documents app-toolbar {
-                @apply --layout-start-justified;
-                font-size: 14px;
-                margin-top: 10px;
-                padding-left: 0;
-            }
-            
-            .documents div {
                 margin: 0;
-            }
-            
-            .documents .error {
-                color: #c02020;
-            }
-            
-            .documents a,
-            .documents a:visited {
-                color: #303F9F;
-                text-decoration: none;
-            }
-            
-            .documents li {
-                display: flex;
-                flex-direction: row;
-                margin-bottom: 10px;
-                padding: 6px 0;
-                border-bottom: thin solid var(--paper-grey-300);
-            }
-            
-            .documents li:last-child {
-                border: none;
-            }
-            
-            .documents .document-select {
-                flex: 0 0;
-                margin-right: 20px;
-            }
-            
-            h1,
-            h2,
-            h3,
-            h4,
-            h5,
-            h6 {
-                font-family: "Oswald", Verdana, "Helvetica", sans-serif;
-                font-weight: 400 !important;
-                line-height: 1.2;
-            }
-            
-            h5 {
-                font-size: 16px;
-                margin: 0;
-            }
-            
-            #facets {
-                flex: 0;
-                min-width: 220px;
-                margin-right: 20px;
-                background-color: #F0F0F0;
-                padding: 0 10px;
-            }
-            
-            #facets h3 {
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-            }
-            
-            #facets h3 paper-checkbox {
-                margin-left: 16px;
-                font-size: 11px;
-            }
-            
-            #facets table {
-                font-size: 14px;
-            }
-            
-            #facets table table {
                 padding-left: 16px;
-                width: 100%;
             }
-            
-            #facets table td {
-                padding: 4px 0;
+
+            .province ul li {
+                margin-top: 12px;
             }
-            
-            #facets table td:nth-child(2) {
-                color: #808080;
-                text-align: right;
-                padding-left: 1em;
-                vertical-align: middle;
+
+            .inscription {
+                margin-top: 36px;
             }
         </style>
     </custom-style>
@@ -307,39 +159,11 @@
                         <h1 class="tp-title" data-template="config:app-title"/>
                     </section>
                     <section class="panels">
-                        <paper-card class="doclist" data-i18n="[heading]browse.documents" heading="documents">
-                            <div class="card-content">
-                                <div class="browse" slot="page">
-                                    <pb-custom-form id="facets" url="api/search/facets" event="pb-results-received" subscribe="docs" emit="docs"/>
-                                    <pb-browse-docs id="document-list" url="api/collection/" sort-options="[{&#34;label&#34;: &#34;browse.title&#34;, &#34;value&#34;: &#34;title&#34;},{&#34;label&#34;: &#34;browse.author&#34;, &#34;value&#34;: &#34;author&#34;}]" sort-by="title" filter-options="[{&#34;label&#34;: &#34;browse.title&#34;, &#34;value&#34;: &#34;title&#34;},{&#34;label&#34;: &#34;browse.author&#34;, &#34;value&#34;: &#34;author&#34;},{&#34;label&#34;: &#34;browse.file&#34;, &#34;value&#34;: &#34;file&#34;}]" filter-by="title" auto="auto" history="history" login="login" emit="docs" subscribe="docs">
-                                        <pb-paginate slot="toolbar" id="paginate" per-page="10" range="5" emit="docs" subscribe="docs"/>
-                                        <pb-restricted login="login" slot="toolbar">
-                                            <pb-ajax emit="docs" url="api/odd" method="post" data-template="pages:parse-params" event="pb-search-resubmit" title="Recompile ODD" data-i18n="[title]odd.manage.regenerate-all">
-                                                <h3 slot="title">
-                                                    <pb-i18n key="odd.manage.regenerate-all"/>
-                                                </h3>
-                                                <paper-icon-button icon="icons:update"/>
-                                            </pb-ajax>
-                                        </pb-restricted>
-                                    </pb-browse-docs>
-                                </div>
-                            </div>
-                        </paper-card>
-                        <pb-restricted class="upload-panel" login="login">
-                            <aside>
-                                <paper-card class="upload" data-i18n="[heading]upload.upload" heading="Upload">
-                                    <div class="card-content">
-                                        <pb-upload id="upload" emit="docs" accept=".xml, .tei, .odd, .docx, .mei"/>
-                                    </div>
-                                </paper-card>
-                            </aside>
-                        </pb-restricted>
+                        <pb-load id="sites" url="api/sites" auto="" wait-for="#map" emit="sites"></pb-load>
+                        <pb-leaflet-map id="map" zoom="12" crs="EPSG3857" subscribe="map" access-token="pk.eyJ1Ijoid29sZmdhbmdtbSIsImEiOiJjam1kMjVpMnUwNm9wM3JwMzdsNGhhcnZ0In0.v65crewF-dkNsPF3o1Q4uw"></pb-leaflet-map>
+                        <pb-load id="documents" url="api/inscriptions" subscribe="documents"/>
                     </section>
                 </main>
-                <footer class="version">
-                    App: v<span data-template="pages:version"/> /
-                    web components: v<pb-version/>
-                </footer>
             </app-header-layout>
         </app-drawer-layout>
         <paper-dialog id="downloadDialog">
