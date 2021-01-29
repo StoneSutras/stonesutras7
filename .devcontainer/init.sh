@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-sleep 1
+sleep 5
 cd $(dirname "$0")/..
 ant
 for XAR in build/*.xar; do
