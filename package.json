@@ -1,0 +1,8 @@
+{
+  "dependencies" : {
+    "@teipublisher/pb-components" : "1.17.1"
+  },
+  "name" : "stonesutras7",
+  "version" : "1.0.0",
+  "description" : "Buddhist Stonesutras in China"
+}
