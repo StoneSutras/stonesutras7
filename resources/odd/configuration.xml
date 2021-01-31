@@ -19,4 +19,10 @@
     <!--output mode="web" odd="documentation">
         <module uri="http://www.tei-c.org/tei-simple/xquery/ext-html" prefix="ext-html" at="xmldb:exist:///db/apps/tei-publisher/modules/ext-html.xql"/>
     </output-->
+    <output mode="web">
+        <module uri="http://stonesutras.org/ext-common" prefix="es" at="xmldb:exist:///db/apps/stonesutras7/modules/ext-stonesutras.xql"/>
+    </output>
+    <output mode="epub">
+        <module uri="http://stonesutras.org/ext-common" prefix="es" at="xmldb:exist:///db/apps/stonesutras7/modules/ext-stonesutras.xql"/>
+    </output>
 </modules>

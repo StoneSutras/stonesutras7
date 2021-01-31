@@ -26,7 +26,7 @@ declare namespace tei="http://www.tei-c.org/ns/1.0";
  : If a version is given, the components will be loaded from a public CDN.
  : This is recommended unless you develop your own components.
  :)
-declare variable $config:webcomponents :="1.17.1";
+declare variable $config:webcomponents :="1.18.1";
 
 (:~
  : CDN URL to use for loading webcomponents. Could be changed if you created your
@@ -65,7 +65,7 @@ declare variable $config:default-view :="div";
  : The default HTML template used for viewing document content. This can be
  : overwritten by the teipublisher processing instruction inside a TEI document.
  :)
-declare variable $config:default-template :="view.html";
+declare variable $config:default-template :="stonesutras.html";
 
 (:
  : The element to search by default, either 'tei:div' or 'tei:text'.

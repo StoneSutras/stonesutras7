@@ -1,0 +1,66 @@
+@import url("theme.css");
+app-header {
+    background-image: url("../images/webpage-start-background.jpg");
+    background-size: contain;
+}
+
+.logo {
+    background-image: url("../images/webpage-start-oben.jpg");
+}
+
+.splash {
+    background-image: url("../images/webpage-start-oben.jpg");
+}
+
+body {
+    --pb-logo-image-width: 320px;
+    --pb-logo-image-height: 60px;
+    --pb-base-font-family: Noto, sans-serif;
+    --pb-content-font-family: Noto, sans-serif;
+    --pb-content-font-size: 18px;
+    --pb-menubar-background-color: #ffffff;
+    --pb-menubar-color: var(--pb-color-primary);
+    --pb-toolbar-background-color: rgba(0, 0, 0, .4);
+    --pb-toolbar-color: var(--pb-color-inverse);
+    --grid-height: calc(100vh - 172px);
+    --pb-svg-height: calc(var(--grid-height) - 360px);
+    --pb-panel-max-height: var(--grid-height);
+}
+
+.logo {
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+    width: var(--pb-logo-image-width);
+    height: var(--pb-logo-image-height);
+    cursor: pointer;
+}
+
+.content-body {
+    display: grid;
+    height: var(--grid-height);
+    grid-template-columns: minmax(256px, 20vw) auto minmax(360px, 33vw);
+}
+
+#catalog {
+    display: flex;
+    flex-direction: column;
+}
+
+#transcription, #translation, pb-svg {
+    overflow: auto;
+}
+
+#transcription {
+    height: calc(var(--grid-height) - 70px);
+}
+
+#catalog pb-view {
+    overflow: auto;
+    height: calc(var(--grid-height) - 360px);
+}
+
+pb-leaflet-map {
+    width: 100%;
+    height: 360px;
+}

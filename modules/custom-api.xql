@@ -14,6 +14,7 @@ import module namespace app="teipublisher.com/app" at "app.xql";
 import module namespace tpu="http://www.tei-c.org/tei-publisher/util" at "lib/util.xql";
 import module namespace pm-config="http://www.tei-c.org/tei-simple/pm-config" at "pm-config.xql";
 import module namespace config="http://www.tei-c.org/tei-simple/config" at "config.xqm";
+import module namespace layout="https://stonesutras.org/api/layout" at "layout.xql";
 
 declare namespace xlink="http://www.w3.org/1999/xlink";
 declare namespace catalog="http://exist-db.org/ns/catalog";

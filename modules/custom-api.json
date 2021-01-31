@@ -70,6 +70,34 @@
                     }
                 }
             }
+        },
+        "/api/layout/{id}": {
+            "get": {
+                "summary": "Retrieve a layout view of the text",
+                "operationId": "layout:svg",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema":{
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200":{
+                        "description": "List of inscriptions",
+                        "content": {
+                            "image/svg+xml":{
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "security": [

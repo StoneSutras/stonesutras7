@@ -9,6 +9,12 @@ import module namespace nav="http://www.tei-c.org/tei-simple/navigation/tei" at 
 
 declare namespace tei="http://www.tei-c.org/ns/1.0";
 
+declare function mapping:catalog($root as node(), $userParams as map(*)) {
+    let $id := root($root)//tei:text/@xml:id
+    return
+        collection("/db/catalog")/id($id)
+};
+
 (:~
  : For the Van Gogh letters: find the page break in the translation corresponding
  : to the one shown in the transcription.
