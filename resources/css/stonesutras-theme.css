@@ -5,15 +5,15 @@ app-header {
 }
 
 .logo {
-    background-image: url("../images/webpage-start-oben.jpg");
+    background-image: url("../images/logo.jpg");
 }
 
 .splash {
-    background-image: url("../images/webpage-start-oben.jpg");
+    background-image: url("../images/logo.jpg");
 }
 
 body {
-    --pb-logo-image-width: 320px;
+    --pb-logo-image-width: 234px;
     --pb-logo-image-height: 60px;
     --pb-base-font-family: Noto, sans-serif;
     --pb-content-font-family: Noto, sans-serif;
