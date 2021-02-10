@@ -105,4 +105,20 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
+
+    pbEvents.subscribe('pb-zoom', 'transcription', (ev) => {
+        const direction = ev.detail.direction;
+        const view = document.getElementById('variants');
+        if (!view) {
+            return;
+        }
+        const fontSize = window.getComputedStyle(view).getPropertyValue('font-size');
+        const size = parseInt(fontSize.replace(/^(\d+)px/, "$1"));
+
+        if (direction === 'in') {
+            view.style.fontSize = (size + 1) + 'px';
+        } else {
+            view.style.fontSize = (size - 1) + 'px';
+        }
+    });
 });
