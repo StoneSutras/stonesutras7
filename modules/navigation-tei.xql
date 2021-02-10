@@ -267,6 +267,10 @@ declare function nav:milestone-chunk($ms1 as element(), $ms2 as element()?, $nod
             function($node, $ms1, $ms2) {
                 $node/descendant::tei:pb intersect ($ms1, $ms2)
             }
+        else if ($ms1 instance of element(tei:lb) and (empty($ms2) or $ms2 instance of element(tei:lb))) then
+            function($node, $ms1, $ms2) {
+                $node/descendant::tei:lb intersect ($ms1, $ms2)
+            }
         else
             function($node, $ms1, $ms2) {
                 some $n in $node/descendant::* satisfies ($n is $ms1 or $n is $ms2)

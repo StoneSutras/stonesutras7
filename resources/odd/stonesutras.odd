@@ -1,4 +1,4 @@
-<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:pb="http://teipublisher.com/1.0" xmlns:mods="http://www.loc.gov/mods/v3" xml:lang="en">
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:pb="http://teipublisher.com/1.0" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:cb="http://www.cbeta.org/ns/1.0" xml:lang="en">
     <teiHeader>
         <fileDesc>
             <titleStmt>
@@ -24,6 +24,7 @@
         </fileDesc>
         <encodingDesc>
             <tagsDecl>
+                <rendition source="stonesutras.css"/>
             </tagsDecl>
         </encodingDesc>
         <revisionDesc>
@@ -35,85 +36,99 @@
             <schemaSpec start="TEI teiCorpus" ident="stonesutras" source="teipublisher.odd">
                 <elementSpec ident="title" mode="change">
                     <model predicate="$parameters?header='short'" behaviour="heading">
-                        <param name="level" value="5"/>
-                    </model>
+            <param name="level" value="5"/>
+        </model>
                     <modelSequence predicate="parent::titleStmt/parent::fileDesc">
-                        <model predicate="preceding-sibling::title" behaviour="text">
-                            <param name="content" value="' — '"/>
-                        </model>
-                        <model behaviour="inline"/>
-                    </modelSequence>
+            <model predicate="preceding-sibling::title" behaviour="text">
+                <param name="content" value="' — '"/>
+            </model>
+            <model behaviour="inline"/>
+        </modelSequence>
                     <model predicate="@type='scroll'" behaviour="inline">
-                        <outputRendition xml:space="preserve">
+            <outputRendition xml:space="preserve">
             color: #59bf00 !important;
             </outputRendition>
-                    </model>
+        </model>
                     <model predicate="@type='chapter'" behaviour="inline">
-                        <outputRendition xml:space="preserve">
+            <outputRendition xml:space="preserve">
             color: #40A0A0 !important;
             </outputRendition>
-                    </model>
+        </model>
                     <model behaviour="inline"/>
                 </elementSpec>
                 <elementSpec ident="head" mode="change">
                     <model predicate="$parameters?header='short'" behaviour="inline">
-                        <param name="content" value="replace(string-join(.//text()[not(parent::ref)]), '^(.*?)[^\w]*$', '$1')"/>
-                    </model>
+            <param name="content" value="replace(string-join(.//text()[not(parent::ref)]), '^(.*?)[^\w]*$', '$1')"/>
+        </model>
                     <model predicate="parent::figure" behaviour="block">
-                        <outputRendition xml:space="preserve">
+            <outputRendition xml:space="preserve">
             font-style: italic;
             </outputRendition>
-                    </model>
+        </model>
                     <model predicate="parent::table" behaviour="block">
-                        <outputRendition xml:space="preserve">
+            <outputRendition xml:space="preserve">
             font-style: italic;
             </outputRendition>
-                    </model>
+        </model>
                     <model predicate="parent::lg" behaviour="block">
-                        <outputRendition xml:space="preserve">
+            <outputRendition xml:space="preserve">
             font-style: italic;
             </outputRendition>
-                    </model>
+        </model>
                     <model predicate="parent::list" behaviour="block">
-                        <outputRendition xml:space="preserve">
+            <outputRendition xml:space="preserve">
             font-weight: bold;
             </outputRendition>
-                    </model>
+        </model>
                     <model predicate="parent::div" behaviour="heading">
-                        <param name="level" value="count(ancestor::div)"/>
-                        <outputRendition xml:space="preserve">
+            <param name="level" value="count(ancestor::div)"/>
+            <outputRendition xml:space="preserve">
             color: #a69933;
             </outputRendition>
-                    </model>
+        </model>
                     <model behaviour="block"/>
                 </elementSpec>
                 <elementSpec ident="lb" mode="change">
+                    <model predicate="@ed='T'" behaviour="inline">
+            <param name="n" value="@n"/>
+            <pb:template xmlns="" xml:space="preserve"><span data-taisho="[[n]]" class="cbeta"/></pb:template>
+        </model>
                     <model behaviour="inline" useSourceRendition="true">
-                        <param name="content" value="('/', @n, '/')"/>
-                        <outputRendition xml:space="preserve">
+            <param name="content" value="('/', @n, '/')"/>
+            <outputRendition xml:space="preserve">
+            
+            
+            
+            
+            
             color: #a69933;
 padding-left: .5em;
 padding-right: .5em;
+            
+            
+            
+            
+            
             </outputRendition>
-                    </model>
+        </model>
                 </elementSpec>
                 <elementSpec ident="g" mode="change">
                     <model predicate="not(text())" behaviour="glyph">
-                        <param name="uri" value="@ref"/>
-                    </model>
+            <param name="uri" value="@ref"/>
+        </model>
                     <model behaviour="inline">
-                        <outputRendition xml:space="preserve">
+            <outputRendition xml:space="preserve">
             color: #7C7012;
             </outputRendition>
-                    </model>
+        </model>
                 </elementSpec>
                 <elementSpec ident="supplied" mode="change">
                     <model predicate="parent::title" behaviour="inline"/>
                     <model behaviour="inline">
-                        <outputRendition xml:space="preserve">
+            <outputRendition xml:space="preserve">
             color: #C0C0C0;
             </outputRendition>
-                    </model>
+        </model>
                 </elementSpec>
                 <elementSpec ident="note" mode="change">
                     <model predicate="ancestor::back" behaviour="inline"/>
@@ -122,134 +137,143 @@ padding-right: .5em;
                 </elementSpec>
                 <elementSpec ident="ptr" mode="add">
                     <model predicate="starts-with(@target, 'note') and id(@target, root($parameters?root))[@type='display']" behaviour="note">
-                        <param name="content" value="id(@target, root($parameters?root))"/>
-                    </model>
+            <param name="content" value="id(@target, root($parameters?root))"/>
+        </model>
                 </elementSpec>
                 <elementSpec ident="choice" mode="change">
                     <modelSequence predicate="unclear/@cert">
-                        <model behaviour="inline">
-                            <param name="content" value="unclear[@cert = max(../unclear/@cert)]/node()"/>
-                            <outputRendition xml:space="preserve">
+            <model behaviour="inline">
+                <param name="content" value="unclear[@cert = max(../unclear/@cert)]/node()"/>
+                <outputRendition xml:space="preserve">
                 color: #FF1111;
                 </outputRendition>
-                        </model>
-                        <model behaviour="note">
-                            <param name="content" value="('此字漫漶，他本作', unclear[@resp and @cert &lt; 0.5])"/>
-                        </model>
-                    </modelSequence>
+            </model>
+            <model behaviour="note">
+                <param name="content" value="('此字漫漶，他本作', unclear[@resp and @cert &lt; 0.5])"/>
+            </model>
+        </modelSequence>
                     <model predicate="unclear/@cert" behaviour="alternate">
-                        <param name="default" value="unclear[@cert = max(../unclear/@cert)]"/>
-                        <param name="alternate" value="('此字漫漶，他本作', unclear)"/>
-                    </model>
+            <param name="default" value="unclear[@cert = max(../unclear/@cert)]"/>
+            <param name="alternate" value="('此字漫漶，他本作', unclear)"/>
+        </model>
                 </elementSpec>
                 <elementSpec ident="unclear" mode="change">
                     <model predicate="@cert &lt; 0.5 and @resp and following-sibling::unclear[@cert &lt; 0.5][@resp]" behaviour="inline">
-                        <outputRendition xml:space="preserve" scope="before">
+            <outputRendition xml:space="preserve" scope="before">
             content: '“';
             </outputRendition>
-                        <outputRendition xml:space="preserve" scope="after">
+            <outputRendition xml:space="preserve" scope="after">
             content: '”字;';
             </outputRendition>
-                    </model>
+        </model>
                     <model predicate="@cert &lt; 0.5 and @resp" behaviour="inline">
-                        <outputRendition xml:space="preserve" scope="before">
+            <outputRendition xml:space="preserve" scope="before">
             content: '“';
             </outputRendition>
-                        <outputRendition xml:space="preserve" scope="after">
+            <outputRendition xml:space="preserve" scope="after">
             content: '”字';
             </outputRendition>
-                    </model>
+        </model>
                 </elementSpec>
                 <elementSpec ident="lem" mode="add">
-                    <model behaviour="text" output="web">
-                        <param name="content" value="es:fix-punctuation(.)"/>
-                    </model>
+                    <model output="web" behaviour="text">
+            <param name="content" value="es:fix-punctuation(.)"/>
+        </model>
                     <model behaviour="inline"/>
                 </elementSpec>
                 <elementSpec ident="app" mode="add">
+                    <model predicate="$parameters?mode='synopsis' and rdg[starts-with(@wit, 'T_')]" behaviour="inline">
+            <param name="content" value="lem"/>
+            <outputRendition xml:space="preserve">
+            border-bottom: 3px solid #fb3b3b;
+            </outputRendition>
+        </model>
+                    <model predicate="$parameters?mode='synopsis'" behaviour="inline">
+            <param name="content" value="lem"/>
+        </model>
                     <modelSequence predicate="lem//text() and rdg[@type = 'textcritical']//text() and empty(rdg[@type = 'interpretative'])">
-                        <desc>Case 1.1, Lemma contains text, reading is type= textcritical and contains text</desc>
-                        <model predicate="lem" behaviour="inline">
-                            <param name="content" value="lem"/>
-                        </model>
-                        <model behaviour="note">
-                            <param name="charNote" value="if (lem//hi[@rend='smaller'] and count(lem/*) = 1) then '小字' else ()"/>
-                            <param name="lem" value="lem"/>
-                            <param name="rdg" value="rdg"/>
-                            <pb:template xml:space="preserve">石刻本作[[charNote]]“[[lem]]”字，《大正藏》本作“[[rdg]]“字。</pb:template>
-                        </model>
-                    </modelSequence>
+            <desc>Case 1.1, Lemma contains text, reading is type= textcritical and contains text</desc>
+            <model predicate="lem" behaviour="inline">
+                <param name="content" value="lem"/>
+            </model>
+            <model behaviour="note">
+                <param name="charNote" value="if (lem//hi[@rend='smaller'] and count(lem/*) = 1) then '小字' else ()"/>
+                <param name="lem" value="lem"/>
+                <param name="rdg" value="rdg"/>
+                <pb:template xmlns="" xml:space="preserve">石刻本作[[charNote]]“[[lem]]”字，《大正藏》本作“[[rdg]]“字。</pb:template>
+            </model>
+        </modelSequence>
                     <modelSequence predicate="lem//text() and empty(rdg[@type = 'textcritical']//text()) and empty(rdg[@type = 'interpretative'])">
-                        <desc>Case 1.2, Lemma contains text, textcritical reading does not contain text</desc>
-                        <model predicate="lem" behaviour="inline">
-                            <param name="content" value="lem"/>
-                        </model>
-                        <model behaviour="note">
-                            <param name="charNote" value="if (lem//hi[@rend='smaller'] and count(lem/*) = 1) then '小字' else ()"/>
-                            <param name="lem" value="lem"/>
-                            <param name="rdg" value="rdg"/>
-                            <pb:template xml:space="preserve">石刻本作[[charNote]]“[[lem]]”字，《大正藏》本此處無字[[rdg]]。</pb:template>
-                        </model>
-                    </modelSequence>
-                    <model behaviour="note" predicate="empty(lem//text()) and rdg[@type = 'textcritical']//text() and empty(rdg[@type = 'interpretative'])">
-                        <desc>Case 1.3, Lemma contains no text, textcritical reading does</desc>
-                        <param name="charNote" value="if (lem//hi[@rend='smaller'] and count(lem/*) = 1) then '小字' else ()"/>
-                        <param name="lem" value="lem"/>
-                        <param name="rdg" value="rdg"/>
-                        <pb:template xml:space="preserve">《大正藏》本此處有“[[rdg]]“字。</pb:template>
-                    </model>
+            <desc>Case 1.2, Lemma contains text, textcritical reading does not contain text</desc>
+            <model predicate="lem" behaviour="inline">
+                <param name="content" value="lem"/>
+            </model>
+            <model behaviour="note">
+                <param name="charNote" value="if (lem//hi[@rend='smaller'] and count(lem/*) = 1) then '小字' else ()"/>
+                <param name="lem" value="lem"/>
+                <param name="rdg" value="rdg"/>
+                <pb:template xmlns="" xml:space="preserve">石刻本作[[charNote]]“[[lem]]”字，《大正藏》本此處無字[[rdg]]。</pb:template>
+            </model>
+        </modelSequence>
+                    <model predicate="empty(lem//text()) and rdg[@type = 'textcritical']//text() and empty(rdg[@type = 'interpretative'])" behaviour="note">
+            <desc>Case 1.3, Lemma contains no text, textcritical reading does</desc>
+            <param name="charNote" value="if (lem//hi[@rend='smaller'] and count(lem/*) = 1) then '小字' else ()"/>
+            <param name="lem" value="lem"/>
+            <param name="rdg" value="rdg"/>
+            <pb:template xmlns="" xml:space="preserve">《大正藏》本此處有“[[rdg]]“字。</pb:template>
+        </model>
                     <modelSequence predicate="lem//text() and rdg[@type = 'interpretative']//text()">
-                        <desc>Case 2.1, Lemma contains text, interpretative reading as well</desc>
-                        <model predicate="lem" behaviour="inline">
-                            <param name="content" value="lem"/>
-                        </model>
-                        <model behaviour="note">
-                            <param name="charNote" value="if (lem//hi[@rend='smaller'] and count(lem/*) = 1) then '小字' else ()"/>
-                            <param name="lem" value="lem"/>
-                            <param name="rdg" value="rdg"/>
-                            <pb:template xml:space="preserve">他本作“[[rdg]]“字。</pb:template>
-                        </model>
-                    </modelSequence>
+            <desc>Case 2.1, Lemma contains text, interpretative reading as well</desc>
+            <model predicate="lem" behaviour="inline">
+                <param name="content" value="lem"/>
+            </model>
+            <model behaviour="note">
+                <param name="charNote" value="if (lem//hi[@rend='smaller'] and count(lem/*) = 1) then '小字' else ()"/>
+                <param name="lem" value="lem"/>
+                <param name="rdg" value="rdg"/>
+                <pb:template xmlns="" xml:space="preserve">他本作“[[rdg]]“字。</pb:template>
+            </model>
+        </modelSequence>
                     <modelSequence predicate="lem//text() and empty(rdg[@type = 'interpretative']//text()) and empty(rdg[@type = 'textcritical'])">
-                        <desc>Case 2.2 Lemma contains text, interpretative reading does not contain text</desc>
-                        <model predicate="lem" behaviour="inline">
-                            <param name="content" value="lem"/>
-                        </model>
-                        <model behaviour="note">
-                            <param name="charNote" value="if (lem//hi[@rend='smaller'] and count(lem/*) = 1) then '小字' else ()"/>
-                            <param name="lem" value="lem"/>
-                            <param name="rdg" value="rdg"/>
-                            <pb:template xml:space="preserve">他本無“[[lem]]”字[[rdg]]。</pb:template>
-                        </model>
-                    </modelSequence>
-                    <model behaviour="note" predicate="empty(lem//text()) and exists(rdg[@type = 'interpretative']//text()) and empty(rdg[@type = 'textcritical'])">
-                        <desc>Case 2.3, Lemma contains no text, textcritical reading does contain text</desc>
-                        <param name="charNote" value="if (lem//hi[@rend='smaller'] and count(lem/*) = 1) then '小字' else ()"/>
-                        <param name="lem" value="lem"/>
-                        <param name="rdg" value="rdg"/>
-                        <pb:template xml:space="preserve">他本多“[[rdg]]”字。</pb:template>
-                    </model>
+            <desc>Case 2.2 Lemma contains text, interpretative reading does not contain text</desc>
+            <model predicate="lem" behaviour="inline">
+                <param name="content" value="lem"/>
+            </model>
+            <model behaviour="note">
+                <param name="charNote" value="if (lem//hi[@rend='smaller'] and count(lem/*) = 1) then '小字' else ()"/>
+                <param name="lem" value="lem"/>
+                <param name="rdg" value="rdg"/>
+                <pb:template xmlns="" xml:space="preserve">他本無“[[lem]]”字[[rdg]]。</pb:template>
+            </model>
+        </modelSequence>
+                    <model predicate="empty(lem//text()) and exists(rdg[@type = 'interpretative']//text()) and empty(rdg[@type = 'textcritical'])" behaviour="note">
+            <desc>Case 2.3, Lemma contains no text, textcritical reading does contain text</desc>
+            <param name="charNote" value="if (lem//hi[@rend='smaller'] and count(lem/*) = 1) then '小字' else ()"/>
+            <param name="lem" value="lem"/>
+            <param name="rdg" value="rdg"/>
+            <pb:template xmlns="" xml:space="preserve">他本多“[[rdg]]”字。</pb:template>
+        </model>
                     <modelSequence predicate="lem//text() and rdg[@type = 'textcritical']//text() and rdg[@type = 'interpretative']//text()">
-                        <desc>Case 3.2</desc>
-                        <model predicate="lem" behaviour="inline">
-                            <param name="content" value="lem"/>
-                        </model>
-                        <model behaviour="note">
-                            <param name="charNote" value="if (lem//hi[@rend='smaller'] and count(lem/*) = 1) then '小字' else ()"/>
-                            <param name="lem" value="lem"/>
-                            <param name="rdgCrit" value="rdg[@type='textcritical']"/>
-                            <param name="rdgInt" value="rdg[@type='interpretative']"/>
-                            <pb:template xml:space="preserve">《大正藏》本作：[[rdgCrit]]字。他本作“[[rdgInt]]”字。</pb:template>
-                        </model>
-                    </modelSequence>
+            <desc>Case 3.2</desc>
+            <model predicate="lem" behaviour="inline">
+                <param name="content" value="lem"/>
+            </model>
+            <model behaviour="note">
+                <param name="charNote" value="if (lem//hi[@rend='smaller'] and count(lem/*) = 1) then '小字' else ()"/>
+                <param name="lem" value="lem"/>
+                <param name="rdgCrit" value="rdg[@type='textcritical']"/>
+                <param name="rdgInt" value="rdg[@type='interpretative']"/>
+                <pb:template xmlns="" xml:space="preserve">《大正藏》本作：[[rdgCrit]]字。他本作“[[rdgInt]]”字。</pb:template>
+            </model>
+        </modelSequence>
                     <modelSequence>
-                        <model predicate="lem" behaviour="inline">
-                            <param name="content" value="lem"/>
-                        </model>
-                        <model behaviour="note">
-                            <param name="content" value="rdg"/>
-                        </model>
-                    </modelSequence>
+            <model predicate="lem" behaviour="inline">
+                <param name="content" value="lem"/>
+            </model>
+            <model behaviour="note">
+                <param name="content" value="rdg"/>
+            </model>
+        </modelSequence>
                 </elementSpec>
                 <elementSpec ident="foreign" mode="change">
                     <model behaviour="inline"/>
@@ -257,46 +281,53 @@ padding-right: .5em;
                 <elementSpec ident="seg" mode="change">
                     <model predicate="@rend" behaviour="inline"/>
                     <model behaviour="webcomponent" useSourceRendition="true">
-                        <param name="name" value="'pb-highlight'"/>
-                        <param name="key" value="substring-after(@n, '.')"/>
-                        <param name="highlight-self" value="true()"/>
-                    </model>
+            <param name="name" value="'pb-highlight'"/>
+            <param name="key" value="substring-after(@n, '.')"/>
+            <param name="highlight-self" value="true()"/>
+        </model>
                 </elementSpec>
                 <elementSpec ident="hi" mode="change">
                     <model predicate="@rendition" behaviour="inline" useSourceRendition="true">
-                        <outputRendition xml:space="preserve">
+            <outputRendition xml:space="preserve">
             font-style: italic;
             </outputRendition>
-                    </model>
+        </model>
                     <model predicate="@rend='bold'" behaviour="inline">
-                        <outputRendition xml:space="preserve">
+            <outputRendition xml:space="preserve">
             font-weight: bold;
             </outputRendition>
-                    </model>
+        </model>
                     <model predicate="@rend='smaller'" behaviour="inline">
-                        <outputRendition xml:space="preserve">
+            <outputRendition xml:space="preserve">
             font-size: .85em;
             </outputRendition>
-                    </model>
+        </model>
                     <model predicate="not(@rendition)" behaviour="inline">
-                        <outputRendition xml:space="preserve">
+            <outputRendition xml:space="preserve">
             font-style: italic;
             </outputRendition>
-                    </model>
+        </model>
                 </elementSpec>
                 <elementSpec ident="ref" mode="change">
                     <model predicate="@type='biblio'" behaviour="link">
-                        <param name="content" value="let $target := @target return collection('/db/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']"/>
-                        <param name="link" value="@target"/>
-                        <outputRendition>
-                            font-variant: small-caps;
-                        </outputRendition>
-                    </model>
+            <param name="content" value="let $target := @target return collection('/db/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']"/>
+            <param name="link" value="@target"/>
+            <outputRendition xml:space="preserve">
+            font-variant: small-caps;
+            </outputRendition>
+        </model>
                 </elementSpec>
                 <elementSpec ident="mods:titleInfo" mode="add">
                     <model behaviour="inline">
-                        <param name="content" value="mods:title[1]/string()"/>
-                    </model>
+            <param name="content" value="mods:title[1]/string()"/>
+        </model>
+                </elementSpec>
+            <elementSpec ident="text()" mode="add">
+                    <model predicate="$parameters?mode='synoptic'" behaviour="wrap-text"/>
+                    <model behaviour="text"/>
+                </elementSpec>
+            <elementSpec ident="cb:div" mode="add">
+                    <model behaviour="section"/>
                 </elementSpec>
             </schemaSpec>
         </body>

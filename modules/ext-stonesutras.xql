@@ -16,3 +16,15 @@ declare function es:fix-punctuation($nodes as node()*) {
             default return
                 $node
 };
+
+declare function es:wrap-text($config as map(*), $node as node(), $class as xs:string+, $content) {
+    let $text := $content ! (
+        typeswitch (.)
+            case text() return
+                .
+            default return
+                text { . }
+    )
+    return
+        <span class="t">{$text}</span>
+};

@@ -15,9 +15,11 @@ import module namespace tpu="http://www.tei-c.org/tei-publisher/util" at "lib/ut
 import module namespace pm-config="http://www.tei-c.org/tei-simple/pm-config" at "pm-config.xql";
 import module namespace config="http://www.tei-c.org/tei-simple/config" at "config.xqm";
 import module namespace layout="https://stonesutras.org/api/layout" at "layout.xql";
+import module namespace nav="http://www.tei-c.org/tei-simple/navigation/tei" at "navigation-tei.xql";
 
 declare namespace xlink="http://www.w3.org/1999/xlink";
 declare namespace catalog="http://exist-db.org/ns/catalog";
+declare namespace tei="http://www.tei-c.org/ns/1.0";
 
 declare variable $api:SITES := (
      "HDS", "TC", "SY", "EG", "YC", "DZ", "Sili", "Yin", "PY", "HT", "JS", "Yang", "HSY", "CLS", "FHS", "SNS",
@@ -91,6 +93,41 @@ declare function api:inscriptions($request as map(*)) {
                     </div>
             }
         </div>
+};
+
+declare function api:taisho($id as xs:string) {
+    let $taisho := doc("/db/apps/stonesutras7/data/T08n0235.xml")/tei:TEI
+    let $start := $taisho//tei:lb[@n = substring-after($id, '_')]
+    let $end := $start/following::tei:lb[1]
+    return
+        <li>
+            <h3>{$id}</h3>
+            <div>{$start/following::text()[. << $end]}</div>
+        </li>
+};
+
+declare function api:stonesutras($id as xs:string) {
+    for $lb in collection($config:data-root)//tei:lb[@n = $id][@ed = "T"]
+    let $end := $lb/following::tei:lb[@ed = "T"][1]
+    let $fragment := nav:milestone-chunk($lb, $end, ($lb/ancestor::* intersect $end/ancestor::*)[last()])
+    let $html := $pm-config:web-transform($fragment, map { "mode": "synopsis" }, "stonesutras.odd")
+    let $relpath := substring-after(document-uri(root($lb)), $config:data-root || "/")
+    return
+        <li>
+            <h3>
+                <pb-link path="{$relpath}" emit="transcription">{$lb/ancestor::tei:text/@xml:id/string()}</pb-link>
+            </h3>
+            <div>{$html}</div>
+        </li>
+};
+
+declare function api:variants($request as map(*)) {
+    let $id := $request?parameters?id
+    return
+        <ul lang="zh" class="variants">
+            { api:taisho($id) }
+            { api:stonesutras($id) }
+        </ul>
 };
 
 (:~

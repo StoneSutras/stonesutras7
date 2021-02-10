@@ -1,0 +1,17 @@
+.cbeta {
+    color: orange;
+    font-weight: bold;
+}
+
+.cbeta::after {
+    content: "\a";
+    white-space: pre;
+}
+
+.cbeta.highlight-start::after {
+    content: "\a[";
+}
+
+.cbeta.highlight-end::after {
+    content: "]\a";
+}

@@ -15,6 +15,18 @@ declare function mapping:catalog($root as node(), $userParams as map(*)) {
         collection("/db/catalog")/id($id)
 };
 
+declare function mapping:cbeta($root as node(), $userParams as map(*)) {
+    let $cbeta := doc("/db/apps/stonesutras7/data/T08n0235.xml")//tei:body
+    let $lines := $root//tei:lb[@ed='T']/@n
+    let $startId := tokenize($lines[1], '_')[2]
+    let $endId := tokenize($lines[last()], '_')[2]
+    let $start := $cbeta//tei:lb[@n = $startId]
+    let $end := $cbeta//tei:lb[@n = $endId]
+    let $chunk := nav:milestone-chunk($start, $end, $cbeta)
+    return
+        $chunk
+};
+
 (:~
  : For the Van Gogh letters: find the page break in the translation corresponding
  : to the one shown in the transcription.

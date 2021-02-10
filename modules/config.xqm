@@ -304,7 +304,7 @@ declare variable $config:default-odd :="stonesutras.odd";
  : make sure to run modules/generate-pm-config.xql to update the main configuration
  : module for transformations (modules/pm-config.xql).
  :)
-declare variable $config:odd-available :=("stonesutras.odd", "catalog.odd");
+declare variable $config:odd-available :=("stonesutras.odd", "catalog.odd", "cbeta.odd");
 
 (:~
  : List of ODD files which are used internally only, i.e. not for displaying information

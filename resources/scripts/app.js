@@ -31,4 +31,78 @@ window.addEventListener('DOMContentLoaded', () => {
             svg.setAttribute('url', svgPath);
         }
     });
+
+    let cbeta;
+    pbEvents.subscribe('pb-update', 'cbeta', (ev) => {
+        cbeta = ev.detail.root;
+    });
+
+    pbEvents.subscribe('pb-update', 'transcription', (ev) => {
+        const spans = ev.detail.root.querySelectorAll('.t');
+        spans.forEach((span) => {
+            span.addEventListener('click', () => {
+                ev.detail.root.querySelectorAll('.cbeta').forEach(lb => {
+                    lb.innerHTML = '';
+                });
+                const walker = ev.detail.root.ownerDocument.createTreeWalker(
+                    ev.detail.root,
+                    NodeFilter.SHOW_ELEMENT
+                );
+                let found = false;
+                let prevLb;
+                let nextLb;
+                while (walker.nextNode()) {
+                    if (walker.currentNode === span) {
+                        found = true;
+                    }
+                    if (walker.currentNode.classList.contains('cbeta')) {
+                        if (found) {
+                            nextLb = walker.currentNode;
+                            break;
+                        } else {
+                            prevLb = walker.currentNode;
+                        }
+                    }
+                }
+                if (prevLb) {
+                    prevLb.innerHTML = '[';
+                }
+                if (nextLb) {
+                    nextLb.innerHTML = ']';
+                }
+                pbEvents.emit('pb-refresh', 'variants', {
+                    params: {
+                        id: prevLb.getAttribute('data-taisho')
+                    }
+                });
+
+                if (cbeta) {
+                    cbeta.querySelectorAll('.cbeta').forEach(lb => {
+                        lb.classList.remove('highlight-start', 'highlight-end');
+                    });
+                    const startId = prevLb.getAttribute('data-taisho').replace(/^.*_(.*)$/, '$1');
+                    const lb = cbeta.querySelector(`#lb-${startId}`);
+                    lb.classList.add('highlight-start');
+                    const walker = ev.detail.root.ownerDocument.createTreeWalker(
+                        cbeta,
+                        NodeFilter.SHOW_ELEMENT
+                    );
+                    let found = false;
+                    let nextLb = null;
+                    while (walker.nextNode()) {
+                        if (walker.currentNode === lb) {
+                            found = true;
+                        } else if (walker.currentNode.classList.contains('cbeta') && found) {
+                            nextLb = walker.currentNode;
+                            break;
+                        }
+                    }
+                    if (nextLb) {
+                        nextLb.classList.add('highlight-end');
+                    }
+                    lb.scrollIntoView({block: "end", behavior: "smooth"});
+                }
+            });
+        });
+    });
 });
