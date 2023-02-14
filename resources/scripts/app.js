@@ -2,10 +2,9 @@ window.addEventListener('DOMContentLoaded', () => {
     pbEvents.subscribe('pb-end-update', 'sites', () => {
         const sites = document.getElementById('sites');
         const documents = document.getElementById('documents');
-        pbEvents.emit('pb-update', 'map', {
-            root: sites
-        });
-        sites.querySelectorAll('pb-geolocation').forEach((geo) => {
+        const locations = sites.querySelectorAll('pb-geolocation');
+        pbEvents.emit('pb-update-map', 'map', Array.from(locations));
+        locations.forEach((geo) => {
             geo.addEventListener('click', (ev) => {
                 ev.preventDefault();
                 documents.load({
@@ -13,6 +12,10 @@ window.addEventListener('DOMContentLoaded', () => {
                 });
             });
         });
+    });
+
+    pbEvents.subscribe('pb-leaflet-marker-click', null, (ev) => {
+        console.log(ev.detail);
     });
 
     const panel = document.querySelector('pb-panel');
