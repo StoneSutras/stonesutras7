@@ -1,1 +1,13 @@
-<meta xmlns="http://exist-db.org/xquery/repo"><description>Buddhist Stonesutras in China</description><author/><status>beta</status><license>GNU-LGPL</license><copyright>true</copyright><type>application</type><prepare>pre-install.xql</prepare><finish>post-install.xql</finish><target>stonesutras7</target><permissions user="stone" group="tei" password="$utra$" mode="rw-r--r--"/><deployed>2021-01-29T13:39:59.735Z</deployed></meta>
+<meta xmlns="http://exist-db.org/xquery/repo">
+    <description>Buddhist Stonesutras in China</description>
+    <author/>
+    <status>beta</status>
+    <license>GNU-LGPL</license>
+    <copyright>true</copyright>
+    <type>application</type>
+    <prepare>pre-install.xql</prepare>
+    <finish>post-install.xql</finish>
+    <target>stonesutras7</target>
+    <permissions user="stone" group="tei" password="$utra$" mode="rw-r--r--"/>
+    <deployed>2021-01-29T13:39:59.735Z</deployed>
+</meta>

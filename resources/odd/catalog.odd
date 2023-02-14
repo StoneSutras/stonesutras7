@@ -62,11 +62,9 @@
                     </model>
                     <modelSequence>
                         <model behaviour="inline">
-                            <param name="name" value="'pb-facs-link'"/>
-                            <param name="facs" value="'api/layout/' || @xml:id/string()"/>
-                            <param name="content" value="()"/>
+                            <param name="facs" value="@xml:id"/>
                             <pb:template xmlns="">
-                                <img style="display: none" src="[[facs]]" class="layout"/>
+                                <img style="display: none" src="../api/layout/[[facs]]" class="layout"/>
                             </pb:template>
                         </model>
                         <model behaviour="inline">
