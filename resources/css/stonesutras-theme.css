@@ -25,6 +25,8 @@ body {
     --grid-height: calc(100vh - 172px);
     --pb-svg-height: calc(var(--grid-height) - 360px);
     --pb-panel-max-height: var(--grid-height);
+    --pb-lang-input-color: var(--pb-color-primary);
+    --pb-lang-label-color: var(--pb-color-primary);
 }
 
 .logo {
