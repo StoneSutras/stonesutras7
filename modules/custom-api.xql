@@ -54,7 +54,7 @@ declare function api:sites($request as map(*)) {
                 <div slot="collapse-content">
                     <ul>
                     {
-                        for $site in collection("/db/catalog")/catalog:object[@type=("site", "cave")][catalog:header/catalog:province=$province?name][@xml:id = $api:SITES]
+                        for $site in collection($config:data-catalog)/catalog:object[@type=("site", "cave")][catalog:header/catalog:province=$province?name][@xml:id = $api:SITES]
                         let $title := string-join(($site/catalog:header/catalog:title[@lang="zh"], $site/catalog:header/catalog:title[@lang="en"]), " - ")
                         let $coordinates := tokenize($site/*:location/*:coordinates[@srsName="EPSG:4326"], "\s*,\s*")
                         order by $site/catalog:header/catalog:title[@lang="en"], $site/@xml:id
@@ -71,15 +71,15 @@ declare function api:sites($request as map(*)) {
 };
 
 declare function api:inscriptions($request as map(*)) {
-    let $catalog := collection("/db/catalog")/id($request?parameters?site)
+    let $catalog := collection($config:data-catalog)/id($request?parameters?site)
     let $title := string-join(($catalog/catalog:header/catalog:title[@lang="zh"], $catalog/catalog:header/catalog:title[@lang="en"]), " - ")
     return
         <div>
             <h1>{$title}</h1>
             {
                 for $link in $catalog/catalog:fileDescription/catalog:link/@xlink:href
-                let $inscription := collection("/db/catalog")/id($link)
-                let $tei := collection("/db/docs")/id($inscription/@xml:id)
+                let $inscription := collection($config:data-catalog)/id($link)
+                let $tei := collection($config:data-docs)/id($inscription/@xml:id)
                 where $tei
                 let $relPath := config:get-relpath($tei[1])
                 return

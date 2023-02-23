@@ -6,13 +6,14 @@
 module namespace mapping="http://www.tei-c.org/tei-simple/components/map";
 
 import module namespace nav="http://www.tei-c.org/tei-simple/navigation/tei" at "navigation-tei.xql";
+import module namespace config="http://www.tei-c.org/tei-simple/config" at "config.xqm";
 
 declare namespace tei="http://www.tei-c.org/ns/1.0";
 
 declare function mapping:catalog($root as node(), $userParams as map(*)) {
     let $id := root($root)//tei:text/@xml:id
     return
-        collection("/db/catalog")/id($id)
+        collection($config:data-catalog)/id($id)
 };
 
 declare function mapping:cbeta($root as node(), $userParams as map(*)) {

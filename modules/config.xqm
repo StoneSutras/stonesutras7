@@ -292,7 +292,10 @@ declare variable $config:context-path :=
 (:~
  : The root of the collection hierarchy containing data.
  :)
-declare variable $config:data-root := "/db/docs";
+declare variable $config:data-root := "/db/apps/stonesutras-data/data";
+declare variable $config:data-docs := $config:data-root || "/docs";
+declare variable $config:data-catalog := $config:data-root || "/catalog";
+declare variable $config:data-layouts := $config:data-root || "/layouts";
 
 (:~
  : The root of the collection hierarchy whose files should be displayed

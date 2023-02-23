@@ -42,11 +42,6 @@ body {
     grid-template-columns: minmax(256px, 20vw) auto minmax(360px, 33vw);
 }
 
-#catalog {
-    display: flex;
-    flex-direction: column;
-}
-
 #variants {
     font-family: var(--pb-content-font-family);
     font-size: var(--pb-content-font-size);
@@ -60,12 +55,8 @@ body {
     height: calc(var(--grid-height) - 70px);
 }
 
-#catalog pb-view {
-    overflow: auto;
-    height: calc(var(--grid-height) - 360px);
-}
-
 pb-leaflet-map {
+    margin-top: 2em;
     width: 100%;
     height: 360px;
 }

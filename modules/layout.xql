@@ -3,6 +3,8 @@ module namespace layout="https://stonesutras.org/api/layout";
 declare namespace tei="http://www.tei-c.org/ns/1.0";
 declare namespace svg="http://www.w3.org/2000/svg";
 
+import module namespace config="http://www.tei-c.org/tei-simple/config" at "config.xqm";
+
 declare variable $layout:font-size := 24;
 
 declare variable $layout:interpunktion := '』『」「。，、： ；？！.,:;?!&#10;&#13;“”‘’（）·«»⌉⌈/[]［］…';
@@ -11,7 +13,7 @@ declare variable $layout:spaces := "                                     ";
 
 declare function layout:svg($request as map(*)) {
     let $id := $request?parameters?id
-    let $xml := collection("/db/docs")/id($id)/tei:body/tei:div[@xml:lang='zh']
+    let $xml := collection($config:data-docs)/id($id)/tei:body/tei:div[@xml:lang='zh']
     return
         layout:generate($id, $xml)
 };
@@ -150,7 +152,7 @@ declare function layout:draw($columns as element(c)*, $direction as xs:string?) 
 };
 
 declare function layout:generate($id as xs:string, $div as element()) {
-    let $layout := doc(concat("/db/layouts/", $id, ".svg"))/svg:svg
+    let $layout := doc(concat($config:data-layouts, "/", $id, ".svg"))/svg:svg
     return
         if ($layout) then
             element { node-name($layout) } {

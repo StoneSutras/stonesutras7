@@ -310,7 +310,7 @@ padding-right: .5em;
                 </elementSpec>
                 <elementSpec ident="ref" mode="change">
                     <model predicate="@type='biblio'" behaviour="link">
-            <param name="content" value="let $target := @target return collection('/db/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']"/>
+            <param name="content" value="let $target := @target return collection('/db/apps/stonesutras/data/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']"/>
             <param name="link" value="@target"/>
             <outputRendition xml:space="preserve">
             font-variant: small-caps;
