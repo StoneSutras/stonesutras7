@@ -27,7 +27,7 @@
                 <pb:behaviour ident="pair" output="web">
                     <pb:param name="key"/>
                     <pb:param name="value"/>
-                    <pb:template xmlns="">
+                    <pb:template xmlns="" xml:space="preserve">
                         <tr>
                             <td>[[key]]:</td>
                             <td>[[value]]</td>
@@ -46,93 +46,93 @@
             <schemaSpec start="TEI teiCorpus" ident="catalog" ns="http://exist-db.org/ns/catalog">
                 <elementSpec ident="object" mode="add">
                     <modelSequence predicate="$parameters?mode='title'">
-                        <model behaviour="heading">
-                            <param name="level" value="3"/>
-                            <param name="content" value="translate(@xml:id, '_', ' ')"/>
-                        </model>
-                        <model behaviour="block">
-                            <param name="content" value="header"/>
-                        </model>
-                    </modelSequence>
+            <model behaviour="heading">
+                <param name="level" value="3"/>
+                <param name="content" value="translate(@xml:id, '_', ' ')"/>
+            </model>
+            <model behaviour="block">
+                <param name="content" value="header"/>
+            </model>
+        </modelSequence>
                     <model predicate="$parameters?mode='breadcrumbs'" behaviour="block">
-                        <param name="content" value="header"/>
-                    </model>
+            <param name="content" value="header"/>
+        </model>
                     <model predicate="$parameters?mode='discussion'" behaviour="block">
-                        <param name="content" value="references"/>
-                    </model>
+            <param name="content" value="references"/>
+        </model>
                     <modelSequence>
-                        <model behaviour="inline">
-                            <param name="facs" value="@xml:id"/>
-                            <pb:template xmlns="">
+            <model behaviour="inline">
+                <param name="facs" value="@xml:id"/>
+                <pb:template xmlns="" xml:space="preserve">
                                 <img style="display: none" src="../api/layout/[[facs]]" class="layout"/>
                             </pb:template>
-                        </model>
-                        <model behaviour="inline">
-                            <param name="content" value="(physicalDescription, location)"/>
-                        </model>
-                    </modelSequence>
+            </model>
+            <model behaviour="inline">
+                <param name="content" value="(physicalDescription, location)"/>
+            </model>
+        </modelSequence>
                 </elementSpec>
                 <elementSpec ident="header" mode="add">
                     <modelSequence predicate="$parameters?mode='breadcrumbs'">
-                        <model behaviour="inline">
-                            <param name="content" value="let $site := substring-before(../@xml:id, '_') let $c := collection(&#34;/db/catalog&#34;)/id($site) return (  $c/header/province[@lang='zh'], ' ',       $c/header/province[@lang='en'], ' &gt; ',     $c/header/title[@lang='zh'], ' ',      $c/header/title[@lang='en'],     ' &gt; ' )"/>
-                        </model>
-                        <model behaviour="inline">
-                            <param name="content" value="(title[@*:lang='zh'], title[@*:lang='en'])"/>
-                        </model>
-                    </modelSequence>
+            <model behaviour="inline">
+                <param name="content" value="let $site := substring-before(../@xml:id, '_') let $c := collection(&#34;/db/catalog&#34;)/id($site) return (  $c/header/province[@lang='zh'], ' ',       $c/header/province[@lang='en'], ' &gt; ',     $c/header/title[@lang='zh'], ' ',      $c/header/title[@lang='en'],     ' &gt; ' )"/>
+            </model>
+            <model behaviour="inline">
+                <param name="content" value="(title[@*:lang='zh'], title[@*:lang='en'])"/>
+            </model>
+        </modelSequence>
                     <model predicate="$parameters?mode='title'" behaviour="link">
-                        <param name="content" value="(title[@*:lang='zh'], title[@*:lang='en'])"/>
-                        <param name="link" value="$parameters?doc"/>
-                    </model>
+            <param name="content" value="(title[@*:lang='zh'], title[@*:lang='en'])"/>
+            <param name="link" value="$parameters?doc"/>
+        </model>
                     <model behaviour="block">
-                        <param name="content" value="(title[@*:lang='zh'], title[@*:lang='en'], physicalDescription)"/>
-                    </model>
+            <param name="content" value="(title[@*:lang='zh'], title[@*:lang='en'], physicalDescription)"/>
+        </model>
                 </elementSpec>
                 <elementSpec ident="title" mode="add">
                     <model predicate="$parameters?mode='breadcrumbs' and @lang='zh'" behaviour="inline">
-                        <outputRendition xml:space="preserve" scope="after">
+            <outputRendition xml:space="preserve" scope="after">
             content: ' ';
             </outputRendition>
-                        <outputRendition xml:space="preserve">
+            <outputRendition xml:space="preserve">
             font-size: 16px; line-height: 24px; font-weight: 400;
             </outputRendition>
-                    </model>
+        </model>
                     <model predicate="$parameters?mode='breadcrumbs'" behaviour="inline">
-                        <outputRendition xml:space="preserve">
+            <outputRendition xml:space="preserve">
             font-size: 16px; line-height: 24px; font-weight: 400;
             </outputRendition>
-                    </model>
+        </model>
                     <model predicate="@type='abbreviated' and $parameters?mode='title'" behaviour="omit"/>
                     <model predicate="$parameters?mode='title'" behaviour="heading">
-                        <param name="level" value="3"/>
-                    </model>
+            <param name="level" value="3"/>
+        </model>
                     <model behaviour="heading">
-                        <param name="level" value="1"/>
-                        <outputRendition xml:space="preserve">
+            <param name="level" value="1"/>
+            <outputRendition xml:space="preserve">
             font-family: "Oswald","Noto Sans", Verdana,"Helvetica",sans-serif; color: #a69933;
             </outputRendition>
-                    </model>
+        </model>
                 </elementSpec>
                 <elementSpec ident="physicalDescription" mode="add">
                     <modelSequence>
-                        <model behaviour="heading">
-                            <param name="content" value="'概况 Physical Description'"/>
-                            <param name="level" value="3"/>
-                        </model>
-                        <model behaviour="table">
-                            <param name="content" value="(condition, format, frame, grid, decor, polishing, technique)"/>
-                        </model>
-                        <model behaviour="block">
-                            <param name="content" value="(dimensions)"/>
-                        </model>
-                    </modelSequence>
+            <model behaviour="heading">
+                <param name="content" value="'概况 Physical Description'"/>
+                <param name="level" value="3"/>
+            </model>
+            <model behaviour="table">
+                <param name="content" value="(condition, format, frame, grid, decor, polishing, technique)"/>
+            </model>
+            <model behaviour="block">
+                <param name="content" value="(dimensions)"/>
+            </model>
+        </modelSequence>
                 </elementSpec>
                 <elementSpec ident="dimensions" mode="add">
-                    <model behaviour="block" predicate="@height != ''">
-                        <param name="height" value="@height"/>
-                        <param name="width" value="@width"/>
-                        <pb:template xmlns="">
+                    <model predicate="@height != ''" behaviour="block">
+            <param name="height" value="@height"/>
+            <param name="width" value="@width"/>
+            <pb:template xmlns="" xml:space="preserve">
                             <h3>面積 Overall Dimensions</h3>
                             <table>
                                 <tr>
@@ -145,33 +145,34 @@
                                 </tr>
                             </table>
                         </pb:template>
-                    </model>
+        </model>
                 </elementSpec>
                 <elementSpec ident="condition" mode="add">
                     <model behaviour="pair">
-                        <param name="key" value="'現狀 Condition'"/>
-                        <param name="value" value="(label[@xml:lang='zh'], label[@xml:lang='en'])"/>
-                    </model>
+            <param name="key" value="'現狀 Condition'"/>
+            <param name="value" value="(label[@xml:lang='zh'], label[@xml:lang='en'])"/>
+        </model>
                 </elementSpec>
                 <elementSpec ident="label" mode="add">
                     <model predicate="@xml:lang='zh'" behaviour="inline">
-                        <outputRendition xml:space="preserve" scope="after">
+            <outputRendition xml:space="preserve" scope="after">
             content: ' ';
             </outputRendition>
-                    </model>
+        </model>
                     <model behaviour="inline"/>
                 </elementSpec>
                 <elementSpec ident="location" mode="add">
                     <model behaviour="block">
-                        <param name="content" value="(coordinates[@srsName=&#34;EPSG:4326&#34;])"/>
-                    </model>
+            <param name="content" value="(coordinates[@srsName=&#34;EPSG:4326&#34;])"/>
+        </model>
                 </elementSpec>
                 <elementSpec ident="coordinates" mode="add">
                     <model behaviour="block">
-                        <param name="height" value="@height"/>
-                        <param name="latitude" value="tokenize(., '\s*,\s*')[2]"/>
-                        <param name="longitude" value="tokenize(., '\s*,\s*')[1]"/>
-                        <pb:template xmlns="">
+            <param name="height" value="@height"/>
+            <param name="latitude" value="tokenize(., '\s*,\s*')[2]"/>
+            <param name="longitude" value="tokenize(., '\s*,\s*')[1]"/>
+            <param name="ident" value="translate(ancestor::object/@xml:id, '_', ' ')"/>
+            <pb:template xmlns="" xml:space="preserve">
                             <h3>方位 Coordinates of Position</h3>
                             <table>
                                 <tr>
@@ -187,64 +188,64 @@
                                     <td>[[longitude]]°</td>
                                 </tr>
                             </table>
-                            <pb-geolocation latitude="[[latitude]]" longitude="[[longitude]]"/>
+                            <pb-geolocation latitude="[[latitude]]" longitude="[[longitude]]" label="[[ident]]" emit="catalog"/>
                         </pb:template>
-                    </model>
+        </model>
                 </elementSpec>
                 <elementSpec ident="province" mode="add"/>
                 <elementSpec ident="format" mode="add">
                     <model behaviour="pair">
-                        <param name="key" value="'形制 Format'"/>
-                        <param name="value" value="(label[@xml:lang='zh'], label[@xml:lang='en'])"/>
-                    </model>
+            <param name="key" value="'形制 Format'"/>
+            <param name="value" value="(label[@xml:lang='zh'], label[@xml:lang='en'])"/>
+        </model>
                 </elementSpec>
                 <elementSpec ident="frame" mode="add">
                     <model behaviour="pair">
-                        <param name="key" value="'邊框 Frame'"/>
-                        <param name="value" value="(label[@xml:lang='zh'], label[@xml:lang='en'])"/>
-                    </model>
+            <param name="key" value="'邊框 Frame'"/>
+            <param name="value" value="(label[@xml:lang='zh'], label[@xml:lang='en'])"/>
+        </model>
                 </elementSpec>
                 <elementSpec ident="grid" mode="add">
                     <model behaviour="pair">
-                        <param name="key" value="'界格 Grid'"/>
-                        <param name="value" value="(label[@xml:lang='zh'], label[@xml:lang='en'])"/>
-                    </model>
+            <param name="key" value="'界格 Grid'"/>
+            <param name="value" value="(label[@xml:lang='zh'], label[@xml:lang='en'])"/>
+        </model>
                 </elementSpec>
                 <elementSpec ident="decor" mode="add">
                     <model behaviour="pair">
-                        <param name="key" value="'紋飾 Decor'"/>
-                        <param name="value" value="(label[@xml:lang='zh'], label[@xml:lang='en'])"/>
-                    </model>
+            <param name="key" value="'紋飾 Decor'"/>
+            <param name="value" value="(label[@xml:lang='zh'], label[@xml:lang='en'])"/>
+        </model>
                 </elementSpec>
                 <elementSpec ident="polishing" mode="add">
                     <model behaviour="pair">
-                        <param name="key" value="'磨光 Polishing'"/>
-                        <param name="value" value="(label[@xml:lang='zh'], label[@xml:lang='en'])"/>
-                    </model>
+            <param name="key" value="'磨光 Polishing'"/>
+            <param name="value" value="(label[@xml:lang='zh'], label[@xml:lang='en'])"/>
+        </model>
                 </elementSpec>
                 <elementSpec ident="technique" mode="add">
                     <model behaviour="pair">
-                        <param name="key" value="'刻法 Technique'"/>
-                        <param name="value" value="(label[@xml:lang='zh'], label[@xml:lang='en'])"/>
-                    </model>
+            <param name="key" value="'刻法 Technique'"/>
+            <param name="value" value="(label[@xml:lang='zh'], label[@xml:lang='en'])"/>
+        </model>
                 </elementSpec>
                 <elementSpec ident="references">
                     <model behaviour="list" cssClass="discussion">
-                        <param name="type" value="'custom'"/>
-                        <param name="content" value="for $ref in ref[@value='discussion'] order by $ref/@xlink:href return $ref"/>
-                    </model>
+            <param name="type" value="'custom'"/>
+            <param name="content" value="for $ref in ref[@value='discussion'] order by $ref/@xlink:href return $ref"/>
+        </model>
                 </elementSpec>
                 <elementSpec ident="ref">
-                    <model behaviour="template" predicate="@value='discussion'">
-                        <param name="sigle" value="let $target := @xlink:href return (collection('/db/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']/string(), '???')[1] "/>
-                        <param name="pages" value="pages/string()"/>
-                        <param name="content" value="note"/>
-                        <pb:template xmlns="">
+                    <model predicate="@value='discussion'" behaviour="template">
+            <param name="sigle" value="let $target := @xlink:href return (collection('/db/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']/string(), '???')[1] "/>
+            <param name="pages" value="pages/string()"/>
+            <param name="content" value="note"/>
+            <pb:template xmlns="" xml:space="preserve">
                             <dt>
                                 <span class="sigle">[[sigle]]</span>, [[pages]]</dt>
                             <dd>[[content]]</dd>
                         </pb:template>
-                    </model>
+        </model>
                     <model behaviour="omit"/>
                 </elementSpec>
                 <elementSpec ident="note">
@@ -252,22 +253,22 @@
                 </elementSpec>
                 <elementSpec ident="tei:ref" mode="add">
                     <model predicate="@type='biblio'" behaviour="link">
-                        <param name="content" value="let $target := @target return collection('/db/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']/string()"/>
-                        <param name="link" value="@target"/>
-                        <outputRendition>
-                            font-variant: small-caps;
-                        </outputRendition>
-                    </model>
+            <param name="content" value="let $target := @target return collection('/db/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']/string()"/>
+            <param name="link" value="@target"/>
+            <outputRendition xml:space="preserve">
+            font-variant: small-caps;
+            </outputRendition>
+        </model>
                 </elementSpec>
                 <elementSpec ident="tei:p" mode="add">
                     <model behaviour="paragraph"/>
                 </elementSpec>
                 <elementSpec ident="tei:hi" mode="add">
                     <model behaviour="inline">
-                        <outputRendition>
-                            font-style: italic;
-                        </outputRendition>
-                    </model>
+            <outputRendition xml:space="preserve">
+            font-style: italic;
+            </outputRendition>
+        </model>
                 </elementSpec>
                 <elementSpec ident="tei:anchor">
                     <model behaviour="omit"/>
