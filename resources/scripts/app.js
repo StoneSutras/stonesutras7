@@ -21,17 +21,20 @@ window.addEventListener('DOMContentLoaded', () => {
     const panel = document.querySelector('pb-panel');
     let svgPath;
     pbEvents.subscribe('pb-update', 'catalog', (ev) => {
+        const config = JSON.parse(document.getElementById('appConfig').textContent);
         const svgImg = ev.detail.root.querySelector('.layout');
         svgPath = svgImg.getAttribute('src');
         const svg = panel.querySelector('pb-svg');
         if (svg) {
-            svg.setAttribute('url', svgPath);
+            svg.setAttribute('url', new URL(svgPath, new URL(`${config.app}/`, location.href)).toString());
         }
     });
     pbEvents.subscribe('pb-panel', 'panels', () => {
+        const config = JSON.parse(document.getElementById('appConfig').textContent);
         const svg = panel.querySelector('pb-svg');
+        console.log(svg);
         if (svg) {
-            svg.setAttribute('url', svgPath);
+            svg.setAttribute('url', new URL(svgPath, new URL(`${config.app}/`, location.href)).toString());
         }
     });
 

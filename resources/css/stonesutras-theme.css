@@ -22,8 +22,8 @@ body {
     --pb-menubar-color: var(--pb-color-primary);
     --pb-toolbar-background-color: rgba(0, 0, 0, .4);
     --pb-toolbar-color: var(--pb-color-inverse);
-    --grid-height: calc(100vh - 172px);
-    --pb-svg-height: calc(var(--grid-height) - 360px);
+    --grid-height: calc(100vh - 128px);
+    --pb-svg-height: calc(var(--grid-height) - 72px);
     --pb-panel-max-height: var(--grid-height);
     --pb-lang-input-color: var(--pb-color-primary);
     --pb-lang-label-color: var(--pb-color-primary);
@@ -38,6 +38,10 @@ body {
     cursor: pointer;
 }
 
+.toolbar pb-view {
+    --pb-view-max-width: calc(100vw - 128px);
+}
+
 .content-body {
     display: grid;
     height: var(--grid-height);
@@ -49,8 +53,16 @@ body {
     font-size: var(--pb-content-font-size);
 }
 
-#transcription, #translation, pb-svg, #taisho {
+#catalog, pb-panel {
+    max-height: var(--pb-grid-height);
+}
+
+#transcription, #translation, #taisho, #catalog {
     overflow: auto;
+}
+
+pb-svg {
+    height: 100%;
 }
 
 #transcription, #taisho {

@@ -21,6 +21,11 @@
 
     <body>
         <pb-page data-template="pages:pb-page" unresolved="unresolved">
+            <script id="appConfig" type="application/json" data-template="pages:parse-params">
+                {
+                    "app": "${app}"
+                }
+            </script>
             <pb-document id="document1" data-template="pages:pb-document"/>
             <app-drawer-layout force-narrow="force-narrow">
                 <app-drawer data-template="templates:include" data-template-path="templates/drawer.html"/>
