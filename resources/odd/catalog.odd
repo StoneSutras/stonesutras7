@@ -64,7 +64,7 @@
             <model behaviour="inline">
                 <param name="facs" value="@xml:id"/>
                 <pb:template xmlns="" xml:space="preserve">
-                                <img style="display: none" src="../api/layout/[[facs]]" class="layout"/>
+                                <img style="display: none" src="api/layout/[[facs]]" class="layout"/>
                             </pb:template>
             </model>
             <model behaviour="inline">
