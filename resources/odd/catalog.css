@@ -15,3 +15,7 @@ td {
 .discussion .sigle {
     font-variant: small-caps;
 }
+
+.breadcrumbs a:link, .breadcrumbs a:visited {
+    color: inherit;
+}

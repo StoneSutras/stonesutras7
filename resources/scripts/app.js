@@ -1,12 +1,16 @@
 window.addEventListener('DOMContentLoaded', () => {
+    const sites = document.getElementById('sites');
+
     pbEvents.subscribe('pb-end-update', 'sites', () => {
-        const sites = document.getElementById('sites');
         const documents = document.getElementById('documents');
         const locations = sites.querySelectorAll('pb-geolocation');
         pbEvents.emit('pb-update-map', 'map', Array.from(locations));
         locations.forEach((geo) => {
             geo.addEventListener('click', (ev) => {
                 ev.preventDefault();
+                const url = new URL(location.href);
+                url.searchParams.set('site', geo.id);
+                history.pushState(null, null, url.toString());
                 documents.load({
                     site: geo.id
                 });
@@ -125,6 +129,15 @@ window.addEventListener('DOMContentLoaded', () => {
             view.style.fontSize = (size + 1) + 'px';
         } else {
             view.style.fontSize = (size - 1) + 'px';
+        }
+    });
+
+    pbEvents.subscribe('pb-page-ready', null, function() {
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('site')) {
+            documents.load({
+                site: params.get('site')
+            });
         }
     });
 });

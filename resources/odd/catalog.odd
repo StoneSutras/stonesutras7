@@ -1,3 +1,4 @@
+<?teipublisher output="web"?>
 <TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:pb="http://teipublisher.com/1.0" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:lang="en">
     <teiHeader>
         <fileDesc>
@@ -75,7 +76,13 @@
                 <elementSpec ident="header" mode="add">
                     <modelSequence predicate="$parameters?mode='breadcrumbs'">
             <model behaviour="inline">
-                <param name="content" value="let $site := substring-before(../@xml:id, '_') let $c := collection(&#34;/db/apps/stonesutras-data/data/catalog&#34;)/id($site) return (  $c/header/province[@lang='zh'], ' ',       $c/header/province[@lang='en'], ' &gt; ',     $c/header/title[@lang='zh'], ' ',      $c/header/title[@lang='en'],     ' &gt; ' )"/>
+                <param name="province" value="let $site := substring-before(../@xml:id, '_') let $c := collection(&#34;/db/apps/stonesutras-data/data/catalog&#34;)/id($site) return ($c/header/province[@lang='zh'], ' ',       $c/header/province[@lang='en'])"/>
+                <param name="site" value="let $site := substring-before(../@xml:id, '_') let $c := collection(&#34;/db/apps/stonesutras-data/data/catalog&#34;)/id($site) return ($c/header/title[@lang='zh'], ' ',      $c/header/title[@lang='en'])"/>
+                <param name="id" value="$parameters?app || &#34;index.html?site=&#34; || substring-before(../@xml:id, '_')"/>
+                <pb:template xmlns="" xml:space="preserve"><span class="breadcrumbs">
+  <span class="province">[[province]]</span> &gt;
+  <span class="site"><a href="[[id]]">[[site]]</a></span> &gt;
+</span></pb:template>
             </model>
             <model behaviour="inline">
                 <param name="content" value="(title[@*:lang='zh'], title[@*:lang='en'])"/>
@@ -237,7 +244,7 @@
                 </elementSpec>
                 <elementSpec ident="ref">
                     <model predicate="@value='discussion'" behaviour="template">
-            <param name="sigle" value="let $target := @xlink:href return (collection('/db/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']/string(), '???')[1] "/>
+            <param name="sigle" value="let $target := @xlink:href return (collection('/db/apps/stonesutras-data/data/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']/string(), '???')[1] "/>
             <param name="pages" value="pages/string()"/>
             <param name="content" value="note"/>
             <pb:template xmlns="" xml:space="preserve">
