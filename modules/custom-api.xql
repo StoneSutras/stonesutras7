@@ -23,13 +23,14 @@ declare namespace tei="http://www.tei-c.org/ns/1.0";
 
 declare variable $api:SITES := (
      "HDS", "TC", "SY", "EG", "YC", "DZ", "Sili", "Yin", "PY", "HT", "JS", "Yang", "HSY", "CLS", "FHS", "SNS",
-     "Ziyang", "TS", "LS", "Yi", "Tie", "Ge",
-     "WFY_1", "WFY_2", "WFY_29", "WFY_33"
+     "Ziyang", "TS", "LS", "Yi", "Tie", "Ge", "GS", "JCW_east",
+     "WFY_1", "WFY_2", "WFY_29", "WFY_33", "WFY_46"
 );
 
 declare variable $api:PROVINCES := (
     map {
         "name": "Shandong",
+        "name_zh": "山東",
         "coordinates": map {
             "latitude": 36.372645,
             "longitude": 118.059082
@@ -37,6 +38,15 @@ declare variable $api:PROVINCES := (
     },
     map {
         "name": "Sichuan",
+        "name_zh": "四川",
+        "coordinates": map {
+            "latitude": 30.694612,
+            "longitude": 102.392578
+        }
+    },
+    map {
+        "name": "Shaanxi",
+        "name_zh": "陝西",
         "coordinates": map {
             "latitude": 30.694612,
             "longitude": 102.392578
@@ -49,8 +59,8 @@ declare function api:sites($request as map(*)) {
     {
         for $province in $api:PROVINCES
         return
-            <pb-collapse class="province">
-                <h4 slot="collapse-trigger">{$province?name}</h4>
+            <pb-collapse class="province" opened="">
+                <h4 slot="collapse-trigger">{$province?name_zh} {$province?name}</h4>
                 <div slot="collapse-content">
                     <ul>
                     {

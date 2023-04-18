@@ -3,6 +3,7 @@ transform
 node_modules
 resources/scripts/*.js
 resources/scripts/*.map
+!resources/scripts/app.js
 resources/lib/
 resources/css/leaflet/
 resources/css/prismjs
