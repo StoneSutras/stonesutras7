@@ -59,7 +59,7 @@
 </head>
 
 <body>
-    <pb-page data-template="pages:pb-page" unresolved="unresolved">
+    <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json">
         <app-drawer-layout force-narrow="force-narrow">
             <app-drawer slot="drawer" align="right">
                 <div class="drawer-content">
@@ -74,7 +74,10 @@
                     <app-toolbar class="menubar">
                         <a href="${app}/index.html" class="logo" data-template="pages:parse-params"/>
                         <pb-media-query query="(min-width: 1024px)">
-                            <a href="${app}/index.html" data-template="pages:parse-params">Start</a>
+                            <a href="${app}/index.html" data-template="pages:parse-params"><pb-i18n key="menu.start">Start</pb-i18n></a>
+                            <a href="${app}/inscriptions.html" data-template="pages:parse-params"><pb-i18n key="menu.inscriptions">Inscriptions</pb-i18n></a>
+                            <a href="${app}/articles.html" data-template="pages:parse-params"><pb-i18n key="menu.articles">Articles</pb-i18n></a>
+                            <a href="${app}/articles.html" data-template="pages:parse-params"><pb-i18n key="menu.bibliography">Bibliography</pb-i18n></a>
                             <pb-restricted login="login" group="tei">
                                 <paper-menu-button>
                                     <a href="#" slot="dropdown-trigger">

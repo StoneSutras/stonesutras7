@@ -43,6 +43,40 @@
                 }
             }
         },
+        "/api/inscriptions/json": {
+            "get": {
+                "summary": "Get list of inscriptions for site",
+                "operationId": "api:inscription-table",
+                "parameters": [
+                    {
+                        "name": "start",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200":{
+                        "description": "List of inscriptions",
+                        "content": {
+                            "application/json":{
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/inscriptions": {
             "get": {
                 "summary": "Get list of inscriptions for site",

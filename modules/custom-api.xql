@@ -54,6 +54,25 @@ declare variable $api:PROVINCES := (
     }
 );
 
+declare function api:inscription-table($request as map(*)) {
+    let $inscriptions :=
+        for $siteName in $api:SITES
+        let $site := collection($config:data-catalog)/catalog:object[@type=("site", "cave")][@xml:id = $siteName]
+        for $catalog in collection($config:data-catalog)/catalog:object[@type="inscription"][starts-with(@xml:id, $siteName)]
+        return
+            map {
+                "id": translate($catalog/@xml:id, '_', ' '),
+                "title_zh": $catalog/catalog:header/catalog:title[@lang="zh"]/string(),
+                "title": $catalog/catalog:header/catalog:title[@lang="en"]/string(),
+                "province": $site/catalog:header/catalog:province/string()
+            }
+    return
+        map {
+            "count": count($inscriptions),
+            "results": array { subsequence($inscriptions, $request?parameters?start, $request?parameters?limit) }
+        }
+};
+
 declare function api:sites($request as map(*)) {
     <div>
     {

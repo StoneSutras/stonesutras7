@@ -1,5 +1,11 @@
 {
     "myapp": {
         "title": "Foo"
+    },
+    "menu": {
+        "start": "Sites",
+        "articles": "Research",
+        "inscriptions": "Inscriptions",
+        "bibliography": "Bibliography"
     }
 }
