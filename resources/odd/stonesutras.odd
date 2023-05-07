@@ -1,3 +1,4 @@
+<?teipublisher output="print web"?>
 <TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:pb="http://teipublisher.com/1.0" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:cb="http://www.cbeta.org/ns/1.0" xml:lang="en">
     <teiHeader>
         <fileDesc>
@@ -89,25 +90,24 @@
                     <model behaviour="block"/>
                 </elementSpec>
                 <elementSpec ident="lb" mode="change">
-                    <model predicate="@ed='T'" behaviour="inline">
-            <param name="n" value="@n"/>
-            <pb:template xmlns="" xml:space="preserve"><span data-taisho="[[n]]" class="cbeta"/></pb:template>
-        </model>
+                    <modelSequence predicate="@ed='T'">
+            <model behaviour="inline">
+                <param name="n" value="@n"/>
+                <param name="link" value="replace(@n, '^(T[^_]+)_(.*)$', '$1_p$2')"/>
+                <pb:template xmlns="" xml:space="preserve"><pb-popover><a slot="default" target="_blank" href="https://cbetaonline.dila.edu.tw/zh/[[link]]">|</a><template slot="alternate">[[n]]</template></pb-popover></pb:template>
+            </model>
+            <model behaviour="inline">
+                <param name="content" value="@n"/>
+                <pb:template xmlns="" xml:space="preserve"><span data-taisho="[[content]]" class="cbeta"/></pb:template>
+            </model>
+        </modelSequence>
                     <model behaviour="inline" useSourceRendition="true">
             <param name="content" value="('/', @n, '/')"/>
             <outputRendition xml:space="preserve">
             
-            
-            
-            
-            
             color: #a69933;
 padding-left: .5em;
 padding-right: .5em;
-            
-            
-            
-            
             
             </outputRendition>
         </model>
@@ -200,7 +200,7 @@ padding-right: .5em;
                 <param name="charNote" value="if (lem//hi[@rend='smaller'] and count(lem/*) = 1) then '小字' else ()"/>
                 <param name="lem" value="lem"/>
                 <param name="rdg" value="rdg"/>
-                <pb:template xmlns="" xml:space="preserve">石刻本作[[charNote]]“[[lem]]”字，《大正藏》本作“[[rdg]]“字。</pb:template>
+                <pb:template xmlns="" xml:space="preserve"><span>石刻本作[[charNote]]“[[lem]]”字，《大正藏》本作“[[rdg]]”字。</span></pb:template>
             </model>
         </modelSequence>
                     <modelSequence predicate="lem//text() and empty(rdg[@type = 'textcritical']//text()) and empty(rdg[@type = 'interpretative'])">
@@ -220,7 +220,7 @@ padding-right: .5em;
             <param name="charNote" value="if (lem//hi[@rend='smaller'] and count(lem/*) = 1) then '小字' else ()"/>
             <param name="lem" value="lem"/>
             <param name="rdg" value="rdg"/>
-            <pb:template xmlns="" xml:space="preserve">《大正藏》本此處有“[[rdg]]“字。</pb:template>
+            <pb:template xmlns="" xml:space="preserve"><span>《大正藏》本此處有“[[rdg]]”字。</span></pb:template>
         </model>
                     <modelSequence predicate="lem//text() and rdg[@type = 'interpretative']//text()">
             <desc>Case 2.1, Lemma contains text, interpretative reading as well</desc>
@@ -231,7 +231,7 @@ padding-right: .5em;
                 <param name="charNote" value="if (lem//hi[@rend='smaller'] and count(lem/*) = 1) then '小字' else ()"/>
                 <param name="lem" value="lem"/>
                 <param name="rdg" value="rdg"/>
-                <pb:template xmlns="" xml:space="preserve">他本作“[[rdg]]“字。</pb:template>
+                <pb:template xmlns="" xml:space="preserve"><span>他本作“[[rdg]]“字。</span></pb:template>
             </model>
         </modelSequence>
                     <modelSequence predicate="lem//text() and empty(rdg[@type = 'interpretative']//text()) and empty(rdg[@type = 'textcritical'])">
@@ -243,7 +243,7 @@ padding-right: .5em;
                 <param name="charNote" value="if (lem//hi[@rend='smaller'] and count(lem/*) = 1) then '小字' else ()"/>
                 <param name="lem" value="lem"/>
                 <param name="rdg" value="rdg"/>
-                <pb:template xmlns="" xml:space="preserve">他本無“[[lem]]”字[[rdg]]。</pb:template>
+                <pb:template xmlns="" xml:space="preserve"><span>他本無“[[lem]]”字[[rdg]]。</span></pb:template>
             </model>
         </modelSequence>
                     <model predicate="empty(lem//text()) and exists(rdg[@type = 'interpretative']//text()) and empty(rdg[@type = 'textcritical'])" behaviour="note">
@@ -251,7 +251,7 @@ padding-right: .5em;
             <param name="charNote" value="if (lem//hi[@rend='smaller'] and count(lem/*) = 1) then '小字' else ()"/>
             <param name="lem" value="lem"/>
             <param name="rdg" value="rdg"/>
-            <pb:template xmlns="" xml:space="preserve">他本多“[[rdg]]”字。</pb:template>
+            <pb:template xmlns="" xml:space="preserve"><span>他本多“[[rdg]]”字。</span></pb:template>
         </model>
                     <modelSequence predicate="lem//text() and rdg[@type = 'textcritical']//text() and rdg[@type = 'interpretative']//text()">
             <desc>Case 3.2</desc>
@@ -263,7 +263,7 @@ padding-right: .5em;
                 <param name="lem" value="lem"/>
                 <param name="rdgCrit" value="rdg[@type='textcritical']"/>
                 <param name="rdgInt" value="rdg[@type='interpretative']"/>
-                <pb:template xmlns="" xml:space="preserve">《大正藏》本作：[[rdgCrit]]字。他本作“[[rdgInt]]”字。</pb:template>
+                <pb:template xmlns="" xml:space="preserve"><span>《大正藏》本作：[[rdgCrit]]字。他本作“[[rdgInt]]”字。</span></pb:template>
             </model>
         </modelSequence>
                     <modelSequence>
@@ -328,6 +328,15 @@ padding-right: .5em;
                 </elementSpec>
             <elementSpec ident="cb:div" mode="add">
                     <model behaviour="section"/>
+                </elementSpec>
+            <elementSpec ident="rdg" mode="add">
+                    <model predicate="starts-with(@wit, 'T_')" behaviour="link">
+            <param name="uri" value="let $prev := preceding::lb[@ed='T'][1] return 'https://cbetaonline.dila.edu.tw/zh/' || replace($prev/@n, '^(T[^_]+)_(.*)$', '$1_p$2')"/>
+            <param name="target" value="'_blank'"/>
+        </model>
+                    <model behaviour="inline">
+            <param name="content" value="'X'"/>
+        </model>
                 </elementSpec>
             </schemaSpec>
         </body>
