@@ -46,15 +46,34 @@ body {
     display: grid;
     height: var(--grid-height);
     grid-template-columns: minmax(256px, 20vw) auto minmax(360px, 33vw);
+    grid-template-rows: auto 1fr 25%;
+    grid-template-areas: "catalog header tabs" "catalog transcription tabs" "map transcription tabs";
+    row-gap: 20px;
+}
+
+#catalog {
+    grid-area: catalog;
+}
+
+#transcription {
+    grid-area: transcription;
+}
+
+.inscription #map {
+    grid-area: map;
+}
+
+pb-panel {
+    grid-area: tabs;
+}
+
+.header {
+    grid-area: header;
 }
 
 #variants {
     font-family: var(--pb-content-font-family);
     font-size: var(--pb-content-font-size);
-}
-
-#catalog, pb-panel {
-    max-height: var(--pb-grid-height);
 }
 
 #transcription, #translation, #taisho, #catalog {
@@ -65,14 +84,9 @@ pb-svg {
     height: 100%;
 }
 
-#transcription, #taisho {
-    height: calc(var(--grid-height) - 70px);
-}
-
-pb-leaflet-map {
-    margin-top: 2em;
+#map {
     width: 100%;
-    height: 360px;
+    height: 100%;
 }
 
 ul.variants {
