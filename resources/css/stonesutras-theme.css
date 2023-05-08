@@ -27,6 +27,8 @@ body {
     --pb-panel-max-height: var(--grid-height);
     --pb-lang-input-color: var(--pb-color-primary);
     --pb-lang-label-color: var(--pb-color-primary);
+    --bss-color-gold: #a69933;
+    --bss-color-red: #731750;
 }
 
 .logo {
@@ -63,7 +65,7 @@ body {
     grid-area: map;
 }
 
-pb-panel {
+pb-tabs {
     grid-area: tabs;
 }
 

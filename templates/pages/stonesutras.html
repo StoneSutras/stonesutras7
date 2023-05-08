@@ -57,20 +57,18 @@
                         <h4 class="header">Transcription</h4>
                         <pb-view id="transcription" lang="zh" src="document1" xpath="//text/body/div[@xml:lang='zh']" view="single" column-separator=".tei-cb" history="history" append-footnotes="append-footnotes"
                             subscribe="transcription" emit="transcription"/>
-                        <pb-panel emit="panels">
-                            <template title="Translation">
-                                <pb-view id="translation" lang="en" src="document1" xpath="//text/body/div[@xml:lang='en']" view="single" column-separator=".tei-cb" history="history" append-footnotes="append-footnotes"
-                                    subscribe="transcription"/>
-                            </template>
-                            <template title="Layout Text">
-                                <pb-svg subscribe="layout"/>
-                            </template>
-                            <template title="Discussion">
-                                <pb-view src="document1" odd="catalog" view="single" map="catalog">
-                                    <pb-param name="mode" value="discussion"/>
-                                </pb-view>
-                            </template>
-                        </pb-panel>
+                        
+                        <pb-tabs>
+                            <paper-tab slot="tab">Translation</paper-tab>
+                            <paper-tab slot="tab">Layout Text</paper-tab>
+                            <paper-tab slot="tab">Discussion</paper-tab>
+                            <pb-view slot="page" id="translation" lang="en" src="document1" xpath="//text/body/div[@xml:lang='en']" view="single" column-separator=".tei-cb" history="history" append-footnotes="append-footnotes"
+                                subscribe="transcription"/>
+                            <pb-svg slot="page" subscribe="layout"/>
+                            <pb-view slot="page" src="document1" odd="catalog" view="single" map="catalog">
+                                <pb-param name="mode" value="discussion"/>
+                            </pb-view>
+                        </pb-tabs>
                     </main>
                 </app-header-layout>
             </app-drawer-layout>

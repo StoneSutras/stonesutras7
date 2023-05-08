@@ -29,10 +29,10 @@
                     <pb:param name="key"/>
                     <pb:param name="value"/>
                     <pb:template xmlns="" xml:space="preserve">
-                        <tr>
-                            <td>[[key]]:</td>
-                            <td>[[value]]</td>
-                        </tr>
+                        <div class="entry">
+                            <h4>[[key]]</h4>
+                            <div>[[value]]</div>
+                        </div>
                     </pb:template>
                 </pb:behaviour>
                 <rendition source="catalog.css"/>
@@ -127,7 +127,7 @@
                 <param name="content" value="'概况 Physical Description'"/>
                 <param name="level" value="3"/>
             </model>
-            <model behaviour="table">
+            <model behaviour="block">
                 <param name="content" value="(condition, format, frame, grid, decor, polishing, technique)"/>
             </model>
             <model behaviour="block">
@@ -244,7 +244,7 @@
                 </elementSpec>
                 <elementSpec ident="ref">
                     <model predicate="@value='discussion'" behaviour="template">
-            <param name="sigle" value="let $target := @xlink:href return (collection('/db/apps/stonesutras-data/data/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']/string(), '???')[1] "/>
+            <param name="sigle" value="let $target := @xlink:href return (collection('/db/apps/stonesutras-data/data/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']/string(), '???')[1] =&gt; normalize-space()"/>
             <param name="pages" value="pages/string()"/>
             <param name="content" value="note"/>
             <pb:template xmlns="" xml:space="preserve">

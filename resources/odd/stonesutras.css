@@ -2,3 +2,8 @@
     color: orange;
     font-weight: bold;
 }
+
+
+a:link, a:visited {
+    text-decoration: none;
+}

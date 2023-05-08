@@ -8,14 +8,21 @@ h3 {
 td {
     vertical-align: top;
 }
-.discussion dt {
+
+.list.discussion dt {
     float: none;
 }
 
-.discussion .sigle {
+.list.discussion .sigle {
     font-variant: small-caps;
 }
 
 .breadcrumbs a:link, .breadcrumbs a:visited {
     color: inherit;
+}
+
+.entry h4 {
+    margin-bottom: 0;
+    font-weight: 400;
+    color: var(--bss-color-red);
 }

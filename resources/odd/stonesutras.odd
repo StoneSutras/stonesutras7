@@ -1,4 +1,4 @@
-<?teipublisher output="print web"?>
+<?teipublisher output="web"?>
 <TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:pb="http://teipublisher.com/1.0" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:cb="http://www.cbeta.org/ns/1.0" xml:lang="en">
     <teiHeader>
         <fileDesc>
@@ -104,11 +104,9 @@
                     <model behaviour="inline" useSourceRendition="true">
             <param name="content" value="('/', @n, '/')"/>
             <outputRendition xml:space="preserve">
-            
-            color: #a69933;
+            color: var(--bss-color-gold);
 padding-left: .5em;
 padding-right: .5em;
-            
             </outputRendition>
         </model>
                 </elementSpec>
@@ -118,7 +116,7 @@ padding-right: .5em;
         </model>
                     <model behaviour="inline">
             <outputRendition xml:space="preserve">
-            color: #7C7012;
+            color: var(--bss-color-red);
             </outputRendition>
         </model>
                 </elementSpec>
