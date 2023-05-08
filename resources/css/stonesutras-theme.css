@@ -67,6 +67,7 @@ body {
 
 pb-tabs {
     grid-area: tabs;
+    overflow: auto;
 }
 
 .header {
@@ -78,7 +79,7 @@ pb-tabs {
     font-size: var(--pb-content-font-size);
 }
 
-#transcription, #translation, #taisho, #catalog {
+#transcription, #taisho, #catalog {
     overflow: auto;
 }
 
