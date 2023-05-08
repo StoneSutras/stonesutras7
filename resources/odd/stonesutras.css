@@ -6,4 +6,14 @@
 
 a:link, a:visited {
     text-decoration: none;
+    color: var(--bss-color-lb);
+}
+
+.lemma {
+    background-color: var(--bss-color-lemma);
+    color: var(--pb-color-inverse);
+}
+
+.note.lemma {
+    padding: 0 4px 0 4px;
 }

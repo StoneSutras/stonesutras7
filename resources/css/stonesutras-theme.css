@@ -27,8 +27,12 @@ body {
     --pb-panel-max-height: var(--grid-height);
     --pb-lang-input-color: var(--pb-color-primary);
     --pb-lang-label-color: var(--pb-color-primary);
+    --bss-color-title: #40A0A0;
+    --bss-color-scroll: #054A29;
     --bss-color-gold: #a69933;
     --bss-color-red: #731750;
+    --bss-color-lemma: #EC7357;
+    --bss-color-lb: #2274A5;
 }
 
 .logo {
