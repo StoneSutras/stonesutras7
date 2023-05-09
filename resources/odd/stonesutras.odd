@@ -104,9 +104,13 @@
                     <model behaviour="inline" useSourceRendition="true">
             <param name="content" value="('/', @n, '/')"/>
             <outputRendition xml:space="preserve">
+            
+            
             color: var(--bss-color-gold);
 padding-left: .5em;
 padding-right: .5em;
+            
+            
             </outputRendition>
         </model>
                 </elementSpec>
@@ -198,7 +202,9 @@ padding-right: .5em;
                 <param name="charNote" value="if (lem//hi[@rend='smaller'] and count(lem/*) = 1) then '小字' else ()"/>
                 <param name="lem" value="lem"/>
                 <param name="rdg" value="rdg"/>
-                <pb:template xmlns="" xml:space="preserve"><span>石刻本作[[charNote]]“[[lem]]”字，《大正藏》本作“[[rdg]]”字。</span></pb:template>
+                <pb:set-param name="quote" value="true()"/>
+                <pb:set-param name="char" value="&#34;字&#34;"/>
+                <pb:template xmlns="" xml:space="preserve"><span>[[charNote]]“[[lem]]”，《大正藏》本作[[rdg]]。</span></pb:template>
             </model>
         </modelSequence>
                     <modelSequence predicate="lem//text() and empty(rdg[@type = 'textcritical']//text()) and empty(rdg[@type = 'interpretative'])">
@@ -219,7 +225,9 @@ padding-right: .5em;
                 <param name="charNote" value="if (lem//hi[@rend='smaller'] and count(lem/*) = 1) then '小字' else ()"/>
                 <param name="lem" value="lem"/>
                 <param name="rdg" value="rdg"/>
-                <pb:template xmlns="" xml:space="preserve"><span>《大正藏》本此處有“[[rdg]]”字。</span></pb:template>
+                <pb:set-param name="char" value="'字'"/>
+                <pb:set-param name="quote" value="true()"/>
+                <pb:template xmlns="" xml:space="preserve"><span>《大正藏》本此處有[[rdg]]。</span></pb:template>
             </model>
         </modelSequence>
                     <modelSequence predicate="lem//text() and rdg[@type = 'interpretative']//text()">
@@ -231,7 +239,9 @@ padding-right: .5em;
                 <param name="charNote" value="if (lem//hi[@rend='smaller'] and count(lem/*) = 1) then '小字' else ()"/>
                 <param name="lem" value="lem"/>
                 <param name="rdg" value="rdg"/>
-                <pb:template xmlns="" xml:space="preserve"><span>他本作“[[rdg]]“字。</span></pb:template>
+                <pb:set-param name="char" value="'字'"/>
+                <pb:set-param name="quote" value="true()"/>
+                <pb:template xmlns="" xml:space="preserve"><span>他本作[[rdg]]。</span></pb:template>
             </model>
         </modelSequence>
                     <modelSequence predicate="lem//text() and empty(rdg[@type = 'interpretative']//text()) and empty(rdg[@type = 'textcritical'])">
@@ -242,7 +252,8 @@ padding-right: .5em;
             <model behaviour="note">
                 <param name="charNote" value="if (lem//hi[@rend='smaller'] and count(lem/*) = 1) then '小字' else ()"/>
                 <param name="lem" value="lem"/>
-                <param name="rdg" value="rdg"/>
+                <pb:set-param name="rdg" value="rdg"/>
+                <pb:set-param name="quote" value="false()"/>
                 <pb:template xmlns="" xml:space="preserve"><span>他本無“[[lem]]”字[[rdg]]。</span></pb:template>
             </model>
         </modelSequence>
@@ -251,7 +262,9 @@ padding-right: .5em;
             <param name="charNote" value="if (lem//hi[@rend='smaller'] and count(lem/*) = 1) then '小字' else ()"/>
             <param name="lem" value="lem"/>
             <param name="rdg" value="rdg"/>
-            <pb:template xmlns="" xml:space="preserve"><span>他本多“[[rdg]]”字。</span></pb:template>
+            <pb:set-param name="quote" value="true()"/>
+            <pb:set-param name="char" value="'字'"/>
+            <pb:template xmlns="" xml:space="preserve"><span>他本多[[rdg]]。</span></pb:template>
         </model>
                     <modelSequence predicate="lem//text() and rdg[@type = 'textcritical']//text() and rdg[@type = 'interpretative']//text()">
             <desc>Case 3.2</desc>
@@ -263,7 +276,9 @@ padding-right: .5em;
                 <param name="lem" value="lem"/>
                 <param name="rdgCrit" value="rdg[@type='textcritical']"/>
                 <param name="rdgInt" value="rdg[@type='interpretative']"/>
-                <pb:template xmlns="" xml:space="preserve"><span>《大正藏》本作：[[rdgCrit]]字。他本作“[[rdgInt]]”字。</span></pb:template>
+                <pb:set-param name="char" value="'字'"/>
+                <pb:set-param name="quote" value="true()"/>
+                <pb:template xmlns="" xml:space="preserve"><span>《大正藏》本作：[[rdgCrit]]字。他本作[[rdgInt]]。</span></pb:template>
             </model>
         </modelSequence>
                     <modelSequence>
@@ -318,7 +333,7 @@ padding-right: .5em;
         </model>
                 </elementSpec>
                 <elementSpec ident="mods:titleInfo" mode="add">
-                    <model behaviour="inline">
+                    <model behaviour="inline" cssClass="titleInfo">
             <param name="content" value="mods:title[1]/string()"/>
         </model>
                 </elementSpec>
@@ -334,9 +349,28 @@ padding-right: .5em;
             <param name="uri" value="let $prev := preceding::lb[@ed='T'][1] return 'https://cbetaonline.dila.edu.tw/zh/' || replace($prev/@n, '^(T[^_]+)_(.*)$', '$1_p$2')"/>
             <param name="target" value="'_blank'"/>
         </model>
-                    <model behaviour="inline">
-            <param name="content" value="'X'"/>
+                    <model predicate="$parameters?quote" behaviour="pass-through">
+            <param name="char" value="$parameters?char"/>
+            <param name="witnesses" value="for $sigil in tokenize(./@wit, '[,\s]+') return   root($parameters?root)//witList/witness[@sigil=$sigil]"/>
+            <pb:template xmlns="" xml:space="preserve"><span class="rdg">“[[content]]”[[char]]([[witnesses]])</span></pb:template>
         </model>
+                    <model behaviour="inline" cssClass="rdg">
+            <param name="char" value="$parameters?char"/>
+            <pb:template xmlns="" xml:space="preserve">[[content]][[char]]</pb:template>
+        </model>
+                </elementSpec>
+            <elementSpec ident="witness" mode="add">
+                    <model predicate="matches(@sigil, '^T\d+.*$')" behaviour="pass-through">
+            <param name="ref" value="let $target := ./witDetail/@target/string()  let $mods := collection('/db/apps/stonesutras-data/data/biblio')/mods:mods[@ID = $target]  return   $mods/mods:titleInfo[@type = 'reference']"/>
+            <pb:template xmlns="" xml:space="preserve"><span class="witness_taisho"><span class="ref">[[ref]]</span>[[content]]</span></pb:template>
+        </model>
+                    <model behaviour="pass-through">
+            <param name="ref" value="let $target := ./witDetail/@target/string()  let $mods := collection('/db/apps/stonesutras-data/data/biblio')/mods:mods[@ID = $target]  return   $mods/mods:titleInfo[@type = 'reference']"/>
+            <pb:template xmlns="" xml:space="preserve"><span class="witness">[[ref]][[content]]</span></pb:template>
+        </model>
+                </elementSpec>
+                <elementSpec ident="witDetail" mode="add">
+                    <model behaviour="inline" cssClass="witDetail"/>
                 </elementSpec>
             </schemaSpec>
         </body>

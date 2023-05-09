@@ -25,3 +25,19 @@ a:link, a:visited {
 .cblb.toggle {
     display: inline;
 }
+
+.rdg + .rdg::before {
+    content: "，";
+}
+
+.witness + .witness::before {
+    content: "; ";
+}
+
+.witDetail::before {
+    content: ", ";
+}
+
+.titleInfo {
+    font-variant: small-caps;
+}
