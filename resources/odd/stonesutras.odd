@@ -91,10 +91,10 @@
                 </elementSpec>
                 <elementSpec ident="lb" mode="change">
                     <modelSequence predicate="@ed='T'">
-            <model behaviour="inline">
+            <model behaviour="pass-through">
                 <param name="n" value="@n"/>
                 <param name="link" value="replace(@n, '^(T[^_]+)_(.*)$', '$1_p$2')"/>
-                <pb:template xmlns="" xml:space="preserve"><pb-popover><a slot="default" target="_blank" href="https://cbetaonline.dila.edu.tw/zh/[[link]]" class="cblb">|</a><template slot="alternate">[[n]]</template></pb-popover></pb:template>
+                <pb:template xmlns="" xml:space="preserve"><pb-popover class="cblb"><a slot="default" target="_blank" href="https://cbetaonline.dila.edu.tw/zh/[[link]]">|</a><template slot="alternate">[[n]]</template></pb-popover></pb:template>
             </model>
             <model behaviour="inline">
                 <param name="content" value="@n"/>

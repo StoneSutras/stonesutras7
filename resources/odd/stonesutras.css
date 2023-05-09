@@ -3,7 +3,6 @@
     font-weight: bold;
 }
 
-
 a:link, a:visited {
     text-decoration: none;
     color: var(--bss-color-lb);
@@ -16,4 +15,13 @@ a:link, a:visited {
 
 .note.lemma {
     padding: 0 4px 0 4px;
+    color: var(--pb-color-inverse);
+}
+
+.cblb {
+    display: none;
+}
+
+.cblb.toggle {
+    display: inline;
 }

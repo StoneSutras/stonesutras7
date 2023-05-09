@@ -85,7 +85,7 @@
 </span></pb:template>
             </model>
             <model behaviour="inline">
-                <param name="content" value="(title[@*:lang='zh'], title[@*:lang='en'])"/>
+                <param name="content" value="replace(ancestor::object/@xml:id, '^([^_]+)_([^_]+).*$', '$1 $2')"/>
             </model>
         </modelSequence>
                     <model predicate="$parameters?mode='title'" behaviour="link">

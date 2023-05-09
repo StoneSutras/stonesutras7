@@ -44,24 +44,29 @@
                         </div>
                     </pb-drawer>
                     <main class="content-body">
-                        <div id="catalog">
-                            <pb-view src="document1" map="catalog" odd="catalog" view="single" wait-for="#map" emit="catalog" subscribe="catalog"/>
-                        </div>
-                        <pb-leaflet-map id="map" subscribe="catalog" zoom="11" crs="EPSG3857" fit-markers="">
-                            <pb-map-layer base="" show="" label="Mapbox OSM" url="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoid29sZmdhbmdtbSIsImEiOiJjam1kMjVpMnUwNm9wM3JwMzdsNGhhcnZ0In0.v65crewF-dkNsPF3o1Q4uw"
-                                attribution='© &lt;a href="https://www.mapbox.com/about/maps/"&gt;Mapbox&lt;/a&gt; © &lt;a href="http://www.openstreetmap.org/copyright"&gt;OpenStreetMap&lt;/a&gt; &lt;strong&gt;&lt;a href="https://www.mapbox.com/map-feedback/" target="_blank"&gt;Improve this map&lt;/a&gt;&lt;/strong&gt;'
-                                max-zoom="18" tile-size="512"></pb-map-layer>
-                            <pb-map-layer base="" label="ESRI World Imagery" url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-                                attribution='© Esri - © Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'></pb-map-layer>
-                        </pb-leaflet-map>
-                        <h4 class="header">Transcription</h4>
+                        <app-toolbar class="header">
+                            <h4 main-title="">Transcription</h4>
+                            <pb-toggle-feature name="cbeta" default="off" selector=".cblb" emit="transcription" subscribe="transcription">
+                                CBETA Linebreaks
+                            </pb-toggle-feature>
+                        </app-toolbar>
                         <pb-view id="transcription" lang="zh" src="document1" xpath="//text/body/div[@xml:lang='zh']" view="single" column-separator=".tei-cb" history="history" append-footnotes="append-footnotes"
                             subscribe="transcription" emit="transcription"/>
-                        
                         <pb-tabs>
+                            <paper-tab slot="tab">Metadata</paper-tab>
                             <paper-tab slot="tab">Translation</paper-tab>
                             <paper-tab slot="tab">Layout Text</paper-tab>
                             <paper-tab slot="tab">Discussion</paper-tab>
+                            <div slot="page" id="catalog">
+                                <pb-view src="document1" map="catalog" odd="catalog" view="single" wait-for="#map" emit="catalog" subscribe="catalog"/>
+                                <pb-leaflet-map id="map" subscribe="catalog" zoom="11" crs="EPSG3857" fit-markers="">
+                                    <pb-map-layer base="" show="" label="Mapbox OSM" url="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoid29sZmdhbmdtbSIsImEiOiJjam1kMjVpMnUwNm9wM3JwMzdsNGhhcnZ0In0.v65crewF-dkNsPF3o1Q4uw"
+                                        attribution='© &lt;a href="https://www.mapbox.com/about/maps/"&gt;Mapbox&lt;/a&gt; © &lt;a href="http://www.openstreetmap.org/copyright"&gt;OpenStreetMap&lt;/a&gt; &lt;strong&gt;&lt;a href="https://www.mapbox.com/map-feedback/" target="_blank"&gt;Improve this map&lt;/a&gt;&lt;/strong&gt;'
+                                        max-zoom="18" tile-size="512"></pb-map-layer>
+                                    <pb-map-layer base="" label="ESRI World Imagery" url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                                        attribution='© Esri - © Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'></pb-map-layer>
+                                </pb-leaflet-map>
+                            </div>
                             <pb-view slot="page" id="translation" lang="en" src="document1" xpath="//text/body/div[@xml:lang='en']" view="single" column-separator=".tei-cb" history="history" append-footnotes="append-footnotes"
                                 subscribe="transcription"/>
                             <pb-svg slot="page" subscribe="layout"/>
