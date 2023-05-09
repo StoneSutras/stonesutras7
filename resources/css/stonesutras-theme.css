@@ -33,6 +33,7 @@ body {
     --bss-color-red: #731750;
     --bss-color-lemma: #EC7357;
     --bss-color-lb: #2274A5;
+    --bss-catalog-font-size: 16px;
 }
 
 .logo {
@@ -75,6 +76,7 @@ pb-tabs {
 pb-tabs::part(pages) {
     height: calc(100% - 48px);
     overflow: auto;
+    --pb-content-font-size: var(--bss-catalog-font-size);
 }
 
 .header {
