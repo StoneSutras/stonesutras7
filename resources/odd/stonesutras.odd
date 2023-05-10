@@ -106,9 +106,11 @@
             <outputRendition xml:space="preserve">
             
             
+            
             color: var(--bss-color-gold);
 padding-left: .5em;
 padding-right: .5em;
+            
             
             
             </outputRendition>
@@ -137,10 +139,11 @@ padding-right: .5em;
                     <model predicate="@type!='display'" behaviour="omit"/>
                     <model behaviour="note"/>
                 </elementSpec>
-                <elementSpec ident="ptr" mode="add">
+                <elementSpec ident="ptr" mode="change">
                     <model predicate="starts-with(@target, 'note') and id(@target, root($parameters?root))[@type='display']" behaviour="note">
             <param name="content" value="id(@target, root($parameters?root))"/>
         </model>
+                    <model behaviour="omit"/>
                 </elementSpec>
                 <elementSpec ident="choice" mode="change">
                     <modelSequence predicate="unclear/@cert">
