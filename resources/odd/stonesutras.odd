@@ -386,13 +386,20 @@ padding-right: .5em;
         </model>
                     <model predicate="@xml:lang" behaviour="pass-through">
             <param name="lang" value="@xml:lang"/>
-            <pb:template xmlns="" xml:space="preserve"><div lang="[[lang]]">[[content]]</div></pb:template>
+            <param name="class" value="if (starts-with($parameters?root//text/@xml:id, 'Site_')) then 'site' else ()"/>
+            <pb:template xmlns="" xml:space="preserve"><div lang="[[lang]]" class="[[class]]">[[content]]</div></pb:template>
         </model>
                     <model behaviour="block"/>
                 </elementSpec>
                 <elementSpec ident="figure" mode="change">
-        <model behaviour="figure"/>
-    </elementSpec>
+                    <model behaviour="figure">
+            <param name="title" value="(head[@xml:lang='zh'], head[not(@xml:lang='zh')])"/>
+            <param name="content" value="graphic"/>
+        </model>
+                </elementSpec>
+            <elementSpec ident="text" mode="change">
+                    <model behaviour="body"/>
+                </elementSpec>
             </schemaSpec>
         </body>
     </text>

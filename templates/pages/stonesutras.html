@@ -31,7 +31,12 @@
                 <app-drawer data-template="templates:include" data-template-path="templates/drawer.html"/>
                 <app-header-layout>
                     <app-header slot="header" reveals="reveals" fixed="fixed" effects="waterfall">
-                        <app-toolbar data-template="templates:include" data-template-path="templates/menu.html"/>
+                        <app-toolbar data-template="lib:include" data-template-path="templates/menu.html">
+                            <pb-view data-target="toolbar-before" id="title-view1" src="document1" odd="catalog" view="single" map="catalog">
+                                <pb-param name="mode" value="breadcrumbs"/>
+                                <pb-param name="app" value="${app}/" data-template="pages:parse-params"/>
+                            </pb-view>
+                        </app-toolbar>
                         <app-toolbar data-template="templates:include" data-template-path="templates/toolbar.html"/>
                     </app-header>
 

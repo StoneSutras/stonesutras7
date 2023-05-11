@@ -54,3 +54,16 @@ a:link, a:visited {
 [lang=zh] .abbr::after {
     content: '）';
 }
+
+figcaption {
+    text-align: right;
+    font-size: var(--pb-footnote-font-size);
+}
+
+.site {
+    columns: 2;
+}
+
+.site h1, .site h2, .site figure.full, .site figure.center {
+    column-span: all;
+}
