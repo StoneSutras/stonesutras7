@@ -41,3 +41,16 @@ a:link, a:visited {
 .titleInfo {
     font-variant: small-caps;
 }
+
+.abbr {
+    display: block;
+    text-align: right;
+}
+
+[lang=zh] .abbr::before {
+    content: '（';
+}
+
+[lang=zh] .abbr::after {
+    content: '）';
+}

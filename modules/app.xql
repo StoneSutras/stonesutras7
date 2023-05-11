@@ -13,8 +13,8 @@ import module namespace config="http://www.tei-c.org/tei-simple/config" at "conf
 
 declare namespace tei="http://www.tei-c.org/ns/1.0";
 
-declare
-    %templates:wrap
-function app:foo($node as node(), $model as map(*)) {
-    <p>Dummy templating function.</p>
+declare function app:pb-document($node as node(), $model as map(*), $site as xs:string?) {
+    <pb-document path="Publication/Site_{$site}.xml" root-path="{$config:data-root}">
+    { $node/@* }
+    </pb-document>
 };
