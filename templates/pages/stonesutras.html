@@ -1,3 +1,4 @@
+
 <html>
     <head>
         <meta charset="utf-8"/>
@@ -32,12 +33,13 @@
                 <app-header-layout>
                     <app-header slot="header" reveals="reveals" fixed="fixed" effects="waterfall">
                         <app-toolbar data-template="lib:include" data-template-path="templates/menu.html">
-                            <pb-view data-target="toolbar-before" id="title-view1" src="document1" odd="catalog" view="single" map="catalog">
+                        </app-toolbar>
+                        <app-toolbar data-template="lib:include" data-template-path="templates/toolbar.html">
+                            <pb-view data-target="breadcrumbs" id="title-view1" src="document1" odd="catalog" view="single" map="catalog">
                                 <pb-param name="mode" value="breadcrumbs"/>
                                 <pb-param name="app" value="${app}/" data-template="pages:parse-params"/>
                             </pb-view>
                         </app-toolbar>
-                        <app-toolbar data-template="templates:include" data-template-path="templates/toolbar.html"/>
                     </app-header>
 
                     <pb-drawer toggle="tocToggle" class="toc" emit="toc" subscribe="transcription">

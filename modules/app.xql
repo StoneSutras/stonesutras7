@@ -18,3 +18,9 @@ declare function app:pb-document($node as node(), $model as map(*), $site as xs:
     { $node/@* }
     </pb-document>
 };
+
+declare function app:pb-document-catalog($node as node(), $model as map(*), $site as xs:string?) {
+    <pb-document path="catalog/{$site}_Site.xml" root-path="{$config:data-root}">
+    { $node/@* }
+    </pb-document>
+};

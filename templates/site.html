@@ -20,7 +20,8 @@
     </head>
 
     <body class="inscription">
-        <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json">
+        <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json"
+            require-language="">
             <script id="appConfig" type="application/json" data-template="pages:parse-params">
                 {
                     "app": "${app}"
@@ -28,14 +29,19 @@
             </script>
             <pb-document id="site" odd="stonesutras" data-template="app:pb-document"/>
             <app-drawer-layout force-narrow="force-narrow">
-                <app-drawer data-template="templates:include" data-template-path="templates/drawer.html"/>
+                <app-drawer data-template="lib:include" data-template-path="templates/drawer.html"/>
                 <app-header-layout>
                     <app-header slot="header" reveals="reveals" fixed="fixed" effects="waterfall">
-                        <app-toolbar data-template="templates:include" data-template-path="templates/menu.html"/>
-                        <app-toolbar data-template="templates:include" data-template-path="templates/toolbar.html"/>
+                        <app-toolbar data-template="lib:include" data-template-path="templates/menu.html"/>
+                        <app-toolbar data-template="lib:include" data-template-path="templates/toolbar.html">
+                            <pb-view data-target="breadcrumbs" id="title-view1" src="site" view="single" odd="catalog" map="site">
+                                <pb-param name="mode" value="site"/>
+                                <pb-param name="app" value="${app}/" data-template="pages:parse-params"/>
+                            </pb-view>
+                        </app-toolbar>
                     </app-header>
                     <main class="content-body">
-                        <pb-view src="site"/>
+                        <pb-view src="site" view="single" map="language" use-language=""/>
                         <pb-load id="documents" url="api/inscriptions" subscribe="documents"/>
                     </main>
                 </app-header-layout>

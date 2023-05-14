@@ -16,6 +16,22 @@ declare function mapping:catalog($root as node(), $userParams as map(*)) {
         collection($config:data-catalog)/id($id)
 };
 
+declare function mapping:site($root as node(), $userParams as map(*)) {
+    let $id := root($root)//tei:text/@xml:id
+    return
+        collection($config:data-catalog)/id(substring-after($id, 'Site_'))
+};
+
+declare function mapping:language($root as node(), $userParams as map(*)) {
+    let $lang := replace($userParams?language, "^([^_]+).*$", "$1")
+    return
+    switch($lang)
+        case "zh" return
+            root($root)//tei:body/tei:div[@xml:lang="zh"]
+        default return
+            root($root)//tei:body/tei:div[@xml:lang="en"]
+};
+
 declare function mapping:cbeta($root as node(), $userParams as map(*)) {
     let $cbeta := doc("/db/apps/stonesutras7/data/T08n0235.xml")//tei:body
     let $lines := $root//tei:lb[@ed='T']/@n

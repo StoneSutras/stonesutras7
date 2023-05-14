@@ -10,6 +10,7 @@
         "server": "localhost",
         "root": "/db/apps/stonesutras7",
         "active": false,
+        "polling": true,
         "ignore": [
             ".existdb.json",
             ".git/**",

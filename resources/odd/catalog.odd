@@ -55,7 +55,7 @@
                 <param name="content" value="header"/>
             </model>
         </modelSequence>
-                    <model predicate="$parameters?mode='breadcrumbs'" behaviour="block">
+                    <model predicate="$parameters?mode=('breadcrumbs','site')" behaviour="block">
             <param name="content" value="header"/>
         </model>
                     <model predicate="$parameters?mode='discussion'" behaviour="block">
@@ -74,6 +74,16 @@
         </modelSequence>
                 </elementSpec>
                 <elementSpec ident="header" mode="add">
+                    <modelSequence predicate="$parameters?mode='site'">
+            <model behaviour="inline">
+                <param name="site" value="(title[@lang='zh'], ' ', title[@lang='en'])"/>
+                <param name="province" value="(province[@lang='zh'], ' ', province[@lang='en'])"/>
+                <pb:template xmlns="" xml:space="preserve"><span class="breadcrumbs">
+  <span class="province">[[province]]</span> &gt;
+  <span class="site"><a href="[[id]]">[[site]]</a></span>
+</span></pb:template>
+            </model>
+        </modelSequence>
                     <modelSequence predicate="$parameters?mode='breadcrumbs'">
             <model behaviour="inline">
                 <param name="province" value="let $site := substring-before(../@xml:id, '_') let $c := collection(&#34;/db/apps/stonesutras-data/data/catalog&#34;)/id($site) return ($c/header/province[@lang='zh'], ' ',       $c/header/province[@lang='en'])"/>
@@ -97,7 +107,7 @@
         </model>
                 </elementSpec>
                 <elementSpec ident="title" mode="add">
-                    <model predicate="$parameters?mode='breadcrumbs' and @lang='zh'" behaviour="inline">
+                    <model predicate="$parameters?mode=('breadcrumbs', 'site') and @lang='zh'" behaviour="inline">
             <outputRendition xml:space="preserve" scope="after">
             content: ' ';
             </outputRendition>
@@ -105,7 +115,7 @@
             font-size: 16px; line-height: 24px; font-weight: 400;
             </outputRendition>
         </model>
-                    <model predicate="$parameters?mode='breadcrumbs'" behaviour="inline">
+                    <model predicate="$parameters?mode=('breadcrumbs', 'site')" behaviour="inline">
             <outputRendition xml:space="preserve">
             font-size: 16px; line-height: 24px; font-weight: 400;
             </outputRendition>

@@ -102,10 +102,8 @@ declare function api:sites($request as map(*)) {
 
 declare function api:inscriptions($request as map(*)) {
     let $catalog := collection($config:data-catalog)/id($request?parameters?site)
-    let $title := string-join(($catalog/catalog:header/catalog:title[@lang="zh"], $catalog/catalog:header/catalog:title[@lang="en"]), " - ")
     return
         <div>
-            <h1>{$title}</h1>
             {
                 for $link in $catalog/catalog:fileDescription/catalog:link/@xlink:href
                 let $inscription := collection($config:data-catalog)/id($link)
