@@ -22,17 +22,13 @@
             main {
                 display: grid;
                 margin: 0 20px;
-                grid-template-columns: auto 1fr minmax(auto, 33vw);
-                height: calc(100vh - 64px);
+                grid-template-columns: auto 1fr;
+                column-gap: 20px;
+                height: calc(100vh - 128px);
             }
 
             #sites {
                 margin-right: 20px;
-                overflow: auto;
-            }
-
-            #documents {
-                margin-left: 20px;
                 overflow: auto;
             }
 
@@ -107,18 +103,12 @@
                         </pb-login>
                         <pb-progress indeterminate="indeterminate" bottom-item="bottom-item" subscribe="docs"/>
                     </app-toolbar>
-                    <pb-media-query query="(max-width: 1023px)">
-                        <app-toolbar class="toolbar" sticky="sticky">
-                            <!-- Search input -->
-                            <pb-search action="${app}/search.html" data-template="pages:parse-params" value="${query}" redirect="redirect"/>
-                            <paper-icon-button icon="icons:menu" drawer-toggle="drawer-toggle"/>
-                        </app-toolbar>
-                    </pb-media-query>
-                    <div id="separator"></div>
+                    <app-toolbar data-template="lib:include" data-template-path="templates/toolbar.html">
+                        <div class="breadcrumbs" data-target="breadcrumbs">Sites</div>
+                    </app-toolbar>
                 </app-header>
                 <main>
                     <div id="sites">
-                        <h1>Sites</h1>
                         <pb-load url="api/sites" auto="" wait-for="pb-leaflet-map" emit="sites"></pb-load>
                     </div>
                     <pb-leaflet-map id="map" zoom="12" crs="EPSG3857" fit-markers="" subscribe="map">
@@ -128,7 +118,6 @@
                         <pb-map-layer base="" show="" label="ESRI World Imagery" url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
                             attribution='© Esri - © Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'></pb-map-layer>
                     </pb-leaflet-map>
-                    <pb-load id="documents" url="api/inscriptions" subscribe="documents"/>
                 </main>
             </app-header-layout>
         </app-drawer-layout>

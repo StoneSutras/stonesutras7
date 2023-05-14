@@ -5,17 +5,17 @@ window.addEventListener('DOMContentLoaded', () => {
         const documents = document.getElementById('documents');
         const locations = sites.querySelectorAll('pb-geolocation');
         pbEvents.emit('pb-update-map', 'map', Array.from(locations));
-        locations.forEach((geo) => {
-            geo.addEventListener('click', (ev) => {
-                ev.preventDefault();
-                const url = new URL(location.href);
-                url.searchParams.set('site', geo.id);
-                history.pushState(null, null, url.toString());
-                documents.load({
-                    site: geo.id
-                });
-            });
-        });
+        // locations.forEach((geo) => {
+        //     geo.addEventListener('click', (ev) => {
+        //         ev.preventDefault();
+        //         const url = new URL(location.href);
+        //         url.searchParams.set('site', geo.id);
+        //         history.pushState(null, null, url.toString());
+        //         documents.load({
+        //             site: geo.id
+        //         });
+        //     });
+        // });
     });
 
     pbEvents.subscribe('pb-leaflet-marker-click', null, (ev) => {

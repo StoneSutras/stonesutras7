@@ -90,7 +90,9 @@ declare function api:sites($request as map(*)) {
                         order by $site/catalog:header/catalog:title[@lang="en"], $site/@xml:id
                         return
                             <li>
-                                <pb-geolocation id="{$site/@xml:id/string()}" longitude="{$coordinates[1]}" latitude="{$coordinates[2]}" label="{$title}" emit="map">{$title}</pb-geolocation>
+                                <pb-geolocation id="{$site/@xml:id/string()}" longitude="{$coordinates[1]}" latitude="{$coordinates[2]}" label="{$title}" emit="map">
+                                <a href="site.html?site={$site/@xml:id}">{$title}</a>
+                                </pb-geolocation>
                             </li>
                     }
                     </ul>
