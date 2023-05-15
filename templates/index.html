@@ -14,21 +14,7 @@
     <script type="module" src="pb-leaflet-map.js" data-template="pages:load-components"/>
     <custom-style>
         <style>
-            #separator {
-                height: 20px;
-                background-color: rgba(0, 0, 0, .4);
-            }
-
-            main {
-                display: grid;
-                margin: 0 20px;
-                grid-template-columns: auto 1fr;
-                column-gap: 20px;
-                height: calc(100vh - 128px);
-            }
-
             #sites {
-                margin-right: 20px;
                 overflow: auto;
             }
 
@@ -45,10 +31,6 @@
 
             .province ul li {
                 margin-top: 12px;
-            }
-
-            .inscription {
-                margin-top: 36px;
             }
         </style>
     </custom-style>
@@ -108,7 +90,7 @@
                         <div class="breadcrumbs" data-target="breadcrumbs">Sites</div>
                     </app-toolbar>
                 </app-header>
-                <main>
+                <main class="sites-map">
                     <div id="sites">
                         <pb-load url="api/sites" auto="" wait-for="pb-leaflet-map" emit="sites"></pb-load>
                     </div>

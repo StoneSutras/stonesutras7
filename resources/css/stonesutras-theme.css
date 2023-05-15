@@ -6,6 +6,12 @@ app-header {
 
 .logo {
     background-image: url("../images/logo.jpg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+    width: var(--pb-logo-image-width);
+    height: var(--pb-logo-image-height);
+    cursor: pointer;
 }
 
 .splash {
@@ -34,17 +40,13 @@ body {
     --bss-color-red: #731750;
     --bss-color-lemma: #EC7357;
     --bss-color-lb: #2274A5;
-    --bss-catalog-font-size: 16px;
+    --bss-catalog-font-size: 14px;
     --bss-serif-font-family: "Noto Serif TC", serif;
 }
 
-.logo {
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center center;
-    width: var(--pb-logo-image-width);
-    height: var(--pb-logo-image-height);
-    cursor: pointer;
+a:link, a:visited, a:hover {
+    text-decoration: none;
+    color: var(--bss-color-lb);
 }
 
 .toolbar pb-view {
@@ -62,6 +64,20 @@ body {
     max-width: 1440px;
 }
 
+.sites-map {
+    display: grid;
+    margin: 0 20px;
+    grid-template-columns: 520px 1fr;
+    column-gap: 20px;
+    height: calc(100vh - 128px);
+}
+
+@media (max-width: 1024px) {
+    .sites-map {
+        grid-template-columns: 320px 1fr;
+    } 
+}
+
 @media (max-width: 1440px) {
     .content-body {
         margin: 0 1rem;
@@ -70,6 +86,14 @@ body {
 
 #transcription {
     grid-area: transcription;
+}
+
+#documents {
+    font-size: var(--bss-catalog-font-size);
+}
+
+#documents h2 {
+    color: var(--bss-color-gold);
 }
 
 pb-tabs {
