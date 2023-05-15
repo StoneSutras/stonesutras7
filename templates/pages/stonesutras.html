@@ -21,7 +21,8 @@
     </head>
 
     <body class="inscription">
-        <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json">
+        <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json" 
+            require-language="" supported-languages="en, zh_CN">
             <script id="appConfig" type="application/json" data-template="pages:parse-params">
                 {
                     "app": "${app}"
@@ -77,7 +78,7 @@
                                 </pb-leaflet-map>
                             </div>
                             <pb-view slot="page" id="translation" lang="en" src="document1" xpath="//text/body/div[@xml:lang='en']" view="single" column-separator=".tei-cb" history="history" append-footnotes="append-footnotes"
-                                subscribe="transcription" disable-history=""/>
+                                subscribe="transcription" disable-history="" not-found="Not translated by project team."/>
                             <pb-svg slot="page" subscribe="layout"/>
                             <pb-view id="discussion" slot="page" src="document1" odd="catalog" view="single" map="catalog" disable-history="">
                                 <pb-param name="mode" value="discussion"/>
