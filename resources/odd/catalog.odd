@@ -88,7 +88,7 @@
             <model behaviour="inline">
                 <param name="province" value="let $site := substring-before(../@xml:id, '_') let $c := collection(&#34;/db/apps/stonesutras-data/data/catalog&#34;)/id($site) return ($c/header/province[@lang='zh'], ' ',       $c/header/province[@lang='en'])"/>
                 <param name="site" value="let $site := substring-before(../@xml:id, '_') let $c := collection(&#34;/db/apps/stonesutras-data/data/catalog&#34;)/id($site) return ($c/header/title[@lang='zh'], ' ',      $c/header/title[@lang='en'])"/>
-                <param name="id" value="$parameters?app || &#34;index.html?site=&#34; || substring-before(../@xml:id, '_')"/>
+                <param name="id" value="$parameters?app || &#34;sites/&#34; || substring-before(../@xml:id, '_')"/>
                 <pb:template xmlns="" xml:space="preserve"><span class="breadcrumbs">
   <span class="province">[[province]]</span> &gt;
   <span class="site"><a href="[[id]]">[[site]]</a></span> &gt;
@@ -100,7 +100,7 @@
         </modelSequence>
                     <model predicate="$parameters?mode='title'" behaviour="link">
             <param name="content" value="(title[@*:lang='zh'], title[@*:lang='en'])"/>
-            <param name="link" value="$parameters?doc"/>
+            <param name="link" value="&#34;../inscriptions/&#34; || ancestor::object/@xml:id"/>
         </model>
                     <model behaviour="block">
             <param name="content" value="(title[@*:lang='zh'], title[@*:lang='en'], physicalDescription)"/>

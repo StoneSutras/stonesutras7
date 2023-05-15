@@ -25,6 +25,142 @@
         }
     },
     "paths": {
+        "/inscriptions/{id}": {
+			"get": {
+				"summary": "Retrieve the HTML template used for displaying a document",
+				"description": "Get the HTML template associated with the given document. This is called whenever the users tries to view a document. The actual content of the document will then be loaded by the template.",
+				"tags": ["view"],
+				"operationId": "custom:resolve",
+				"x-error-handler": "vapi:handle-error",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Relative path to the document",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"example": "test/orlik_to_serafin.xml"
+						},
+						"allowReserved": true
+					},
+					{
+						"name": "template",
+						"in": "query",
+						"description": "Name of the template to be used. Overwrites any default template setting.",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "view",
+						"in": "query",
+						"schema": {
+							"type": "string",
+							"enum": ["page", "div", "single"]
+						},
+						"example": "div",
+						"description": "The view type used by the main view which displays the document, e.g. 'page' or 'div'. This has an influence on the generated links, which need to differ when linking to a page rather than a section."
+					},
+					{
+						"name": "odd",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "action",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "HTML view for the document",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "The document was not found",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "An error occurred",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+        "/sites/{site}": {
+			"get": {
+				"summary": "Retrieve HTML page",
+				"description": "Retrieve an HTML page expanded through eXist templating. This is used to load the top-level HTML pages, e.g. `index.html`.",
+				"tags": ["view"],
+				"operationId": "vapi:html",
+				"x-error-handler": "vapi:handle-error",
+				"parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+					{
+						"name": "file",
+						"in": "query",
+						"required": true,
+						"schema": {
+							"type": "string",
+                            "default": "site"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "HTML of the page",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "The document was not found",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
         "/api/sites": {
             "get": {
                 "summary": "Get list of sites",
@@ -77,14 +213,14 @@
                 }
             }
         },
-        "/api/inscriptions": {
+        "/api/inscriptions/{site}": {
             "get": {
                 "summary": "Get list of inscriptions for site",
                 "operationId": "api:inscriptions",
                 "parameters": [
                     {
                         "name": "site",
-                        "in": "query",
+                        "in": "path",
                         "required": true,
                         "schema":{
                             "type": "string"

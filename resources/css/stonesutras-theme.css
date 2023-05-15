@@ -18,6 +18,7 @@ body {
     --pb-base-font-family: "Noto Sans TC", sans-serif;
     --pb-content-font-family: "Noto Sans TC", sans-serif;
     --pb-content-font-size: 20px;
+    --pb-heading-font-family: var(--pb-base-font-family);
     --pb-menubar-background-color: #ffffff;
     --pb-menubar-color: var(--pb-color-primary);
     --pb-toolbar-background-color: rgba(0, 0, 0, .4);
@@ -34,6 +35,7 @@ body {
     --bss-color-lemma: #EC7357;
     --bss-color-lb: #2274A5;
     --bss-catalog-font-size: 16px;
+    --bss-serif-font-family: "Noto Serif TC", serif;
 }
 
 .logo {
@@ -55,6 +57,7 @@ body {
     grid-template-columns: auto minmax(360px, 33vw);
     grid-template-rows: auto 1fr;
     grid-template-areas: "header tabs" "transcription tabs";
+    column-gap: 20px;
     margin: 0 auto;
     max-width: 1440px;
 }

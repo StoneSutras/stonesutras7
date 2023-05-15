@@ -67,3 +67,8 @@ figcaption {
 .site h1, .site h2, .site figure.full, .site figure.center {
     column-span: all;
 }
+
+h1, h2, h3, h4 {
+    font-family: var(--bss-serif-font-family);
+    font-weight: 400;
+}

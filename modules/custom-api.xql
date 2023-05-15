@@ -16,6 +16,8 @@ import module namespace pm-config="http://www.tei-c.org/tei-simple/pm-config" at
 import module namespace config="http://www.tei-c.org/tei-simple/config" at "config.xqm";
 import module namespace layout="https://stonesutras.org/api/layout" at "layout.xql";
 import module namespace nav="http://www.tei-c.org/tei-simple/navigation/tei" at "navigation-tei.xql";
+import module namespace vapi="http://teipublisher.com/api/view" at "lib/api/view.xql";
+import module namespace errors = "http://e-editiones.org/roaster/errors";
 
 declare namespace xlink="http://www.w3.org/1999/xlink";
 declare namespace catalog="http://exist-db.org/ns/catalog";
@@ -55,6 +57,33 @@ declare variable $api:PROVINCES := (
     }
 );
 
+declare function api:resolve($request as map(*)) {
+    let $byId := collection($config:data-docs)/id($request?parameters?id)
+    let $root :=
+        if ($byId) then
+            $byId
+        else
+            doc($config:data-root || "/" || $request?parameters?collection || "/" || $request?parameters?idOrDoc)
+    return
+        if ($root) then
+            vapi:view(
+                map:merge((
+                    $request, 
+                    map { 
+                        "parameters": map:merge((
+                            $request?parameters,
+                            map {
+                                "docid": substring-after(document-uri(root($root)), $config:data-root || '/'),
+                                "id": if ($byId) then $request?parameters?idOrDoc else ()
+                            }
+                        ))
+                    }
+                ))
+            )
+        else
+            error($errors:NOT_FOUND, "Document " || $request?parameters?id || " not found")
+};
+
 declare function api:inscription-table($request as map(*)) {
     let $inscriptions :=
         for $siteName in $api:SITES
@@ -91,7 +120,7 @@ declare function api:sites($request as map(*)) {
                         return
                             <li>
                                 <pb-geolocation id="{$site/@xml:id/string()}" longitude="{$coordinates[1]}" latitude="{$coordinates[2]}" label="{$title}" emit="map">
-                                <a href="site.html?site={$site/@xml:id}">{$title}</a>
+                                <a href="sites/{$site/@xml:id}">{$title}</a>
                                 </pb-geolocation>
                             </li>
                     }
@@ -106,22 +135,22 @@ declare function api:inscriptions($request as map(*)) {
     let $catalog := collection($config:data-catalog)/id($request?parameters?site)
     return
         <div>
-            {
-                for $link in $catalog/catalog:fileDescription/catalog:link/@xlink:href
-                let $inscription := collection($config:data-catalog)/id($link)
-                let $tei := collection($config:data-docs)/id($inscription/@xml:id)
-                where $tei
-                let $relPath := config:get-relpath($tei[1])
-                return
-                    <div class="inscription">
-                    {
-                        $pm-config:web-transform($inscription, map {
-                            "mode": "title",
-                            "doc": $relPath
-                        }, "catalog.odd")
-                    }
-                    </div>
-            }
+        {
+            for $link in $catalog/catalog:fileDescription/catalog:link/@xlink:href
+            let $inscription := collection($config:data-catalog)/id($link)
+            let $tei := collection($config:data-docs)/id($inscription/@xml:id)
+            where $tei
+            let $relPath := $inscription/@xml:id
+            return
+                <div class="inscription">
+                {
+                    $pm-config:web-transform($inscription, map {
+                        "mode": "title",
+                        "doc": $relPath
+                    }, "catalog.odd")
+                }
+                </div>
+        }
         </div>
 };
 
