@@ -79,8 +79,8 @@
                 <param name="site" value="(title[@lang='zh'], ' ', title[@lang='en'])"/>
                 <param name="province" value="(province[@lang='zh'], ' ', province[@lang='en'])"/>
                 <pb:template xmlns="" xml:space="preserve"><span class="breadcrumbs">
-  <span class="province">[[province]]</span> &gt;
-  <span class="site"><a href="[[id]]">[[site]]</a></span>
+  <a class="province" href="../index.html">[[province]]</a> &gt;
+  <span class="site">[[site]]</span>
 </span></pb:template>
             </model>
         </modelSequence>
@@ -90,7 +90,7 @@
                 <param name="site" value="let $site := substring-before(../@xml:id, '_') let $c := collection(&#34;/db/apps/stonesutras-data/data/catalog&#34;)/id($site) return ($c/header/title[@lang='zh'], ' ',      $c/header/title[@lang='en'])"/>
                 <param name="id" value="$parameters?app || &#34;sites/&#34; || substring-before(../@xml:id, '_')"/>
                 <pb:template xmlns="" xml:space="preserve"><span class="breadcrumbs">
-  <span class="province">[[province]]</span> &gt;
+  <a class="province" href="../index.html">[[province]]</a> &gt;
   <span class="site"><a href="[[id]]">[[site]]</a></span> &gt;
 </span></pb:template>
             </model>
@@ -115,11 +115,7 @@
             font-size: 16px; line-height: 24px; font-weight: 400;
             </outputRendition>
         </model>
-                    <model predicate="$parameters?mode=('breadcrumbs', 'site')" behaviour="inline">
-            <outputRendition xml:space="preserve">
-            font-size: 16px; line-height: 24px; font-weight: 400;
-            </outputRendition>
-        </model>
+                    <model predicate="$parameters?mode=('breadcrumbs', 'site')" behaviour="inline"/>
                     <model predicate="@type='abbreviated' and $parameters?mode='title'" behaviour="omit"/>
                     <model predicate="$parameters?mode='title'" behaviour="heading">
             <param name="level" value="4"/>

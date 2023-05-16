@@ -49,8 +49,13 @@ a:link, a:visited, a:hover {
     color: var(--bss-color-lb);
 }
 
+.menubar a:link, .menubar a:visited, .menubar a:hover {
+    color: var(--pb-menubar-color);
+}
+
 .toolbar pb-view {
     --pb-view-max-width: calc(100vw - 128px);
+    --pb-content-font-size: 16px;
 }
 
 .content-body {
