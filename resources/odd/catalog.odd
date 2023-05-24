@@ -99,7 +99,7 @@
             </model>
         </modelSequence>
                     <model predicate="$parameters?mode='title'" behaviour="link">
-            <param name="content" value="(title[@*:lang='zh'], title[@*:lang='en'])"/>
+            <param name="content" value="(head((title[@*:lang='zh'][@type='abbreviated'], title[@*:lang='zh'])), head((title[@*:lang='en'][@type='abbreviated'], title[@*:lang='en'])))"/>
             <param name="link" value="&#34;../inscriptions/&#34; || ancestor::object/@xml:id"/>
         </model>
                     <model behaviour="block">
@@ -116,7 +116,6 @@
             </outputRendition>
         </model>
                     <model predicate="$parameters?mode=('breadcrumbs', 'site')" behaviour="inline"/>
-                    <model predicate="@type='abbreviated' and $parameters?mode='title'" behaviour="omit"/>
                     <model predicate="$parameters?mode='title'" behaviour="heading">
             <param name="level" value="4"/>
         </model>
