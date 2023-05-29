@@ -55,20 +55,48 @@ a:link, a:visited {
     content: '）';
 }
 
+figure {
+    break-inside: avoid-column;
+    scroll-padding-top: 128px;
+}
+
 figcaption {
     text-align: right;
     font-size: var(--pb-footnote-font-size);
+}
+
+figcaption.fignum {
+    text-align: left;
+}
+
+figcaption.fignum::before {
+    content: 'Figure ';
 }
 
 .site {
     columns: 2;
 }
 
-.site h1, .site h2, .site figure.full, .site figure.center {
+.site h1, .site h2, .site h3, .site figure.full, .site figure.center {
     column-span: all;
 }
 
 h1, h2, h3, h4 {
     font-family: var(--bss-serif-font-family);
     font-weight: 400;
+    margin-top: var(--pb-content-margin);
+    margin-bottom: var(--pb-content-margin);
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: var(--pb-content-margin);
+}
+
+img {
+    width: 100%;
+}
+
+.fn-content {
+    font-size: var(--pb-footnote-font-size);
 }

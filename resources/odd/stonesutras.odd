@@ -108,9 +108,13 @@
             
             
             
+            
+            
             color: var(--bss-color-gold);
 padding-left: .5em;
 padding-right: .5em;
+            
+            
             
             
             
@@ -142,8 +146,13 @@ padding-right: .5em;
                     <model behaviour="note"/>
                 </elementSpec>
                 <elementSpec ident="ptr" mode="change">
-                    <model predicate="starts-with(@target, 'note') and id(@target, root($parameters?root))[@type='display']" behaviour="note">
+                    <model predicate="starts-with(@target, 'note_') and id(@target, root($parameters?root))[@type='display']" behaviour="note">
             <param name="content" value="id(@target, root($parameters?root))"/>
+        </model>
+                    <model predicate="starts-with(@target, 'note_')" behaviour="omit"/>
+                    <model behaviour="link">
+            <param name="content" value="count(id(@target, root($parameters?root))/preceding::figure) + 1"/>
+            <param name="uri" value="'#' || @target"/>
         </model>
                     <model behaviour="omit"/>
                 </elementSpec>
@@ -329,8 +338,8 @@ padding-right: .5em;
         </model>
                 </elementSpec>
                 <elementSpec ident="ref" mode="change">
-                    <model predicate="@type='biblio'" behaviour="link">
-            <param name="content" value="let $target := @target return collection('/db/apps/stonesutras/data/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']"/>
+                    <model predicate="@type='biblio'" behaviour="inline">
+            <param name="content" value="let $target := @target  let $title := collection('/db/apps/stonesutras-data/data/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference'] return   if ($title) then $title else 'NOT FOUND'"/>
             <param name="link" value="@target"/>
             <outputRendition xml:space="preserve">
             font-variant: small-caps;
@@ -394,13 +403,46 @@ padding-right: .5em;
                     <model behaviour="block"/>
                 </elementSpec>
                 <elementSpec ident="figure" mode="change">
-                    <model behaviour="figure">
+                    <model behaviour="pass-through">
             <param name="title" value="(head[@xml:lang='zh'], head[not(@xml:lang='zh')])"/>
             <param name="content" value="graphic"/>
+            <param name="id" value="@xml:id"/>
+            <param name="fignum" value="count(preceding::figure) + 1"/>
+            <pb:template xmlns="" xml:space="preserve"><figure id="[[id]]">
+  <figcaption class="fignum">[[fignum]]</figcaption>
+  [[content]]
+  <figcaption>[[title]]</figcaption>
+</figure></pb:template>
         </model>
                 </elementSpec>
             <elementSpec ident="text" mode="change">
                     <model behaviour="body"/>
+                </elementSpec>
+            <elementSpec ident="graphic" mode="change">
+                    <model behaviour="graphic">
+            <param name="url" value="'../../stonesutras-data/images/' || replace(@url, '^(.*)\.[^\.]+$', '$1.jpg')"/>
+            <param name="width" value="@width"/>
+            <param name="height" value="@height"/>
+            <param name="scale" value="@scale"/>
+            <param name="title" value="desc"/>
+        </model>
+                </elementSpec>
+            <elementSpec ident="quote" mode="change">
+                    <model predicate="ancestor::p" behaviour="inline" useSourceRendition="true">
+            <desc>If it is inside a paragraph then it is inline, otherwise it is block
+                  level</desc>
+            <outputRendition xml:space="preserve">
+            font-family: var(--bss-serif-font-family);
+            </outputRendition>
+        </model>
+                    <model behaviour="paragraph" useSourceRendition="true">
+            <desc>If it is inside a paragraph then it is inline, otherwise it is block
+                  level</desc>
+            <outputRendition xml:space="preserve">
+            margin-left: 1em; 
+font-family: var(--bss-serif-font-family);
+            </outputRendition>
+        </model>
                 </elementSpec>
             </schemaSpec>
         </body>

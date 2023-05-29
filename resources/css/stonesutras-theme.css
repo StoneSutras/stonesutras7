@@ -24,6 +24,7 @@ body {
     --pb-base-font-family: "Noto Sans TC", sans-serif;
     --pb-content-font-family: "Noto Sans TC", sans-serif;
     --pb-content-font-size: 20px;
+    --pb-content-margin: calc(var(--pb-content-font-size) * var(--pb-base-line-height));
     --pb-heading-font-family: var(--pb-base-font-family);
     --pb-menubar-background-color: #ffffff;
     --pb-menubar-color: var(--pb-color-primary);
