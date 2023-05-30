@@ -26,6 +26,11 @@ window.addEventListener('DOMContentLoaded', () => {
     let svgPath;
     pbEvents.subscribe('pb-update', 'catalog', (ev) => {
         const config = JSON.parse(document.getElementById('appConfig').textContent);
+        if (ev.detail.root.querySelector('pb-geolocation')) {
+            document.querySelector('pb-leaflet-map').style.display = 'block';
+        } else {
+            document.querySelector('pb-leaflet-map').style.display = 'none';
+        }
         const svgImg = ev.detail.root.querySelector('.layout');
         svgPath = svgImg.getAttribute('src');
         const svg = panel.querySelector('pb-svg');

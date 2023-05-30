@@ -179,7 +179,7 @@
         </model>
                 </elementSpec>
                 <elementSpec ident="coordinates" mode="add">
-                    <model behaviour="block">
+                    <model predicate="text()" behaviour="block">
             <param name="height" value="@height"/>
             <param name="latitude" value="tokenize(., '\s*,\s*')[2]"/>
             <param name="longitude" value="tokenize(., '\s*,\s*')[1]"/>
@@ -200,8 +200,7 @@
                                     <td>[[longitude]]°</td>
                                 </tr>
                             </table>
-                            <pb-geolocation latitude="[[latitude]]" longitude="[[longitude]]" label="[[ident]]" emit="catalog"/>
-                        </pb:template>
+                            <pb-geolocation latitude="[[latitude]]" longitude="[[longitude]]" label="[[ident]]" emit="catalog"/></pb:template>
         </model>
                 </elementSpec>
                 <elementSpec ident="province" mode="add"/>

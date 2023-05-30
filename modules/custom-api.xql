@@ -25,7 +25,7 @@ declare namespace tei="http://www.tei-c.org/ns/1.0";
 
 declare variable $api:SITES := (
      "HDS", "TC", "SY", "EG", "YC", "DZ", "Sili", "Yin", "PY", "HT", "JS", "Yang", "HSY", "CLS", "FHS", "SNS",
-     "Ziyang", "TS", "LS", "Yi", "Tie", "Ge", "GS", "JCW_east",
+     "Ziyang", "TS", "LS", "Yi", "Tie", "Ge", "GS", "JCW_east", "YS", "Ziyang_site", "JSY",
      "WFY_1", "WFY_2", "WFY_29", "WFY_33", "WFY_46", "WFY_51", "WFY_59", "WFY_66", "WFY_71", "WFY_73", 
      "WFY_76", "WFY_85", "WFY_109", "WFY_110"
 );
@@ -119,9 +119,14 @@ declare function api:sites($request as map(*)) {
                         order by $site/catalog:header/catalog:title[@lang="en"], $site/@xml:id
                         return
                             <li>
-                                <pb-geolocation id="{$site/@xml:id/string()}" longitude="{$coordinates[1]}" latitude="{$coordinates[2]}" label="{$title}" emit="map">
-                                <a href="sites/{$site/@xml:id}">{$title}</a>
-                                </pb-geolocation>
+                                {
+                                    if (exists($coordinates)) then
+                                        <pb-geolocation id="{$site/@xml:id/string()}" longitude="{$coordinates[1]}" latitude="{$coordinates[2]}" label="{$title}" emit="map">
+                                            <a href="sites/{$site/@xml:id}">{$title}</a>
+                                        </pb-geolocation>
+                                    else
+                                        <a href="sites/{$site/@xml:id}">{$title}</a>
+                                }
                             </li>
                     }
                     </ul>
