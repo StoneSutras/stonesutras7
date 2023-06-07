@@ -28,3 +28,35 @@ declare function es:wrap-text($config as map(*), $node as node(), $class as xs:s
     return
         <span class="t">{$text}</span>
 };
+
+declare function es:finish($config as map(*), $input as node()*) {
+    es:clear-whitespace($input, ())
+};
+
+declare function es:clear-whitespace($nodes as node()*, $lang as xs:string?) {
+    for $node in $nodes
+    return
+        typeswitch($node)
+            case document-node() return
+                document {
+                    es:clear-whitespace($node/node(), $lang)
+                }
+            case element() return
+                if ($node/@lang = 'zh') then
+                    element {node-name($node) } {
+                        $node/@*,
+                        es:clear-whitespace($node/node(), 'zh')
+                    }
+                else
+                    element { node-name($node) } {
+                        $node/@*,
+                        es:clear-whitespace($node/node(), $lang)
+                    }
+            case text() return
+                if ($lang = 'zh') then
+                    replace($node, "\s+", "")
+                else
+                    $node
+            default return
+                $node
+};
