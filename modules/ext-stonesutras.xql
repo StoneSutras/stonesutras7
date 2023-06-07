@@ -42,10 +42,10 @@ declare function es:clear-whitespace($nodes as node()*, $lang as xs:string?) {
                     es:clear-whitespace($node/node(), $lang)
                 }
             case element() return
-                if ($node/@lang = 'zh') then
+                if ($node/@lang = ('zh', 'en')) then
                     element {node-name($node) } {
                         $node/@*,
-                        es:clear-whitespace($node/node(), 'zh')
+                        es:clear-whitespace($node/node(), $node/@lang)
                     }
                 else
                     element { node-name($node) } {

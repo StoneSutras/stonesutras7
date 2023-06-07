@@ -78,9 +78,9 @@ figcaption.fignum::before {
     content: 'Figure ';
 }
 
-.site {
+/* .site {
     columns: 2;
-}
+} */
 
 .site h1, .site h2, .site h3, .site figure.full, .site figure.center {
     column-span: all;

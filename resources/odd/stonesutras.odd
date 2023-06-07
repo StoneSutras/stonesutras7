@@ -61,7 +61,11 @@
                     <model predicate="$parameters?header='short'" behaviour="inline">
             <param name="content" value="replace(string-join(.//text()[not(parent::ref)]), '^(.*?)[^\w]*$', '$1')"/>
         </model>
-                    <model predicate="parent::figure" behaviour="block">
+                    <model predicate="parent::figure and @xml:lang='zh'" behaviour="pass-through">
+            <pb:template xmlns="" xml:space="preserve"><div lang="zh">[[content]]</div></pb:template>
+        </model>
+                    <model predicate="parent::figure" behaviour="pass-through">
+            <pb:template xmlns="" xml:space="preserve"><div lang="en">[[content]]</div></pb:template>
             <outputRendition xml:space="preserve">
             font-style: italic;
             </outputRendition>
@@ -110,9 +114,11 @@
             
             
             
+            
             color: var(--bss-color-gold);
 padding-left: .5em;
 padding-right: .5em;
+            
             
             
             
@@ -439,8 +445,10 @@ padding-right: .5em;
             <desc>If it is inside a paragraph then it is inline, otherwise it is block
                   level</desc>
             <outputRendition xml:space="preserve">
+            
             margin-left: 1em; 
 font-family: var(--bss-serif-font-family);
+            
             </outputRendition>
         </model>
                 </elementSpec>
