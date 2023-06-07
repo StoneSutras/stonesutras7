@@ -1,3 +1,8 @@
+div:lang(zh) {
+    font-family: var(--bss-chinese-font-family);
+    --pb-content-font-family: var(--bss-chinese-font-family);
+}
+
 .cbeta {
     color: orange;
     font-weight: bold;
