@@ -1,5 +1,5 @@
 h3 {
-    font-family: "Oswald","Noto Sans", Verdana,"Helvetica",sans-serif; font-weight: 400; margin-top: 20px; margin-bottom: 10px;
+    font-family: "Oswald",var(--bss-chinese-font-family), Verdana,"Helvetica",sans-serif; font-weight: 400; margin-top: 20px; margin-bottom: 10px;
 }
 td {
     vertical-align: top;

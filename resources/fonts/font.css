@@ -79,16 +79,6 @@
   src: url('noto-sans-v28-devanagari_latin_latin-ext-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
 
-/* noto-sans-tc-regular - chinese-traditional_latin */
-@font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
-  font-family: 'Noto Sans TC';
-  font-style: normal;
-  font-weight: 400;
-  src: url('noto-sans-tc-v26-chinese-traditional_latin-regular.woff2') format('woff2'), /* Chrome 36+, Opera 23+, Firefox 39+ */
-       url('noto-sans-tc-v26-chinese-traditional_latin-regular.woff') format('woff'); /* Chrome 5+, Firefox 3.6+, IE 9+, Safari 5.1+ */
-}
-
 /* noto-serif-tc-regular - chinese-traditional_latin */
 @font-face {
   font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
@@ -99,16 +89,7 @@
        url('noto-serif-tc-v23-chinese-traditional_latin-regular.woff') format('woff'); /* Chrome 5+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 
-/* noto-sans-sc-regular - chinese-simplified_latin */
-@font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
-  font-family: 'Noto Sans SC';
-  font-style: normal;
-  font-weight: 400;
-  src: url('noto-sans-sc-v26-chinese-simplified_latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
-}
-
-/* noto-sans-sc-regular - chinese-simplified_latin */
+/* BabelStoneHan */
 @font-face {
   font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
   font-family: 'BabelStone Han';
