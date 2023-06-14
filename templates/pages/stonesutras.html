@@ -37,7 +37,7 @@
                         </app-toolbar>
                         <app-toolbar data-template="lib:include" data-template-path="templates/toolbar.html">
                             <pb-view data-target="breadcrumbs" id="title-view1" src="document1" odd="catalog" view="single" map="catalog" disable-history=""
-                                not-found="">
+                                not-found="" use-language="">
                                 <pb-param name="mode" value="breadcrumbs"/>
                                 <pb-param name="app" value="${app}/" data-template="pages:parse-params"/>
                             </pb-view>
@@ -61,7 +61,7 @@
                         </app-toolbar>
                         <pb-view id="transcription" lang="zh" src="document1" xpath="//text/body/div[@xml:lang='zh']" 
                         view="single" column-separator=".tei-cb" history="history" append-footnotes="append-footnotes"
-                        odd="stonesutras" subscribe="transcription" emit="transcription" disable-history=""/>
+                        odd="stonesutras" subscribe="transcription" emit="transcription" disable-history="" use-language=""/>
                         <pb-tabs>
                             <paper-tab slot="tab">Metadata</paper-tab>
                             <paper-tab slot="tab">Translation</paper-tab>
