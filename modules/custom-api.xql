@@ -108,7 +108,7 @@ declare function api:sites($request as map(*)) {
     {
         for $province in $api:PROVINCES
         return
-            <pb-collapse class="province" opened="">
+            <pb-collapse class="province">
                 <h4 slot="collapse-trigger">{$province?name_zh} {$province?name}</h4>
                 <div slot="collapse-content">
                     <ul>
