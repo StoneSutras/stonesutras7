@@ -34,18 +34,21 @@
                 }
             </script>
             <app-drawer-layout force-narrow="force-narrow">
-                <app-drawer data-template="templates:include" data-template-path="templates/drawer.html"/>
+                <app-drawer data-template="lib:include" data-template-path="templates/drawer.html"/>
                 <app-header-layout>
                     <app-header slot="header" reveals="reveals" fixed="fixed" effects="waterfall">
-                        <app-toolbar data-template="templates:include" data-template-path="templates/menu.html"/>
-                        <app-toolbar data-template="templates:include" data-template-path="templates/toolbar.html"/>
+                        <app-toolbar data-template="lib:include" data-template-path="templates/menu.html"/>
+                        <app-toolbar data-template="lib:include" data-template-path="templates/toolbar.html">
+                            <p data-target="breadcrumbs" class="breadcrumbs">Inscriptions</p>
+                        </app-toolbar>
                     </app-header>
                     <main>
+                        <p><pb-i18n key="errors.under-construction"></pb-i18n></p>
                         <pb-table-grid class="table-grid" source="api/inscriptions/json" css-path="../css/gridjs" resizable=""
                             fixed-header="" search="">
                             <pb-table-column label="ID" property="id" sort=""></pb-table-column>
                             <pb-table-column label="Title" property="title_zh"></pb-table-column>
-                            <pb-table-column label="Title ZH" property="title"></pb-table-column>
+                            <pb-table-column label="Translated title" property="title"></pb-table-column>
                             <pb-table-column label="Province" property="province" sort=""></pb-table-column>
                         </pb-table-grid>
                     </main>

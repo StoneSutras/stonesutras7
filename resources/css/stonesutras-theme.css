@@ -60,6 +60,10 @@ a:link, a:visited, a:hover {
     --pb-content-font-size: 16px;
 }
 
+.breadcrumbs {
+    margin: 0 0 0 20px;
+}
+
 .content-body {
     display: grid;
     height: var(--grid-height);

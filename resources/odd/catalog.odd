@@ -57,6 +57,7 @@
         </modelSequence>
                     <model predicate="$parameters?mode=('breadcrumbs','site')" behaviour="block">
             <param name="content" value="header"/>
+            <pb:set-param name="site" value="let $id := @xml:id return   collection(&#34;/db/apps/stonesutras-data/data/catalog&#34;)/object[.//link[@type='inscription']/@xlink:href=$id]"/>
         </model>
                     <model predicate="$parameters?mode='discussion'" behaviour="block">
             <param name="content" value="references"/>
@@ -86,9 +87,9 @@
         </modelSequence>
                     <modelSequence predicate="$parameters?mode='breadcrumbs'">
             <model behaviour="inline">
-                <param name="province" value="let $site := substring-before(../@xml:id, '_') let $c := collection(&#34;/db/apps/stonesutras-data/data/catalog&#34;)/id($site) return ($c/header/province[@lang='zh'], ' ',       $c/header/province[@lang='en'])"/>
-                <param name="site" value="let $site := substring-before(../@xml:id, '_') let $c := collection(&#34;/db/apps/stonesutras-data/data/catalog&#34;)/id($site) return ($c/header/title[@lang='zh'], ' ',      $c/header/title[@lang='en'])"/>
-                <param name="id" value="$parameters?app || &#34;sites/&#34; || substring-before(../@xml:id, '_')"/>
+                <param name="province" value="($parameters?site/header/province[@lang='zh'], ' ', $parameters?site/header/province[@lang='en'])"/>
+                <param name="site" value="($parameters?site/header/title[@lang='zh'], ' ', $parameters?site/header/title[@lang='en'])"/>
+                <param name="id" value="$parameters?app || &#34;sites/&#34; || $parameters?site/@xml:id"/>
                 <pb:template xmlns="" xml:space="preserve"><span class="breadcrumbs">
   <a class="province" href="../index.html">[[province]]</a> &gt;
   <span class="site"><a href="[[id]]">[[site]]</a></span> &gt;
