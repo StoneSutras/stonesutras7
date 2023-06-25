@@ -14,12 +14,16 @@
 
         <link rel="stylesheet" type="text/css" href="resources/fonts/font.css"/>
         <link rel="stylesheet" href="resources/css/stonesutras-theme.css"/>
+        <style>
+            main {
+                max-width: var(--pb-view-max-width);
+                margin: 20px;
+            }
+        </style>
         <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
-        <script type="module" src="pb-leaflet-map.js" data-template="pages:load-components"/>
-        <script src="resources/scripts/app.js"/>
     </head>
 
-    <body class="inscription">
+    <body>
         <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json"
             require-language="" supported-languages="en, zh_CN">
             <script id="appConfig" type="application/json" data-template="pages:parse-params">
@@ -27,29 +31,15 @@
                     "app": "${app}"
                 }
             </script>
-            <pb-document id="site" odd="stonesutras" data-template="app:pb-document"/>
             <app-drawer-layout force-narrow="force-narrow">
-                <app-drawer data-template="lib:include" data-template-path="templates/drawer.html"/>
+                <app-drawer data-template="templates:include" data-template-path="templates/drawer.html"/>
                 <app-header-layout>
                     <app-header slot="header" reveals="reveals" fixed="fixed" effects="waterfall">
-                        <app-toolbar data-template="lib:include" data-template-path="templates/menu.html"/>
-                        <app-toolbar data-template="lib:include" data-template-path="templates/toolbar.html">
-                            <pb-view data-target="breadcrumbs" id="title-view1" src="site" view="single" odd="catalog" map="site"
-                                not-found="" disable-history="">
-                                <pb-param name="mode" value="site"/>
-                                <pb-param name="app" value="${app}/" data-template="pages:parse-params"/>
-                            </pb-view>
-                            <pb-zoom data-target="toolbar-util" emit="transcription" direction="in" icon="icons:zoom-in"/>
-                            <pb-zoom data-target="toolbar-util" emit="transcription" direction="out" icon="icons:zoom-out"/>
-                        </app-toolbar>
+                        <app-toolbar data-template="templates:include" data-template-path="templates/menu.html"/>
+                        <app-toolbar data-template="templates:include" data-template-path="templates/toolbar.html"/>
                     </app-header>
-                    <main class="content-body">
-                        <pb-view src="site" view="single" map="language" use-language="" disable-history="" append-footnotes="append-footnotes"
-                            not-found="No site description available yet!" subscribe="transcription" emit="transcription"/>
-                        <div id="documents">
-                            <h2><pb-i18n key="inscriptions"></pb-i18n></h2>
-                            <pb-load url="api/inscriptions/${site}" subscribe="documents" data-template="pages:parse-params" auto=""/>
-                        </div>
+                    <main>
+                        <h1><pb-i18n key="errors.under-construction"></pb-i18n></h1>
                     </main>
                 </app-header-layout>
             </app-drawer-layout>

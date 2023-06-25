@@ -8,5 +8,8 @@
         "inscriptions": "Inscriptions",
         "bibliography": "Bibliography"
     },
-    "inscriptions": "Inscriptions"
+    "inscriptions": "Inscriptions",
+    "errors": {
+        "under-construction": "Under construction ..."
+    }
 }
