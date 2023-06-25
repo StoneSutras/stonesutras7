@@ -394,7 +394,7 @@ padding-right: .5em;
                     <model behaviour="pass-through">
             <param name="ref" value="let $target := ./witDetail/@target/string()  let $mods := collection('/db/apps/stonesutras-data/data/biblio')/mods:mods[@ID = $target]  return   $mods/mods:titleInfo[@type = 'reference']"/>
             <param name="target" value="./witDetail/@target/string()"/>
-            <pb:template xmlns="" xml:space="preserve"><pb-popover remote="http://sutras.adw.uni-heidelberg.de:8080/exist/apps/stonepub/modules/bibliohtml.xql?id=[[target]]"><span class="witness">[[ref]][[content]]</span></pb-popover></pb:template>
+            <pb:template xmlns="" xml:space="preserve"><pb-popover remote="https://sutras.adw.uni-heidelberg.de/exist/apps/stonepub/modules/bibliohtml.xql?id=[[target]]"><span class="witness">[[ref]][[content]]</span></pb-popover></pb:template>
         </model>
                 </elementSpec>
                 <elementSpec ident="witDetail" mode="add">
