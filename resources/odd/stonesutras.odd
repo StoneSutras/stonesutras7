@@ -115,9 +115,11 @@
             
             
             
+            
             color: var(--bss-color-gold);
 padding-left: .5em;
 padding-right: .5em;
+            
             
             
             
@@ -311,7 +313,10 @@ padding-right: .5em;
         </modelSequence>
                 </elementSpec>
                 <elementSpec ident="foreign" mode="change">
-                    <model behaviour="inline"/>
+                    <model behaviour="pass-through">
+            <param name="lang" value="@xml:lang"/>
+            <pb:template xmlns="" xml:space="preserve"><span lang="[[lang]]">[[content]]</span></pb:template>
+        </model>
                 </elementSpec>
                 <elementSpec ident="seg" mode="change">
                     <model predicate="@rend" behaviour="inline"/>
@@ -346,15 +351,17 @@ padding-right: .5em;
                 <elementSpec ident="ref" mode="change">
                     <model predicate="@type='biblio'" behaviour="inline">
             <param name="content" value="let $target := @target  let $title := collection('/db/apps/stonesutras-data/data/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference'] return   if ($title) then $title else 'NOT FOUND'"/>
-            <param name="link" value="@target"/>
+            <param name="target" value="@target"/>
+            <pb:template xmlns="" xml:space="preserve"><pb-popover remote="http://sutras.adw.uni-heidelberg.de:8080/exist/apps/stonepub/modules/bibliohtml.xql?id=[[target]]"><span class="sigle">[[content]]</span></pb-popover></pb:template>
             <outputRendition xml:space="preserve">
             font-variant: small-caps;
             </outputRendition>
         </model>
                 </elementSpec>
                 <elementSpec ident="mods:titleInfo" mode="add">
-                    <model behaviour="inline" cssClass="titleInfo">
+                    <model behaviour="pass-through">
             <param name="content" value="mods:title[1]/string()"/>
+            <pb:template xmlns="" xml:space="preserve"><span class="titleInfo" lang="en">[[content]]</span></pb:template>
         </model>
                 </elementSpec>
             <elementSpec ident="text()" mode="add">
@@ -386,7 +393,8 @@ padding-right: .5em;
         </model>
                     <model behaviour="pass-through">
             <param name="ref" value="let $target := ./witDetail/@target/string()  let $mods := collection('/db/apps/stonesutras-data/data/biblio')/mods:mods[@ID = $target]  return   $mods/mods:titleInfo[@type = 'reference']"/>
-            <pb:template xmlns="" xml:space="preserve"><span class="witness">[[ref]][[content]]</span></pb:template>
+            <param name="target" value="./witDetail/@target/string()"/>
+            <pb:template xmlns="" xml:space="preserve"><pb-popover remote="http://sutras.adw.uni-heidelberg.de:8080/exist/apps/stonepub/modules/bibliohtml.xql?id=[[target]]"><span class="witness">[[ref]][[content]]</span></pb-popover></pb:template>
         </model>
                 </elementSpec>
                 <elementSpec ident="witDetail" mode="add">
@@ -446,8 +454,10 @@ padding-right: .5em;
                   level</desc>
             <outputRendition xml:space="preserve">
             
+            
             margin-left: 1em; 
 font-family: var(--bss-serif-font-family);
+            
             
             </outputRendition>
         </model>

@@ -243,7 +243,7 @@
                 <elementSpec ident="references">
                     <model behaviour="list" cssClass="discussion">
             <param name="type" value="'custom'"/>
-            <param name="content" value="for $ref in ref[@value='discussion'] order by $ref/@xlink:href return $ref"/>
+            <param name="content" value="ref[@value='discussion']"/>
         </model>
                 </elementSpec>
                 <elementSpec ident="ref">
@@ -251,8 +251,9 @@
             <param name="sigle" value="let $target := @xlink:href return (collection('/db/apps/stonesutras-data/data/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']/string(), '???')[1] =&gt; normalize-space()"/>
             <param name="pages" value="pages/string()"/>
             <param name="content" value="(note[@*:lang='zh'], note[@*:lang='en'])"/>
+            <param name="target" value="@xlink:href"/>
             <pb:template xmlns="" xml:space="preserve"><dt>
-    <span class="sigle">[[sigle]]</span>, [[pages]]</dt>
+  <pb-popover placement="right" remote="http://sutras.adw.uni-heidelberg.de:8080/exist/apps/stonepub/modules/bibliohtml.xql?id=[[target]]"><span class="sigle">[[sigle]]</span></pb-popover>, [[pages]]</dt>
 <dd>[[content]]</dd></pb:template>
         </model>
                     <model behaviour="omit"/>
@@ -273,6 +274,11 @@
                     <model behaviour="paragraph"/>
                 </elementSpec>
                 <elementSpec ident="tei:hi" mode="add">
+                    <model predicate="@rend='bold'" behaviour="inline">
+            <outputRendition xml:space="preserve">
+            font-weight: bold;
+            </outputRendition>
+        </model>
                     <model behaviour="inline">
             <outputRendition xml:space="preserve">
             font-style: italic;
