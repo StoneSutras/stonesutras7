@@ -1,5 +1,8 @@
 h3 {
-    font-family: "Oswald",var(--bss-chinese-font-family), Verdana,"Helvetica",sans-serif; font-weight: 400; margin-top: 20px; margin-bottom: 10px;
+    font-family: "Oswald",var(--bss-chinese-font-family), Verdana,"Helvetica",sans-serif; 
+    font-weight: 400; 
+    margin-top: 20px; 
+    margin-bottom: 10px;
 }
 td {
     vertical-align: top;
@@ -21,4 +24,10 @@ td {
     margin-bottom: 0;
     font-weight: 400;
     color: var(--bss-color-red);
+}
+
+.tippy-content {
+    font-size: var(--bss-catalog-font-size);
+    width: 320px;
+    z-index: -1;
 }
