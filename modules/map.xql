@@ -9,6 +9,8 @@ import module namespace nav="http://www.tei-c.org/tei-simple/navigation/tei" at 
 import module namespace config="http://www.tei-c.org/tei-simple/config" at "config.xqm";
 
 declare namespace tei="http://www.tei-c.org/ns/1.0";
+declare namespace xlink = "http://www.w3.org/1999/xlink";
+declare namespace c = "http://exist-db.org/ns/catalog";
 
 declare function mapping:catalog($root as node(), $userParams as map(*)) {
     let $id := root($root)//tei:text/@xml:id
@@ -18,8 +20,12 @@ declare function mapping:catalog($root as node(), $userParams as map(*)) {
 
 declare function mapping:site($root as node(), $userParams as map(*)) {
     let $id := root($root)//tei:text/@xml:id
+    let $catalog := collection($config:data-catalog)/id(substring-after($id, 'Site_'))
     return
-        collection($config:data-catalog)/id(substring-after($id, 'Site_'))
+        if ($catalog) then
+            $catalog
+        else
+            collection($config:data-catalog)/c:object[.//c:link[@type='introduction']/@xlink:href = $id]
 };
 
 declare function mapping:language($root as node(), $userParams as map(*)) {
