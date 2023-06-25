@@ -434,7 +434,7 @@ padding-right: .5em;
                 </elementSpec>
             <elementSpec ident="graphic" mode="change">
                     <model behaviour="graphic">
-            <param name="url" value="'../../stonesutras-data/images/' || replace(@url, '^(.*)\.[^\.]+$', '$1.jpg')"/>
+            <param name="url" value="'https://sutras.adw.uni-heidelberg.de/images/' || replace(@url, '^(.*)\.[^\.]+$', '$1.jpg')"/>
             <param name="width" value="@width"/>
             <param name="height" value="@height"/>
             <param name="scale" value="@scale"/>
