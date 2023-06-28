@@ -12,6 +12,16 @@ declare namespace tei="http://www.tei-c.org/ns/1.0";
 declare namespace xlink = "http://www.w3.org/1999/xlink";
 declare namespace c = "http://exist-db.org/ns/catalog";
 
+declare function mapping:translation($root as node(), $userParams as map(*)) {
+    let $id := root($root)//tei:text/@xml:id
+    let $catalog := collection($config:data-catalog)/id($id)
+    return
+        if ($catalog//c:link[@type='translation']) then
+            collection($config:data-root)/id($catalog//c:link[@type='translation']/@xlink:href)
+        else
+            $root//tei:text/tei:body/tei:div[@xml:lang='en']
+};
+
 declare function mapping:catalog($root as node(), $userParams as map(*)) {
     let $id := root($root)//tei:text/@xml:id
     return
