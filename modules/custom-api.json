@@ -161,6 +161,121 @@
 				}
 			}
 		},
+        "/characters": {
+			"get": {
+				"summary": "Retrieve the HTML template used for displaying a document",
+				"description": "Get the HTML template associated with the given document. This is called whenever the users tries to view a document. The actual content of the document will then be loaded by the template.",
+				"tags": ["view"],
+				"operationId": "vapi:html",
+				"x-error-handler": "vapi:handle-error",
+				"parameters": [
+					{
+						"name": "file",
+						"in": "query",
+						"required": true,
+						"schema": {
+							"type": "string",
+                            "default": "characters"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "HTML view for the document",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "The document was not found",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "An error occurred",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+        "/characters/{id}": {
+			"get": {
+				"summary": "Retrieve the HTML template used for displaying a document",
+				"description": "Get the HTML template associated with the given document. This is called whenever the users tries to view a document. The actual content of the document will then be loaded by the template.",
+				"tags": ["view"],
+				"operationId": "vapi:html",
+				"x-error-handler": "vapi:handle-error",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "ID (unicode codepoint) of the character",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"example": "6B32"
+						},
+						"allowReserved": true
+					},
+					{
+						"name": "file",
+						"in": "query",
+						"required": true,
+						"schema": {
+							"type": "string",
+                            "default": "char"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "HTML view for the document",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "The document was not found",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "An error occurred",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
         "/api/sites": {
             "get": {
                 "summary": "Get list of sites",
@@ -288,6 +403,24 @@
                         "description": "List of inscriptions",
                         "content": {
                             "application/xml":{
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/characters": {
+            "get": {
+                "summary": "Get list of characters",
+                "operationId": "api:characters",
+                "responses": {
+                    "200":{
+                        "description": "List of sites",
+                        "content": {
+                            "text/html":{
                                 "schema": {
                                     "type": "string"
                                 }

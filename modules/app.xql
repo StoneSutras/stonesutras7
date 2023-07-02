@@ -37,3 +37,45 @@ declare function app:pb-document-catalog($node as node(), $model as map(*), $sit
     { $node/@* }
     </pb-document>
 };
+
+declare 
+    %templates:wrap
+function app:character($node as node(), $model as map(*), $id as xs:string) {
+    let $char := collection($config:data-root || "/unicode")//char[@xmlid = "U+" || $id]
+    return
+        map {
+            "char": $char,
+            "unicode": $char/@xmlid/string(),
+            "label": $char/appearance[1]/@character/string()
+        }
+};
+
+declare 
+    %templates:wrap
+function app:appearances($node as node(), $model as map(*)) {
+    <div>
+        <div class="snippets">
+        {
+            for $appear in $model?char/appearance
+            let $catalog := collection($config:data-catalog)/id($appear/source)
+            return
+                <div class="snippet">
+                    <div class="id">{translate($appear/source, '_', ' ')}</div>
+                    <img src="https://sutras.adw.uni-heidelberg.de/images/characters/subimage_{$appear/@nr}.png"/>
+                    <a href="inscriptions/{$catalog/@xml:id}">
+                        <h3 lang="zh_CN">
+                        {
+                            $catalog/c:header/c:title[@lang="zh"]/string()
+                        }
+                        </h3>
+                        <h3>
+                        {
+                            $catalog/c:header/c:title[@lang="en"]/string()
+                        }
+                        </h3>
+                    </a>
+                </div>
+        }
+        </div>
+    </div>
+};

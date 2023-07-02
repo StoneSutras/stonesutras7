@@ -194,6 +194,22 @@ declare function api:variants($request as map(*)) {
         </ul>
 };
 
+declare function api:characters($request as map(*)) {
+    <div class="characters">
+    {
+        for $char in collection($config:data-root || "/unicode")//char[appearance]
+        return
+            <a href="{substring($char/@xmlid, 3)}">
+                <div class="character">
+                    <div class="count">{count($char/appearance)}</div>
+                    <h1>{$char/appearance[1]/@character/string()}</h1>
+                    <h2>{$char/@xmlid/string()}</h2>
+                </div>
+            </a>
+    }
+    </div>
+};
+
 (:~
  : Keep this. This function does the actual lookup in the imported modules.
  :)
