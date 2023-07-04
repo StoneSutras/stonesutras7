@@ -416,6 +416,15 @@
             "get": {
                 "summary": "Get list of characters",
                 "operationId": "api:characters",
+				"parameters": [
+					{
+						"name": "query",
+						"in": "query",
+						"schema":{
+							"type": "string"
+						}
+					}
+				],
                 "responses": {
                     "200":{
                         "description": "List of sites",

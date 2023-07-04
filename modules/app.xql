@@ -62,7 +62,7 @@ function app:appearances($node as node(), $model as map(*)) {
                 <div class="snippet">
                     <div class="id">{translate($appear/source, '_', ' ')}</div>
                     <img src="https://sutras.adw.uni-heidelberg.de/images/characters/subimage_{$appear/@nr}.png"/>
-                    <a href="inscriptions/{$catalog/@xml:id}">
+                    <a href="../inscriptions/{$catalog/@xml:id}">
                         <h3 lang="zh_CN">
                         {
                             $catalog/c:header/c:title[@lang="zh"]/string()

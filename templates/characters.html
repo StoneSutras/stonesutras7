@@ -43,6 +43,11 @@
                         </app-toolbar>
                     </app-header>
                     <main>
+                        <pb-search id="search-form" subscribe="search" place-holder="Enter character"
+                            data-template="pages:parse-params" value="${query}" 
+                            subforms=".options" submit-on-load="submit-on-load">
+                            <paper-button slot="searchButton"><pb-i18n key="search.search"></pb-i18n></paper-button>
+                        </pb-search>
                         <pb-load url="api/characters" auto="auto"></pb-load>
                     </main>
                 </app-header-layout>
