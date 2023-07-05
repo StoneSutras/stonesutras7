@@ -117,9 +117,11 @@
             
             
             
+            
             color: var(--bss-color-gold);
 padding-left: .5em;
 padding-right: .5em;
+            
             
             
             
@@ -374,25 +376,28 @@ padding-right: .5em;
                     <model behaviour="section"/>
                 </elementSpec>
             <elementSpec ident="rdg" mode="add">
-                    <model predicate="starts-with(@wit, 'T_')" behaviour="link">
-            <param name="uri" value="let $prev := preceding::lb[@ed='T'][1] return 'https://cbetaonline.dila.edu.tw/zh/' || replace($prev/@n, '^(T[^_]+)_(.*)$', '$1_p$2')"/>
-            <param name="target" value="'_blank'"/>
-        </model>
                     <model predicate="$parameters?quote" behaviour="pass-through">
             <param name="char" value="$parameters?char"/>
             <param name="witnesses" value="for $sigil in tokenize(./@wit, '[,\s]+') return   root($parameters?root)//witList/witness[@sigil=$sigil]"/>
-            <pb:template xmlns="" xml:space="preserve"><span class="rdg">“[[content]]”[[char]]([[witnesses]])</span></pb:template>
+            <pb:set-param name="lb" value="let $prev := preceding::lb[@ed='T'][1] return replace($prev/@n, '^(T[^_]+)_(.*)$', '$1_p$2')"/>
+            <pb:template xmlns="" xml:space="preserve"><span class="rdg" lang="en">“[[content]]”[[char]]([[witnesses]])</span></pb:template>
         </model>
-                    <model behaviour="inline" cssClass="rdg">
+                    <model behaviour="pass-through">
             <param name="char" value="$parameters?char"/>
-            <pb:template xmlns="" xml:space="preserve">[[content]][[char]]</pb:template>
+            <pb:set-param name="lb" value="let $prev := preceding::lb[@ed='T'][1] return replace($prev/@n, '^(T[^_]+)_(.*)$', '$1_p$2')"/>
+            <pb:template xmlns="" xml:space="preserve"><span class="rdg" lang="en">[[content]][[char]]</span></pb:template>
         </model>
                 </elementSpec>
             <elementSpec ident="witness" mode="add">
                     <model predicate="matches(@sigil, &#34;^[rR].*&#34;)" behaviour="inline" cssClass="witness"/>
-                    <model predicate="matches(@sigil, '^T\d+.*$')" behaviour="pass-through">
+                    <model predicate="matches(@sigil, '^T_?\d+.*$') and $parameters?lb != ''" behaviour="pass-through">
             <param name="ref" value="let $target := ./witDetail/@target/string()  let $mods := collection($parameters?data-root || '/biblio')/mods:mods[@ID = $target]  return   $mods/mods:titleInfo[@type = 'reference']"/>
-            <pb:template xmlns="" xml:space="preserve"><span class="witness_taisho"><span class="ref">[[ref]]</span>[[content]]</span></pb:template>
+            <param name="uri" value="$parameters?lb"/>
+            <pb:template xmlns="" xml:space="preserve"><a href="https://cbetaonline.dila.edu.tw/zh/[[uri]]" class="witness" target="_blank">[[ref]][[content]]</a></pb:template>
+        </model>
+                    <model predicate="matches(@sigil, '^T_?\d+.*$')" behaviour="pass-through">
+            <param name="ref" value="let $target := ./witDetail/@target/string()  let $mods := collection($parameters?data-root || '/biblio')/mods:mods[@ID = $target]  return   $mods/mods:titleInfo[@type = 'reference']"/>
+            <pb:template xmlns="" xml:space="preserve"><span class="witness">[[ref]][[content]]</span></pb:template>
         </model>
                     <model behaviour="pass-through">
             <param name="ref" value="let $target := ./witDetail/@target/string()  let $mods := collection($parameters?data-root || '/biblio')/mods:mods[@ID = $target]  return   $mods/mods:titleInfo[@type = 'reference']"/>
@@ -406,7 +411,8 @@ padding-right: .5em;
             <param name="uri" value="'#' || @target"/>
             <pb:template xmlns="" xml:space="preserve"><span lang="en">[[content]]</span></pb:template>
         </model>
-                    <model behaviour="inline" cssClass="witDetail"/>
+                    <model predicate="text()" behaviour="inline" cssClass="witDetail"/>
+                    <model behaviour="inline"/>
                 </elementSpec>
             <elementSpec ident="abbr" mode="change">
                     <model behaviour="inline" cssClass="abbr"/>
@@ -464,8 +470,10 @@ padding-right: .5em;
             
             
             
+            
             margin-left: 1em; 
 font-family: var(--bss-serif-font-family);
+            
             
             
             

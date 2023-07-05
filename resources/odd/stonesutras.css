@@ -40,7 +40,7 @@ a:link, a:visited {
 }
 
 .witDetail::before {
-    content: ", ";
+    content: ": ";
 }
 
 .titleInfo {
