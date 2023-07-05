@@ -116,9 +116,11 @@
             
             
             
+            
             color: var(--bss-color-gold);
 padding-left: .5em;
 padding-right: .5em;
+            
             
             
             
@@ -387,6 +389,7 @@ padding-right: .5em;
         </model>
                 </elementSpec>
             <elementSpec ident="witness" mode="add">
+                    <model predicate="matches(@sigil, &#34;^[rR].*&#34;)" behaviour="inline" cssClass="witness"/>
                     <model predicate="matches(@sigil, '^T\d+.*$')" behaviour="pass-through">
             <param name="ref" value="let $target := ./witDetail/@target/string()  let $mods := collection($parameters?data-root || '/biblio')/mods:mods[@ID = $target]  return   $mods/mods:titleInfo[@type = 'reference']"/>
             <pb:template xmlns="" xml:space="preserve"><span class="witness_taisho"><span class="ref">[[ref]]</span>[[content]]</span></pb:template>
@@ -394,10 +397,15 @@ padding-right: .5em;
                     <model behaviour="pass-through">
             <param name="ref" value="let $target := ./witDetail/@target/string()  let $mods := collection($parameters?data-root || '/biblio')/mods:mods[@ID = $target]  return   $mods/mods:titleInfo[@type = 'reference']"/>
             <param name="target" value="./witDetail/@target/string()"/>
-            <pb:template xmlns="" xml:space="preserve"><pb-popover remote="https://sutras.adw.uni-heidelberg.de/exist/apps/stonepub/modules/bibliohtml.xql?id=[[target]]"><span class="witness">[[ref]][[content]]</span></pb-popover></pb:template>
+            <pb:template xmlns="" xml:space="preserve"><pb-popover class="witness" remote="https://sutras.adw.uni-heidelberg.de/exist/apps/stonepub/modules/bibliohtml.xql?id=[[target]]"><span>[[ref]][[content]]</span></pb-popover></pb:template>
         </model>
                 </elementSpec>
                 <elementSpec ident="witDetail" mode="add">
+                    <model predicate="matches(parent::witness/@sigil, '^[rR].*')" behaviour="pass-through">
+            <param name="content" value="('see figure ', let $figure := id(@target, root($parameters?root)) return   count($figure/preceding::figure) + 1 )"/>
+            <param name="uri" value="'#' || @target"/>
+            <pb:template xmlns="" xml:space="preserve"><span lang="en">[[content]]</span></pb:template>
+        </model>
                     <model behaviour="inline" cssClass="witDetail"/>
                 </elementSpec>
             <elementSpec ident="abbr" mode="change">
@@ -455,8 +463,10 @@ padding-right: .5em;
             <outputRendition xml:space="preserve">
             
             
+            
             margin-left: 1em; 
 font-family: var(--bss-serif-font-family);
+            
             
             
             </outputRendition>
