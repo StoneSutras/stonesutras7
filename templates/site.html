@@ -38,6 +38,7 @@
                                 not-found="" disable-history="">
                                 <pb-param name="mode" value="site"/>
                                 <pb-param name="app" value="${app}/" data-template="pages:parse-params"/>
+                                <pb-param name="data-root" value="${data-root}/" data-template="pages:parse-params"/>
                             </pb-view>
                             <pb-zoom data-target="toolbar-util" emit="transcription" direction="in" icon="icons:zoom-in"/>
                             <pb-zoom data-target="toolbar-util" emit="transcription" direction="out" icon="icons:zoom-out"/>
@@ -45,7 +46,9 @@
                     </app-header>
                     <main class="content-body">
                         <pb-view src="site" view="single" map="language" use-language="" disable-history="" append-footnotes="append-footnotes"
-                            not-found="No site description available yet!" subscribe="transcription" emit="transcription"/>
+                            not-found="No site description available yet!" subscribe="transcription" emit="transcription">
+                            <pb-param name="data-root" value="${data-root}/" data-template="pages:parse-params"/>
+                        </pb-view>
                         <div id="documents">
                             <h2><pb-i18n key="inscriptions"></pb-i18n></h2>
                             <pb-load url="api/inscriptions/${site}" subscribe="documents" data-template="pages:parse-params" auto=""/>

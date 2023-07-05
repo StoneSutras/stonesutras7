@@ -350,7 +350,7 @@ padding-right: .5em;
                 </elementSpec>
                 <elementSpec ident="ref" mode="change">
                     <model predicate="@type='biblio'" behaviour="inline">
-            <param name="content" value="let $target := @target  let $title := collection('/db/apps/stonesutras-data/data/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference'] return   if ($title) then $title else 'NOT FOUND'"/>
+            <param name="content" value="let $target := @target  let $title := collection($parameters?data-root || '/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference'] return   if ($title) then $title else 'NOT FOUND'"/>
             <param name="target" value="@target"/>
             <pb:template xmlns="" xml:space="preserve"><pb-popover remote="https://sutras.adw.uni-heidelberg.de/exist/apps/stonepub/modules/bibliohtml.xql?id=[[target]]"><span class="sigle">[[content]]</span></pb-popover></pb:template>
             <outputRendition xml:space="preserve">
@@ -388,11 +388,11 @@ padding-right: .5em;
                 </elementSpec>
             <elementSpec ident="witness" mode="add">
                     <model predicate="matches(@sigil, '^T\d+.*$')" behaviour="pass-through">
-            <param name="ref" value="let $target := ./witDetail/@target/string()  let $mods := collection('/db/apps/stonesutras-data/data/biblio')/mods:mods[@ID = $target]  return   $mods/mods:titleInfo[@type = 'reference']"/>
+            <param name="ref" value="let $target := ./witDetail/@target/string()  let $mods := collection($parameters?data-root || '/biblio')/mods:mods[@ID = $target]  return   $mods/mods:titleInfo[@type = 'reference']"/>
             <pb:template xmlns="" xml:space="preserve"><span class="witness_taisho"><span class="ref">[[ref]]</span>[[content]]</span></pb:template>
         </model>
                     <model behaviour="pass-through">
-            <param name="ref" value="let $target := ./witDetail/@target/string()  let $mods := collection('/db/apps/stonesutras-data/data/biblio')/mods:mods[@ID = $target]  return   $mods/mods:titleInfo[@type = 'reference']"/>
+            <param name="ref" value="let $target := ./witDetail/@target/string()  let $mods := collection($parameters?data-root || '/biblio')/mods:mods[@ID = $target]  return   $mods/mods:titleInfo[@type = 'reference']"/>
             <param name="target" value="./witDetail/@target/string()"/>
             <pb:template xmlns="" xml:space="preserve"><pb-popover remote="https://sutras.adw.uni-heidelberg.de/exist/apps/stonepub/modules/bibliohtml.xql?id=[[target]]"><span class="witness">[[ref]][[content]]</span></pb-popover></pb:template>
         </model>

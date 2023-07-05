@@ -40,6 +40,7 @@
                                 not-found="" use-language="">
                                 <pb-param name="mode" value="breadcrumbs"/>
                                 <pb-param name="app" value="${app}/" data-template="pages:parse-params"/>
+                                <pb-param name="data-root" value="${data-root}/" data-template="pages:parse-params"/>
                             </pb-view>
                             <pb-zoom data-target="toolbar-util" emit="transcription" direction="in" icon="icons:zoom-in"/>
                             <pb-zoom data-target="toolbar-util" emit="transcription" direction="out" icon="icons:zoom-out"/>
@@ -63,14 +64,18 @@
                         </app-toolbar>
                         <pb-view id="transcription" lang="zh" src="document1" xpath="//text/body/div[@xml:lang='zh']" 
                         view="single" column-separator=".tei-cb" history="history" append-footnotes="append-footnotes"
-                        odd="stonesutras" subscribe="transcription" emit="transcription" disable-history="" use-language=""/>
+                        odd="stonesutras" subscribe="transcription" emit="transcription" disable-history="" use-language="">
+                            <pb-param name="data-root" value="${data-root}/" data-template="pages:parse-params"/>
+                        </pb-view>
                         <pb-tabs>
                             <paper-tab slot="tab">Metadata</paper-tab>
                             <paper-tab slot="tab">Translation</paper-tab>
                             <paper-tab slot="tab">Layout Text</paper-tab>
                             <paper-tab slot="tab">Discussion</paper-tab>
                             <div slot="page" id="catalog">
-                                <pb-view src="document1" map="catalog" odd="catalog" view="single" wait-for="#map" emit="catalog" subscribe="catalog" disable-history=""/>
+                                <pb-view src="document1" map="catalog" odd="catalog" view="single" wait-for="#map" emit="catalog" subscribe="catalog" disable-history="">
+                                    <pb-param name="data-root" value="${data-root}/" data-template="pages:parse-params"/>
+                                </pb-view>
                                 <pb-leaflet-map id="map" subscribe="catalog" zoom="11" crs="EPSG3857" fit-markers="">
                                     <pb-map-layer base="" label="Mapbox OSM" url="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoid29sZmdhbmdtbSIsImEiOiJjam1kMjVpMnUwNm9wM3JwMzdsNGhhcnZ0In0.v65crewF-dkNsPF3o1Q4uw"
                                         attribution='© &lt;a href="https://www.mapbox.com/about/maps/"&gt;Mapbox&lt;/a&gt; © &lt;a href="http://www.openstreetmap.org/copyright"&gt;OpenStreetMap&lt;/a&gt; &lt;strong&gt;&lt;a href="https://www.mapbox.com/map-feedback/" target="_blank"&gt;Improve this map&lt;/a&gt;&lt;/strong&gt;'
@@ -80,10 +85,13 @@
                                 </pb-leaflet-map>
                             </div>
                             <pb-view slot="page" id="translation" lang="en" src="document1" map="translation" view="single" column-separator=".tei-cb" history="history" append-footnotes="append-footnotes"
-                                subscribe="transcription" disable-history="" not-found="Not translated by project team."/>
+                                subscribe="transcription" disable-history="" not-found="Not translated by project team.">
+                                <pb-param name="data-root" value="${data-root}/" data-template="pages:parse-params"/>
+                            </pb-view>
                             <pb-svg slot="page" subscribe="layout"/>
                             <pb-view id="discussion" slot="page" src="document1" odd="catalog" view="single" map="catalog" disable-history="">
                                 <pb-param name="mode" value="discussion"/>
+                                <pb-param name="data-root" value="${data-root}/" data-template="pages:parse-params"/>
                             </pb-view>
                         </pb-tabs>
                     </main>

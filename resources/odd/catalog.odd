@@ -57,7 +57,7 @@
         </modelSequence>
                     <model predicate="$parameters?mode=('breadcrumbs','site')" behaviour="block">
             <param name="content" value="header"/>
-            <pb:set-param name="site" value="let $id := @xml:id return   collection(&#34;/db/apps/stonesutras-data/data/catalog&#34;)/object[.//link[@type='inscription']/@xlink:href=$id]"/>
+            <pb:set-param name="site" value="let $id := @xml:id return   collection($parameters?data-root || '/catalog')/object[.//link[@type='inscription']/@xlink:href=$id]"/>
         </model>
                     <model predicate="$parameters?mode='discussion'" behaviour="block">
             <param name="content" value="references"/>
@@ -249,7 +249,7 @@
                 </elementSpec>
                 <elementSpec ident="ref">
                     <model predicate="@value='discussion'" behaviour="template">
-            <param name="sigle" value="let $target := @xlink:href return (collection('/db/apps/stonesutras-data/data/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']/string(), '???')[1] =&gt; normalize-space()"/>
+            <param name="sigle" value="let $target := @xlink:href return (collection($parameters?data-root || '/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']/string(), '???')[1] =&gt; normalize-space()"/>
             <param name="pages" value="pages/string()"/>
             <param name="content" value="(note[@*:lang='zh'], head((note[@*:lang='en'], note[not(@*:lang)])))"/>
             <param name="target" value="@xlink:href"/>
@@ -264,7 +264,7 @@
                 </elementSpec>
                 <elementSpec ident="tei:ref" mode="add">
                     <model predicate="@type='biblio'" behaviour="link">
-            <param name="content" value="let $target := @target return collection('/db/apps/stonsutras-data/data/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']/string()"/>
+            <param name="content" value="let $target := @target return collection($parameters?data-root || '/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']/string()"/>
             <param name="link" value="@target"/>
             <outputRendition xml:space="preserve">
             font-variant: small-caps;

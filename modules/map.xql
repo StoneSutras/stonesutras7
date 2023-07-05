@@ -49,7 +49,7 @@ declare function mapping:language($root as node(), $userParams as map(*)) {
 };
 
 declare function mapping:cbeta($root as node(), $userParams as map(*)) {
-    let $cbeta := doc("/db/apps/stonesutras7/data/T08n0235.xml")//tei:body
+    let $cbeta := doc($config:data-root || "/T08n0235.xml")//tei:body
     let $lines := $root//tei:lb[@ed='T']/@n
     let $startId := tokenize($lines[1], '_')[2]
     let $endId := tokenize($lines[last()], '_')[2]

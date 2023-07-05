@@ -74,7 +74,8 @@ declare function api:resolve($request as map(*)) {
                             $request?parameters,
                             map {
                                 "docid": substring-after(document-uri(root($root)), $config:data-root || '/'),
-                                "id": if ($byId) then $request?parameters?idOrDoc else ()
+                                "id": if ($byId) then $request?parameters?idOrDoc else (),
+                                "data-root": $config:data-root
                             }
                         ))
                     }
@@ -160,7 +161,7 @@ declare function api:inscriptions($request as map(*)) {
 };
 
 declare function api:taisho($id as xs:string) {
-    let $taisho := doc("/db/apps/stonesutras7/data/T08n0235.xml")/tei:TEI
+    let $taisho := doc($config:data-root || "/T08n0235.xml")/tei:TEI
     let $start := $taisho//tei:lb[@n = substring-after($id, '_')]
     let $end := $start/following::tei:lb[1]
     return

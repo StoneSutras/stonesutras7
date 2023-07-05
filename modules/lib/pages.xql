@@ -286,7 +286,8 @@ declare function pages:pb-page($node as node(), $model as map(*)) {
             $model,
             map { 
                 "app": $config:context-path,
-                "collection": $docPath
+                "collection": $docPath,
+                "data-root": $config:data-root
             }
         )
     )
