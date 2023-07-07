@@ -22,10 +22,9 @@ window.addEventListener('DOMContentLoaded', () => {
         console.log(ev.detail);
     });
 
-    const panel = document.querySelector('pb-panel');
     let svgPath;
+    let loadSvg = false;
     pbEvents.subscribe('pb-update', 'catalog', (ev) => {
-        const config = JSON.parse(document.getElementById('appConfig').textContent);
         if (ev.detail.root.querySelector('pb-geolocation')) {
             document.querySelector('pb-leaflet-map').style.display = 'block';
         } else {
@@ -33,17 +32,19 @@ window.addEventListener('DOMContentLoaded', () => {
         }
         const svgImg = ev.detail.root.querySelector('.layout');
         svgPath = svgImg.getAttribute('src');
-        const svg = panel.querySelector('pb-svg');
-        if (svg) {
-            svg.setAttribute('url', new URL(svgPath, new URL(`${config.app}/`, location.href)).toString());
+        if (loadSvg) {
+            pbEvents.emit('pb-show-annotation', 'layout', {file: svgPath});
+            loadSvg = false;
         }
     });
-    pbEvents.subscribe('pb-panel', 'panels', () => {
-        const config = JSON.parse(document.getElementById('appConfig').textContent);
-        const svg = panel.querySelector('pb-svg');
-        console.log(svg);
-        if (svg) {
-            svg.setAttribute('url', new URL(svgPath, new URL(`${config.app}/`, location.href)).toString());
+
+    pbEvents.subscribe('pb-tab', 'tabs', (ev) => {
+        if (ev.detail.selected === 2) {
+            if (svgPath) {
+                pbEvents.emit('pb-show-annotation', 'layout', {file: svgPath});
+            } else {
+                loadSvg = true;
+            }
         }
     });
 

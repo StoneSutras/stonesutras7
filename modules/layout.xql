@@ -159,6 +159,16 @@ declare function layout:generate($id as xs:string, $div as element()) {
                 $layout/@* except ($layout/@width, $layout/@height),
                 $layout/node()
             }
+        else if (string-length($div) > 1000) then
+            <svg xmlns="http://www.w3.org/2000/svg">
+                <style type="text/css">
+                    text {{
+                        font-family: sans-serif;
+                        font-size: 13px;
+                    }}
+                </style>
+                <text>Text too large for auto-layout ({string-length($div)}).</text>
+            </svg>
         else
             let $direction := $div/@rend
             let $text := <r>{layout:extract-text($div)}</r>
