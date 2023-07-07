@@ -118,9 +118,11 @@
             
             
             
+            
             color: var(--bss-color-gold);
 padding-left: .5em;
 padding-right: .5em;
+            
             
             
             
@@ -353,7 +355,18 @@ padding-right: .5em;
         </model>
                 </elementSpec>
                 <elementSpec ident="ref" mode="change">
-                    <model predicate="@type='biblio'" behaviour="inline">
+                    <model predicate="@type='biblio' and preceding-sibling::node()[1][self::ref]" behaviour="inline" cssClass="biblio-ref">
+            <param name="content" value="let $target := @target  let $title := collection($parameters?data-root || '/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference'] return   if ($title) then $title else 'NOT FOUND'"/>
+            <param name="target" value="@target"/>
+            <pb:template xmlns="" xml:space="preserve"><pb-popover remote="https://sutras.adw.uni-heidelberg.de/exist/apps/stonepub/modules/bibliohtml.xql?id=[[target]]"><span class="sigle">[[content]]</span></pb-popover></pb:template>
+            <outputRendition xml:space="preserve">
+            font-variant: small-caps;
+            </outputRendition>
+            <outputRendition xml:space="preserve" scope="before">
+            content: ', ';
+            </outputRendition>
+        </model>
+                    <model predicate="@type='biblio'" behaviour="inline" cssClass="biblio-ref">
             <param name="content" value="let $target := @target  let $title := collection($parameters?data-root || '/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference'] return   if ($title) then $title else 'NOT FOUND'"/>
             <param name="target" value="@target"/>
             <pb:template xmlns="" xml:space="preserve"><pb-popover remote="https://sutras.adw.uni-heidelberg.de/exist/apps/stonepub/modules/bibliohtml.xql?id=[[target]]"><span class="sigle">[[content]]</span></pb-popover></pb:template>
@@ -471,8 +484,10 @@ padding-right: .5em;
             
             
             
+            
             margin-left: 1em; 
 font-family: var(--bss-serif-font-family);
+            
             
             
             
