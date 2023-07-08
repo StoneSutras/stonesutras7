@@ -1,0 +1,108 @@
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes"/>
+        <link rel="shortcut icon" type="image/x-icon" href="resources/images/favicon.ico"/>
+        <link rel="shortcut icon" type="image/png" href="resources/images/favicon-16.png" sizes="16x16"/>
+        <link rel="shortcut icon" type="image/png" href="resources/images/favicon-24.png" sizes="24x24"/>
+        <link rel="shortcut icon" type="image/png" href="resources/images/favicon-32.png" sizes="32x32"/>
+        <link rel="shortcut icon" type="image/png" href="resources/images/favicon-64.png" sizes="64x64"/>
+
+        <title data-template="config:app-title"/>
+        <meta name="description" content="Default single text layout"/>
+        <meta name="pb-template" content="view.html"/>
+
+        <link rel="stylesheet" type="text/css" href="resources/fonts/font.css"/>
+        <link rel="stylesheet" href="resources/css/stonesutras-theme.css"/>
+        <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
+        <script type="module" src="pb-leaflet-map.js" data-template="pages:load-components"/>
+    </head>
+
+    <body class="home">
+        <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json"
+            require-language="" supported-languages="en, zh_CN">
+            <script id="appConfig" type="application/json" data-template="pages:parse-params">
+                {
+                    "app": "${app}"
+                }
+            </script>
+            <app-drawer-layout force-narrow="force-narrow">
+                <app-drawer data-template="lib:include" data-template-path="templates/drawer.html"/>
+                <app-header-layout>
+                    <app-header slot="header" reveals="reveals" fixed="fixed" effects="waterfall">
+                        <app-toolbar data-template="lib:include" data-template-path="templates/menu.html"/>
+                        <app-toolbar data-template="lib:include" data-template-path="templates/toolbar.html">
+                            <!-- Search input -->
+                            <pb-search data-target="toolbar-util" action="${app}/search.html" data-template="pages:parse-params" value="${query}" redirect="redirect"/>
+                        </app-toolbar>
+                    </app-header>
+                    <main>
+                        <section id="title">
+                            <img src="resources/images/webpage-start-oben.jpg" width="100%"/>
+                        </section>
+                        <section id="akademie">
+                            <img src="resources/images/hadw_logo_blau.png" height="128"/>
+                            <div>
+                                <h3>a project of the</h3>
+                                <div class="two-column">
+                                    <h2>Heidelberger Akademie<br/>der Wissenschaften</h2>
+                                    <h2>海德堡<br/>科學院</h2>
+                                </div>
+                            </div>
+                        </section>
+                        <section id="credits">
+                            <table class="provinces">
+                                <tr>
+                                    <td colspan="2">in collaboration with</td>
+                                </tr>
+                                <tr class="by-province">
+                                    <td class="province">
+                                        <h3 lang="zh">山東省</h3>
+                                        <h3 lang="en">Shandong Province</h3>
+                                    </td>
+                                    <td>
+                                        <ul>
+                                            <li>山東省石刻藝術博物館<br/>
+                                                Shandong Stone Carving Art Museum</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr class="by-province">
+                                    <td class="province">
+                                        <h3 lang="zh">四川省</h3>
+                                        <h3 lang="en">Sichuan Province</h3>
+                                    </td>
+                                    <td>
+                                        <ul>
+                                            <li>北京大學考古文博學院<br/>
+                                                Institute of Archaeology and Museology, Peking University</li>
+                                            <li>成都市文物考古研究所<br/>
+                                                Chengdu Municipal Institute of Cultural Relics and Archaeology</li>
+                                            <li>安岳縣文物管理局<br/>
+                                                Sichuan Provincial Research Institute of Cultural Relics and Archaeology</li>
+                                            <li>安岳縣文物管理局<br/>
+                                                Bureau for Cultural Relics of Anyue County</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr class="by-province">
+                                    <td class="province">
+                                        <h3 lang="zh">陝西省</h3>
+                                        <h3 lang="en">Shaanxi Province</h3>
+                                    </td>
+                                    <td>
+                                        <ul>
+                                            <li>陝西省文物保護研究院<br/>
+                                            Shaanxi Institute for the Preservation of Cultural Heritage</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </table>
+                        </section>
+                    </main>
+                </app-header-layout>
+            </app-drawer-layout>
+        </pb-page>
+        <div class="splash"/>
+    </body>
+</html>
