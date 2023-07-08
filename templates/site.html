@@ -42,6 +42,8 @@
                             </pb-view>
                             <pb-zoom data-target="toolbar-util" emit="transcription" direction="in" icon="icons:zoom-in"/>
                             <pb-zoom data-target="toolbar-util" emit="transcription" direction="out" icon="icons:zoom-out"/>
+                            <!-- Search input -->
+                            <pb-search data-target="toolbar-util" action="${app}/search.html" data-template="pages:parse-params" value="${query}" redirect="redirect"/>
                         </app-toolbar>
                     </app-header>
                     <main class="content-body">

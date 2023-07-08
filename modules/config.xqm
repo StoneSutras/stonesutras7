@@ -16,6 +16,7 @@ declare namespace repo="http://exist-db.org/xquery/repo";
 declare namespace expath="http://expath.org/ns/pkg";
 declare namespace jmx="http://exist-db.org/jmx";
 declare namespace tei="http://www.tei-c.org/ns/1.0";
+declare namespace c = "http://exist-db.org/ns/catalog";
 
 (:~~
  : The version of the pb-components webcomponents library to be used by this app.
@@ -111,25 +112,36 @@ declare variable $config:pagination-fill := 5;
  :)
 declare variable $config:facets := [
     map {
-        "dimension": "genre",
-        "heading": "facets.genre",
-        "max": 5,
-        "hierarchical": true()
-    },
-    map {
-        "dimension": "language",
-        "heading": "facets.language",
+        "dimension": "province",
+        "heading": "facets.province",
         "max": 5,
         "hierarchical": false(),
         "output": function($label) {
             switch($label)
-                case "de" return "German"
-                case "es" return "Spanish"
-                case "la" return "Latin"
-                case "fr" return "French"
-                case "en" return "English"
+                case "Shandong" return "山東Shandong"
+                case "Sichuan" return "四川Sichuan"
+                case "Shaanxi" return "陝西Shaanxi"
                 default return $label
         }
+    },
+    map {
+        "dimension": "site",
+        "heading": "facets.site",
+        "max": 5,
+        "hierarchical": false(),
+        "output": function($label) {
+            let $catalog := collection($config:data-catalog)/id($label)
+            return (
+                <span lang="zh">{$catalog/c:header/c:title[@*:lang="zh"][@type="given"]/string()}</span>,
+                <span lang="zh">{$catalog/c:header/c:title[@*:lang="en"][@type="given"]/string()}</span>
+            )
+        }
+    },
+    map {
+        "dimension": "type",
+        "heading": "facets.type",
+        "max": 5,
+        "hierarchical": false()
     }
 ];
 
@@ -347,7 +359,7 @@ declare variable $config:expath-descriptor := doc(concat($config:app-root, "/exp
 
 declare variable $config:session-prefix := $config:expath-descriptor/@abbrev/string();
 
-declare variable $config:default-fields := ();
+declare variable $config:default-fields := ("type");
 
 declare variable $config:dts-collections := map {
     "id": "default",

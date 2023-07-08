@@ -69,6 +69,13 @@ a:link, a:visited, a:hover {
     margin: 0 0 0 20px;
 }
 
+app-toolbar pb-search {
+    --pb-search-label-color: var(--pb-toolbar-color);
+    --pb-search-input-color: var(--pb-toolbar-color);
+    --pb-search-focus-color: var(--pb-color-focus);
+    padding-left: 20px;
+}
+
 .content-body {
     display: grid;
     height: var(--grid-height);
@@ -194,6 +201,18 @@ ul.variants {
     width: 100%;
 }
 
-.zh, [lang="zh_CN"] {
+.zh, :lang(zh) {
     font-family: var(--bss-chinese-font-family);
+}
+
+.matches {
+    display: block;
+    margin-left: 20px;
+    margin-top: 10px;
+    font: var(--pb-results-body-font);
+}
+
+.matches .hi {
+    background-color: var(--pb-highlight-color);
+    color: var(--pb-color-primary);
 }

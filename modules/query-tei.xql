@@ -20,6 +20,8 @@ xquery version "3.1";
 module namespace teis="http://www.tei-c.org/tei-simple/query/tei";
 
 declare namespace tei="http://www.tei-c.org/ns/1.0";
+declare namespace c = "http://exist-db.org/ns/catalog";
+declare namespace xlink = "http://www.w3.org/1999/xlink";
 
 import module namespace config="http://www.tei-c.org/tei-simple/config" at "config.xqm";
 import module namespace nav="http://www.tei-c.org/tei-simple/navigation/tei" at "navigation-tei.xql";
@@ -44,9 +46,14 @@ declare function teis:query-default($fields as xs:string+, $query as xs:string, 
                         return
                             $config:data-root ! doc(. || "/" || $text)//tei:div[ft:query(., $query, query:options($sortBy))] |
                             $config:data-root ! doc(. || "/" || $text)//tei:text[ft:query(., $query, query:options($sortBy))]
-                    else
-                        collection($config:data-root)//tei:div[ft:query(., $query, query:options($sortBy))] |
-                        collection($config:data-root)//tei:text[ft:query(., $query, query:options($sortBy))]
+                    else (
+                        (: util:log('INFO', 'Querying NGRAM'), :)
+                        (: collection($config:data-root)//tei:body[ngram:contains(., $query)] :)
+                        for $hit in collection($config:data-root)//tei:body[ft:query(., $query, query:options($sortBy))]
+                        where ft:field($hit, "type") = ("site", "cave", "inscription")
+                        return
+                            $hit
+                    )
     else ()
 };
 
@@ -114,20 +121,41 @@ declare function teis:get-parent-section($node as node()) {
 };
 
 declare function teis:get-breadcrumbs($config as map(*), $hit as node(), $parent-id as xs:string) {
-    let $work := root($hit)/*
-    let $work-title := nav:get-document-title($config, $work)/string()
+    let $id := root($hit)//tei:text/@xml:id
+    let $inscriptionCatalog := collection($config:data-catalog)/id($id)
+    let $catalog :=
+        if ($inscriptionCatalog) then
+            $inscriptionCatalog
+        else
+            let $siteCatalog := collection($config:data-catalog)/id(substring-after($id, 'Site_'))
+            return
+                if ($siteCatalog) then
+                    $siteCatalog
+                else
+                    collection($config:data-catalog)/c:object[.//c:link[@type='introduction']/@xlink:href = $id]
+    let $site :=
+        if ($catalog/@type=('site','cave')) then
+            $catalog
+        else
+            collection($config:data-catalog)/c:object[@type=('site', 'cave')][c:fileDescription/c:link[@type='inscription'][@xlink:href=$catalog/@xml:id]]
     return
         <div class="breadcrumbs">
-            <a class="breadcrumb" href="{$parent-id}">{$work-title}</a>
+            <a class="breadcrumb" href="#">
+                <span lang="zh">{$site/c:header/c:province[@*:lang="zh"]}</span>
+                <span>{$site/c:header/c:province[@*:lang="en"]}</span>
+            </a>
+            <a class="breadcrumb" href="sites/{$site/@xml:id}">
+                <span lang="zh">{$site/c:header/c:title[@*:lang="zh"][@type="given"]/string()}</span>
+                <span>{$site/c:header/c:title[@*:lang="en"][@type="given"]/string()}</span>
+            </a>
             {
-                for $parentDiv in $hit/ancestor-or-self::tei:div[tei:head]
-                let $id := util:node-id(
-                    if ($config?view = "page") then ($parentDiv/preceding::tei:pb[1], $parentDiv)[1] else $parentDiv
-                )
-                return
-                    <a class="breadcrumb" href="{$parent-id || "?action=search&amp;root=" || $id || "&amp;view=" || $config?view || "&amp;odd=" || $config?odd}">
-                    {$parentDiv/tei:head/string()}
+                if ($catalog/@type='inscription') then
+                    <a class="breadcrumb" href="inscriptions/{$catalog/@xml:id}">
+                        <span lang="zh">{$catalog/c:header/c:title[@*:lang="zh"][@type="given"]/string()}</span>
+                        <span>{$catalog/c:header/c:title[@*:lang="en"][@type="given"]/string()}</span>
                     </a>
+                else
+                    ()
             }
         </div>
 };

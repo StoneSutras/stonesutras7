@@ -75,8 +75,6 @@
                                     </paper-listbox>
                                 </paper-menu-button>
                             </pb-restricted>
-                            <!-- Search input -->
-                            <pb-search action="${app}/search.html" data-template="pages:parse-params" value="${query}" redirect="redirect"/>
 
                             <!-- language selector -->
                             <pb-lang name="lang" data-template="pages:languages"/>
@@ -88,6 +86,8 @@
                     </app-toolbar>
                     <app-toolbar data-template="lib:include" data-template-path="templates/toolbar.html">
                         <div class="breadcrumbs" data-target="breadcrumbs">Sites</div>
+                        <!-- Search input -->
+                        <pb-search data-target="toolbar-util" action="${app}/search.html" data-template="pages:parse-params" value="${query}" redirect="redirect"/>
                     </app-toolbar>
                 </app-header>
                 <main class="sites-map">

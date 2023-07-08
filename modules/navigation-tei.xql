@@ -20,6 +20,7 @@ xquery version "3.1";
 module namespace nav="http://www.tei-c.org/tei-simple/navigation/tei";
 
 declare namespace tei="http://www.tei-c.org/ns/1.0";
+declare namespace c = "http://exist-db.org/ns/catalog";
 
 import module namespace config="http://www.tei-c.org/tei-simple/config" at "config.xqm";
 
@@ -63,12 +64,13 @@ declare function nav:get-document-title($config as map(*), $root as element()) {
 declare function nav:get-metadata($config as map(*), $root as element(), $field as xs:string) {
     switch ($field)
         case "title" return
-            let $header := $root/tei:teiHeader
-            return
-            (
-                $header//tei:msDesc/tei:head, $header//tei:titleStmt/tei:title[@type = 'main'],
-                $header//tei:titleStmt/tei:title
-            )[1]
+            let $id := root($root)//tei:text/@xml:id
+            let $log := util:log('INFO', $id)
+            let $catalog := collection($config:data-catalog)/id($id)
+            return (
+                $catalog/c:header/c:title[@*:lang="zh"][@type="given"],
+                $catalog/c:header/c:title[@*:lang="en"][@type="given"]
+            )
         case "author" return (
             $root/tei:teiHeader//tei:titleStmt/tei:author,
             $root/tei:teiHeader//tei:correspDesc/tei:correspAction/tei:persName

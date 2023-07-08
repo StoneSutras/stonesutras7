@@ -12,6 +12,7 @@
         <link rel="stylesheet" type="text/css" href="resources/fonts/font.css"/>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald&amp;display=swap"/>
         <link rel="stylesheet" href="resources/css/theme.css"/>
+        <link rel="stylesheet" href="resources/css/stonesutras-theme.css"/>
         <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
 
         <style>
@@ -55,36 +56,25 @@
                 margin-right: 20px;
                 font-weight: bold;
             }
-            .breadcrumb:link, .breadcrumb:visited {
-                text-decoration: none;
-                color: var(--paper-grey-600);
-            }
+
             .breadcrumb:before {
                 content: '&gt;';
                 padding: 0 8px;
                 font-weight: bold;
+                text-decoration: none;
             }
             .breadcrumb:first-child::before {
                 content: '';
-            }
-            .matches {
-                display: table;
-                margin-left: 20px;
-                margin-top: 10px;
-                font: var(--pb-results-body-font);
-            }
-            .matches p {
-                display: table-row;
-            }
-            .matches p * {
-                display: table-cell;
-                padding: 4px 8px;
+                padding: 0;
             }
 
-            .hi {
-                display: block;
+            .breadcrumbs a:link, .breadcrumbs a:visited, .breadcrumbs a:hover {
+                text-decoration: none;
             }
 
+            pb-paginate {
+                color: var(--pb-color-inverse);
+            }
             #facets h3 {
                 display: flex;
                 flex-direction: row;
@@ -106,7 +96,8 @@
     </head>
 
     <body>
-        <pb-page data-template="pages:pb-page" unresolved="unresolved">
+        <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json"
+            supported-languages="en, zh_CN">
             <app-header-layout>
                 <app-header slot="header" reveals="reveals" fixed="fixed" effects="waterfall">
                     <app-toolbar data-template="templates:include" data-template-path="templates/menu.html"/>

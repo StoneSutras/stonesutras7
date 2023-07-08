@@ -12,5 +12,10 @@
     "inscriptions": "Inscriptions",
     "errors": {
         "under-construction": "Under construction ..."
+    },
+    "facets": {
+        "type": "Type of document",
+        "site": "Site",
+        "province": "Province"
     }
 }
