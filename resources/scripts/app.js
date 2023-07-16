@@ -44,7 +44,9 @@ window.addEventListener('DOMContentLoaded', () => {
         switch (ev.detail.selected) {
             case 0:
                 const map = document.querySelector('pb-leaflet-map');
-                map.map.invalidateSize(true);
+                setTimeout(() => {
+                    map.map.invalidateSize(true)
+                });
                 break;
             case 2:
                 if (svgPath) {

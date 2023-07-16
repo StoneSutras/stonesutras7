@@ -6,7 +6,7 @@ import module namespace config="http://www.tei-c.org/tei-simple/config" at "conf
 declare namespace xlink="http://www.w3.org/1999/xlink";
 declare namespace catalog="http://exist-db.org/ns/catalog";
 
-declare variable $iiif:IMAGE_API_BASE := "http://sutras.adw.uni-heidelberg.de:8182/iiif/3";
+declare variable $iiif:IMAGE_API_BASE := "https://sutras.adw.uni-heidelberg.de/iiif/3";
 
 declare %private function iiif:image-info($path as xs:string) {
     let $request := <http:request method="GET" href="{$iiif:IMAGE_API_BASE}/{$path}/info.json"/>
