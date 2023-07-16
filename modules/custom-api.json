@@ -387,7 +387,7 @@
 		"/api/iiif/{id}.manifest": {
             "get": {
                 "summary": "Retrieve IIIF presentation manifest for inscription",
-                "operationId": "custom:iiif-manifest",
+                "operationId": "iiif:manifest",
                 "parameters": [
                     {
                         "name": "id",
