@@ -15,9 +15,12 @@
 
         <link rel="stylesheet" type="text/css" href="resources/fonts/font.css"/>
         <link rel="stylesheet" href="resources/css/stonesutras-theme.css"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tify@0.28.1/dist/tify.css"/>
+
         <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
         <script type="module" src="pb-leaflet-map.js" data-template="pages:load-components"/>
         <script src="resources/scripts/app.js"/>
+        <script src="https://cdn.jsdelivr.net/npm/tify@0.28.1/dist/tify.js"></script>
     </head>
 
     <body class="inscription">
@@ -25,7 +28,8 @@
             require-language="" supported-languages="en, zh_CN">
             <script id="appConfig" type="application/json" data-template="pages:parse-params">
                 {
-                    "app": "${app}"
+                    "app": "${app}",
+                    "inscription": "${id}"
                 }
             </script>
             <pb-document id="document1" data-template="pages:pb-document"/>
@@ -74,6 +78,7 @@
                             <paper-tab slot="tab">Translation</paper-tab>
                             <paper-tab slot="tab">Layout Text</paper-tab>
                             <paper-tab slot="tab">Discussion</paper-tab>
+                            <paper-tab slot="tab">Images</paper-tab>
                             <div slot="page" id="catalog">
                                 <pb-view src="document1" map="catalog" odd="catalog" view="single" wait-for="#map" emit="catalog" subscribe="catalog" disable-history="">
                                     <pb-param name="data-root" value="${data-root}/" data-template="pages:parse-params"/>
@@ -95,6 +100,7 @@
                                 <pb-param name="mode" value="discussion"/>
                                 <pb-param name="data-root" value="${data-root}/" data-template="pages:parse-params"/>
                             </pb-view>
+                            <div id="tify" slot="page" style="height: 100%"></div>
                         </pb-tabs>
                     </main>
                 </app-header-layout>

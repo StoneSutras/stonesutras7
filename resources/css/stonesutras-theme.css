@@ -146,7 +146,7 @@ pb-svg {
     height: 100%;
 }
 
-#map {
+pb-leaflet-map {
     margin-top: 2rem;
     width: 100%;
     height: 356px;

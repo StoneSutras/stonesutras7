@@ -1,8 +1,9 @@
 window.addEventListener('DOMContentLoaded', () => {
+    const config = JSON.parse(document.getElementById('appConfig').textContent);
+
     const sites = document.getElementById('sites');
 
     pbEvents.subscribe('pb-end-update', 'sites', () => {
-        const documents = document.getElementById('documents');
         const locations = sites.querySelectorAll('pb-geolocation');
         pbEvents.emit('pb-update-map', 'map', Array.from(locations));
         // locations.forEach((geo) => {
@@ -38,13 +39,30 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    let tify;
     pbEvents.subscribe('pb-tab', 'tabs', (ev) => {
-        if (ev.detail.selected === 2) {
-            if (svgPath) {
-                pbEvents.emit('pb-show-annotation', 'layout', {file: svgPath});
-            } else {
-                loadSvg = true;
-            }
+        switch (ev.detail.selected) {
+            case 0:
+                const map = document.querySelector('pb-leaflet-map');
+                map.map.invalidateSize(true);
+                break;
+            case 2:
+                if (svgPath) {
+                    pbEvents.emit('pb-show-annotation', 'layout', {file: svgPath});
+                } else {
+                    loadSvg = true;
+                }
+                break;
+            case 4:
+                if (!tify) {
+                    tify = new Tify({
+                        container: '#tify',
+                        manifestUrl: `${config.app}/api/iiif/${config.inscription}.manifest`,
+                        view: 'thumbnails',
+                        pageLabelFormat: 'L',
+                    });
+                }
+                break;
         }
     });
 

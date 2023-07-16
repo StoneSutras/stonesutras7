@@ -95,7 +95,7 @@ declare function local:generate-code($collection as xs:string) {
 (: API needs dba rights for LaTeX :)
 sm:chgrp(xs:anyURI($target || "/modules/lib/api-dba.xql"), "dba"),
 sm:chmod(xs:anyURI($target || "/modules/lib/api-dba.xql"), "rwxr-Sr-x"),
-sm:chgrp(xs:anyURI($target || "/modules/lib/api.xql"), "editor"),
+sm:chgrp(xs:anyURI($target || "/modules/lib/api.xql"), "tei"),
 sm:chmod(xs:anyURI($target || "/modules/lib/api.xql"), "rwxr-Sr-x"),
 
 local:mkcol($target, "transform"),

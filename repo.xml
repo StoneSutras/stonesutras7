@@ -8,6 +8,6 @@
     <prepare>pre-install.xql</prepare>
     <finish>post-install.xql</finish>
     <target>stonesutras7</target>
-    <permissions user="stone" group="editor" password="$utra$" mode="rw-r--r--"/>
+    <permissions user="stone" group="tei" password="$utra$" mode="rw-r--r--"/>
     <deployed>2021-01-29T13:39:59.735Z</deployed>
 </meta>

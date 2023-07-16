@@ -384,6 +384,34 @@
                 }
             }
         },
+		"/api/iiif/{id}.manifest": {
+            "get": {
+                "summary": "Retrieve IIIF presentation manifest for inscription",
+                "operationId": "custom:iiif-manifest",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema":{
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200":{
+                        "description": "IIIF manifest",
+                        "content": {
+                            "application/ld+json":{
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/variants": {
             "get": {
                 "summary": "Retrieve a layout view of the text",
