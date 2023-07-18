@@ -1,5 +1,4 @@
 window.addEventListener('DOMContentLoaded', () => {
-    const config = JSON.parse(document.getElementById('appConfig').textContent);
 
     const sites = document.getElementById('sites');
 
@@ -56,6 +55,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
                 break;
             case 4:
+    		const config = JSON.parse(document.getElementById('appConfig').textContent);
                 if (!tify) {
                     tify = new Tify({
                         container: '#tify',
