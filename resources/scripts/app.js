@@ -2,20 +2,16 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const sites = document.getElementById('sites');
 
+    // start page map
     pbEvents.subscribe('pb-end-update', 'sites', () => {
         const locations = sites.querySelectorAll('pb-geolocation');
         pbEvents.emit('pb-update-map', 'map', Array.from(locations));
-        // locations.forEach((geo) => {
-        //     geo.addEventListener('click', (ev) => {
-        //         ev.preventDefault();
-        //         const url = new URL(location.href);
-        //         url.searchParams.set('site', geo.id);
-        //         history.pushState(null, null, url.toString());
-        //         documents.load({
-        //             site: geo.id
-        //         });
-        //     });
-        // });
+    });
+
+    // site description map
+    pbEvents.subscribe('pb-end-update', 'documents', (ev) => {
+        const locations = document.querySelectorAll('#documents pb-geolocation');
+        pbEvents.emit('pb-update-map', 'catalog', Array.from(locations));
     });
 
     pbEvents.subscribe('pb-leaflet-marker-click', null, (ev) => {
@@ -74,6 +70,30 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
     pbEvents.subscribe('pb-update', 'transcription', (ev) => {
+        const illustrations = ev.detail.root.querySelectorAll('.illustration .lightbox');
+        const images = new Set();
+        let lightbox;
+        let elements = [];
+        illustrations.forEach((img) => {
+            const template = img.parentNode.querySelector('[slot=alternate]');
+            images.add({
+                href: img.href,
+                title: Array.from(template.content.childNodes).map((node) => node.outerHTML).join('')
+            });
+            img.addEventListener('click', (ev) => {
+                ev.preventDefault();
+                ev.stopPropagation();
+                const pos = elements.findIndex((elem) => elem.href === img.href);
+                console.log('Opening image %d', pos);
+                lightbox.openAt(pos);
+            })
+        });
+        elements = Array.from(images);
+        lightbox = GLightbox({
+            elements 
+        });
+
+        // CBETA spans for side-by-side view
         const spans = ev.detail.root.querySelectorAll('.t');
         spans.forEach((span) => {
             span.addEventListener('click', () => {

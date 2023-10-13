@@ -60,6 +60,17 @@ a:link, a:visited {
     content: '）';
 }
 
+.illustration {
+    position: static;
+    float: right;
+    clear: both;
+    margin-right: -100px;
+}
+
+.illustration img {
+    width: 80px;
+}
+
 figure {
     break-inside: avoid-column;
     scroll-padding-top: 128px;

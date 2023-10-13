@@ -52,7 +52,7 @@
                 <param name="content" value="translate(@xml:id, '_', ' ')"/>
             </model>
             <model behaviour="block">
-                <param name="content" value="header"/>
+                <param name="content" value="(header, location/coordinates)"/>
             </model>
         </modelSequence>
                     <model predicate="$parameters?mode=('breadcrumbs','site')" behaviour="block">
@@ -180,6 +180,12 @@
         </model>
                 </elementSpec>
                 <elementSpec ident="coordinates" mode="add">
+                    <model predicate="$parameters?mode='title' and text()" behaviour="pass-through">
+            <param name="latitude" value="tokenize(., '\s*,\s*')[2]"/>
+            <param name="longitude" value="tokenize(., '\s*,\s*')[1]"/>
+            <param name="ident" value="translate(ancestor::object/@xml:id, '_', ' ')"/>
+            <pb:template xmlns="" xml:space="preserve"><pb-geolocation latitude="[[latitude]]" longitude="[[longitude]]" label="[[ident]]" emit="catalog"/></pb:template>
+        </model>
                     <model predicate="text()" behaviour="block">
             <param name="height" value="@height"/>
             <param name="latitude" value="tokenize(., '\s*,\s*')[2]"/>

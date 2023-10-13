@@ -46,6 +46,10 @@ body {
     --pb-lang-label-color: var(--pb-color-primary);
 }
 
+html.glightbox-open {
+    overflow: unset;
+}
+
 a:link, a:visited, a:hover {
     text-decoration: none;
     color: var(--bss-color-lb);
@@ -85,6 +89,22 @@ app-toolbar pb-search {
     column-gap: 20px;
     margin: 0 auto;
     max-width: 1440px;
+}
+
+.site .content-body {
+    grid-template-areas: "text map" "text inscriptions";
+}
+
+.site pb-view[src=site] {
+    grid-area: text;
+}
+
+.site pb-leaflet-map {
+    grid-area: map;
+}
+
+.site .documents {
+    grid-area: inscriptions;
 }
 
 .sites-map {
@@ -150,6 +170,10 @@ pb-leaflet-map {
     margin-top: 2rem;
     width: 100%;
     height: 356px;
+}
+
+pb-view[src=site]::part(content) {
+    margin-right: 100px;
 }
 
 ul.variants {
@@ -255,14 +279,19 @@ ul.variants {
     margin-top: 30px;
 }
 .home .by-province, .home .by-province h3 {
-    font-size: 24px;
+    font-size: 20px;
 }
 .home td {
     padding-bottom: 30px;
     vertical-align: top;
 }
+.home .by-province .province {
+    padding-right: 4em;
+}
+
 .home .by-province ul {
     padding-bottom: 30px;
+    padding-left: 0;
 }
 .home .by-province li {
     list-style: none;

@@ -17,22 +17,29 @@
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400&amp;family=Oswald&amp;display=swap" rel="stylesheet"/>
         <link rel="stylesheet" href="resources/css/stonesutras-theme.css"/>
         <link rel="stylesheet" href="transform/stonesutras.css"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
         <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
         <script type="module" src="pb-leaflet-map.js" data-template="pages:load-components"/>
+        <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
         <script src="resources/scripts/app.js"/>
         <style>
-            .content-body {
+            main.content-body {
                 display: grid;
                 height: var(--grid-height);
-                grid-template-columns: minmax(40vw, auto) minmax(30vw, 1fr) auto;
+                grid-template-columns: minmax(40vw, auto) minmax(30vw, 1fr) minmax(30vw, 460px);
                 margin: 0 20px;
+                max-width: auto;
+            }
+
+            main.content-body div {
+                overflow: auto;
             }
         </style>
     </head>
 
     <body>
-        <pb-page data-template="pages:pb-page" unresolved="unresolved">
-            <pb-document id="document1" path="Anyue/WFY_33_Diamond.xml" view="single" odd="stonesutras"/>
+        <pb-page data-template="pages:pb-page" unresolved="unresolved" url-template="cbeta.html" url-ignore="path,odd">
+            <pb-document id="document1" path="docs/Anyue/WFY_33_Diamond.xml" view="single" odd="stonesutras"/>
             <app-drawer-layout force-narrow="force-narrow">
                 <app-drawer data-template="templates:include" data-template-path="templates/drawer.html"/>
                 <app-header-layout>
@@ -58,14 +65,14 @@
                         <div class="transcription-wrapper">
                             <h4>Transcription</h4>
                             <pb-view id="transcription" lang="zh" src="document1" xpath="//text/body/div[@xml:lang='zh']" view="single" column-separator=".tei-cb" history="history" append-footnotes="append-footnotes"
-                                subscribe="transcription" emit="transcription">
+                                subscribe="transcription" emit="transcription" disable-history="">
                                 <pb-param name="mode" value="synoptic"/>
                             </pb-view>
                         </div>
                         <div class="transcription-wrapper">
                             <h4>CBeta</h4>
                             <pb-view id="taisho" lang="zh" src="document1" map="cbeta" view="single" append-footnotes="append-footnotes"
-                                odd="cbeta" subscribe="transcription" emit="cbeta" wait-for="#transcription">
+                                odd="cbeta" subscribe="transcription" emit="cbeta" wait-for="#transcription" disable-history="">
                             </pb-view>
                         </div>
                         <div class="transcription-wrapper">
