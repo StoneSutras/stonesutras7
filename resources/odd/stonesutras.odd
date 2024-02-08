@@ -425,7 +425,7 @@ font-family: var(--bss-serif-font-family);
     </elementSpec>
     <elementSpec ident="ref" mode="change">
         <model predicate="@type='biblio' and preceding-sibling::node()[1][self::ref]" behaviour="inline" cssClass="biblio-ref">
-            <param name="content" value="let $target := @target  let $title := collection($parameters?data-root || '/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference'] return   if ($title) then $title else 'NOT FOUND'"/>
+            <param name="content" value="let $target := @target  let $title := collection($global:data-root || '/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference'] return   if ($title) then $title else 'NOT FOUND'"/>
             <param name="target" value="@target"/>
             <pb:template xml:space="preserve" xmlns=""><pb-popover remote="https://sutras.adw.uni-heidelberg.de/exist/apps/stonepub/modules/bibliohtml.xql?id=[[target]]"><span class="sigle">[[content]]</span></pb-popover></pb:template>
             <outputRendition xml:space="preserve" >
@@ -436,7 +436,7 @@ font-family: var(--bss-serif-font-family);
             </outputRendition>
         </model>
         <model predicate="@type='biblio'" behaviour="inline" cssClass="biblio-ref">
-            <param name="content" value="let $target := @target  let $title := collection($parameters?data-root || '/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference'] return   if ($title) then $title else 'NOT FOUND'"/>
+            <param name="content" value="let $target := @target  let $title := collection($global:data-root || '/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference'] return   if ($title) then $title else 'NOT FOUND'"/>
             <param name="target" value="@target"/>
             <pb:template xml:space="preserve" xmlns=""><pb-popover remote="https://sutras.adw.uni-heidelberg.de/exist/apps/stonepub/modules/bibliohtml.xql?id=[[target]]"><span class="sigle">[[content]]</span></pb-popover></pb:template>
             <outputRendition xml:space="preserve" >
@@ -519,16 +519,16 @@ font-family: var(--bss-serif-font-family);
     <elementSpec ident="witness" mode="add">
         <model predicate="matches(@sigil, &quot;^[rR].*&quot;)" behaviour="inline" cssClass="witness"/>
         <model predicate="matches(@sigil, '^T_?\d+.*$') and $parameters?lb != ''" behaviour="pass-through">
-            <param name="ref" value="let $target := ./witDetail/@target/string()  let $mods := collection($parameters?data-root || '/biblio')/mods:mods[@ID = $target]  return   $mods/mods:titleInfo[@type = 'reference']"/>
+            <param name="ref" value="let $target := ./witDetail/@target/string()  let $mods := collection($global:data-root || '/biblio')/mods:mods[@ID = $target]  return   $mods/mods:titleInfo[@type = 'reference']"/>
             <param name="uri" value="$parameters?lb"/>
             <pb:template xml:space="preserve" xmlns=""><a href="https://cbetaonline.dila.edu.tw/zh/[[uri]]" class="witness" target="_blank">[[ref]][[content]]</a></pb:template>
         </model>
         <model predicate="matches(@sigil, '^T_?\d+.*$')" behaviour="pass-through">
-            <param name="ref" value="let $target := ./witDetail/@target/string()  let $mods := collection($parameters?data-root || '/biblio')/mods:mods[@ID = $target]  return   $mods/mods:titleInfo[@type = 'reference']"/>
+            <param name="ref" value="let $target := ./witDetail/@target/string()  let $mods := collection($global:data-root || '/biblio')/mods:mods[@ID = $target]  return   $mods/mods:titleInfo[@type = 'reference']"/>
             <pb:template xml:space="preserve" xmlns=""><span class="witness">[[ref]][[content]]</span></pb:template>
         </model>
         <model behaviour="pass-through">
-            <param name="ref" value="let $target := ./witDetail/@target/string()  let $mods := collection($parameters?data-root || '/biblio')/mods:mods[@ID = $target]  return   $mods/mods:titleInfo[@type = 'reference']"/>
+            <param name="ref" value="let $target := ./witDetail/@target/string()  let $mods := collection($global:data-root || '/biblio')/mods:mods[@ID = $target]  return   $mods/mods:titleInfo[@type = 'reference']"/>
             <param name="target" value="./witDetail/@target/string()"/>
             <pb:template xml:space="preserve" xmlns=""><pb-popover class="witness" remote="https://sutras.adw.uni-heidelberg.de/exist/apps/stonepub/modules/bibliohtml.xql?id=[[target]]"><span>[[ref]][[content]]</span></pb-popover></pb:template>
         </model>

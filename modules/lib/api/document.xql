@@ -48,8 +48,10 @@ declare function dapi:delete($request as map(*)) {
     return
         if ($doc) then
             let $del := xmldb:remove(util:collection-name($doc), util:document-name($doc))
-            return
-                router:response(410, '')
+            return (
+                session:set-attribute($config:session-prefix || ".works", ()),
+                router:response(204, 'Document deleted')
+            )
         else
             error($errors:NOT_FOUND, "Document " || $id || " not found")
 };
@@ -200,7 +202,7 @@ declare %private function dapi:webcomponents($components as xs:string?) {
             font-size: var(--pb-footnote-font-size, var(--pb-content-font-size, 75%));
         }}
         </style>,
-        <script defer="defer" src="https://unpkg.com/@webcomponents/webcomponentsjs@2.4.3/webcomponents-loader.js"></script>,
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/web-components-loader/lib/index.min.js"></script>,
         switch ($config:webcomponents)
             case "dev" return
                 <script type="module" src="{$config:webcomponents-cdn}/src/pb-components-bundle.js"></script>
@@ -354,13 +356,13 @@ declare function dapi:epub($request as map(*)) {
         if (exists($work)) then
             let $entries := dapi:work2epub($request, $id, $work, $request?parameters?lang)
             return
-                (
+                ( 
                     if ($request?parameters?token) then
                         response:set-cookie("simple.token", $request?parameters?token)
                     else
                         (),
                     response:set-header("Content-Disposition", concat("attachment; filename=", concat($id, '.epub'))),
-                    response:stream-binary(
+                    response:stream-binary( 
                         compression:zip( $entries, true() ),
                         'application/epub+zip',
                         concat($id, '.epub')
@@ -371,7 +373,13 @@ declare function dapi:epub($request as map(*)) {
 };
 
 declare %private function dapi:work2epub($request as map(*), $id as xs:string, $work as document-node(), $lang as xs:string?) {
-    let $config := $config:epub-config($work, $lang)
+    let $imagesCollection := $request?parameters?images-collection
+    let $coverImage := $request?parameters?cover-image
+    let $config := map:merge(($config:epub-config($work, $lang), map {
+        'imagesCollection': $imagesCollection,
+        'skipTitle': $request?parameters?skip-title,
+        'coverImage': $coverImage
+    }))
     let $odd := head(($request?parameters?odd, $config:default-odd))
     let $oddName := replace($odd, "^([^/\.]+).*$", "$1")
     let $cssDefault := util:binary-to-string(util:binary-doc($config:output-root || "/" || $oddName || ".css"))
@@ -398,39 +406,40 @@ declare function dapi:get-fragment($request as map(*)) {
 declare function dapi:get-fragment($request as map(*), $docs as node()*, $path as xs:string) {
     let $view := head(($request?parameters?view, $config:default-view))
     let $xml :=
-        if ($request?parameters?xpath) then
+        if (exists($request?parameters?id) and $request?parameters?id != "" and $request?parameters?view != 'single') then
             for $document in $docs
-            let $namespace := namespace-uri-from-QName(node-name(root($document)/*))
-            let $xquery := "declare default element namespace '" || $namespace || "'; $document" || $request?parameters?xpath
-            let $data := util:eval($xquery)
+            let $config := tpu:parse-pi(root($document), $view)
+            let $context := dapi:apply-xpath($request, $document)
+            let $data :=
+                if (count($request?parameters?id) = 1) then
+                    if ($view = "div") then
+                        nav:get-section-for-node($config, $context/id($request?parameters?id))
+                    else
+                        $document/id($request?parameters?id)
+                else
+                    let $ms1 := $context/id($request?parameters?id[1])
+                    let $ms2 := $context/id($request?parameters?id[2])
+                    return
+                        if ($ms1 and $ms2) then
+                            nav-tei:milestone-chunk($ms1, $ms2, $context/tei:TEI)
+                        else
+                            ()
+            return
+                map {
+                    "config": map:merge(($config, map { "context": $context })),
+                    "odd": $config?odd,
+                    "view": $config?view,
+                    "data": $data
+                }
+        else if ($request?parameters?xpath) then
+            for $document in $docs
+            let $data := dapi:apply-xpath($request, $document)
             return
                 if ($data) then
                     pages:load-xml($data, $view, $request?parameters?root, $path)
                 else
                     ()
-
-        else if (exists($request?parameters?id)) then (
-            for $document in $docs
-            let $config := tpu:parse-pi(root($document), $view)
-            let $data :=
-                if (count($request?parameters?id) = 1) then
-                    nav:get-section-for-node($config, $document/id($request?parameters?id))
-                else
-                    let $ms1 := $document/id($request?parameters?id[1])
-                    let $ms2 := $document/id($request?parameters?id[2])
-                    return
-                        if ($ms1 and $ms2) then
-                            nav-tei:milestone-chunk($ms1, $ms2, $document/tei:TEI)
-                        else
-                            ()
-            return
-                map {
-                    "config": map:merge(($config, map { "context": $document })),
-                    "odd": $config?odd,
-                    "view": $config?view,
-                    "data": $data
-                }
-        ) else
+        else
             pages:load-xml($docs, $view, $request?parameters?root, $path)
     return
         if ($xml?data) then
@@ -448,7 +457,7 @@ declare function dapi:get-fragment($request as map(*), $docs as node()*, $path a
                 else
                     $xml?data
             let $data :=
-                if (empty($request?parameters?xpath) and $request?parameters?highlight and exists(session:get-attribute($config:session-prefix || ".query"))) then
+                if (empty($request?parameters?xpath) and $request?parameters?highlight and exists(session:get-attribute($config:session-prefix || ".search"))) then
                     query:expand($xml?config, $mapped)[1]
                 else
                     $mapped
@@ -527,6 +536,16 @@ declare function dapi:get-fragment($request as map(*), $docs as node()*, $path a
                         )
         else
             error($errors:NOT_FOUND, "Document " || $path || " not found")
+};
+
+declare %private function dapi:apply-xpath($request as map(*), $data as node()) {
+    if ($request?parameters?xpath) then
+        let $namespace := namespace-uri-from-QName(node-name(root($data)/*))
+        let $xquery := "declare default element namespace '" || $namespace || "'; $data" || $request?parameters?xpath
+        return
+            util:eval($xquery)
+    else
+        $data
 };
 
 declare function dapi:get-collection($data) {

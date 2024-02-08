@@ -67,8 +67,8 @@ declare function pages:pb-document($node as node(), $model as map(*), $odd as xs
  :)
 declare function pages:load-components($node as node(), $model as map(*)) {
     if (not($node/preceding::script[@data-template="pages:load-components"])) then (
-        <script defer="defer" src="https://unpkg.com/@webcomponents/webcomponentsjs@2.4.3/webcomponents-loader.js"></script>,
-        <script defer="defer" src="https://unpkg.com/web-animations-js@2.3.2/web-animations-next-lite.min.js"></script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2.7.0/webcomponents-loader.js"></script>,
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/web-animations-js/web-animations.min.js"></script>
     ) else
         (),
     switch ($config:webcomponents)
@@ -80,6 +80,23 @@ declare function pages:load-components($node as node(), $model as map(*)) {
         default return
             <script type="module"
                 src="{$config:webcomponents-cdn}@{$config:webcomponents}/dist/{$node/@src}"></script>
+};
+
+declare function pages:load-fore($node as node(), $model as map(*), $type as xs:string?) {
+    switch ($node/local-name())
+        case "link" return
+            switch ($config:fore)
+                case "local" return
+                    <link rel="stylesheet" type="text/css" href="resources/css/{$node/@href}"/>
+                default return
+                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@jinntec/fore@{$config:fore}/resources/{$node/@href}"/>
+        default return
+            switch ($config:fore)
+                case "local" return
+                    <script type="module" src="resources/scripts/fore/{$node/@src}"></script>
+                default return
+                    <script type="module" src="https://cdn.jsdelivr.net/npm/@jinntec/fore@{$config:fore}/dist/{$node/@src}"></script>
+            
 };
 
 declare function pages:load-xml($view as xs:string?, $root as xs:string?, $doc as xs:string) {
@@ -286,8 +303,7 @@ declare function pages:pb-page($node as node(), $model as map(*)) {
             $model,
             map { 
                 "app": $config:context-path,
-                "collection": $docPath,
-                "data-root": $config:data-root
+                "collection": $docPath
             }
         )
     )

@@ -24,6 +24,7 @@ declare function sapi:autocomplete($request as map(*)) {
     return
         array {
             for $item in $items
+            group by $item
             return
                 map {
                     "text": $item,
@@ -52,7 +53,7 @@ declare function sapi:search($request as map(*)) {
         let $store := (
             session:set-attribute($config:session-prefix || ".hits", $hitsAll),
             session:set-attribute($config:session-prefix || ".hitCount", $hitCount),
-            session:set-attribute($config:session-prefix || ".query", $request?parameters?query),
+            session:set-attribute($config:session-prefix || ".search", $request?parameters?query),
             session:set-attribute($config:session-prefix || ".field", $request?parameters?field),
             session:set-attribute($config:session-prefix || ".docs", $request?parameters?doc)
         )
@@ -121,4 +122,29 @@ declare function sapi:facets($request as map(*)) {
                 facets:display($config, $hits)
         }
         </div>
+};
+
+declare function sapi:list-facets($request as map(*)) {
+    let $type := $request?parameters?type
+    let $lang := tokenize($request?parameters?language, '-')[1]
+    let $facetConfig := filter($config:facets?*, function($facetCfg) {
+        $facetCfg?dimension = $type
+    })
+    let $hits := session:get-attribute($config:session-prefix || ".hits")
+    let $facets := ft:facets($hits, $type, ())
+    let $matches := 
+        for $key in if (exists($request?parameters?value)) then $request?parameters?value else map:keys($facets)
+        let $label := facets:translate($facetConfig, $lang, $key)
+        return 
+            map {
+                "text": $label,
+                "freq": $facets($key),
+                "value": $key
+            } 
+           
+    let $filtered := filter($matches, function($item) {
+        matches($item?text, '(?:^|\W)' || $request?parameters?query, 'i')
+    })
+    return
+        array { $filtered }
 };

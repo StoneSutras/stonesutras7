@@ -52,7 +52,11 @@ declare function vapi:view($request as map(*)) {
             xmldb:decode($request?parameters?docid) || $request?parameters?suffix
         else
             xmldb:decode($request?parameters?docid)
-    let $config := vapi:get-config($path, $request?parameters?view)
+    let $config :=
+        if ($request?parameters?suffix = '.md') then
+            map {}
+        else 
+            vapi:get-config($path, $request?parameters?view)
     let $templateName := head((vapi:get-template($config, $request?parameters?template), $config:default-template))
     let $templatePaths := ($config:app-root || "/templates/pages/" || $templateName, $config:app-root || "/templates/" || $templateName)
     let $template :=
@@ -69,7 +73,8 @@ declare function vapi:view($request as map(*)) {
             let $model := map { 
                 "doc": $path,
                 "template": $templateName,
-                "media": if (map:contains($config, 'media')) then $config?media else ()
+                "media": if (map:contains($config, 'media')) then $config?media else (),
+                "app": $config:context-path
             }
             return
                 templates:apply($template, vapi:lookup#2, $model, tpu:get-template-config($request))
@@ -83,7 +88,7 @@ declare function vapi:html($request as map(*)) {
         else
             error($errors:NOT_FOUND, "HTML file " || $path || " not found")
     return
-        templates:apply($template, vapi:lookup#2, (), tpu:get-template-config($request))
+        templates:apply($template, vapi:lookup#2, map { "app": $config:context-path }, tpu:get-template-config($request))
 };
 
 declare function vapi:handle-error($error) {
