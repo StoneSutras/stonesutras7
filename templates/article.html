@@ -14,7 +14,12 @@
 
         <link rel="stylesheet" type="text/css" href="resources/fonts/font.css"/>
         <link rel="stylesheet" href="resources/css/stonesutras-theme.css"/>
+        <link rel="stylesheet" href="transform/stonesutras.css"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
         <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
+        <script type="module" src="pb-leaflet-map.js" data-template="pages:load-components"/>
+        <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
+        <script src="resources/scripts/app.js"/>
     </head>
 
     <body class="articles">
@@ -25,27 +30,23 @@
                     "app": "${app}"
                 }
             </script>
+            <pb-document id="site" odd="stonesutras" data-template="pages:pb-document"/>
             <app-drawer-layout force-narrow="force-narrow">
                 <app-drawer data-template="lib:include" data-template-path="templates/drawer.html"/>
                 <app-header-layout>
                     <app-header slot="header" reveals="reveals" fixed="fixed" effects="waterfall">
                         <app-toolbar data-template="lib:include" data-template-path="templates/menu.html"/>
                         <app-toolbar data-template="lib:include" data-template-path="templates/toolbar.html">
-                            <h3 data-target="breadcrumbs">Research articles</h3>
+                            <pb-zoom data-target="toolbar-util" emit="transcription" direction="in" icon="icons:zoom-in"/>
+                            <pb-zoom data-target="toolbar-util" emit="transcription" direction="out" icon="icons:zoom-out"/>
+                            <!-- Search input -->
+                            <pb-search data-target="toolbar-util" action="${app}/search.html" data-template="pages:parse-params" value="${query}" redirect="redirect"/>
                         </app-toolbar>
                     </app-header>
                     <main>
-                        <pb-custom-form event="pb-results-received" subscribe="articles" emit="articles"
-                            auto-submit="paper-dropdown-menu">
-                            <paper-dropdown-menu name="volume" label="Volume">
-                                <paper-listbox slot="dropdown-content">
-                                    <paper-item>all</paper-item>
-                                    <paper-item>volume1</paper-item>
-                                    <paper-item>volume2</paper-item>
-                                </paper-listbox>
-                            </paper-dropdown-menu>
-                        </pb-custom-form>
-                        <pb-load url="api/articles" auto="" event="pb-search-resubmit" subscribe="articles" emit="transcription"></pb-load>
+                        <pb-view src="site" view="div" use-language="" append-footnotes="append-footnotes"
+                            subscribe="transcription" emit="transcription">
+                        </pb-view>
                     </main>
                 </app-header-layout>
             </app-drawer-layout>

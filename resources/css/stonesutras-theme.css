@@ -310,3 +310,10 @@ ul.variants {
 .home .province h3 {
     margin: 0;
 }
+
+.articles main {
+    display: grid;
+    margin: 0 auto;
+    max-width: 1200px;
+    grid-template-columns: auto auto;
+}

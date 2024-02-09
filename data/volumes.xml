@@ -1,0 +1,91 @@
+<volumes>
+    <volume id="volume1">
+        <article id="Preface_WYB"/>
+        <article id="Preface_LL"/>
+        <article id="IntroLL"/>
+    </volume>
+    <volume id="volume2">
+        <article id="EpigraphersLL"/>
+        <article id="BiFei_shisong"/>
+    </volume>
+    <volume id="volume3">
+        <article id="Intro_vol3"/>
+        <article id="Zhengyan_Huangshiyai"/>
+    </volume>
+    <volume id="volume4">
+        <article id="Sassmann_research_history"/>
+        <article id="Why_the_Diamond"/>
+        <article id="Preface_LL_SD4"/>
+        <article id="Panoramic_View"/>
+        <article id="SL_stupa"/>
+        <article id="ZhouYing_Taishandaxuekao"/>
+    </volume>
+    <volume id="volume5">
+        <article id="Intro_vol5"/>
+        <article id="Shandong5_Overbey_Steles"/>
+    </volume>
+    <volume id="sichuan_volume1">
+        <article id="Preface_LL_Sichuan_1"/>
+        <article id="Site_WFY_Section_G"/>
+        <article id="Teiser_Lotus"/>
+        <article id="Preface_SH_Sichuan_1"/>
+        <article id="Hidden"/>
+    </volume>
+    <volume id="sichuan_volume2">
+        <article id="Site_WFY_Section_AandB"/>
+        <article id="Chen_Buddhanames"/>
+        <article id="Chen_Deathbed_Injunction"/>
+        <article id="Mayer_Vajracchedika"/>
+        <article id="Overbey_ConsecrationSutra"/>
+        <article id="Wenzel_SixGates"/>
+        <article id="Claudia_Sutra_Wise_Foolish"/>
+    </volume>
+    <volume id="sichuan_volume3">
+        <article id="Site_WFY_Section_C"/>
+        <article id="Chen_Foxinghaizang"/>
+        <article id="Wenzel_Amitabha_Spell"/>
+        <article id="Zacchetti"/>
+        <article id="Bemmann_Banner"/>
+        <article id="Overbey_Perfection_of_Wisdom"/>
+        <article id="Tsai_Jubilant_Corona"/>
+        <article id="Wenzel_Amitabha"/>
+    </volume>
+    <volume id="sichuan_volume4">
+        <article id="Blum_Nirvanasutra"/>
+        <article id="Overbey_Fumuenzhong"/>
+        <article id="LL_Intro_Sichuan4"/>
+        <article id="Greene"/>
+        <article id="Rawson_Cave59_ornaments"/>
+    </volume>
+    <volume id="sichuan_volume5">
+        <article id="Radich_GoldenLight"/>
+        <article id="Site_WFY_Section_E_F"/>
+    </volume>
+    <volume id="sichuan_volume6">
+        <article id="Grove_final"/>
+        <article id="HeLiqun_relief_pagodas"/>
+        <article id="Overbey_Fo_baoen_jing"/>
+        <article id="Site_WFY_Section_H"/>
+    </volume>
+    <volume id="sichuan_volume7">
+        <article id="Intro_Sichuan7"/>
+    </volume>
+    <volume id="Shaanxi1">
+        <article id="Brandstadt_Introduction"/>
+        <article id="ZZ_Jinchuanwan_new"/>
+        <article id="Preface_ZR"/>
+        <article id="Han_JCW_Surveying_Conservation"/>
+        <article id="Preface_LL_Shaanxi_1"/>
+    </volume>
+    <volume id="Shaanxi2">
+        <article id="Roesch_Qijiefomingjing"/>
+        <article id="Preface_MR_Shaanxi_2"/>
+        <article id="Wenzel_Architecture_TextDesign"/>
+        <article id="FanBo"/>
+        <article id="MR_Rajavavadaka"/>
+    </volume>
+    <volume id="Shaanxi3">
+        <article id="Surveying_Conservation_Shaanxi_3"/>
+        <article id="Sassmann_Materiality_of_Sutra_Texts"/>
+    </volume>
+</volumes>

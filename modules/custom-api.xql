@@ -59,7 +59,9 @@ declare variable $api:PROVINCES := (
 );
 
 declare function api:resolve($request as map(*)) {
-    let $byId := collection($config:data-docs)/id($request?parameters?id)
+    let $byId := 
+        collection($config:data-docs)/id($request?parameters?id) |
+        collection($config:data-publication)/id($request?parameters?id)
     let $root :=
         if ($byId) then
             $byId
@@ -217,6 +219,32 @@ declare function api:characters($request as map(*)) {
                     </div>
                 </a>
         }
+        </div>
+};
+
+declare function api:research-articles($request as map(*)) {
+    let $lang := replace($request?parameters?language, "^([^_]+)_.*$", "$1")
+    let $volumes :=
+        if ($request?parameters?volume = "all") then
+            doc($config:app-root || "/data/volumes.xml")//volume
+        else
+            doc($config:app-root || "/data/volumes.xml")//volume[@id = $request?parameters?volume]
+    for $volume in $volumes
+    return
+        <div class="volume">
+            <h2>{$volume/@id/string()}</h2>
+            {
+                for $articleRef in $volume/article
+                let $article := collection($config:data-root)/id($articleRef/@id)
+                let $div := $article//tei:body/tei:div[@xml:lang=$lang]
+                return
+                    <div class="article">
+                        <h3>
+                            <a href="articles/{$articleRef/@id}?root={util:node-id($div)}">{$div/tei:head[1]}</a>
+                        </h3>
+                        <p>{$div/tei:head[@type="author"]}</p>
+                    </div>
+            }
         </div>
 };
 

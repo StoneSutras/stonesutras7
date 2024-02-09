@@ -294,6 +294,105 @@
                 }
             }
         },
+		"/api/articles": {
+            "get": {
+                "summary": "Get list of sites",
+                "operationId": "api:research-articles",
+				"parameters": [
+					{
+						"name": "language",
+						"in": "query",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "volume",
+						"in": "query",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"default": "all"
+						}
+					}
+				],
+                "responses": {
+                    "200":{
+                        "description": "List of sites",
+                        "content": {
+                            "text/html":{
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+		"/articles/{id}": {
+			"get": {
+				"summary": "Retrieve the HTML template used for displaying a document",
+				"description": "Get the HTML template associated with the given document. This is called whenever the users tries to view a document. The actual content of the document will then be loaded by the template.",
+				"tags": ["view"],
+				"operationId": "custom:resolve",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "ID (unicode codepoint) of the character",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"example": "6B32"
+						},
+						"allowReserved": true
+					},
+					{
+						"name": "template",
+						"in": "query",
+						"required": true,
+						"schema": {
+							"type": "string",
+                            "default": "article.html"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "HTML view for the document",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "The document was not found",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "An error occurred",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
         "/api/inscriptions/json": {
             "get": {
                 "summary": "Get list of inscriptions for site",
