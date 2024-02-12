@@ -35,21 +35,39 @@
                         </app-toolbar>
                     </app-header>
                     <main>
-                        <pb-custom-form event="pb-results-received" subscribe="articles" emit="articles"
-                            auto-submit="paper-dropdown-menu">
-                            <paper-dropdown-menu name="volume" label="Volume">
-                                <paper-listbox slot="dropdown-content">
-                                    <paper-item>all</paper-item>
-                                    <paper-item>volume1</paper-item>
-                                    <paper-item>volume2</paper-item>
-                                </paper-listbox>
-                            </paper-dropdown-menu>
-                        </pb-custom-form>
-                        <pb-load url="api/articles" auto="" event="pb-search-resubmit" subscribe="articles" emit="transcription"></pb-load>
+                        <pb-custom-form class="facets" url="api/search/article-facets" event="pb-results-received" subscribe="transcription" emit="articles"></pb-custom-form>
+                        <pb-load url="api/articles" auto="" event="pb-search-resubmit" use-language="" subscribe="articles" emit="transcription"></pb-load>
                     </main>
                 </app-header-layout>
             </app-drawer-layout>
         </pb-page>
         <div class="splash"/>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const facets = document.querySelector('.facets');
+                if (facets) {
+                    facets.addEventListener('pb-custom-form-loaded', function(ev) {
+                        const elems = ev.detail.querySelectorAll('.facet');
+                        // add event listener to facet checkboxes
+                        elems.forEach(facet => {
+                            facet.addEventListener('change', () => {
+                                if (!facet.checked) {
+                                    pbRegistry.state[facet.name] = null;
+                                }
+                                const table = facet.closest('table');
+                                if (table) {
+                                    const nested = table.querySelectorAll('.nested .facet').forEach(nested => {
+                                        if (nested != facet) {
+                                            nested.checked = false;
+                                        }
+                                    });
+                                }
+                                facets.submit();
+                            });
+                        });
+                    });
+                }
+            });
+        </script>
     </body>
 </html>

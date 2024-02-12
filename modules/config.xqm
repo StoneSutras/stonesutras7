@@ -142,6 +142,27 @@ declare variable $config:facets := [
         "heading": "facets.type",
         "max": 5,
         "hierarchical": false()
+    },
+    map {
+        "dimension": "volume",
+        "heading": "facets.volume",
+        "max": 5,
+        "hierarchical": false()
+    }
+];
+
+declare variable $config:article-facets := [
+    map {
+        "dimension": "volume",
+        "heading": "Volume",
+        "max": 10,
+        "hierarchical": false(),
+        "output": function($label, $lang) {
+            let $lang := replace($lang, "^([^_]+)_.*$", "$1")
+            let $articles := collection($config:data-publication)//tei:seriesStmt/tei:title[@n = $label][@xml:lang=$lang]
+            return
+                $articles[1]/string()
+        }
     }
 ];
 
@@ -308,6 +329,7 @@ declare variable $config:data-root := "/db/apps/stonesutras-data/data";
 declare variable $config:data-docs := $config:data-root || "/docs";
 declare variable $config:data-catalog := $config:data-root || "/catalog";
 declare variable $config:data-layouts := $config:data-root || "/layouts";
+declare variable $config:data-publication := $config:data-root || "/Publication";
 
 (:~
  : The root of the collection hierarchy whose files should be displayed

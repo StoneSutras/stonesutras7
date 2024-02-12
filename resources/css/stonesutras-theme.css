@@ -315,5 +315,6 @@ ul.variants {
     display: grid;
     margin: 0 auto;
     max-width: 1200px;
-    grid-template-columns: auto auto;
+    grid-template-columns: minmax(220px, 360px) auto;
+    column-gap: 40px;
 }

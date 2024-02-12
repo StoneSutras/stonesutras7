@@ -393,6 +393,26 @@
 				}
 			}
 		},
+		"/api/search/article-facets": {
+			"get": {
+				"summary": "List facets",
+				"description": "Return a list of facet counts for current search results",
+				"operationId": "custom:article-facets",
+				"tags": ["search"],
+				"responses": {
+					"200": {
+						"description": "Facets returned",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
         "/api/inscriptions/json": {
             "get": {
                 "summary": "Get list of inscriptions for site",

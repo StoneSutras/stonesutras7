@@ -19,6 +19,8 @@ import module namespace iiif="https://stonesutras.org/api/iiif" at "iiif.xql";
 import module namespace nav="http://www.tei-c.org/tei-simple/navigation/tei" at "navigation-tei.xql";
 import module namespace vapi="http://teipublisher.com/api/view" at "lib/api/view.xql";
 import module namespace errors = "http://e-editiones.org/roaster/errors";
+import module namespace query="http://www.tei-c.org/tei-simple/query" at "query.xql";
+import module namespace facets="http://teipublisher.com/facets" at "facets.xql";
 
 declare namespace xlink="http://www.w3.org/1999/xlink";
 declare namespace catalog="http://exist-db.org/ns/catalog";
@@ -33,7 +35,7 @@ declare variable $api:SITES := (
 
 declare variable $api:PROVINCES := (
     map {
-        "name": "Shandong",
+        "name": "Shandong Province",
         "name_zh": "山東",
         "coordinates": map {
             "latitude": 36.372645,
@@ -41,7 +43,7 @@ declare variable $api:PROVINCES := (
         }
     },
     map {
-        "name": "Sichuan",
+        "name": "Sichuan Province",
         "name_zh": "四川",
         "coordinates": map {
             "latitude": 30.694612,
@@ -49,7 +51,7 @@ declare variable $api:PROVINCES := (
         }
     },
     map {
-        "name": "Shaanxi",
+        "name": "Shaanxi Province",
         "name_zh": "陝西",
         "coordinates": map {
             "latitude": 30.694612,
@@ -224,27 +226,44 @@ declare function api:characters($request as map(*)) {
 
 declare function api:research-articles($request as map(*)) {
     let $lang := replace($request?parameters?language, "^([^_]+)_.*$", "$1")
-    let $volumes :=
-        if ($request?parameters?volume = "all") then
-            doc($config:app-root || "/data/volumes.xml")//volume
-        else
-            doc($config:app-root || "/data/volumes.xml")//volume[@id = $request?parameters?volume]
+    let $options := query:options(())
+    let $volumes := 
+        collection($config:data-publication)//tei:body[ft:query(., "volume:*", $options)][ancestor::tei:TEI//tei:seriesStmt]
+    let $nil := session:set-attribute($config:session-prefix || ".articles", $volumes)
     for $volume in $volumes
+    group by $id := $volume/ancestor::tei:TEI//tei:seriesStmt/tei:title[1]/@n
+    order by $id
+    let $seriesStmt := head($volume/ancestor::tei:TEI)/tei:teiHeader//tei:seriesStmt
     return
         <div class="volume">
-            <h2>{$volume/@id/string()}</h2>
+            <h2>{$seriesStmt/tei:title[@xml:lang=$lang]/string()}</h2>
             {
-                for $articleRef in $volume/article
-                let $article := collection($config:data-root)/id($articleRef/@id)
-                let $div := $article//tei:body/tei:div[@xml:lang=$lang]
+                for $article in $volume
+                let $div := ($article/tei:div[@xml:lang=$lang], $article/tei:div)[1]
+                let $id := $article/parent::tei:text/@xml:id
+                order by number(root($article)//tei:seriesStmt//tei:biblScope/@n)
                 return
                     <div class="article">
                         <h3>
-                            <a href="articles/{$articleRef/@id}?root={util:node-id($div)}">{$div/tei:head[1]}</a>
+                            <a href="articles/{$id}?root={util:node-id($div)}">{$div/tei:head[1]/string()}</a>
                         </h3>
-                        <p>{$div/tei:head[@type="author"]}</p>
+                        <p>{$div/tei:head[@type="author"]/string()}</p>
                     </div>
             }
+        </div>
+};
+
+declare function api:article-facets($request as map(*)) {
+    
+    let $hits := session:get-attribute($config:session-prefix || ".articles")
+    where count($hits) > 0
+    return
+        <div>
+        {
+            for $config in $config:article-facets?*
+            return
+                facets:display($config, $hits)
+        }
         </div>
 };
 
