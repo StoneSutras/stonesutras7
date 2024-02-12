@@ -241,12 +241,11 @@ declare function api:research-articles($request as map(*)) {
                 for $article in $volume
                 let $div := ($article/tei:div[@xml:lang=$lang], $article/tei:div)[1]
                 let $id := $article/parent::tei:text/@xml:id
+                let $head := $pm-config:web-transform($div/tei:head[1], map { "mode": "articles" }, "stonesutras.odd")
                 order by number(root($article)//tei:seriesStmt//tei:biblScope/@n)
                 return
                     <div class="article">
-                        <h3>
-                            <a href="articles/{$id}?root={util:node-id($div)}">{$div/tei:head[1]/string()}</a>
-                        </h3>
+                        <a href="articles/{$id}?root={util:node-id($div)}">{$head}</a>
                         <p>{$div/tei:head[@type="author"]/string()}</p>
                     </div>
             }
