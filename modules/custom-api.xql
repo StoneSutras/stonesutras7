@@ -51,7 +51,7 @@ declare variable $api:PROVINCES := (
         }
     },
     map {
-        "name": "Shaanxi Province",
+        "name": "Shaanxi",
         "name_zh": "陝西",
         "coordinates": map {
             "latitude": 30.694612,
@@ -125,8 +125,8 @@ declare function api:sites($request as map(*)) {
                         order by $site/catalog:header/catalog:title[@lang="en"], $site/@xml:id
                         return
                             <li>
-                                {
-                                    if (exists($coordinates)) then
+                                { 
+                if (exists($coordinates)) then
                                         <pb-geolocation id="{$site/@xml:id/string()}" longitude="{$coordinates[1]}" latitude="{$coordinates[2]}" label="{$title}" emit="map">
                                             <a href="sites/{$site/@xml:id}">{$title}</a>
                                         </pb-geolocation>
@@ -266,6 +266,20 @@ declare function api:article-facets($request as map(*)) {
         </div>
 };
 
+declare function api:inscription-facets($request as map(*)) {
+    
+    let $hits := session:get-attribute($config:session-prefix || ".inscriptions")
+    where count($hits) > 0
+    return
+        <div>
+        {
+            for $config in $config:inscription-facets?*
+            return
+                facets:display($config, $hits)
+        }
+        </div>
+};
+
 (:~
  : Keep this. This function does the actual lookup in the imported modules.
  :)
@@ -276,3 +290,29 @@ declare function api:lookup($name as xs:string, $arity as xs:integer) {
         ()
     }
 };
+
+(:
+declare function api:sites-new($request as map(*)) {
+    <div>
+    {
+        let $lang := replace($request?parameters?language, "^([^_]+)_.*$", "$1")
+        let $all := collection($config:data-catalog)/catalog:object[ft:query(., "type:inscription", query:options(()))]
+        let $nil := session:set-attribute($config:session-prefix || ".inscriptions", $all)
+        for $catalog in $all
+        let $title := $catalog/catalog:header/catalog:title[@*:lang=$lang]
+        let $coordinates := tokenize($catalog/catalog:location/catalog:coordinates[@srsName="EPSG:4326"], "\s*,\s*")
+        where count($coordinates) = 2
+        return
+            <pb-geolocation id="{$catalog/@xml:id}" longitude="{$coordinates[1]}" latitude="{$coordinates[2]}" 
+                label="{$title} – {$catalog/@xml:id}" emit="map">
+            { 
+                if (ft:field($catalog, "type") = "site") then
+                    attribute icon { "site" }
+                else
+                    ()
+            }
+            </pb-geolocation>
+    }
+    </div>
+};
+:)

@@ -1,6 +1,36 @@
 window.addEventListener('DOMContentLoaded', () => {
 
     const sites = document.getElementById('sites');
+    const appConfig = document.getElementById('appConfig');
+    let config = {};
+    if (appConfig) {
+        config = JSON.parse(appConfig.textContent);
+    }
+
+    // registering facet checkbox events
+    const facets = document.querySelector('.facets');
+    if (facets) {
+        facets.addEventListener('pb-custom-form-loaded', function(ev) {
+            const elems = ev.detail.querySelectorAll('.facet');
+            // add event listener to facet checkboxes
+            elems.forEach(facet => {
+                facet.addEventListener('change', () => {
+                    if (!facet.checked) {
+                        pbRegistry.state[facet.name] = null;
+                    }
+                    const table = facet.closest('table');
+                    if (table) {
+                        const nested = table.querySelectorAll('.nested .facet').forEach(nested => {
+                            if (nested != facet) {
+                                nested.checked = false;
+                            }
+                        });
+                    }
+                    facets.submit();
+                });
+            });
+        });
+    }
 
     // start page map
     pbEvents.subscribe('pb-end-update', 'sites', () => {
@@ -15,7 +45,9 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
     pbEvents.subscribe('pb-leaflet-marker-click', null, (ev) => {
-        console.log(ev.detail);
+        const id = ev.detail.element.id;
+        const url = `${config.app}/inscriptions/${id}`;
+        window.location = `${config.app}/inscriptions/${id}`;
     });
 
     let svgPath;
@@ -51,7 +83,6 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
                 break;
             case 4:
-    		const config = JSON.parse(document.getElementById('appConfig').textContent);
                 if (!tify) {
                     tify = new Tify({
                         container: '#tify',
@@ -89,10 +120,12 @@ window.addEventListener('DOMContentLoaded', () => {
             })
         });
         elements = Array.from(images);
-        lightbox = GLightbox({
-            elements 
-        });
-
+        if (elements.length > 0) {
+            lightbox = GLightbox({
+                elements 
+            });
+        }
+        
         // CBETA spans for side-by-side view
         const spans = ev.detail.root.querySelectorAll('.t');
         spans.forEach((span) => {

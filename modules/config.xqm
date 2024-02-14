@@ -166,6 +166,33 @@ declare variable $config:article-facets := [
     }
 ];
 
+declare variable $config:inscription-facets := [
+    map {
+        "dimension": "type",
+        "heading": "Type",
+        "max": 10,
+        "hierarchical": false()
+    },
+    map {
+        "dimension": "province",
+        "heading": "Province",
+        "max": 10,
+        "hierarchical": false()
+    },
+    map {
+        "dimension": "site",
+        "heading": "Site",
+        "max": 10,
+        "hierarchical": false(),
+        "output": function($label, $lang) {
+            let $lang := replace($lang, "^([^_]+)_.*$", "$1")
+            let $catalog := collection($config:data-catalog)/id($label)
+            return
+                $catalog/c:header/c:title[@*:lang=$lang][@type="given"]/string()
+        }
+    }
+];
+
 (:
  : The function to be called to determine the next content chunk to display.
  : It takes two parameters:
@@ -446,8 +473,15 @@ declare variable $config:dts-import-collection := $config:data-default || "/play
  : @param $docUri relative document path (including $collection)
  :)
 declare function config:collection-config($collection as xs:string?, $docUri as xs:string?) {
+    let $doc := doc($config:data-root || "/" || $docUri)
+    return
+        if (empty($doc//tei:teiHeader//tei:seriesStmt)) then
     (: Return empty sequence to use default config :)
     ()
+        else
+            map {
+                "template": "article.html"
+            }
 
     (: 
      : Replace line above with the following code to switch between different view configurations per collection.

@@ -12,6 +12,11 @@
     <link rel="stylesheet" href="resources/css/stonesutras-theme.css"/>
     <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
     <script type="module" src="pb-leaflet-map.js" data-template="pages:load-components"/>
+    <script id="appConfig" type="application/json" data-template="pages:parse-params">
+        {
+            "app": "${app}"
+        }
+    </script>
     <custom-style>
         <style>
             #sites {
@@ -93,13 +98,19 @@
                 <main class="sites-map">
                     <div id="sites">
                         <pb-load url="api/sites" auto="" wait-for="pb-leaflet-map" emit="sites"></pb-load>
+                        <!--
+                        <pb-custom-form class="facets" url="api/search/inscription-facets" event="pb-results-received" subscribe="sites" emit="sites"></pb-custom-form>
+                        <pb-load url="api/sites" auto="" wait-for="pb-leaflet-map" event="pb-search-resubmit" use-language="" subscribe="sites" emit="sites"></pb-load>
+                        -->
                     </div>
-                    <pb-leaflet-map id="map" zoom="12" crs="EPSG3857" fit-markers="" subscribe="map">
+                    <pb-leaflet-map id="map" zoom="12" crs="EPSG3857" fit-markers="" cluster="" subscribe="map">
                         <pb-map-layer base="" label="Mapbox OSM" url="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoid29sZmdhbmdtbSIsImEiOiJjam1kMjVpMnUwNm9wM3JwMzdsNGhhcnZ0In0.v65crewF-dkNsPF3o1Q4uw"
                             attribution='© &lt;a href="https://www.mapbox.com/about/maps/"&gt;Mapbox&lt;/a&gt; © &lt;a href="http://www.openstreetmap.org/copyright"&gt;OpenStreetMap&lt;/a&gt; &lt;strong&gt;&lt;a href="https://www.mapbox.com/map-feedback/" target="_blank"&gt;Improve this map&lt;/a&gt;&lt;/strong&gt;'
                             max-zoom="18" tile-size="512"></pb-map-layer>
-                        <pb-map-layer base="" show="" label="ESRI World Imagery" url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                        <pb-map-layer base="" show="" max-zoom="18" label="ESRI World Imagery" url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
                             attribution='© Esri - © Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'></pb-map-layer>
+                        <pb-map-icon name="site" icon-url="${app}/resources/images/buddha_9179981.png" icon-size="32, 32" 
+                            icon-anchor="16, 32" popup-anchor="0, 0" data-template="pages:parse-params"/>
                     </pb-leaflet-map>
                 </main>
             </app-header-layout>

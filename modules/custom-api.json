@@ -280,6 +280,15 @@
             "get": {
                 "summary": "Get list of sites",
                 "operationId": "api:sites",
+				"parameters": [
+					{
+						"name": "language",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
                 "responses": {
                     "200":{
                         "description": "List of sites",
@@ -398,6 +407,26 @@
 				"summary": "List facets",
 				"description": "Return a list of facet counts for current search results",
 				"operationId": "custom:article-facets",
+				"tags": ["search"],
+				"responses": {
+					"200": {
+						"description": "Facets returned",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/search/inscription-facets": {
+			"get": {
+				"summary": "List facets",
+				"description": "Return a list of facet counts for current search results",
+				"operationId": "custom:inscription-facets",
 				"tags": ["search"],
 				"responses": {
 					"200": {

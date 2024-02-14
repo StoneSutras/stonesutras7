@@ -22,7 +22,7 @@
         <script src="resources/scripts/app.js"/>
     </head>
 
-    <body class="articles">
+    <body class="article">
         <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json"
             require-language="" supported-languages="en, zh_CN">
             <script id="appConfig" type="application/json" data-template="pages:parse-params">
@@ -43,11 +43,9 @@
                             <pb-search data-target="toolbar-util" action="${app}/search.html" data-template="pages:parse-params" value="${query}" redirect="redirect"/>
                         </app-toolbar>
                     </app-header>
-                    <main>
-                        <pb-view src="site" view="div" use-language="" append-footnotes="append-footnotes"
-                            subscribe="transcription" emit="transcription">
-                        </pb-view>
-                    </main>
+                    <pb-view src="site" view="div" use-language="" append-footnotes="append-footnotes"
+                        subscribe="transcription" emit="transcription">
+                    </pb-view>
                 </app-header-layout>
             </app-drawer-layout>
         </pb-page>

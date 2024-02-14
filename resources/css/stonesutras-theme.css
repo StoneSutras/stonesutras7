@@ -310,6 +310,42 @@ ul.variants {
 .home .province h3 {
     margin: 0;
 }
+.home .panels {
+    max-width: 860px;
+    display: grid;
+    grid-template-columns: minmax(10rem, 430px) minmax(10rem, 430px);
+    grid-template-rows: 256px 256px;
+    margin: 64px auto 128px auto;
+}
+.home .panels > div {
+    text-align: center;
+}
+.home .panels > div > a > div {
+    background-color: rgba(0, 0, 0, .4);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.home .panels h2 {
+    margin: 0 auto;
+    color: white;
+}
+.home #characters {
+    background-image: url("https://sutras.adw.uni-heidelberg.de/images/characters/subimage_HDS_9.6_6.png");
+    background-size: 100% auto;
+    background-position: center center;
+}
+.home #sites {
+    background-image: url("../images/screenshot-sites.png");
+    background-size: 100% auto;
+    background-position: center center;
+}
+.home #inscriptions {
+    background-image: url("../images/screenshot-inscription.png");
+    background-size: 100% auto;
+    background-position: center center;
+}
 
 .articles main {
     display: grid;
@@ -317,4 +353,8 @@ ul.variants {
     max-width: 1200px;
     grid-template-columns: minmax(220px, 360px) auto;
     column-gap: 40px;
+}
+
+.article pb-view {
+    margin: 0 auto;
 }
