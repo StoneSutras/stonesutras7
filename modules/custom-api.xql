@@ -91,22 +91,43 @@ declare function api:resolve($request as map(*)) {
 };
 
 declare function api:inscription-table($request as map(*)) {
+    let $lang := replace($request?parameters?language, "^([^_]+)_.*$", "$1")
+    let $query := $request?parameters?search
     let $inscriptions :=
-        for $siteName in $api:SITES
-        let $site := collection($config:data-catalog)/catalog:object[@type=("site", "cave")][@xml:id = $siteName]
-        for $catalog in collection($config:data-catalog)/catalog:object[@type="inscription"][starts-with(@xml:id, $siteName)]
+        let $catalogs := 
+            if ($query and $query != "") then
+                collection($config:data-catalog)/catalog:object[ft:query(., "site:* AND title:(" || $query || ")", query:options(()))]
+            else
+                collection($config:data-catalog)/catalog:object[ft:query(., "site:*", query:options(()))]
+        let $nil := session:set-attribute($config:session-prefix || ".inscriptions", $catalogs)
+        for $catalog in $catalogs
+        order by $catalog/@xml:id
+        let $siteId := ft:field($catalog, "site")
+        let $site := collection($config:data-catalog)/id($siteId)
+        let $title := $catalog/catalog:header/catalog:title[@*:lang=$lang]/string()
+        let $taisho := $catalog/catalog:references/catalog:ref[@type="taisho"]
         return
             map {
                 "id": translate($catalog/@xml:id, '_', ' '),
-                "title_zh": $catalog/catalog:header/catalog:title[@lang="zh"]/string(),
-                "title": $catalog/catalog:header/catalog:title[@lang="en"]/string(),
-                "province": $site/catalog:header/catalog:province/string()
+                "site": <a href="sites/{$siteId}">{$site/catalog:header/catalog:title[@*:lang=$lang]/string()}</a>,
+                "title": <a href="inscriptions/{$catalog/@xml:id}">{$title}</a>,
+                "taisho": api:taisho-refs($taisho)
             }
     return
         map {
             "count": count($inscriptions),
             "results": array { subsequence($inscriptions, $request?parameters?start, $request?parameters?limit) }
         }
+};
+
+declare function api:taisho-refs($refs as element(catalog:ref)*) {
+    <ul class="taisho">
+    {
+    for $ref in $refs
+    return
+        <li>{$ref/@xlink:href/string(), " ", $ref/catalog:pages/text()}</li>
+    }
+    </ul>
 };
 
 declare function api:sites($request as map(*)) {
@@ -245,7 +266,7 @@ declare function api:research-articles($request as map(*)) {
                 order by number(root($article)//tei:seriesStmt//tei:biblScope/@n)
                 return
                     <div class="article">
-                        <a href="articles/{$id}?root={util:node-id($div)}">{$head}</a>
+                        <a href="articles/{$id}">{$head}</a>
                         <p>{$div/tei:head[@type="author"]/string()}</p>
                     </div>
             }
@@ -266,14 +287,14 @@ declare function api:article-facets($request as map(*)) {
         </div>
 };
 
-declare function api:inscription-facets($request as map(*)) {
+declare function api:catalog-facets($request as map(*)) {
     
     let $hits := session:get-attribute($config:session-prefix || ".inscriptions")
     where count($hits) > 0
     return
         <div>
         {
-            for $config in $config:inscription-facets?*
+            for $config in $config:catalog-facets?*
             return
                 facets:display($config, $hits)
         }

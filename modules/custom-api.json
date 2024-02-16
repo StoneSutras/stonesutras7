@@ -422,11 +422,11 @@
 				}
 			}
 		},
-		"/api/search/inscription-facets": {
+		"/api/search/catalog-facets": {
 			"get": {
 				"summary": "List facets",
 				"description": "Return a list of facet counts for current search results",
-				"operationId": "custom:inscription-facets",
+				"operationId": "custom:catalog-facets",
 				"tags": ["search"],
 				"responses": {
 					"200": {
@@ -460,7 +460,21 @@
                         "schema": {
                             "type": "integer"
                         }
-                    }
+                    },
+					{
+						"name": "language",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "search",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						}
+					}
                 ],
                 "responses": {
                     "200":{

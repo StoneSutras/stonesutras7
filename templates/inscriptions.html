@@ -25,7 +25,7 @@
         <script src="resources/scripts/app.js"/>
     </head>
 
-    <body>
+    <body class="inscriptions">
         <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json"
             require-language="" supported-languages="en, zh_CN">
             <script id="appConfig" type="application/json" data-template="pages:parse-params">
@@ -43,13 +43,13 @@
                         </app-toolbar>
                     </app-header>
                     <main>
-                        <p><pb-i18n key="errors.under-construction"></pb-i18n></p>
+                        <pb-custom-form class="facets" url="api/search/catalog-facets" event="pb-results-received" subscribe="transcription" emit="transcription"></pb-custom-form>
                         <pb-table-grid class="table-grid" source="api/inscriptions/json" css-path="../css/gridjs" resizable=""
-                            fixed-header="" search="">
-                            <pb-table-column label="ID" property="id" sort=""></pb-table-column>
-                            <pb-table-column label="Title" property="title_zh"></pb-table-column>
-                            <pb-table-column label="Translated title" property="title"></pb-table-column>
-                            <pb-table-column label="Province" property="province" sort=""></pb-table-column>
+                            fixed-header="" search="" subscribe="transcription" emit="transcription" per-page="30">
+                            <pb-table-column label="ID" property="id" sort="" width="8rem"></pb-table-column>
+                            <pb-table-column label="Site" property="site" sort=""></pb-table-column>
+                            <pb-table-column label="Title" property="title"></pb-table-column>
+                            <pb-table-column label="Taisho" property="taisho"></pb-table-column>
                         </pb-table-grid>
                     </main>
                 </app-header-layout>

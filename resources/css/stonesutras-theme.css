@@ -347,7 +347,13 @@ ul.variants {
     background-position: center center;
 }
 
-.articles main {
+.home #research {
+    background-image: url("../images/triangulation.jpg");
+    background-size: 100% auto;
+    background-position: center center;
+}
+
+.articles main, .inscriptions main {
     display: grid;
     margin: 0 auto;
     max-width: 1200px;

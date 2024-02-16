@@ -39,13 +39,18 @@ declare function mapping:site($root as node(), $userParams as map(*)) {
 };
 
 declare function mapping:language($root as node(), $userParams as map(*)) {
-    let $lang := replace($userParams?language, "^([^_]+).*$", "$1")
+    let $rootParam := request:get-parameter("root", ())
     return
-    switch($lang)
-        case "zh" return
-            root($root)//tei:body/tei:div[@xml:lang="zh"]
-        default return
-            root($root)//tei:body/tei:div[@xml:lang="en"]
+        if (exists($rootParam)) then
+            $root
+        else
+            let $lang := replace($userParams?language, "^([^_]+).*$", "$1")
+            return
+            switch($lang)
+                case "zh" return
+                    root($root)//tei:body/tei:div[@xml:lang="zh"]
+                default return
+                    root($root)//tei:body/tei:div[@xml:lang="en"]
 };
 
 declare function mapping:cbeta($root as node(), $userParams as map(*)) {

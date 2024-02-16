@@ -27,7 +27,7 @@ declare namespace c = "http://exist-db.org/ns/catalog";
  : If a version is given, the components will be loaded from a public CDN.
  : This is recommended unless you develop your own components.
  :)
-declare variable $config:webcomponents :="2.19.0";
+declare variable $config:webcomponents :="2.19.1";
 
 (:~
  : CDN URL to use for loading webcomponents. Could be changed if you created your
@@ -162,6 +162,45 @@ declare variable $config:article-facets := [
             let $articles := collection($config:data-publication)//tei:seriesStmt/tei:title[@n = $label][@xml:lang=$lang]
             return
                 $articles[1]/string()
+        }
+    }
+];
+
+declare variable $config:catalog-facets := [
+    map {
+        "dimension": "province",
+        "heading": "facets.province",
+        "max": 5,
+        "hierarchical": false(),
+        "output": function($label) {
+            switch($label)
+                case "Shandong" return "山東Shandong"
+                case "Sichuan" return "四川Sichuan"
+                case "Shaanxi" return "陝西Shaanxi"
+                default return $label
+        }
+    },
+    map {
+        "dimension": "volume",
+        "heading": "Volume",
+        "max": 10,
+        "hierarchical": false(),
+        "output": function($label, $lang) {
+            let $lang := replace($lang, "^([^_]+)_.*$", "$1")
+            let $articles := collection($config:data-publication)//tei:seriesStmt/tei:title[@n = $label][@xml:lang=$lang]
+            return
+                $articles[1]/string()
+        }
+    },
+    map {
+        "dimension": "site",
+        "heading": "Site",
+        "hierarchical": false(),
+        "output": function($label, $lang) {
+            let $lang := replace($lang, "^([^_]+)_.*$", "$1")
+            let $catalog := collection($config:data-catalog)/id($label)
+            return
+                ($catalog/c:header/c:title[@*:lang=$lang][@type="given"])[1]/string()
         }
     }
 ];
@@ -408,7 +447,7 @@ declare variable $config:expath-descriptor := doc(concat($config:app-root, "/exp
 
 declare variable $config:session-prefix := $config:expath-descriptor/@abbrev/string();
 
-declare variable $config:default-fields := ("type");
+declare variable $config:default-fields := ("type", "site");
 
 declare variable $config:dts-collections := map {
     "id": "default",
@@ -476,8 +515,8 @@ declare function config:collection-config($collection as xs:string?, $docUri as 
     let $doc := doc($config:data-root || "/" || $docUri)
     return
         if (empty($doc//tei:teiHeader//tei:seriesStmt)) then
-    (: Return empty sequence to use default config :)
-    ()
+            (: Return empty sequence to use default config :)
+            ()
         else
             map {
                 "template": "article.html"
@@ -524,7 +563,7 @@ declare function config:default-config($docUri as xs:string?) {
             config:collection-config($collection, substring-after($docUri, $config:data-root || "/"))
         else
             config:collection-config((), ())
-    return
+        return
         if (exists($collectionConfig)) then
             map:merge(($defaultConfig, $collectionConfig))
         else
