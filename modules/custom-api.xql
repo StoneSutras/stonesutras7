@@ -28,7 +28,7 @@ declare namespace tei="http://www.tei-c.org/ns/1.0";
 
 declare variable $api:SITES := (
      "HDS", "TC", "SY", "EG", "YC", "DZ", "Sili", "Yin", "PY", "HT", "JS", "Yang", "HSY", "CLS", "FHS", "SNS",
-     "Ziyang", "TS", "LS", "Yi", "Tie", "Ge", "GS", "JCW_east", "YS", "Ziyang_site", "JSY",
+     "Ziyang", "TS", "LS", "Yi", "Tie", "Ge", "GS", "JCW_east", "JCW_west", "YS", "Ziyang_site", "JSY",
      "WFY_1", "WFY_2", "WFY_29", "WFY_33", "WFY_46", "WFY_51", "WFY_59", "WFY_66", "WFY_71", "WFY_73", 
      "WFY_76", "WFY_85", "WFY_109", "WFY_110"
 );
