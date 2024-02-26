@@ -36,7 +36,7 @@ declare variable $api:SITES := (
 declare variable $api:PROVINCES := (
     map {
         "name": "Shandong Province",
-        "name_zh": "山東",
+        "name_zh": "山東省",
         "coordinates": map {
             "latitude": 36.372645,
             "longitude": 118.059082
@@ -44,15 +44,15 @@ declare variable $api:PROVINCES := (
     },
     map {
         "name": "Sichuan Province",
-        "name_zh": "四川",
+        "name_zh": "四川省",
         "coordinates": map {
             "latitude": 30.694612,
             "longitude": 102.392578
         }
     },
     map {
-        "name": "Shaanxi",
-        "name_zh": "陝西",
+        "name": "Shaanxi Province",
+        "name_zh": "陝西省",
         "coordinates": map {
             "latitude": 30.694612,
             "longitude": 102.392578
