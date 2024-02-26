@@ -248,7 +248,15 @@ declare variable $config:next-page := nav:get-next#3;
  : * $elem as element(): the current element displayed
  : * $view as xs:string: the view, either 'div', 'page' or 'body'
  :)
-declare variable $config:previous-page := nav:get-previous#3;
+declare variable $config:previous-page := function($config as map(*), $div as element(), $view as xs:string) {
+    let $lang := request:get-parameter('user.language', 'en') => replace("^([^_]+).*$", "$1")
+    let $prev := nav:get-previous($config, $div, $view)
+    return
+        if ($prev/ancestor-or-self::tei:div[@xml:lang = $lang]) then
+            $prev
+        else
+            ()
+};
 
 (:
  : The CSS class to declare on the main text content div.

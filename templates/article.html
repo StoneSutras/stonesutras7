@@ -20,6 +20,40 @@
         <script type="module" src="pb-leaflet-map.js" data-template="pages:load-components"/>
         <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
         <script src="resources/scripts/app.js"/>
+        <style>
+            @media (min-width: 769px) {
+                .toolbar pb-navigation {
+                    display: none;
+                }
+            }
+
+            main {
+                position: relative;
+                display: flex;
+                justify-content: center;
+            }
+
+            main pb-navigation {
+                position: fixed;
+                bottom: 45%;
+                --paper-fab-background: #35424b;
+                color: white;
+            }
+
+            main pb-navigation[direction=backward] {
+                left: 20px;
+            }
+
+            main pb-navigation[direction=forward] {
+                right: 20px;
+            }
+
+            @media (max-width: 769px) {
+                main pb-navigation {
+                    display: none;
+                }
+            }
+        </style>
     </head>
 
     <body class="article">
@@ -43,9 +77,19 @@
                             <pb-search data-target="toolbar-util" action="${app}/search.html" data-template="pages:parse-params" value="${query}" redirect="redirect"/>
                         </app-toolbar>
                     </app-header>
-                    <pb-view src="site" view="div" use-language="" append-footnotes="append-footnotes"
-                        subscribe="transcription" emit="transcription" map="language">
-                    </pb-view>
+                    <main>
+                        <pb-navigation direction="backward" unit="page" emit="transcription"
+                            subscribe="transcription">
+                            <paper-fab icon="icons:chevron-left"/>
+                        </pb-navigation>
+                        <pb-view src="site" view="div" use-language="" append-footnotes="append-footnotes"
+                            subscribe="transcription" emit="transcription" map="language">
+                        </pb-view>
+                        <pb-navigation direction="forward" unit="page" emit="transcription"
+                            subscribe="transcription">
+                            <paper-fab icon="icons:chevron-right"/>
+                        </pb-navigation>
+                    </main>
                 </app-header-layout>
             </app-drawer-layout>
         </pb-page>
