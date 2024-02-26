@@ -3,7 +3,8 @@
         "title": "Foo"
     },
     "menu": {
-        "start": "Sites",
+        "start": "Start",
+        "sites": "Sites",
         "articles": "Research",
         "inscriptions": "Inscriptions",
         "bibliography": "Bibliography",
