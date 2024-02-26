@@ -46,8 +46,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     pbEvents.subscribe('pb-leaflet-marker-click', null, (ev) => {
         const id = ev.detail.element.id;
-        const url = `${config.app}/inscriptions/${id}`;
-        window.location = `${config.app}/inscriptions/${id}`;
+        const url = `${config.app}/sites/${id}`;
+        window.location = url;
     });
 
     let svgPath;
