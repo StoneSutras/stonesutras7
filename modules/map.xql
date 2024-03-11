@@ -44,7 +44,7 @@ declare function mapping:language($root as node(), $userParams as map(*)) {
         if (exists($rootParam)) then
             $root
         else
-            let $lang := replace($userParams?language, "^([^_]+).*$", "$1")
+            let $lang := replace($userParams?language, "^([^_-]+)[_-].*$", "$1")
             return
             switch($lang)
                 case "zh" return

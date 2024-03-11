@@ -91,7 +91,7 @@ declare function api:resolve($request as map(*)) {
 };
 
 declare function api:inscription-table($request as map(*)) {
-    let $lang := replace($request?parameters?language, "^([^_]+)_.*$", "$1")
+    let $lang := replace($request?parameters?language, "^([^_-]+)[_-].*$", "$1")
     let $query := $request?parameters?search
     let $inscriptions :=
         let $catalogs := 
@@ -246,7 +246,7 @@ declare function api:characters($request as map(*)) {
 };
 
 declare function api:research-articles($request as map(*)) {
-    let $lang := replace($request?parameters?language, "^([^_]+)_.*$", "$1")
+    let $lang := replace($request?parameters?language, "^([^_-]+)[_-].*$", "$1")
     let $options := query:options(())
     let $volumes := 
         collection($config:data-publication)//tei:body[ft:query(., "volume:*", $options)][ancestor::tei:TEI//tei:seriesStmt]
