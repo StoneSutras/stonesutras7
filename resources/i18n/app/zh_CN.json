@@ -1,11 +1,11 @@
 {
     "menu": {
-        "start": "Start",
-        "sites": "Sites",
-        "articles": "Research",
-        "inscriptions": "Inscriptions",
+        "start": "首頁",
+        "sites": "刻經址",
+        "articles": "研究",
+        "inscriptions": "銘刻",
         "bibliography": "Bibliography",
-        "characters": "Characters"
+        "characters": "刻字"
     },
     "inscriptions": "Inscriptions",
     "errors": {
