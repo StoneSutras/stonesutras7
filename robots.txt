@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /odd-editor.html
+Disallow: /api.html
+Disallow: /manage.html
