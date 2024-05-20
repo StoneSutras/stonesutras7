@@ -8,7 +8,7 @@
 
     "mode" is the mode identification string passed to pmu:process.
     The "odd" is defined by its name, without the .odd suffix.
---><modules>
+--><modules skip-global="true">
     <!-- General latex extension functions -->
     <!--output mode="latex">
         <property name="class">"article"</property>
