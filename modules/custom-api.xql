@@ -141,9 +141,9 @@ declare function api:sites($request as map(*)) {
                     <ul>
                     {
                         for $site in collection($config:data-catalog)/catalog:object[@type=("site", "cave")][catalog:header/catalog:province=$province?name][@xml:id = $api:SITES]
-                        let $title := string-join(($site/catalog:header/catalog:title[@lang="zh"], $site/catalog:header/catalog:title[@lang="en"]), " - ")
+                        let $title := string-join(($site/catalog:header/catalog:title[@*:lang="zh"], $site/catalog:header/catalog:title[@*:lang="en"]), " - ")
                         let $coordinates := tokenize($site/*:location/*:coordinates[@srsName="EPSG:4326"], "\s*,\s*")
-                        order by $site/catalog:header/catalog:title[@lang="en"], $site/@xml:id
+                        order by $site/catalog:header/catalog:title[@*:lang="en"], $site/@xml:id
                         return
                             <li>
                                 { 
