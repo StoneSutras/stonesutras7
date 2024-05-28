@@ -255,6 +255,13 @@
             font-weight: bold;
             </outputRendition>
         </model>
+                    <model predicate="parent::div and @type='nonrepeat'" behaviour="heading">
+            <desc>Subtitle should be level 2 heading in gold</desc>
+            <param name="level" value="2"/>
+            <outputRendition xml:space="preserve">
+            color: #a69933;
+            </outputRendition>
+        </model>
                     <model predicate="parent::div and @type='author'" behaviour="heading" cssClass="author">
             <param name="level" value="2"/>
         </model>
