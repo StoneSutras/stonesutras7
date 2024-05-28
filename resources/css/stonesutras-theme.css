@@ -14,6 +14,10 @@ app-header {
     cursor: pointer;
 }
 
+.menubar .logo {
+    margin-right: 64px;
+}
+
 .splash {
     background-image: url("../images/logo.jpg");
 }
@@ -26,7 +30,7 @@ body {
     --bss-color-lemma: #EC7357;
     --bss-color-lb: #2274A5;
     --bss-catalog-font-size: 14px;
-    --bss-serif-font-family: "Noto Serif TC", "Noto Serif Devanagari", serif;
+    --bss-serif-font-family: "Noto Serif Devanagari", "Noto Serif TC", serif;
     --bss-chinese-font-family: "Noto Sans", "BabelStone Han";
     --pb-logo-image-width: 234px;
     --pb-logo-image-height: 60px;
