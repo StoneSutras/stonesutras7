@@ -83,7 +83,7 @@
                                 <pb-view src="document1" map="catalog" odd="catalog" view="single" wait-for="#map" emit="catalog" subscribe="catalog" disable-history="">
                                     <pb-param name="data-root" value="${data-root}/" data-template="pages:parse-params"/>
                                 </pb-view>
-                                <pb-leaflet-map id="map" subscribe="catalog" zoom="11" crs="EPSG3857" fit-markers="">
+                                <pb-leaflet-map id="map" subscribe="catalog" zoom="18" crs="EPSG3857" fit-markers="">
                                     <pb-map-layer base="" label="Mapbox OSM" url="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoid29sZmdhbmdtbSIsImEiOiJjam1kMjVpMnUwNm9wM3JwMzdsNGhhcnZ0In0.v65crewF-dkNsPF3o1Q4uw"
                                         attribution='© &lt;a href="https://www.mapbox.com/about/maps/"&gt;Mapbox&lt;/a&gt; © &lt;a href="http://www.openstreetmap.org/copyright"&gt;OpenStreetMap&lt;/a&gt; &lt;strong&gt;&lt;a href="https://www.mapbox.com/map-feedback/" target="_blank"&gt;Improve this map&lt;/a&gt;&lt;/strong&gt;'
                                         max-zoom="18" zoom="13" tile-size="512"></pb-map-layer>
