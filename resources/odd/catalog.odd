@@ -180,6 +180,7 @@
         </model>
                 </elementSpec>
                 <elementSpec ident="coordinates" mode="add">
+                    <model predicate="not(@srsName=&#34;EPSG:4326&#34;)" behaviour="omit"/>
                     <model predicate="$parameters?mode='title' and text()" behaviour="pass-through">
             <param name="latitude" value="tokenize(., '\s*,\s*')[2]"/>
             <param name="longitude" value="tokenize(., '\s*,\s*')[1]"/>
