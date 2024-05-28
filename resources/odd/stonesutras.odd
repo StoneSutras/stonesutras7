@@ -255,6 +255,9 @@
             font-weight: bold;
             </outputRendition>
         </model>
+                    <model predicate="parent::div and @type='author'" behaviour="heading" cssClass="author">
+            <param name="level" value="2"/>
+        </model>
                     <model predicate="parent::div" behaviour="heading">
             <param name="level" value="count(ancestor::div)"/>
             <outputRendition xml:space="preserve">
@@ -316,9 +319,13 @@
             
             
             
+            
+            
             color: var(--bss-color-gold);
 padding-left: .5em;
 padding-right: .5em;
+            
+            
             
             
             
@@ -402,8 +409,12 @@ padding-right: .5em;
             
             
             
+            
+            
             margin-left: 1em; 
 font-family: var(--bss-serif-font-family);
+            
+            
             
             
             
@@ -442,10 +453,20 @@ font-family: var(--bss-serif-font-family);
             content: ', ';
             </outputRendition>
         </model>
-                    <model predicate="@type='biblio'" behaviour="inline" cssClass="biblio-ref">
-            <param name="content" value="let $target := @target  let $title := collection($global:data-root || '/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference'] return   if ($title) then $title else 'NOT FOUND'"/>
+                    <model predicate="@type='biblio' and not(text())" behaviour="inline" cssClass="biblio-ref">
+            <desc>Output bibl reference without enclosed text</desc>
+            <param name="content" value="let $target := @target   let $title := collection($global:data-root || '/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']  return    if ($title) then $title else 'NOT FOUND'"/>
             <param name="target" value="@target"/>
             <pb:template xmlns="" xml:space="preserve"><pb-popover remote="https://sutras.adw.uni-heidelberg.de/exist/apps/stonepub/modules/bibliohtml.xql?id=[[target]]"><span class="sigle">[[content]]</span></pb-popover></pb:template>
+            <outputRendition xml:space="preserve">
+            font-variant: small-caps;
+            </outputRendition>
+        </model>
+                    <model predicate="@type='biblio'" behaviour="inline" cssClass="biblio-ref">
+            <param name="content" value="let $target := @target   let $title := collection($global:data-root || '/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']  return    if ($title) then $title else 'NOT FOUND'"/>
+            <param name="target" value="@target"/>
+            <param name="text" value="."/>
+            <pb:template xmlns="" xml:space="preserve"><pb-popover remote="https://sutras.adw.uni-heidelberg.de/exist/apps/stonepub/modules/bibliohtml.xql?id=[[target]]"><span class="sigle">[[content]], [[text]]</span></pb-popover></pb:template>
             <outputRendition xml:space="preserve">
             font-variant: small-caps;
             </outputRendition>
