@@ -376,7 +376,7 @@ padding-right: .5em;
                     <model predicate="starts-with(@target, 'note_')" behaviour="omit"/>
                     <model predicate="@type=('infra', 'footnote', 'infrafootnote', 'infrafootnote_zh')" behaviour="pass-through">
             <param name="target" value="@target"/>
-            <pb:template xmlns="" xml:space="preserve"><pb-link xml-id="[[target]]"><iron-icon slot="default" icon="av:library-books" class="iron-icon-small"/></pb-link></pb:template>
+            <pb:template xmlns="" xml:space="preserve"><pb-link xml-id="[[target]]">&#x1F4DA;</pb-link></pb:template>
         </model>
                     <model predicate="id(@target, root($parameters?root))" behaviour="pass-through">
             <param name="figno" value="count(id(@target, root($parameters?root))/preceding::figure) + 1"/>
