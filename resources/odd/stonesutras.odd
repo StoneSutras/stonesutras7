@@ -274,6 +274,11 @@
                     <model behaviour="block"/>
                 </elementSpec>
     <elementSpec ident="hi" mode="change">
+                    <model predicate="@rend='nh'" behaviour="inline">
+            <outputRendition xml:space="preserve">
+            hyphens: none;
+            </outputRendition>
+        </model>
                     <model predicate="@rendition" behaviour="inline" useSourceRendition="true">
             <outputRendition xml:space="preserve">
             font-style: italic;
@@ -328,9 +333,11 @@
             
             
             
+            
             color: var(--bss-color-gold);
 padding-left: .5em;
 padding-right: .5em;
+            
             
             
             
@@ -418,8 +425,10 @@ padding-right: .5em;
             
             
             
+            
             margin-left: 1em; 
 font-family: var(--bss-serif-font-family);
+            
             
             
             
