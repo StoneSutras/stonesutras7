@@ -82,6 +82,7 @@ app-toolbar pb-search {
     --pb-search-input-color: var(--pb-toolbar-color);
     --pb-search-focus-color: var(--pb-color-focus);
     padding-left: 20px;
+    margin-left: auto; /* Pushes the search bar to the right */
 }
 
 .content-body {
