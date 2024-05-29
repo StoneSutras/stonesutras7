@@ -77,8 +77,8 @@
                 <elementSpec ident="header" mode="add">
                     <modelSequence predicate="$parameters?mode='site'">
             <model behaviour="inline">
-                <param name="site" value="(title[@lang='zh'], ' ', title[@lang='en'])"/>
-                <param name="province" value="(province[@lang='zh'], ' ', province[@lang='en'])"/>
+                <param name="site" value="(title[@*:lang='zh'], ' ', title[@*:lang='en'])"/>
+                <param name="province" value="(province[@*:lang='zh'], ' ', province[@*:lang='en'])"/>
                 <pb:template xmlns="" xml:space="preserve"><span class="breadcrumbs">
   <a class="province" href="../index.html">[[province]]</a> &gt;
   <span class="site">[[site]]</span>
