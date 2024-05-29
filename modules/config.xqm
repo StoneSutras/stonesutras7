@@ -27,7 +27,7 @@ declare namespace c = "http://exist-db.org/ns/catalog";
  : If a version is given, the components will be loaded from a public CDN.
  : This is recommended unless you develop your own components.
  :)
-declare variable $config:webcomponents :="2.19.1";
+declare variable $config:webcomponents :="2.23.2";
 
 (:~
  : CDN URL to use for loading webcomponents. Could be changed if you created your
@@ -130,7 +130,7 @@ declare variable $config:facets := [
         "max": 5,
         "hierarchical": false(),
         "output": function($label) {
-            let $catalog := collection($config:data-catalog)/id($label)
+            let $catalog := collection($config:data-catalog)/id($label)[@type=('site', 'cave')]
             return (
                 <span lang="zh">{$catalog/c:header/c:title[@*:lang="zh"][@type="given"]/string()}</span>,
                 <span lang="zh">{$catalog/c:header/c:title[@*:lang="en"][@type="given"]/string()}</span>
@@ -198,7 +198,7 @@ declare variable $config:catalog-facets := [
         "hierarchical": false(),
         "output": function($label, $lang) {
             let $lang := replace($lang, "^([^_]+)_.*$", "$1")
-            let $catalog := collection($config:data-catalog)/id($label)
+            let $catalog := collection($config:data-catalog)/id($label)[@type=('site', 'cave')]
             return
                 ($catalog/c:header/c:title[@*:lang=$lang][@type="given"])[1]/string()
         }

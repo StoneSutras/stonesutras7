@@ -96,14 +96,14 @@ declare function api:inscription-table($request as map(*)) {
     let $inscriptions :=
         let $catalogs := 
             if ($query and $query != "") then
-                collection($config:data-catalog)/catalog:object[ft:query(., "site:* AND title:(" || $query || ")", query:options(()))]
+                collection($config:data-catalog)/catalog:object[ft:query(., "site:* AND type:inscription AND title:(" || $query || ")", query:options(()))]
             else
-                collection($config:data-catalog)/catalog:object[ft:query(., "site:*", query:options(()))]
+                collection($config:data-catalog)/catalog:object[ft:query(., "site:* AND type:inscription", query:options(()))]
         let $nil := session:set-attribute($config:session-prefix || ".inscriptions", $catalogs)
         for $catalog in $catalogs
         order by $catalog/@xml:id
         let $siteId := ft:field($catalog, "site")
-        let $site := collection($config:data-catalog)/id($siteId)
+        let $site := collection($config:data-catalog)/id($siteId)[@type=("site", "cave")]
         let $title := $catalog/catalog:header/catalog:title[@*:lang=$lang]/string()
         let $taisho := $catalog/catalog:references/catalog:ref[@type="taisho"]
         return
