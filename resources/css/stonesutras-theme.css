@@ -358,7 +358,7 @@ ul.variants {
     background-position: center center;
 }
 
-.articles main, .inscriptions main {
+.articles main {
     display: grid;
     margin: 0 auto;
     max-width: 1200px;
@@ -369,3 +369,11 @@ ul.variants {
 .article pb-view {
     margin: 0 auto;
 }
+
+.inscriptions main {
+    display: grid;
+    margin: 0 auto;
+    max-width: 1200px;
+    grid-template-columns: minmax(120px, 200px) auto;
+    column-gap: 40px;
+    }
