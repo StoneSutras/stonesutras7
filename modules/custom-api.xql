@@ -342,7 +342,7 @@ declare function api:bibliography-table($request as map(*)) {
     let $lang := replace($request?parameters?language, "^([^_-]+)[_-].*$", "$1")
     let $query := $request?parameters?search
     let $start := if (exists($request?parameters?start)) then xs:double($request?parameters?start) else 1
-    let $limit := if (exists($request?parameters?limit)) then xs:double($request?parameters?limit) else 10
+    let $limit := if (exists($request?parameters?limit)) then xs:double($request?parameters?limit) else 50
     let $bibliographies :=
         let $files :=
             if ($query and $query != "") then
