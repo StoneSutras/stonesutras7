@@ -341,6 +341,8 @@ declare function api:sites-new($request as map(*)) {
 declare function api:bibliography-table($request as map(*)) {
     let $lang := replace($request?parameters?language, "^([^_-]+)[_-].*$", "$1")
     let $query := $request?parameters?search
+    let $start := if (exists($request?parameters?start)) then xs:double($request?parameters?start) else 1
+    let $limit := if (exists($request?parameters?limit)) then xs:double($request?parameters?limit) else 10
     let $bibliographies :=
         let $files :=
             if ($query and $query != "") then
@@ -371,7 +373,7 @@ declare function api:bibliography-table($request as map(*)) {
                 ()    
         return
             map {
-                "id": translate($biblio/@ID, '_', ' '),
+                "biblioID": translate($biblio/@ID, '_', ' '),
                 "title": $title,
                 "author": $author,
                 "originalTitle": $originalTitle,
@@ -380,7 +382,6 @@ declare function api:bibliography-table($request as map(*)) {
     return
         map {
             "count": count($bibliographies),
-            "results": array { subsequence($bibliographies, $request?parameters?start, $request?parameters?limit) }
+            "results": array { subsequence($bibliographies, $start, $limit) }
         }
 };
-

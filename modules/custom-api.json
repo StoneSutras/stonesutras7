@@ -630,53 +630,67 @@
             }
         },	  
 		"/api/bibliography/json": {
-            "get": {
-                "summary": "Get list of bibliography for site",
-                "operationId": "api:bibliography-table",
-                "parameters": [
-                    {
-                        "name": "start",
-                        "in": "query",
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "limit",
-                        "in": "query",
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
+			"get": {
+				"summary": "Search for Bibliography",
+				"operationId": "api:bibliography-table",
+				"parameters": [
 					{
-						"name": "language",
+						"name": "query",
 						"in": "query",
 						"schema": {
 							"type": "string"
-						}
-					},
-					{
-						"name": "search",
-						"in": "query",
-						"schema": {
-							"type": "string"
+						},
+						"description": "Keyword to search for bibliography titles"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List of bibliographies",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"count": {
+											"type": "integer",
+											"description": "Total count of bibliographies matching the query"
+										},
+										"results": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"biblioID": {
+														"type": "string",
+														"description": "Bibliography ID"
+													},
+													"title": {
+														"type": "string",
+														"description": "Bibliography title"
+													},
+													"author": {
+														"type": "string",
+														"description": "Author"
+													},
+													"originalTitle": {
+														"type": "string",
+														"description": "Original title"
+													},
+													"date": {
+														"type": "string",
+														"description": "Publication date"
+													}
+												}
+											}
+										}
+									}
+								}
+							}
 						}
 					}
-                ],
-                "responses": {
-                    "200":{
-                        "description": "List of inscriptions",
-                        "content": {
-                            "application/json":{
-                                "schema": {
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+				}
+			}
+		}
 
     },
     "security": [
