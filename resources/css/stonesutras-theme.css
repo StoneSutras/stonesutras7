@@ -376,4 +376,8 @@ ul.variants {
     max-width: 1200px;
     grid-template-columns: minmax(120px, 200px) auto;
     column-gap: 40px;
-    }
+}
+
+.bibliography main {
+    margin: 0 auto;
+}

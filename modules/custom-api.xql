@@ -337,3 +337,50 @@ declare function api:sites-new($request as map(*)) {
     </div>
 };
 :)
+
+declare function api:bibliography-table($request as map(*)) {
+    let $lang := replace($request?parameters?language, "^([^_-]+)[_-].*$", "$1")
+    let $query := $request?parameters?search
+    let $bibliographies :=
+        let $files :=
+            if ($query and $query != "") then
+                collection($config:data-biblio)/*:mods[*:titleInfo[@type = "reference" and contains(*:title, $query)]]
+            else
+                collection($config:data-biblio)/*:mods[*:titleInfo[@type = "reference"]]
+        for $biblio in $files
+        order by $biblio/@ID
+        let $title := $biblio/*:titleInfo[@type = "reference"]/*:title/string()
+        let $author := $biblio/*:name[*:namePart[@type = "family"]]/(*:namePart[@type = "family"], *:namePart[@type = "given"])[1]/string()
+        let $originalTitle :=
+            if ($biblio/*:titleInfo[@lang="zh"]) then
+                $biblio/*:titleInfo[@lang="zh"]/*:title/string()
+            else if ($biblio/*:titleInfo[@lang="ja"]) then
+                $biblio/*:titleInfo[@lang="ja"]/*:title/string()
+            else if ($biblio/*:titleInfo[@lang="en"]) then
+                $biblio/*:titleInfo[@lang="en"]/*:title/string()
+            else
+                ()    
+        let $date :=
+            if ($biblio/*:originInfo/*:dateIssued) then
+                $biblio/*:originInfo/*:dateIssued/string()
+            else if ($biblio/*:relatedItem/*:originInfo/*:dateIssued) then
+                $biblio/*:relatedItem/*:originInfo/*:dateIssued/string()
+            else if ($biblio/*:relatedItem/*:part/*:date) then
+                $biblio/*:relatedItem/*:part/*:date/string()
+            else
+                ()    
+        return
+            map {
+                "id": translate($biblio/@ID, '_', ' '),
+                "title": $title,
+                "author": $author,
+                "originalTitle": $originalTitle,
+                "date": $date
+            }
+    return
+        map {
+            "count": count($bibliographies),
+            "results": array { subsequence($bibliographies, $request?parameters?start, $request?parameters?limit) }
+        }
+};
+

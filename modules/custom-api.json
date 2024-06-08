@@ -628,7 +628,56 @@
                     }
                 }
             }
+        },	  
+		"/api/bibliography/json": {
+            "get": {
+                "summary": "Get list of bibliography for site",
+                "operationId": "api:bibliography-table",
+                "parameters": [
+                    {
+                        "name": "start",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+					{
+						"name": "language",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "search",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						}
+					}
+                ],
+                "responses": {
+                    "200":{
+                        "description": "List of inscriptions",
+                        "content": {
+                            "application/json":{
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
+
     },
     "security": [
         {

@@ -413,6 +413,8 @@ declare variable $config:data-docs := $config:data-root || "/docs";
 declare variable $config:data-catalog := $config:data-root || "/catalog";
 declare variable $config:data-layouts := $config:data-root || "/layouts";
 declare variable $config:data-publication := $config:data-root || "/Publication";
+declare variable $config:data-biblio := $config:data-root || "/biblio";
+
 
 (:~
  : The root of the collection hierarchy whose files should be displayed

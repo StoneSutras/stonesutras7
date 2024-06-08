@@ -23,7 +23,7 @@
         <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
     </head>
 
-    <body>
+    <body class="bibliography">
         <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json"
             require-language="" supported-languages="en, zh_CN">
             <script id="appConfig" type="application/json" data-template="pages:parse-params">
@@ -39,7 +39,14 @@
                         <app-toolbar data-template="templates:include" data-template-path="templates/toolbar.html"/>
                     </app-header>
                     <main>
-                        <h1><pb-i18n key="errors.under-construction"></pb-i18n></h1>
+                    <pb-table-grid class="table-grid" source="api/bibliography/json" css-path="../css/gridjs" resizable=""
+        fixed-header="" search="" subscribe="transcription" emit="transcription" per-page="30">
+                        <pb-table-column label="Ref_Title" property="title" sort="" width="12rem"></pb-table-column>
+                        <pb-table-column label="Author(s)" property="author" sort="" width="10rem"></pb-table-column>
+                        <pb-table-column label="Original_Title" property="originalTitle" sort="" width="24rem"></pb-table-column>
+                        <pb-table-column label="Date" property="date" sort="" width="10rem"></pb-table-column>
+                    </pb-table-grid>
+
                     </main>
                 </app-header-layout>
             </app-drawer-layout>
