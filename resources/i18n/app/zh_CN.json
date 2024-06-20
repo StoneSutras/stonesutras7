@@ -4,16 +4,16 @@
         "sites": "刻經址",
         "articles": "研究",
         "inscriptions": "銘刻",
-        "bibliography": "Bibliography",
+        "bibliography": "參考",
         "characters": "刻字"
     },
-    "inscriptions": "Inscriptions",
+    "inscriptions": "銘刻",
     "errors": {
-        "under-construction": "Under construction ..."
+        "under-construction": "網頁建設中 ..."
     },
     "facets": {
-        "type": "Type of document",
-        "site": "Site",
-        "province": "Province"
+        "type": "文檔類型",
+        "site": "地點",
+        "province": "省份"
     }
 }
