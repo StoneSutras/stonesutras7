@@ -40,7 +40,7 @@ declare function facets:sort($config as map(*), $lang as xs:string?, $facets as 
 declare function facets:print-table($config as map(*), $nodes as element()+, $values as xs:string*, $params as xs:string*) {
     let $all := exists($config?max) and facets:get-parameter("all-" || $config?dimension)
     let $lang := tokenize(facets:get-parameter("language"), '-')[1]
-    let $count := if ($all) then 50 else $config?max + 10
+    let $count := if ($all) then 50 else $config?max
     let $facets :=
         if (exists($values)) then
             ft:facets($nodes, $config?dimension, $count, $values)
