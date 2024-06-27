@@ -155,7 +155,7 @@ declare variable $config:article-facets := [
     map {
         "dimension": "volume",
         "heading": "Volume",
-        "max": 10,
+        "max": 20,
         "hierarchical": false(),
         "output": function($label, $lang) {
             let $lang := replace($lang, "^([^_]+)_.*$", "$1")
