@@ -629,18 +629,135 @@
                 }
             }
         },	  
+        "/bibliography-details": {
+        "get": {
+            "summary": "Retrieve details of a bibliography entry",
+            "description": "Retrieve the HTML representation of a bibliography entry based on its ID.",
+            "tags": ["bibliography"],
+            "operationId": "custom:bibliography-details",
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "query",
+                    "description": "ID of the bibliography entry",
+                    "required": true,
+                    "schema": {
+                        "type": "string"
+                    }
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "HTML representation of the bibliography entry",
+                    "content": {
+                        "text/xml": {
+                            "schema": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "Bibliography entry not found",
+                    "content": {
+                        "text/plain": {
+                            "schema": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+
+	"/api/bibliography-table/json": {
+		"get": {
+			"summary": "Used for generating Bibliography-table in static html or xml",
+			"operationId": "api:bibliography-table",
+			"parameters": [
+				{
+					"name": "limit",
+					"in": "query",
+					"schema": {
+						"type": "string"
+					}
+				}
+			],
+			"responses": {
+				"200": {
+					"description": "Bibliographies table used for static html or xml",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"count": {
+										"type": "integer",
+										"description": "Total count of bibliographies matching the query"
+									},
+									"results": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"biblioID": {
+													"type": "string",
+													"description": "Bibliography ID"
+												},
+												"title": {
+													"type": "string",
+													"description": "Bibliography title"
+												},
+												"full_reference": {
+													"type": "string",
+													"description": "full reference"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+
 		"/api/bibliography/json": {
 			"get": {
 				"summary": "Search for Bibliography",
-				"operationId": "api:bibliography-table",
+				"operationId": "api:bibliography",
 				"parameters": [
 					{
-						"name": "query",
+						"name": "search",
 						"in": "query",
 						"schema": {
 							"type": "string"
 						},
 						"description": "Keyword to search for bibliography titles"
+					},
+					{
+                        "name": "start",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+					{
+						"name": "language",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						}
 					}
 				],
 				"responses": {

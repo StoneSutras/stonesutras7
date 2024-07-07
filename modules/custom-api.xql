@@ -21,10 +21,14 @@ import module namespace vapi="http://teipublisher.com/api/view" at "lib/api/view
 import module namespace errors = "http://e-editiones.org/roaster/errors";
 import module namespace query="http://www.tei-c.org/tei-simple/query" at "query.xql";
 import module namespace facets="http://teipublisher.com/facets" at "facets.xql";
+import module namespace template="http://exist-db.org/xquery/html-templating";
+import module namespace modsHTML="http://www.loc.gov/mods/v3" at "mods/bibliooutputHTML.xql";
 
+declare namespace mods="http://www.loc.gov/mods/v3";
 declare namespace xlink="http://www.w3.org/1999/xlink";
 declare namespace catalog="http://exist-db.org/ns/catalog";
 declare namespace tei="http://www.tei-c.org/ns/1.0";
+
 
 declare variable $api:SITES := (
      "HDS", "TC", "SY", "EG", "YC", "DZ", "Sili", "Yin", "PY", "HT", "JS", "Yang", "HSY", "CLS", "FHS", "SNS",
@@ -338,50 +342,56 @@ declare function api:sites-new($request as map(*)) {
 };
 :)
 
-declare function api:bibliography-table($request as map(*)) {
+declare function api:bibliography($request as map(*)) {
     let $lang := replace($request?parameters?language, "^([^_-]+)[_-].*$", "$1")
     let $query := $request?parameters?search
     let $start := if (exists($request?parameters?start)) then xs:double($request?parameters?start) else 1
     let $limit := if (exists($request?parameters?limit)) then xs:double($request?parameters?limit) else 50
-    let $bibliographies :=
-        let $files :=
-            if ($query and $query != "") then
-                collection($config:data-biblio)/*:mods[*:titleInfo[@type = "reference" and contains(*:title, $query)]]
-            else
-                collection($config:data-biblio)/*:mods[*:titleInfo[@type = "reference"]]
-        for $biblio in $files
-        order by $biblio/@ID
-        let $title := $biblio/*:titleInfo[@type = "reference"]/*:title/string()
-        let $author := $biblio/*:name[*:namePart[@type = "family"]]/(*:namePart[@type = "family"], *:namePart[@type = "given"])[1]/string()
-        let $originalTitle :=
-            if ($biblio/*:titleInfo[@lang="zh"]) then
-                $biblio/*:titleInfo[@lang="zh"]/*:title/string()
-            else if ($biblio/*:titleInfo[@lang="ja"]) then
-                $biblio/*:titleInfo[@lang="ja"]/*:title/string()
-            else if ($biblio/*:titleInfo[@lang="en"]) then
-                $biblio/*:titleInfo[@lang="en"]/*:title/string()
-            else
-                ()    
-        let $date :=
-            if ($biblio/*:originInfo/*:dateIssued) then
-                $biblio/*:originInfo/*:dateIssued/string()
-            else if ($biblio/*:relatedItem/*:originInfo/*:dateIssued) then
-                $biblio/*:relatedItem/*:originInfo/*:dateIssued/string()
-            else if ($biblio/*:relatedItem/*:part/*:date) then
-                $biblio/*:relatedItem/*:part/*:date/string()
-            else
-                ()    
-        return
-            map {
-                "biblioID": translate($biblio/@ID, '_', ' '),
-                "title": $title,
-                "author": $author,
-                "originalTitle": $originalTitle,
-                "date": $date
-            }
-    return
-        map {
-            "count": count($bibliographies),
-            "results": array { subsequence($bibliographies, $start, $limit) }
+    
+    let $precomputed-references :=
+        try {
+            doc($config:app-root || '/modules/mods/bibliography-table.xml')/*:bibliographies/*:reference
+        } catch * {
+            error(xs:QName("file-not-found"), "The precomputed bibliography file does not exist.")
         }
+    
+    let $filtered-references :=
+        if ($query) then
+            for $ref in $precomputed-references
+            let $biblioID := fn:string($ref/@id)
+            where contains(lower-case($ref), lower-case($query))
+            order by $biblioID
+            return map {
+                "biblioID": <a href="bibliography-details.html?id={$biblioID}" target="_blank">{$biblioID}</a>,
+                "full_reference": fn:string($ref)
+            }
+        else
+            for $ref in $precomputed-references
+            let $biblioID := fn:string($ref/@id)
+            order by $biblioID
+            return map {
+                "biblioID": <a href="bibliography-details.html?id={$biblioID}" target="_blank">{$biblioID}</a>,
+                "full_reference": fn:string($ref)
+            }
+    
+    let $sorted-references := subsequence($filtered-references, $start, $limit)
+    
+    return map {
+        "count": count($filtered-references),
+        "results": array { $sorted-references }
+    }
+};
+
+declare function api:bibliography-details($request as map(*)) {
+    let $biblioID := $request?parameters?id
+
+    let $mods :=
+        collection($config:data-biblio)/*:mods[@ID = $biblioID]
+
+    return if (exists($mods)) then
+        element result {
+            $mods
+        }
+    else
+        error(xs:QName("not-found"), concat("The bibliography entry with ID '", $biblioID, "' does not exist."))
 };
