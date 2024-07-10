@@ -108,14 +108,35 @@ declare function api:inscription-table($request as map(*)) {
         order by $catalog/@xml:id
         let $siteId := ft:field($catalog, "site")
         let $site := collection($config:data-catalog)/id($siteId)[@type=("site", "cave")]
-        let $title := $catalog/catalog:header/catalog:title[@*:lang=$lang]/string()
+        let $title := (
+            $catalog/catalog:header/catalog:title[@*:lang="zh"]/string(),
+            <br/>,
+            $catalog/catalog:header/catalog:title[@*:lang="en"]/string()
+        )
         let $taisho := $catalog/catalog:references/catalog:ref[@type="taisho"]
+        (: 
+        <c:date>
+            <c:gregorian type="case-date-point">
+                <c:range lower="" upper=""/>
+                <c:point>570</c:point>
+            </c:gregorian>
+            <c:original>武平元年</c:original>
+            <c:given/>
+        </c:date>
+        :)
+        let $datePoint := $catalog//catalog:date/catalog:gregorian/catalog:point
+        let $date :=
+            if ($datePoint/text()) then
+                "(" || $catalog//catalog:date/catalog:gregorian/catalog:point || ")"
+            else
+                ()
         return
             map {
                 "id": translate($catalog/@xml:id, '_', ' '),
                 "site": <a href="sites/{$siteId}">{$site/catalog:header/catalog:title[@*:lang=$lang]/string()}</a>,
                 "title": <a href="inscriptions/{$catalog/@xml:id}">{$title}</a>,
-                "taisho": api:taisho-refs($taisho)
+                "taisho": api:taisho-refs($taisho),
+                "date": <span>{$catalog//catalog:date/catalog:original} {$date}</span>
             }
     return
         map {
