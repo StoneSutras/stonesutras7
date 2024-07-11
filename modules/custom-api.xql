@@ -22,7 +22,7 @@ import module namespace errors = "http://e-editiones.org/roaster/errors";
 import module namespace query="http://www.tei-c.org/tei-simple/query" at "query.xql";
 import module namespace facets="http://teipublisher.com/facets" at "facets.xql";
 import module namespace template="http://exist-db.org/xquery/html-templating";
-import module namespace modsHTML="http://www.loc.gov/mods/v3" at "mods/bibliooutputHTML.xql";
+(: import module namespace modsHTML="http://www.loc.gov/mods/v3" at "mods/bibliooutputHTML.xql"; :)
 
 declare namespace mods="http://www.loc.gov/mods/v3";
 declare namespace xlink="http://www.w3.org/1999/xlink";
