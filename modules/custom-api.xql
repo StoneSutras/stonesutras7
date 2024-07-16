@@ -22,7 +22,7 @@ import module namespace errors = "http://e-editiones.org/roaster/errors";
 import module namespace query="http://www.tei-c.org/tei-simple/query" at "query.xql";
 import module namespace facets="http://teipublisher.com/facets" at "facets.xql";
 import module namespace template="http://exist-db.org/xquery/html-templating";
-(: import module namespace modsHTML="http://www.loc.gov/mods/v3" at "mods/bibliooutputHTML.xql"; :)
+import module namespace modsHTML="http://www.loc.gov/mods/v3" at "mods/bibliooutputHTML.xql"; 
 
 declare namespace mods="http://www.loc.gov/mods/v3";
 declare namespace xlink="http://www.w3.org/1999/xlink";
@@ -380,18 +380,22 @@ declare function api:bibliography($request as map(*)) {
         if ($query) then
             for $ref in $precomputed-references
             let $biblioID := fn:string($ref/@id)
+            let $ref_title := fn:string($ref/@title)
             where contains(lower-case($ref), lower-case($query))
             order by $biblioID
             return map {
-                "biblioID": <a href="bibliography-details.html?id={$biblioID}" target="_blank">{$biblioID}</a>,
+                "biblioID": $biblioID,
+                "title": <a href="bibliography-details.html?id={$biblioID}" target="_blank">{$ref_title}</a>,
                 "full_reference": fn:string($ref)
             }
         else
             for $ref in $precomputed-references
             let $biblioID := fn:string($ref/@id)
+            let $ref_title := fn:string($ref/@title)
             order by $biblioID
             return map {
-                "biblioID": <a href="bibliography-details.html?id={$biblioID}" target="_blank">{$biblioID}</a>,
+                "biblioID": $biblioID,
+                "title": <a href="bibliography-details.html?id={$biblioID}" target="_blank">{$ref_title}</a>,
                 "full_reference": fn:string($ref)
             }
     
@@ -402,6 +406,7 @@ declare function api:bibliography($request as map(*)) {
         "results": array { $sorted-references }
     }
 };
+
 
 declare function api:bibliography-details($request as map(*)) {
     let $biblioID := $request?parameters?id
@@ -415,4 +420,37 @@ declare function api:bibliography-details($request as map(*)) {
         }
     else
         error(xs:QName("not-found"), concat("The bibliography entry with ID '", $biblioID, "' does not exist."))
+};
+
+(:used for generating the precached xml or static html:)
+declare function api:bibliography-table($request as map(*)) {
+    let $start := if (exists($request?parameters?start)) then xs:double($request?parameters?start) else 1
+    let $limit := if (exists($request?parameters?limit)) then xs:double($request?parameters?limit) else 5003
+    let $bibliographies :=
+        let $files :=
+                collection($config:data-biblio)/*:mods[*:titleInfo[@type = "reference"]]
+        for $biblio in $files
+        order by $biblio/@ID
+        let $title := $biblio/*:titleInfo[@type = "reference"]/*:title/string()
+        
+        let $foentry :=
+            try {
+                modsHTML:format-biblioHTML($biblio)
+            } catch * {
+                $title
+            }
+        let $output := element p { $foentry }
+                
+      
+        return
+            map {
+                "biblioID": string($biblio/@ID),
+                "title":$title,
+                "full_reference": fn:string($output)
+            }
+    return
+        map {
+            "count": count($bibliographies),
+            "results": array { subsequence($bibliographies, $start, $limit) }
+        }
 };
