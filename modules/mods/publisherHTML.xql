@@ -32,7 +32,7 @@ declare function publisherHTML:output-publisherHTML($entry as element(mods:mods)
         (
         if (exists($placeLangZh)) then 
             (
-        <span font-family="{$config:BiblioFont}">{($settings:SPACE),($placeTrans/text()),""($placeLangZh/text())}</span>,<span font-family="{$config:BiblioFont}">:{($settings:SPACE),($publisherTrans/text())}</span>,
+        <span font-family="{$config:BiblioFont}">{($settings:SPACE),($placeTrans/text())," ",($placeLangZh/text())}</span>,<span font-family="{$config:BiblioFont}">:{($settings:SPACE),($publisherTrans/text())}</span>,
         if (exists($publisherLangZh/text())) then <span font-family="{$config:ChineseFont}">{($settings:SPACE),($publisherLangZh/text())}</span> else (),
         <span font-family="{$config:BiblioFont}">,</span>
             )
