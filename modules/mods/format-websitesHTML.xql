@@ -67,5 +67,5 @@ declare function webHTML:format-websiteHTML($entry as element(mods:mods)){
                         return
                             $corrected
                })</span>,
-    ".adadad"
+    "."
 };
