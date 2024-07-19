@@ -35,7 +35,7 @@ declare function settings:getrelateditem($entry as element(mods:mods)) {
         else
         collection("/db/apps/stonesutras-data/data/biblio")//mods:mods[@ID=$authRef]};
 
-    declare function settings:getreftitle($entry as element(mods:mods)) {
+declare function settings:getreftitle($entry as element(mods:mods)) {
     let $authRef := ($entry//mods:relatedItem/@xlink:href)[1]/string()
    
     return
@@ -47,7 +47,7 @@ declare function settings:getrelateditem($entry as element(mods:mods)) {
         collection("/db/apps/stonesutras-data/data/biblio")//mods:mods[@ID=$authRef]/mods:titleInfo[@type="reference"]/mods:title/text()
 };
 
-    declare function settings:reprint-getreftitle($entry as element(mods:mods)) {
+declare function settings:reprint-getreftitle($entry as element(mods:mods)) {
     let $authRef := ($entry//mods:relatedItem[2]/@xlink:href [1])/string()
    
     return

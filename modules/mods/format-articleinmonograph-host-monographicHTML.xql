@@ -140,8 +140,7 @@ declare function monographicHTML:monograph-in-congshuHTML($entry as element(mods
     <span> In {$settings:SPACE}</span>,
     <span font-family="{$config:BiblioFont}">{
         let $relitem:= settings:getrelateditem($entry) 
-        let $relitemoutput := fn:string(norelatedItemHTML:biblio-no-relatedItemHTML($relitem))
-        return
+        let $relitemoutput := fn:string(norelatedItemHTML:biblio-no-relatedItemHTML($relitem)[1]) || fn:string(norelatedItemHTML:biblio-no-relatedItemHTML($relitem)[2])        return
             fn:substring($relitemoutput,1, fn:string-length($relitemoutput)-1)}</span>,
     if (exists($entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "series"]/mods:title/text())) then 
                 (
