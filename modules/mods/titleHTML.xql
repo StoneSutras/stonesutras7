@@ -23,7 +23,7 @@ declare function titleHTML:format-titleHTML($settings as element(mods:mods)) {
         if (exists($transliteration)) then (
             <i>{tei2fo:process-biblioHTML($transliteration/mods:title)}{$settings:SPACE}</i>,<span font-family="{settings:get-font($title)}">{tei2fo:process-biblioHTML($displayTitle/mods:title)}</span> 
         ) else
-            (<span font-family="{settings:get-font($title)}" font-style="italic">{tei2fo:process-biblioHTML($displayTitle/mods:title)}</span> ),
+            (<i>{tei2fo:process-biblioHTML($displayTitle/mods:title)}</i> ),
          if(exists($TitleTranslation)) then (
             <span font-family="{$config:BiblioFont}">{$settings:SPACE}[{tei2fo:process-biblioHTML($TitleTranslation/mods:title)}]</span>    
              )    
