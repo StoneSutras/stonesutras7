@@ -49,7 +49,7 @@ declare function webHTML:format-websiteHTML($entry as element(mods:mods)){
         <span font-style="italic" font-family="{$config:BiblioFont}">{$entry/mods:relatedItem/mods:titleInfo/mods:title/text()}.{$settings:SPACE}</span>
         ),:)
     if (not($entry//mods:dateOther)) then () 
-        else <span  font-family="{$config:BiblioFont}">{tei2fo:process-biblio($entry//mods:dateOther)}.{$settings:SPACE}</span>,
+        else <span  font-family="{$config:BiblioFont}">{tei2fo:process-biblioHTML($entry//mods:dateOther)}.{$settings:SPACE}</span>,
     <span  font-family="{$config:BiblioFont}">{if ($entry/mods:relatedItem) then () else $entry/mods:location/mods:url/text()}</span>,
     <span  font-family="{$config:BiblioFont}">{if ($entry/mods:location/mods:url/@rend = "yes") then <span  font-family="{$config:BiblioFont}">.{$settings:SPACE}{$entry/mods:location/mods:url/text()}</span>  else ()}</span>,
     if (not($entry//mods:dateCaptured)) then ()

@@ -422,6 +422,7 @@ declare function api:bibliography-details($request as map(*)) {
         error(xs:QName("not-found"), concat("The bibliography entry with ID '", $biblioID, "' does not exist."))
 };
 
+
 (:used for generating the precached xml or static html:)
 declare function api:bibliography-table($request as map(*)) {
     let $start := if (exists($request?parameters?start)) then xs:double($request?parameters?start) else 1
@@ -439,14 +440,12 @@ declare function api:bibliography-table($request as map(*)) {
             } catch * {
                 $title
             }
-        let $output := element p { $foentry }
-                
-      
+ 
         return
             map {
                 "biblioID": string($biblio/@ID),
                 "title":$title,
-                "full_reference": fn:string($output)
+                "full_reference": fn:serialize($foentry)
             }
     return
         map {

@@ -35,6 +35,6 @@ declare function lectureHTML:format-lectureHTML($entry as element(mods:mods)) {
     <span>{titleHTML:format-titlenotitalicHTML($entry)}</span>,
     <span font-family="{$config:BiblioFont}">”</span>,
     <span font-family="{$config:BiblioFont}">{$settings:SPACE}</span>,
-    <span font-family="{$config:BiblioFont}">{tei2fo:process-biblio($entry/mods:note[@type="lecture"])}</span>,
+    <span font-family="{$config:BiblioFont}">{tei2fo:process-biblioHTML($entry/mods:note[@type="lecture"])}</span>,
     "."
 };

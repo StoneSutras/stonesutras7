@@ -128,7 +128,7 @@ declare function tei2fo:process($nodes as node()*) {
                     case "dottedunderline" return
                         <fo:inline text-decoration="underline" axf:text-line-width="thin" axf:text-line-style="dotted">{tei2fo:process(tei2fo:normalize-ws($node/node()))}</fo:inline>
                     case "italic" return
-                        <fo:inline font-style="italic">{tei2fo:process(tei2fo:normalize-ws($node/node()))}</fo:inline>
+                        <i>{tei2fo:process(tei2fo:normalize-ws($node/node()))}</i>
                     case "normal" return
                         <fo:inline font-style="normal">{tei2fo:process(tei2fo:normalize-ws($node/node()))}</fo:inline>
                     case "bold" return
@@ -379,7 +379,7 @@ declare function tei2fo:process-transcript($nodes as node()*) {
             case element(tei:hi) return
                 switch($node/@rend)
                     case "italic" return
-                        <fo:inline font-style="italic">{tei2fo:process-transcript(tei2fo:normalize-ws($node/node()))}</fo:inline>
+                        <i>{tei2fo:process-transcript(tei2fo:normalize-ws($node/node()))}</i>
                     case "bold" return
                         <fo:inline font-weight="bold">{tei2fo:process-transcript(tei2fo:normalize-ws($node/node()))}</fo:inline>
                     case "smaller" return
@@ -608,6 +608,96 @@ declare function tei2fo:process-biblio($nodes as node()*) {
                 $node
 };
 
+
+declare function tei2fo:process-biblioHTML($nodes as node()*) {
+    for $node in $nodes
+    return
+        typeswitch ($node)
+            case element(mads:foreign) return
+                switch ($node/@lang)
+                    case "zh" return
+                        <fo:inline xml:lang="zh" font-style="normal" font-family="{$foc:ChineseFont}">{ tei2fo:process-biblioHTML($node/node()) }</fo:inline>
+                    case "en" return
+                        <fo:inline white-space-treatment="preserve" font-family="{$foc:DefaultFont}">{tei2fo:process-biblioHTML($node/node())}</fo:inline>
+                    (: case "sa" return
+                        <fo:inline font-family="{$foc:SanskritFont}" hyphenate="true">{ tei2fo:process-biblioHTML($node/node()) }</fo:inline> :)
+                    case "ja" return
+                        <fo:inline font-family="{$foc:JapaneseFont}" hyphenate="false">{ tei2fo:process-biblioHTML($node/node()) }</fo:inline>
+                    case "ko" return
+                        <fo:inline font-family="{$foc:KoreanFont}" hyphenate="false">{ tei2fo:process-biblioHTML($node/node()) }</fo:inline>
+                    default return
+                        tei2fo:process-biblioHTML($node/node())
+            case element(mods:foreign) return
+                switch ($node/@lang)
+                    case "zh" return
+                        <fo:inline xml:lang="zh" font-style="normal" font-family="{$foc:ChineseFont}">{ tei2fo:process-biblioHTML($node/node()) }</fo:inline>
+                    case "en" return
+                        <fo:inline white-space-treatment="preserve" font-family="{$foc:DefaultFont}">{tei2fo:process-biblioHTML($node/node())}</fo:inline>
+                    (: case "sa" return
+                        <fo:inline font-family="{$foc:SanskritFont}" hyphenate="true">{ tei2fo:process-biblioHTML($node/node()) }</fo:inline> :)
+                    case "ja" return
+                        <fo:inline font-family="{$foc:JapaneseFont}" hyphenate="false">{ tei2fo:process-biblioHTML($node/node()) }</fo:inline>
+                    case "ko" return
+                        <fo:inline font-family="{$foc:KoreanFont}" hyphenate="false">{ tei2fo:process-biblioHTML($node/node()) }</fo:inline>
+                    default return
+                        tei2fo:process-biblioHTML($node/node())
+            case element(mods:hi) return
+                switch($node/@rend)
+                    case "bold" return
+                        <fo:inline font-weight="bold">{tei2fo:process-biblioHTML($node/node())}</fo:inline>
+                    case "smaller" return
+                        <fo:inline font-size="85%">{tei2fo:process-biblioHTML($node/node())}</fo:inline>
+                    case "sup" return 
+                        <fo:inline baseline-shift="super" font-size="60%">{ tei2fo:process(tei2fo:normalize-ws($node/node())) }</fo:inline>
+                    case "italic" return
+                        <i>{tei2fo:process-biblioHTML($node/node())}</i>
+                    case "normal" return
+                        <fo:inline font-style="normal">{tei2fo:process($node/node())}</fo:inline>
+                    case "dash" return
+                        <fo:inline keep-together.within-line="always" font-family="'PERPETUA TITLING MT'" font-size="75%" white-space-treatment="preserve" hyphenate="false">——</fo:inline>
+                    case "small-caps" return
+                        <fo:inline font-family="{$foc:BiblioFont}" font-style="small-caps">{tei2fo:process($node/node())}</fo:inline>
+                    default return
+                        <fo:inline>{tei2fo:process-biblioHTML($node/node())}</fo:inline>
+            case element(mads:hi) return
+                switch($node/@rend)
+                    case "italic" return
+                        <i>{tei2fo:process-biblioHTML($node/node())}</i>
+                    case "dash" return
+                        <fo:inline keep-together.within-line="always" font-family="'Times New Roman'" font-size="75%" white-space-treatment="preserve" hyphenate="false">——</fo:inline>
+                    default return
+                        <fo:inline>{tei2fo:process-biblioHTML($node/node())}</fo:inline>
+            case element(mods:space) return
+                let $lang := tei2fo:get-lang($node)
+                return
+                    <fo:inline font-family="{if ($lang='zh') then 'SimSun' else $foc:DefaultFont}"
+                        white-space-collapse="false" white-space-treatment="preserve">
+                    {
+                        let $count := if ($node/@n) then $node/@n else 1
+                        for $i in 1 to $count return " "
+                    }
+                    <!-- space--></fo:inline>
+            case element(mods:ref) return
+                switch($node/@type)
+                    case "biblio" return
+                        let $ref := $node
+                        let $mods := collection("//db/apps/stonesutras-data/data/biblio")/mods:mods[@ID = $ref/@target]
+
+                        return
+                             if (exists($mods)) then
+                             <fo:inline hyphenate="false" font-family="{if ($ref/ancestor::tei:div[@xml:lang='zh']) then $foc:ChineseFont else $foc:DefaultFont}" white-space-treatment="ignore-if-surrounding-linefeed"><fo:inline font-variant="small-caps">{$mods/mods:titleInfo[@type = "reference"]/mods:title/text()}</fo:inline>{ if ($ref/node()) then <fo:inline>, {tei2fo:process-biblioHTML($ref/node()) }</fo:inline> else ()}</fo:inline>
+                              else
+                             <fo:inline color="red">REF: {$ref/@target/string()}</fo:inline>
+                    default return
+                        ()
+            case element() return
+                for $child in $node/node()
+                return
+                    tei2fo:process-biblioHTML($child)
+            default return
+                $node
+};
+
 declare function tei2fo:process-translation($config as map(*)?, $nodes as node()*) {
     typeswitch ($nodes[1])
         case element(tei:seg) return
@@ -713,7 +803,7 @@ declare function tei2fo:process-catalog($config as map(*)?, $nodes as node()*) {
                         <fo:inline font-weight="bold">{tei2fo:process-biblio($node/node())}</fo:inline>
                  
                     case "italic" return
-                        <fo:inline font-style="italic">{tei2fo:process-catalog($config, tei2fo:normalize-ws($node/node()))}</fo:inline>
+                        <i>{tei2fo:process-catalog($config, tei2fo:normalize-ws($node/node()))}</i>
                     case "color-headings" return
                         <fo:inline color="{$foc:ColorBlue}">{tei2fo:process(tei2fo:normalize-ws($node/node()))}</fo:inline>
                     case "color-chapters" return

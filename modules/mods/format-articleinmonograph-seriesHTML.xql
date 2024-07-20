@@ -29,7 +29,7 @@ declare function seriesHTML:format-articleinmonograph-seriesHTML($entry as eleme
             nameHTML:output-nameHTML($entry, "editor"),
             nameHTML:output-nameHTML($entry, "translator"),
             titleHTML:format-titleHTML($entry),
-            if (exists($entry/mods:extension)) then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{tei2fo:process-biblio($entry/mods:extension[1])}{if (fn:ends-with($entry/mods:extension[1]/text(), ".")) then () else "."}</span>
+            if (exists($entry/mods:extension)) then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:extension[1])}{if (fn:ends-with($entry/mods:extension[1]/text(), ".")) then () else "."}</span>
             else
                 (),
                  if ($entry/mods:physicalDescription/mods:extent/mods:detail/@type ="volume") then <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:physicalDescription/mods:extent/mods:detail//text()}{$settings:SPACE}vols.</span> else (),
@@ -39,13 +39,13 @@ declare function seriesHTML:format-articleinmonograph-seriesHTML($entry as eleme
             $settings:SPACE,
             if (exists ($entry/mods:relatedItem[@type="series"]/mods:titleInfo/@transliteration)) then
                     (
-                <span font-family="{$config:BiblioFont}">({tei2fo:process-biblio($entry/mods:relatedItem[@type="series"]/mods:titleInfo[(@transliteration)]/mods:title)}{$settings:SPACE}</span>,
-                <span font-family="{$config:ChineseFont}">{tei2fo:process-biblio($entry/mods:relatedItem[@type="series"]/mods:titleInfo[@lang = ("zh", "ja", "ko")]/mods:title)}<span font-family="{$config:BiblioFont}">{if (exists($entry/mods:relatedItem/mods:part/mods:detail/mods:number)) then <span> {$entry/mods:relatedItem/mods:part/mods:detail/mods:number/text()}</span> else ()}{if (exists($entry/mods:relatedItem/mods:titleInfo/@displayLabel)) then <span>{$settings:SPACE}[{$entry/mods:relatedItem/mods:titleInfo[@type="translated"]/mods:title/text()}]</span> else ()}).</span></span>
+                <span font-family="{$config:BiblioFont}">({tei2fo:process-biblioHTML($entry/mods:relatedItem[@type="series"]/mods:titleInfo[(@transliteration)]/mods:title)}{$settings:SPACE}</span>,
+                <span font-family="{$config:ChineseFont}">{tei2fo:process-biblioHTML($entry/mods:relatedItem[@type="series"]/mods:titleInfo[@lang = ("zh", "ja", "ko")]/mods:title)}<span font-family="{$config:BiblioFont}">{if (exists($entry/mods:relatedItem/mods:part/mods:detail/mods:number)) then <span> {$entry/mods:relatedItem/mods:part/mods:detail/mods:number/text()}</span> else ()}{if (exists($entry/mods:relatedItem/mods:titleInfo/@displayLabel)) then <span>{$settings:SPACE}[{$entry/mods:relatedItem/mods:titleInfo[@type="translated"]/mods:title/text()}]</span> else ()}).</span></span>
                     )
                 
             else
                     (  
-                <span font-family="{$config:BiblioFont}">({tei2fo:process-biblio($entry/mods:relatedItem[@type="series"]/mods:titleInfo[@lang = ("de", "en", "fr")]/mods:title)}{if ($entry/mods:relatedItem[@type="series"]//mods:number/text())then <span>{$settings:SPACE}{$entry/mods:relatedItem[@type="series"]//mods:number/text()}</span> else () }).</span>
+                <span font-family="{$config:BiblioFont}">({tei2fo:process-biblioHTML($entry/mods:relatedItem[@type="series"]/mods:titleInfo[@lang = ("de", "en", "fr")]/mods:title)}{if ($entry/mods:relatedItem[@type="series"]//mods:number/text())then <span>{$settings:SPACE}{$entry/mods:relatedItem[@type="series"]//mods:number/text()}</span> else () }).</span>
                      ),
                 publisherHTML:output-publisherHTML($entry),
                 dateHTML:output-dateHTML($entry),
@@ -90,13 +90,13 @@ declare function seriesHTML:reprint-format-articleinmonograph-seriesHTML($entry 
             $settings:SPACE,
             if (exists ($entry/mods:relatedItem[@type="series"]/mods:titleInfo/@transliteration)) then
                     (
-                <span font-family="{$config:BiblioFont}">{tei2fo:process-biblio($entry/mods:relatedItem[@type="series"]/mods:titleInfo[(@transliteration)]/mods:title)}{$settings:SPACE}</span>,
-                <span font-family="{$config:ChineseFont}">{tei2fo:process-biblio($entry/mods:relatedItem[@type="series"]/mods:titleInfo[@lang = ("zh", "ja", "ko")]/mods:title)}.</span>
+                <span font-family="{$config:BiblioFont}">{tei2fo:process-biblioHTML($entry/mods:relatedItem[@type="series"]/mods:titleInfo[(@transliteration)]/mods:title)}{$settings:SPACE}</span>,
+                <span font-family="{$config:ChineseFont}">{tei2fo:process-biblioHTML($entry/mods:relatedItem[@type="series"]/mods:titleInfo[@lang = ("zh", "ja", "ko")]/mods:title)}.</span>
                     )
                 
             else
                     (  
-                <span font-family="{$config:BiblioFont}">({tei2fo:process-biblio($entry/mods:relatedItem[@type="series"]/mods:titleInfo[@lang = ("de", "en", "fr")]/mods:title)}{if ($entry/mods:relatedItem[@type="series"]//mods:number/text())then <span>{$entry/mods:relatedItem[@type="series"]//mods:number/text()}{$settings:SPACE}</span> else () }).</span>
+                <span font-family="{$config:BiblioFont}">({tei2fo:process-biblioHTML($entry/mods:relatedItem[@type="series"]/mods:titleInfo[@lang = ("de", "en", "fr")]/mods:title)}{if ($entry/mods:relatedItem[@type="series"]//mods:number/text())then <span>{$entry/mods:relatedItem[@type="series"]//mods:number/text()}{$settings:SPACE}</span> else () }).</span>
                      ),
                 publisherHTML:output-publisherHTML($entry),
                 dateHTML:output-dateHTML($entry),

@@ -21,11 +21,11 @@ declare function titleHTML:format-titleHTML($settings as element(mods:mods)) {
     let $displayTitle := ($title[@lang != ("en", "de", "fr")], $title[@lang = ("en", "de", "fr")], $title[not(@lang)])[1]
     return (
         if (exists($transliteration)) then (
-            <span font-style="italic" font-family="{$config:BiblioFont}">{tei2fo:process-biblio($transliteration/mods:title)}{$settings:SPACE}</span>,<span font-family="{settings:get-font($title)}">{tei2fo:process-biblio($displayTitle/mods:title)}</span> 
+            <i>{tei2fo:process-biblioHTML($transliteration/mods:title)}{$settings:SPACE}</i>,<span font-family="{settings:get-font($title)}">{tei2fo:process-biblioHTML($displayTitle/mods:title)}</span> 
         ) else
-            (<span font-family="{settings:get-font($title)}" font-style="italic">{tei2fo:process-biblio($displayTitle/mods:title)}</span> ),
+            (<span font-family="{settings:get-font($title)}" font-style="italic">{tei2fo:process-biblioHTML($displayTitle/mods:title)}</span> ),
          if(exists($TitleTranslation)) then (
-            <span font-family="{$config:BiblioFont}">{$settings:SPACE}[{tei2fo:process-biblio($TitleTranslation/mods:title)}]</span>    
+            <span font-family="{$config:BiblioFont}">{$settings:SPACE}[{tei2fo:process-biblioHTML($TitleTranslation/mods:title)}]</span>    
              )    
            else
             (),
@@ -44,12 +44,12 @@ declare function titleHTML:format-titlenotitalicHTML($settings as element(mods:m
     let $displayTitle := ($title[@lang != ("en", "de", "fr")], $title[@lang = ("en", "de", "fr")], $title[not(@lang)])[1]
     return (
         if (exists($transliteration)) then (
-            <span  font-family="{$config:BiblioFont}">{tei2fo:process-biblio($transliteration/mods:title)}{$settings:SPACE}</span>
+            <span  font-family="{$config:BiblioFont}">{tei2fo:process-biblioHTML($transliteration/mods:title)}{$settings:SPACE}</span>
         ) else
             (),
-        <span font-family="{settings:get-font($title)}">{tei2fo:process-biblio($displayTitle/mods:title)}</span> ,
+        <span font-family="{settings:get-font($title)}">{tei2fo:process-biblioHTML($displayTitle/mods:title)}</span> ,
          if(exists($TitleTranslation)) then (
-            <span font-family="{$config:BiblioFont}">{$settings:SPACE}[{tei2fo:process-biblio($TitleTranslation/mods:title)}]</span>    
+            <span font-family="{$config:BiblioFont}">{$settings:SPACE}[{tei2fo:process-biblioHTML($TitleTranslation/mods:title)}]</span>    
              )    
            else
             (),
@@ -67,12 +67,12 @@ declare function titleHTML:articleinmonograph-seriesHTML($settings as element(mo
     let $displayTitle := ($title[@lang != ("en", "de", "fr")], $title[@lang = ("en", "de", "fr")], $title[not(@lang)])[1]
     return (
         if (exists($transliteration)) then (
-            <span font-style="italic"  font-family="{$config:BiblioFont}">{tei2fo:process-biblio($transliteration/mods:title)}{$settings:SPACE}</span>
+            <i>{tei2fo:process-biblioHTML($transliteration/mods:title)}{$settings:SPACE}</i>
         ) else
             (),
-        <span font-style="italic" font-family="{settings:get-font($title)}">{tei2fo:process-biblio($displayTitle/mods:title)}</span> ,
+        <i>{tei2fo:process-biblioHTML($displayTitle/mods:title)}</i> ,
          if(exists($TitleTranslation)) then (
-            <span font-family="{$config:BiblioFont}">{$settings:SPACE}[{tei2fo:process-biblio($TitleTranslation/mods:title)}]</span>    
+            <span font-family="{$config:BiblioFont}">{$settings:SPACE}[{tei2fo:process-biblioHTML($TitleTranslation/mods:title)}]</span>    
              )    
            else
             (),

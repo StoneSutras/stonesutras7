@@ -35,17 +35,17 @@ declare function continuingHTML:format-articleinmonograph-host-continuingHTML($e
     <span>“{titleHTML:format-titlenotitalicHTML($entry)}” </span>,
             if (exists ($entry/mods:relatedItem[1]/mods:titleInfo/@transliteration)) then
                     (
-                <span font-style="italic" font-family="{$config:BiblioFont}">{tei2fo:process-biblio($entry/mods:relatedItem[1]/mods:titleInfo[(@transliteration)]/mods:title)}{$settings:SPACE}</span>,
+                <i>{tei2fo:process-biblioHTML($entry/mods:relatedItem[1]/mods:titleInfo[(@transliteration)]/mods:title)}{$settings:SPACE}</i>,
                 
                 
-                <span font-family="{$config:ChineseFont}">{tei2fo:process-biblio($entry/mods:relatedItem[1]/mods:titleInfo[@lang = ("zh", "ja", "ko")]/mods:title)}<span font-family="{$config:BiblioFont}"></span></span>,
+                <span font-family="{$config:ChineseFont}">{tei2fo:process-biblioHTML($entry/mods:relatedItem[1]/mods:titleInfo[@lang = ("zh", "ja", "ko")]/mods:title)}<span font-family="{$config:BiblioFont}"></span></span>,
                     (:for translated title:) 
-                if ($entry/mods:relatedItem[1]/mods:titleInfo[@type = "translated"]/@displayLabel/string() = "yes")  then <span font-family="{$config:BiblioFont}"> ({tei2fo:process-biblio($entry/mods:relatedItem[1]/mods:titleInfo[@type = "translated"]/mods:title)})</span>  else ()
+                if ($entry/mods:relatedItem[1]/mods:titleInfo[@type = "translated"]/@displayLabel/string() = "yes")  then <span font-family="{$config:BiblioFont}"> ({tei2fo:process-biblioHTML($entry/mods:relatedItem[1]/mods:titleInfo[@type = "translated"]/mods:title)})</span>  else ()
                     )
                 
             else
                     (  
-                <span font-style="italic" font-family="{$config:BiblioFont}">{tei2fo:process-biblio($entry/mods:relatedItem[1]/mods:titleInfo/mods:title)}</span>
+                <i>{tei2fo:process-biblioHTML($entry/mods:relatedItem[1]/mods:titleInfo/mods:title)}</i>
                      ),
                      
             (:for newspapers:)         
@@ -190,13 +190,13 @@ declare function continuingHTML:reprint-format-articleinmonograph-host-continuin
     
             if (exists ($entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:titleInfo/@transliteration)) then
                     (
-                <span font-style="italic" font-family="{$config:BiblioFont}">{$entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:titleInfo[(@transliteration)]/mods:title/text()}{$settings:SPACE}</span>,
+                <i>{$entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:titleInfo[(@transliteration)]/mods:title/text()}{$settings:SPACE}</i>,
                 <span font-family="{$config:ChineseFont}">{$entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:titleInfo[@lang = ("zh", "ja", "ko")]/mods:title/text()}</span>
                     )
                 
             else
                     (  
-                <span font-style="italic" font-family="{$config:BiblioFont}">{$entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:titleInfo/mods:title/text()}</span>
+                <i>{$entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:titleInfo/mods:title/text()}</i>
                      ),
             if (exists ($entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:part/mods:extent/mods:start/text())) then
                         (
@@ -252,13 +252,13 @@ declare function continuingHTML:format-articleinmonograph-host-continuing-webHTM
     <span font-family="{$config:BiblioFont}">{$settings:SPACE}</span>,
             if (exists ($entry/mods:relatedItem/mods:titleInfo/@transliteration)) then
                     (
-                <span font-style="italic" font-family="{$config:BiblioFont}">{$entry/mods:relatedItem/mods:titleInfo[(@transliteration)]/mods:title/text()}{$settings:SPACE}</span>,
+                <i>{$entry/mods:relatedItem/mods:titleInfo[(@transliteration)]/mods:title/text()}{$settings:SPACE}</i>,
                 <span font-family="{$config:ChineseFont}">{$entry/mods:relatedItem/mods:titleInfo[@lang = ("zh", "ja", "ko")]/mods:title/text()},</span>
                     )
                 
             else
                     (  
-                <span font-style="italic" font-family="{$config:BiblioFont}">{$entry/mods:relatedItem/mods:titleInfo/mods:title/text()},</span>
+                <i>{$entry/mods:relatedItem/mods:titleInfo/mods:title/text()},</i>
                      ),
             if (exists ($entry/mods:relatedItem/mods:part/mods:extent/mods:start/text())) then
                         (
@@ -319,13 +319,13 @@ declare function continuingHTML:reprint-format-articleinmonograph-host-continuin
     <span font-family="{$config:BiblioFont}">{$settings:SPACE}</span>,
             if (exists ($entry/mods:relatedItem/mods:titleInfo/@transliteration)) then
                     (
-                <span font-style="italic" font-family="{$config:BiblioFont}">{$entry/mods:relatedItem/mods:titleInfo[(@transliteration)]/mods:title/text()}{$settings:SPACE}</span>,
+                <i>{$entry/mods:relatedItem/mods:titleInfo[(@transliteration)]/mods:title/text()}{$settings:SPACE}</i>,
                 <span font-family="{$config:ChineseFont}">{$entry/mods:relatedItem/mods:titleInfo[@lang = ("zh", "ja", "ko")]/mods:title/text()},</span>
                     )
                 
             else
                     (  
-                <span font-style="italic" font-family="{$config:BiblioFont}">{$entry/mods:relatedItem/mods:titleInfo/mods:title/text()},</span>
+                <i>{$entry/mods:relatedItem/mods:titleInfo/mods:title/text()},</i>
                      ),
             if (exists ($entry/mods:relatedItem/mods:part/mods:extent/mods:start/text())) then
                         (

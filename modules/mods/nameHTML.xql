@@ -274,7 +274,7 @@ declare function nameHTML:name-posgt1HTML($name as element(mods:name)) {
                                         if ($mads/mads:authority/@lang = "zh") then
                                             <span>
                                                 <span font-family="{$config:BiblioFont}">{
-                                                (tei2fo:process-biblio($corporatenametransliteration/ancestor::mads:variant[@transliteration="pinyin"]/mads:name/mads:namePart)),
+                                                (tei2fo:process-biblioHTML($corporatenametransliteration/ancestor::mads:variant[@transliteration="pinyin"]/mads:name/mads:namePart)),
                                                 ($settings:SPACE)
                                                 }
                                                 </span>
@@ -286,7 +286,7 @@ declare function nameHTML:name-posgt1HTML($name as element(mods:name)) {
                                              if ($mads/mads:authority/@lang = "ja") then
                                             <span>
                                                 <span font-family="{$config:BiblioFont}">{
-                                                (tei2fo:process-biblio($corporatenametransliteration/ancestor::mads:variant[@transliteration="romaji"]/mads:name/mads:namePart)),
+                                                (tei2fo:process-biblioHTML($corporatenametransliteration/ancestor::mads:variant[@transliteration="romaji"]/mads:name/mads:namePart)),
                                                 ($settings:SPACE)
                                                 }
                                                 </span>
@@ -295,7 +295,7 @@ declare function nameHTML:name-posgt1HTML($name as element(mods:name)) {
                                             else
                                                 <span>
                                                 <span font-family="{$config:BiblioFont}">{
-                                                (tei2fo:process-biblio($corporatenametransliteration/ancestor::mads:variant[@transliteration="mccunereischauer"]/mads:name/mads:namePart)),
+                                                (tei2fo:process-biblioHTML($corporatenametransliteration/ancestor::mads:variant[@transliteration="mccunereischauer"]/mads:name/mads:namePart)),
                                                 ($settings:SPACE)
                                                 }
                                                 </span>
@@ -303,7 +303,7 @@ declare function nameHTML:name-posgt1HTML($name as element(mods:name)) {
                                             </span>
                                         ),
                                         if ($corporatenametranslation) then
-                                                <span font-family="{$config:BiblioFont}">{($settings:SPACE),(tei2fo:process-biblio($corporatenametranslation))}
+                                                <span font-family="{$config:BiblioFont}">{($settings:SPACE),(tei2fo:process-biblioHTML($corporatenametranslation))}
                                                 </span>
                                                 else
                                                     ()
@@ -381,7 +381,7 @@ declare function nameHTML:mads-name-posgt1HTML($mads as element(mads:mads)) {
                                         if ($mads/mads:authority/@lang = "zh") then
                                             <span>
                                                 <span font-family="{$config:BiblioFont}">{
-                                                (tei2fo:process-biblio($corporatenametransliteration/ancestor::mads:variant[@transliteration="pinyin"]/mads:name/mads:namePart)),
+                                                (tei2fo:process-biblioHTML($corporatenametransliteration/ancestor::mads:variant[@transliteration="pinyin"]/mads:name/mads:namePart)),
                                                 ($settings:SPACE)
                                                 }
                                                 </span>
@@ -392,7 +392,7 @@ declare function nameHTML:mads-name-posgt1HTML($mads as element(mads:mads)) {
                                              if ($mads/mads:authority/@lang = "ja") then
                                             <span>
                                                 <span font-family="{$config:BiblioFont}">{
-                                                (tei2fo:process-biblio($corporatenametransliteration/ancestor::mads:variant[@transliteration="romaji"]/mads:name/mads:namePart)),
+                                                (tei2fo:process-biblioHTML($corporatenametransliteration/ancestor::mads:variant[@transliteration="romaji"]/mads:name/mads:namePart)),
                                                 ($settings:SPACE)
                                                 }
                                                 </span>
@@ -401,7 +401,7 @@ declare function nameHTML:mads-name-posgt1HTML($mads as element(mads:mads)) {
                                             else
                                                 <span>
                                                 <span font-family="{$config:BiblioFont}">{
-                                                (tei2fo:process-biblio($corporatenametransliteration/ancestor::mads:variant[@transliteration="mccunereischauer"]/mads:name/mads:namePart)),
+                                                (tei2fo:process-biblioHTML($corporatenametransliteration/ancestor::mads:variant[@transliteration="mccunereischauer"]/mads:name/mads:namePart)),
                                                 ($settings:SPACE)
                                                 }
                                                 </span>
@@ -409,7 +409,7 @@ declare function nameHTML:mads-name-posgt1HTML($mads as element(mads:mads)) {
                                             </span>
                                         ),
                                         if ($corporatenametranslation) then
-                                                <span font-family="{$config:BiblioFont}">{($settings:SPACE),"(",(tei2fo:process-biblio($corporatenametranslation)),")"}
+                                                <span font-family="{$config:BiblioFont}">{($settings:SPACE),"(",(tei2fo:process-biblioHTML($corporatenametranslation)),")"}
                                                 </span>
                                                 else
                                                     ()

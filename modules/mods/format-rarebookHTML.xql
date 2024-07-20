@@ -36,9 +36,9 @@ declare function rarebookHTML:format-rarebookHTML($entry as element(mods:mods)) 
     if (exists($entry/mods:originInfo/mods:dateOther)) then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:originInfo/mods:dateOther/text()}.</span>
             else
                 (),
-    if (exists($entry/mods:extension)) then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{tei2fo:process-biblio($entry/mods:extension[1])}{if (fn:ends-with($entry/mods:extension[1]/text(), ".")) then () else "."}</span>
+    if (exists($entry/mods:extension)) then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:extension[1])}{if (fn:ends-with($entry/mods:extension[1]/text(), ".")) then () else "."}</span>
             else
                 (), 
-    <span font-family="{$config:BiblioFont}">{tei2fo:process-biblio($entry/mods:note[@type="rarebook"])}</span>,
+    <span font-family="{$config:BiblioFont}">{tei2fo:process-biblioHTML($entry/mods:note[@type="rarebook"])}</span>,
     "."
 };

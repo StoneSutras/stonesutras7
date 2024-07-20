@@ -43,10 +43,10 @@ declare function monographicHTML:format-articleinmonograph-host-monographicHTML(
     if (exists($entry/mods:originInfo/mods:dateOther)) then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:originInfo/mods:dateOther/text()}.</span>
             else
                 (),
-    if (exists($entry/mods:extension)) then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{tei2fo:process-biblio($entry/mods:extension[1])}{if (fn:ends-with($entry/mods:extension[1]/text(), ".")) then () else "."}</span>
+    if (exists($entry/mods:extension)) then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:extension[1])}{if (fn:ends-with($entry/mods:extension[1]/text(), ".")) then () else "."}</span>
             else
                 (),            
-    if ($entry//mods:note/@type = "aftertitle") then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{tei2fo:process-biblio($entry//mods:note[@type = "aftertitle"]/node())}</span>
+    if ($entry//mods:note/@type = "aftertitle") then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{tei2fo:process-biblioHTML($entry//mods:note[@type = "aftertitle"]/node())}</span>
             else
                 (),
     <span> In {$settings:SPACE}</span>,
@@ -130,17 +130,17 @@ declare function monographicHTML:monograph-in-congshuHTML($entry as element(mods
     if (exists($entry/mods:originInfo/mods:dateOther)) then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:originInfo/mods:dateOther/text()}.</span>
             else
                 (),
-    if ($entry//mods:note/@type = "aftertitle") then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{tei2fo:process-biblio($entry//mods:note[@type = "aftertitle"]/node())}</span>
+    if ($entry//mods:note/@type = "aftertitle") then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{tei2fo:process-biblioHTML($entry//mods:note[@type = "aftertitle"]/node())}</span>
             else
                 (),
-     if (exists($entry/mods:extension)) then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{tei2fo:process-biblio($entry/mods:extension[1])}{if (fn:ends-with($entry/mods:extension[1]/text(), ".")) then () else "."}</span>
+     if (exists($entry/mods:extension)) then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:extension[1])}{if (fn:ends-with($entry/mods:extension[1]/text(), ".")) then () else "."}</span>
             else
                 (),  
     
     <span> In {$settings:SPACE}</span>,
     <span font-family="{$config:BiblioFont}">{
         let $relitem:= settings:getrelateditem($entry) 
-        let $relitemoutput := fn:string(norelatedItemHTML:biblio-no-relatedItemHTML($relitem)[1]) || fn:string(norelatedItemHTML:biblio-no-relatedItemHTML($relitem)[2])        return
+        let $relitemoutput := fn:string-join(norelatedItemHTML:biblio-no-relatedItemHTML($relitem)," ")        return
             fn:substring($relitemoutput,1, fn:string-length($relitemoutput)-1)}</span>,
     if (exists($entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "series"]/mods:title/text())) then 
                 (

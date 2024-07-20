@@ -41,12 +41,12 @@ declare function publisherHTML:output-publisherHTML($entry as element(mods:mods)
             if (exists($placeLangEn)) then
                 (
         <span font-family="{$config:BiblioFont}">{($settings:SPACE),($placeLangEn/text())}</span>,
-        <span font-family="{$config:BiblioFont}">:{($settings:SPACE),(tei2fo:process-biblio($publisherLangEn))},</span>
+        <span font-family="{$config:BiblioFont}">:{($settings:SPACE),(tei2fo:process-biblioHTML($publisherLangEn))},</span>
                 )
             else
                 (
         <span font-family="{$config:BiblioFont}">{($settings:SPACE),($place/text())}</span>,
-        <span font-family="{$config:BiblioFont}">:{($settings:SPACE),(tei2fo:process-biblio($publisherLangEn))},</span>
+        <span font-family="{$config:BiblioFont}">:{($settings:SPACE),(tei2fo:process-biblioHTML($publisherLangEn))},</span>
                 )
             )
         )

@@ -28,7 +28,7 @@ declare function thesisHTML:format-thesisHTML($entry as element(mods:mods)){
     <span>{nameHTML:output-nameHTML($entry, "author")}</span>,
     <span>{nameHTML:output-nameHTML($entry, "editor")}</span>, 
     <span>{titleHTML:format-titleHTML($entry)}{$settings:SPACE}</span>,
-    <span font-family="{$config:BiblioFont}">{tei2fo:process-biblio($entry/mods:note[@type="thesis"])}. </span>, 
+    <span font-family="{$config:BiblioFont}">{tei2fo:process-biblioHTML($entry/mods:note[@type="thesis"])}. </span>, 
     if (exists($entry/mods:originInfo/mods:place/mods:placeTerm/@transliteration)) then
     <span>{$entry/mods:originInfo/mods:place/mods:placeTerm[@transliteration]/text()} <span font-family="{$config:ChineseFont}">{$entry/mods:originInfo/mods:place/mods:placeTerm[not(@transliteration)]/text()}</span>, </span>
     else
