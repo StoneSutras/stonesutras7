@@ -1,4 +1,17 @@
 {
+    "home": {
+        "websiteUnderDevelopment": "This website is under development. Content from our ",
+        "pp":"print publications",
+        "ib":" is being reworked for the website with funding by the ",
+        "gf":"Glorisun Foundation",
+        "wa":". We are aware of issues with layout and missing elements. To report specific problems, please ",
+        "email":"email us",
+        "feedback":" with feedback.",
+        "andInstitutes": "and",
+        "grantsCBETA": "“Linking Buddhist Stone Sutras in China to CBETA (Chinese Buddhist Electronic Text Association)” is a collaboration between the Dharma Drum Institute of Liberal Arts (DILA) and the Heidelberger Akademie der Wissenschaften and is supported by the Database Grants of the ",
+        "CCF":"Chiang Ching-Kuo Foundation",
+        "zh":"."   
+    },
     "menu": {
         "start": "Start",
         "sites": "Sites",

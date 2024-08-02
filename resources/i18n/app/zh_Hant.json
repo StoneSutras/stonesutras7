@@ -1,0 +1,34 @@
+{
+   
+    "home": {
+        "websiteUnderDevelopment": "本網站正在開發中。基於",
+        "pp":"印刷出版物",
+        "ib":"，我們正在重新制作和完善網站。感謝",
+        "gf":"旭日慈善基金會",
+        "wa":"的資助。目前，網站可能存在版面設計和元素缺失的問題。若您發現具體問題，歡迎通過",
+        "email":"電子郵件",
+        "feedback":"向我們反饋。感謝您的理解與支持。",
+        "collaborationBetween": "合作單位",
+        "andInstitutes": "及",
+        "grantsCBETA": "「將中國佛教石經連接到 CBETA（中華電子佛典協會）」是法鼓文理學院（DILA）與海德堡科學院的合作項目，並由",
+        "CCF":"蔣經國基金會",
+        "zh":"的資料庫建置基金資助。"
+    },
+    "menu": {
+        "start": "首頁",
+        "sites": "刻經址",
+        "articles": "研究",
+        "inscriptions": "銘刻",
+        "bibliography": "參考",
+        "characters": "刻字"
+    },
+    "inscriptions":"銘刻",
+    "errors": {
+        "under-construction": "網頁建設中 ..."
+    },
+    "facets": {
+        "type": "文檔類型",
+        "site": "地點",
+        "province": "省份"
+    }
+}
