@@ -8,3 +8,7 @@
 .table-grid [data-column-id="id"] {
     font-size: var(--pb-footnote-font-size);
 }
+
+.table-grid [data-column-id="title"] {
+    font-variant: small-caps;
+}
