@@ -37,52 +37,52 @@ declare function monographicHTML:format-articleinmonograph-host-monographicHTML(
     <span>{nameHTML:output-nameHTML($entry, "commentator")}</span>,
     <span>{nameHTML:output-nameHTML($entry, "editor")}</span>,
     <span>{nameHTML:output-nameHTML($entry, "translator")}</span>,
-    <span font-family="{$config:BiblioFont}">“</span>,
+    <span lang="en">“</span>,
     <span>{titleHTML:format-titlenotitalicHTML($entry)}</span>,
-    <span font-family="{$config:BiblioFont}">”</span>,
-    if (exists($entry/mods:originInfo/mods:dateOther)) then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:originInfo/mods:dateOther/text()}.</span>
+    <span lang="en">”</span>,
+    if (exists($entry/mods:originInfo/mods:dateOther)) then  <span lang="en">{$settings:SPACE}{$entry/mods:originInfo/mods:dateOther/text()}.</span>
             else
                 (),
-    if (exists($entry/mods:extension)) then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:extension[1])}{if (fn:ends-with($entry/mods:extension[1]/text(), ".")) then () else "."}</span>
+    if (exists($entry/mods:extension)) then  <span lang="en">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:extension[1])}{if (fn:ends-with($entry/mods:extension[1]/text(), ".")) then () else "."}</span>
             else
                 (),            
-    if ($entry//mods:note/@type = "aftertitle") then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{tei2fo:process-biblioHTML($entry//mods:note[@type = "aftertitle"]/node())}</span>
+    if ($entry//mods:note/@type = "aftertitle") then  <span lang="en">{$settings:SPACE}{tei2fo:process-biblioHTML($entry//mods:note[@type = "aftertitle"]/node())}</span>
             else
                 (),
     <span> In {$settings:SPACE}</span>,
-    <span font-family="{$config:BiblioFont}">{let $relitem:= settings:getrelateditem($entry)
+    <span lang="en">{let $relitem:= settings:getrelateditem($entry)
     let $relitemoutput:= norelatedItemHTML:biblio-no-relatedItemHTML-before-relatedItemHTML($relitem) return ($relitemoutput)}</span>,
     if (exists($entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "series"]/mods:title/text())) then 
                 (
                     if (exists($entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "series"]/mods:title/@transliteration)) then
                         <span>
-                    <span font-family="{$config:BiblioFont}">, {$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "series"]/mods:title[(@transliteration)]/text()}</span>
-                    <span font-family="{$config:ChineseFont}">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "series"]/mods:title[@lang = ("zh", "ja", "ko")]/text()}</span>
+                    <span lang="en">, {$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "series"]/mods:title[(@transliteration)]/text()}</span>
+                    <span lang="zh">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "series"]/mods:title[@lang = ("zh", "ja", "ko")]/text()}</span>
                         </span>
                     else
-                        <span font-family="{$config:BiblioFont}">, {$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "series"]/mods:title/text()}</span>
+                        <span lang="en">, {$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "series"]/mods:title/text()}</span>
                 )
         else
                 (),
     if (exists($entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "series"]/mods:number/text())) then 
-             <span font-family="{$config:BiblioFont}">, ser. {$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "series"]/mods:number/text()}</span>
+             <span lang="en">, ser. {$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "series"]/mods:number/text()}</span>
         else
                 (),
     if (exists($entry/mods:relatedItem[1]/mods:part/mods:detail[./@type= "volume"]/mods:number/text())) then 
-             <span font-family="{$config:BiblioFont}">, vol. {$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "volume"]/mods:number/text()}</span>
+             <span lang="en">, vol. {$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "volume"]/mods:number/text()}</span>
         else
                 (),
     if (exists($entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "juan"]/mods:number/text())) then 
-             <span font-family="{$config:BiblioFont}">, juan {$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "juan"]/mods:number/text()}</span>
+             <span lang="en">, juan {$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "juan"]/mods:number/text()}</span>
         else
                 (),            
     if (exists($entry/mods:relatedItem[1]/mods:part/mods:extent/mods:end[1]/text())) then
-    <span font-family="{$config:BiblioFont}">:{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part/mods:extent/mods:start[1]/text()}–{$entry/mods:relatedItem[1]/mods:part/mods:extent/mods:end/text()}</span>
+    <span lang="en">:{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part/mods:extent/mods:start[1]/text()}–{$entry/mods:relatedItem[1]/mods:part/mods:extent/mods:end/text()}</span>
         else
-             <span font-family="{$config:BiblioFont}">:{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part/mods:extent/mods:start[1]/text()}</span>,
+             <span lang="en">:{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part/mods:extent/mods:start[1]/text()}</span>,
     ".",
                 if ($entry/mods:note/@type="reprint")then
-            <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:note[@type="reprint"]/text()}.</span>
+            <span lang="en">{$settings:SPACE}{$entry/mods:note[@type="reprint"]/text()}.</span>
             else
                 ()
      
@@ -92,25 +92,25 @@ declare function monographicHTML:format-articleinmonograph-host-monographicHTML(
 declare function monographicHTML:reprint-format-articleinmonograph-host-monographicHTML($entry as element(mods:mods)) 
 {
  
-    <span font-family="{$config:BiblioFont}">{$settings:SPACE}Reprinted in{$settings:SPACE}</span>,
-    <span font-variant="small-caps" font-family="{$config:BiblioFont}">{settings:reprint-getreftitle($entry)}</span>,
+    <span lang="en">{$settings:SPACE}Reprinted in{$settings:SPACE}</span>,
+    <span font-variant="small-caps" lang="en">{settings:reprint-getreftitle($entry)}</span>,
     if (exists($entry/mods:relatedItem[2]/mods:part/mods:detail[@type= "series"]/mods:title/text())) then 
-             <span font-family="{$config:BiblioFont}">, {$entry/mods:relatedItem[2]/mods:part/mods:detail[@type= "series"]/mods:title/text()}</span>
+             <span lang="en">, {$entry/mods:relatedItem[2]/mods:part/mods:detail[@type= "series"]/mods:title/text()}</span>
         else
                 (),
     if (exists($entry/mods:relatedItem[2]/mods:part/mods:detail[@type= "series"]/mods:number/text())) then 
-             <span font-family="{$config:BiblioFont}">, ser. {$entry/mods:relatedItem[2]/mods:part/mods:detail[@type= "series"]/mods:number/text()}</span>
+             <span lang="en">, ser. {$entry/mods:relatedItem[2]/mods:part/mods:detail[@type= "series"]/mods:number/text()}</span>
         else
             (),
     if (exists($entry/mods:relatedItem[2]/mods:part/mods:detail[@type= "volume"]/mods:number/text())) then 
-             <span font-family="{$config:BiblioFont}">, vol. {$entry/mods:relatedItem[2]/mods:part/mods:detail[@type= "volume"]/mods:number/text()}</span>
+             <span lang="en">, vol. {$entry/mods:relatedItem[2]/mods:part/mods:detail[@type= "volume"]/mods:number/text()}</span>
         else
             (),
     if (exists($entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "juan"]/mods:number/text())) then 
-             <span font-family="{$config:BiblioFont}">, juan {$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "juan"]/mods:number/text()}</span>
+             <span lang="en">, juan {$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "juan"]/mods:number/text()}</span>
         else
                 (), 
-    <span font-family="{$config:BiblioFont}">:{$settings:SPACE}{$entry/mods:relatedItem[2]/mods:part/mods:extent/mods:start[1]/text()}–{$entry/mods:relatedItem[2]/mods:part/mods:extent/mods:end/text()}</span>,
+    <span lang="en">:{$settings:SPACE}{$entry/mods:relatedItem[2]/mods:part/mods:extent/mods:start[1]/text()}–{$entry/mods:relatedItem[2]/mods:part/mods:extent/mods:end/text()}</span>,
     "."
      
 };
@@ -127,18 +127,18 @@ declare function monographicHTML:monograph-in-congshuHTML($entry as element(mods
     <span>{nameHTML:output-nameHTML($entry, "editor")}</span>,
     <span>{nameHTML:output-nameHTML($entry, "translator")}</span>,
     <span>{titleHTML:format-titleHTML($entry)}</span>,
-    if (exists($entry/mods:originInfo/mods:dateOther)) then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:originInfo/mods:dateOther/text()}.</span>
+    if (exists($entry/mods:originInfo/mods:dateOther)) then  <span lang="en">{$settings:SPACE}{$entry/mods:originInfo/mods:dateOther/text()}.</span>
             else
                 (),
-    if ($entry//mods:note/@type = "aftertitle") then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{tei2fo:process-biblioHTML($entry//mods:note[@type = "aftertitle"]/node())}</span>
+    if ($entry//mods:note/@type = "aftertitle") then  <span lang="en">{$settings:SPACE}{tei2fo:process-biblioHTML($entry//mods:note[@type = "aftertitle"]/node())}</span>
             else
                 (),
-     if (exists($entry/mods:extension)) then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:extension[1])}{if (fn:ends-with($entry/mods:extension[1]/text(), ".")) then () else "."}</span>
+     if (exists($entry/mods:extension)) then  <span lang="en">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:extension[1])}{if (fn:ends-with($entry/mods:extension[1]/text(), ".")) then () else "."}</span>
             else
                 (),  
     
     <span> In {$settings:SPACE}</span>,
-    <span font-family="{$config:BiblioFont}">{
+    <span lang="en">{
         let $relitem:= settings:getrelateditem($entry) 
         let $relitemoutput := fn:string-join(norelatedItemHTML:biblio-no-relatedItemHTML($relitem)," ")        return
             fn:substring($relitemoutput,1, fn:string-length($relitemoutput)-1)}</span>,
@@ -146,38 +146,38 @@ declare function monographicHTML:monograph-in-congshuHTML($entry as element(mods
                 (
                     if (exists($entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "series"]/mods:title/@transliteration)) then
                         <span>
-                    <span font-family="{$config:BiblioFont}">, {$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "series"]/mods:title[(@transliteration)]/text()}</span>
-                    <span font-family="{$config:ChineseFont}">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "series"]/mods:title[@lang = ("zh", "ja", "ko")]/text()}</span>
+                    <span lang="en">, {$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "series"]/mods:title[(@transliteration)]/text()}</span>
+                    <span lang="zh">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "series"]/mods:title[@lang = ("zh", "ja", "ko")]/text()}</span>
                         </span>
                     else
-                        <span font-family="{$config:BiblioFont}">, {$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "series"]/mods:title/text()}</span>
+                        <span lang="en">, {$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "series"]/mods:title/text()}</span>
                 )
         else
                 (),
     if (exists($entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "series"]/mods:number/text())) then 
-             <span font-family="{$config:BiblioFont}">, ser. {$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "series"]/mods:number/text()}</span>
+             <span lang="en">, ser. {$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "series"]/mods:number/text()}</span>
         else
                 (),
     if (exists($entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "volume"]/mods:number/text())) then 
             if (not($entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "volume"]/mods:number[@type="start"]/text())) then
-             <span font-family="{$config:BiblioFont}">, vol. {$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "volume"]/mods:number/text()}</span>
+             <span lang="en">, vol. {$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "volume"]/mods:number/text()}</span>
              else
-                  <span font-family="{$config:BiblioFont}">, vols. {$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "volume"]/mods:number[@type= "start"]/text()}–{$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "volume"]/mods:number[@type= "end"]/text()}</span>
+                  <span lang="en">, vols. {$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "volume"]/mods:number[@type= "start"]/text()}–{$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "volume"]/mods:number[@type= "end"]/text()}</span>
         else
                 (),
     if (exists($entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "juan"]/mods:number/text())) then 
-             <span font-family="{$config:BiblioFont}">, juan {$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "juan"]/mods:number/text()}</span>
+             <span lang="en">, juan {$entry/mods:relatedItem[1]/mods:part/mods:detail[@type= "juan"]/mods:number/text()}</span>
         else
                 (), 
     if (not($entry/mods:relatedItem[1]/mods:part/mods:extent)) then () 
     else
     if (exists($entry/mods:relatedItem[1]/mods:part/mods:extent/mods:end[1]/text())) then
-    <span font-family="{$config:BiblioFont}">:{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part/mods:extent/mods:start[1]/text()}–{$entry/mods:relatedItem[1]/mods:part/mods:extent/mods:end/text()}</span>
+    <span lang="en">:{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part/mods:extent/mods:start[1]/text()}–{$entry/mods:relatedItem[1]/mods:part/mods:extent/mods:end/text()}</span>
         else
-             <span font-family="{$config:BiblioFont}">:{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part/mods:extent/mods:start[1]/text()}</span>,
+             <span lang="en">:{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part/mods:extent/mods:start[1]/text()}</span>,
     ".",
                 if ($entry/mods:note/@type="reprint")then
-            <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:note[@type="reprint"]/text()}.</span>
+            <span lang="en">{$settings:SPACE}{$entry/mods:note[@type="reprint"]/text()}.</span>
             else
                 ()
      

@@ -32,13 +32,13 @@ declare function rarebookHTML:format-rarebookHTML($entry as element(mods:mods)) 
     <span>{nameHTML:output-nameHTML($entry, "editor")}</span>,
     <span>{nameHTML:output-nameHTML($entry, "translator")}</span>,
     <span>{titleHTML:format-titleHTML($entry)}</span>,
-    <span font-family="{$config:BiblioFont}">{$settings:SPACE}</span>,
-    if (exists($entry/mods:originInfo/mods:dateOther)) then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:originInfo/mods:dateOther/text()}.</span>
+    <span lang="en">{$settings:SPACE}</span>,
+    if (exists($entry/mods:originInfo/mods:dateOther)) then  <span lang="en">{$settings:SPACE}{$entry/mods:originInfo/mods:dateOther/text()}.</span>
             else
                 (),
-    if (exists($entry/mods:extension)) then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:extension[1])}{if (fn:ends-with($entry/mods:extension[1]/text(), ".")) then () else "."}</span>
+    if (exists($entry/mods:extension)) then  <span lang="en">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:extension[1])}{if (fn:ends-with($entry/mods:extension[1]/text(), ".")) then () else "."}</span>
             else
                 (), 
-    <span font-family="{$config:BiblioFont}">{tei2fo:process-biblioHTML($entry/mods:note[@type="rarebook"])}</span>,
+    <span lang="en">{tei2fo:process-biblioHTML($entry/mods:note[@type="rarebook"])}</span>,
     "."
 };

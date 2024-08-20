@@ -37,15 +37,15 @@ declare function norelatedItemHTML:biblio-no-relatedItemHTML($entry as element(m
             nameHTML:output-nameHTML($entry, "editor"), 
             nameHTML:output-nameHTML($entry, "translator"),
             titleHTML:format-titleHTML($entry), 
-            if (exists($entry/mods:extension)) then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:extension[1])}{if (fn:ends-with($entry/mods:extension[1]/text(), ".")) then () else "."}</span>
+            if (exists($entry/mods:extension)) then  <span lang="en">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:extension[1])}{if (fn:ends-with($entry/mods:extension[1]/text(), ".")) then () else "."}</span>
             else
                 (),
-            if (exists($entry/mods:originInfo/mods:dateOther)) then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:originInfo/mods:dateOther/text()}.</span>
+            if (exists($entry/mods:originInfo/mods:dateOther)) then  <span lang="en">{$settings:SPACE}{$entry/mods:originInfo/mods:dateOther/text()}.</span>
             else
                 (),
-            if ($entry/mods:physicalDescription/mods:extent/mods:detail/@type ="volume") then <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:physicalDescription/mods:extent/mods:detail//text()}{$settings:SPACE}vols.</span> else (),
+            if ($entry/mods:physicalDescription/mods:extent/mods:detail/@type ="volume") then <span lang="en">{$settings:SPACE}{$entry/mods:physicalDescription/mods:extent/mods:detail//text()}{$settings:SPACE}vols.</span> else (),
             if ($entry/mods:note/@type="revised")then
-            <span font-family="{$config:BiblioFont}">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:note[@type="revised"])}.</span>
+            <span lang="en">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:note[@type="revised"])}.</span>
             else
                 (),
             
@@ -53,17 +53,17 @@ declare function norelatedItemHTML:biblio-no-relatedItemHTML($entry as element(m
             dateHTML:output-dateHTML($entry),
             ".",
             if ($entry/mods:note/@type="reprint")then
-            <span font-family="{$config:BiblioFont}">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:note[@type="reprint"])}.</span>
+            <span lang="en">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:note[@type="reprint"])}.</span>
             else
                 (),
             if ($entry/mods:classification="reprint") then 
-                <span font-family="{$config:BiblioFont}">{$settings:SPACE}Reprint, {publisherHTML:output-publisher-reprintHTML($entry)}{$settings:SPACE}{data($entry/mods:classification["reprint"]/@edition)}.</span>
+                <span lang="en">{$settings:SPACE}Reprint, {publisherHTML:output-publisher-reprintHTML($entry)}{$settings:SPACE}{data($entry/mods:classification["reprint"]/@edition)}.</span>
             else 
                 (),
             if (exists($entry/mods:location/mods:url/text())) then
                 (
-                <span  font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:location/mods:url/text()}{$settings:SPACE}</span>,
-                <span font-family="{$config:BiblioFont}">(accessed{$settings:SPACE}
+                <span  lang="en">{$settings:SPACE}{$entry/mods:location/mods:url/text()}{$settings:SPACE}</span>,
+                <span lang="en">(accessed{$settings:SPACE}
                {
                    for $date in ($entry//mods:originInfo/mods:dateCaptured)
                    let $corrected :=
@@ -79,7 +79,7 @@ declare function norelatedItemHTML:biblio-no-relatedItemHTML($entry as element(m
                )
                else
                    (),
-              if ($entry/mods:note/@type="forthcoming") then <span font-family="{$config:BiblioFont}">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:note[@type="forthcoming"])}.</span> else ()
+              if ($entry/mods:note/@type="forthcoming") then <span lang="en">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:note[@type="forthcoming"])}.</span> else ()
               
             
             
@@ -102,15 +102,15 @@ declare function norelatedItemHTML:biblio-no-relatedItemHTML-before-relatedItemH
             nameHTML:output-nameHTML($entry, "editor"), 
             nameHTML:output-nameHTML($entry, "translator"),
             titleHTML:format-titleHTML($entry), 
-            if (exists($entry/mods:extension)) then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:extension[1])}{if (fn:ends-with($entry/mods:extension[1]/text(), ".")) then () else "."}</span>
+            if (exists($entry/mods:extension)) then  <span lang="en">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:extension[1])}{if (fn:ends-with($entry/mods:extension[1]/text(), ".")) then () else "."}</span>
             else
                 (),
-            if (exists($entry/mods:originInfo/mods:dateOther)) then  <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:originInfo/mods:dateOther/text()}.</span>
+            if (exists($entry/mods:originInfo/mods:dateOther)) then  <span lang="en">{$settings:SPACE}{$entry/mods:originInfo/mods:dateOther/text()}.</span>
             else
                 (),
-            if ($entry/mods:physicalDescription/mods:extent/mods:detail/@type ="volume") then <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:physicalDescription/mods:extent/mods:detail//text()}{$settings:SPACE}vols.</span> else (),
+            if ($entry/mods:physicalDescription/mods:extent/mods:detail/@type ="volume") then <span lang="en">{$settings:SPACE}{$entry/mods:physicalDescription/mods:extent/mods:detail//text()}{$settings:SPACE}vols.</span> else (),
             if ($entry/mods:note/@type="revised")then
-            <span font-family="{$config:BiblioFont}">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:note[@type="revised"])}.</span>
+            <span lang="en">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:note[@type="revised"])}.</span>
             else
                 (),
             
@@ -118,17 +118,17 @@ declare function norelatedItemHTML:biblio-no-relatedItemHTML-before-relatedItemH
             dateHTML:output-dateHTML($entry),
             "",(:(otherwisethere would be another dot):)
             if ($entry/mods:note/@type="reprint")then
-            <span font-family="{$config:BiblioFont}">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:note[@type="reprint"])}.</span>
+            <span lang="en">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:note[@type="reprint"])}.</span>
             else
                 (),
             if ($entry/mods:classification="reprint") then 
-                <span font-family="{$config:BiblioFont}">{$settings:SPACE}Reprint, {publisherHTML:output-publisher-reprintHTML($entry)}{$settings:SPACE}{data($entry/mods:classification["reprint"]/@edition)}.</span>
+                <span lang="en">{$settings:SPACE}Reprint, {publisherHTML:output-publisher-reprintHTML($entry)}{$settings:SPACE}{data($entry/mods:classification["reprint"]/@edition)}.</span>
             else 
                 (),
             if (exists($entry/mods:location/mods:url/text())) then
                 (
-                <span  font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:location/mods:url/text()}{$settings:SPACE}</span>,
-                <span font-family="{$config:BiblioFont}">(accessed{$settings:SPACE}
+                <span  lang="en">{$settings:SPACE}{$entry/mods:location/mods:url/text()}{$settings:SPACE}</span>,
+                <span lang="en">(accessed{$settings:SPACE}
                {
                    for $date in ($entry//mods:originInfo/mods:dateCaptured)
                    let $corrected :=
@@ -144,7 +144,7 @@ declare function norelatedItemHTML:biblio-no-relatedItemHTML-before-relatedItemH
                )
                else
                    (),
-              if ($entry/mods:note/@type="forthcoming") then <span font-family="{$config:BiblioFont}">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:note[@type="forthcoming"])}.</span> else ()
+              if ($entry/mods:note/@type="forthcoming") then <span lang="en">{$settings:SPACE}{tei2fo:process-biblioHTML($entry/mods:note[@type="forthcoming"])}.</span> else ()
               
             
             

@@ -30,31 +30,31 @@ declare function webHTML:format-websiteHTML($entry as element(mods:mods)){
     (<span>{titleHTML:format-titleHTML($entry)}</span>)
         else
             (
-    <span><span font-family="{$config:BiblioFont}">“</span>
+    <span><span lang="en">“</span>
     <span>{titleHTML:format-titlenotitalicHTML($entry)}</span>
-    <span font-family="{$config:BiblioFont}">”</span></span>),
+    <span lang="en">”</span></span>),
     
-    <span font-family="{$config:BiblioFont}">{$settings:SPACE}</span>,
+    <span lang="en">{$settings:SPACE}</span>,
     if (not($entry/mods:relatedItem)) then () else
         <span> In {$settings:SPACE}</span>,
-    <span font-variant="small-caps" font-family="{$config:BiblioFont}">{settings:getreftitle($entry)}</span>,
+    <span font-variant="small-caps" lang="en">{settings:getreftitle($entry)}</span>,
         (:if (exists ($entry/mods:relatedItem/mods:titleInfo/@transliteration)) then
         (
-        <span font-style="italic" font-family="{$config:BiblioFont}">{$entry/mods:relatedItem/mods:titleInfo[(@transliteration)]/mods:title/text()}{$settings:SPACE}</span>,
-        <span font-family="{$config:ChineseFont}">{$entry/mods:relatedItem/mods:titleInfo[@lang = ("zh", "ja", "ko")]/mods:title/text()}.{$settings:SPACE}</span>
+        <span font-style="italic" lang="en">{$entry/mods:relatedItem/mods:titleInfo[(@transliteration)]/mods:title/text()}{$settings:SPACE}</span>,
+        <span lang="zh">{$entry/mods:relatedItem/mods:titleInfo[@lang = ("zh", "ja", "ko")]/mods:title/text()}.{$settings:SPACE}</span>
         )
 
         else
         (  
-        <span font-style="italic" font-family="{$config:BiblioFont}">{$entry/mods:relatedItem/mods:titleInfo/mods:title/text()}.{$settings:SPACE}</span>
+        <span font-style="italic" lang="en">{$entry/mods:relatedItem/mods:titleInfo/mods:title/text()}.{$settings:SPACE}</span>
         ),:)
     if (not($entry//mods:dateOther)) then () 
-        else <span  font-family="{$config:BiblioFont}">{tei2fo:process-biblioHTML($entry//mods:dateOther)}.{$settings:SPACE}</span>,
-    <span  font-family="{$config:BiblioFont}">{if ($entry/mods:relatedItem) then () else $entry/mods:location/mods:url/text()}</span>,
-    <span  font-family="{$config:BiblioFont}">{if ($entry/mods:location/mods:url/@rend = "yes") then <span  font-family="{$config:BiblioFont}">.{$settings:SPACE}{$entry/mods:location/mods:url/text()}</span>  else ()}</span>,
+        else <span  lang="en">{tei2fo:process-biblioHTML($entry//mods:dateOther)}.{$settings:SPACE}</span>,
+    <span  lang="en">{if ($entry/mods:relatedItem) then () else $entry/mods:location/mods:url/text()}</span>,
+    <span  lang="en">{if ($entry/mods:location/mods:url/@rend = "yes") then <span  lang="en">.{$settings:SPACE}{$entry/mods:location/mods:url/text()}</span>  else ()}</span>,
     if (not($entry//mods:dateCaptured)) then ()
         else 
-    <span font-family="{$config:BiblioFont}">{$settings:SPACE}(accessed{$settings:SPACE}
+    <span lang="en">{$settings:SPACE}(accessed{$settings:SPACE}
                {
                    for $date in ($entry//mods:originInfo/mods:dateCaptured)
                    let $corrected :=

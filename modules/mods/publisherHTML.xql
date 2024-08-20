@@ -32,21 +32,21 @@ declare function publisherHTML:output-publisherHTML($entry as element(mods:mods)
         (
         if (exists($placeLangZh)) then 
             (
-        <span font-family="{$config:BiblioFont}">{($settings:SPACE),($placeTrans/text())," ",($placeLangZh/text())}</span>,<span font-family="{$config:BiblioFont}">:{($settings:SPACE),($publisherTrans/text())}</span>,
-        if (exists($publisherLangZh/text())) then <span font-family="{$config:ChineseFont}">{($settings:SPACE),($publisherLangZh/text())}</span> else (),
-        <span font-family="{$config:BiblioFont}">,</span>
+        <span lang="en">{($settings:SPACE),($placeTrans/text())," ",($placeLangZh/text())}</span>,<span lang="en">:{($settings:SPACE),($publisherTrans/text())}</span>,
+        if (exists($publisherLangZh/text())) then <span lang="zh">{($settings:SPACE),($publisherLangZh/text())}</span> else (),
+        <span lang="en">,</span>
             )
         else 
             (
             if (exists($placeLangEn)) then
                 (
-        <span font-family="{$config:BiblioFont}">{($settings:SPACE),($placeLangEn/text())}</span>,
-        <span font-family="{$config:BiblioFont}">:{($settings:SPACE),(tei2fo:process-biblioHTML($publisherLangEn))},</span>
+        <span lang="en">{($settings:SPACE),($placeLangEn/text())}</span>,
+        <span lang="en">:{($settings:SPACE),(tei2fo:process-biblioHTML($publisherLangEn))},</span>
                 )
             else
                 (
-        <span font-family="{$config:BiblioFont}">{($settings:SPACE),($place/text())}</span>,
-        <span font-family="{$config:BiblioFont}">:{($settings:SPACE),(tei2fo:process-biblioHTML($publisherLangEn))},</span>
+        <span lang="en">{($settings:SPACE),($place/text())}</span>,
+        <span lang="en">:{($settings:SPACE),(tei2fo:process-biblioHTML($publisherLangEn))},</span>
                 )
             )
         )
@@ -55,21 +55,21 @@ declare function publisherHTML:output-publisherHTML($entry as element(mods:mods)
         (
         if (exists($placeLangZh)) then 
             (
-        <span font-family="{$config:BiblioFont}">{($settings:SPACE),($placeTrans/text())}</span>,<span font-family="{$config:BiblioFont}">:{($settings:SPACE)}</span>,
-        if (exists($publisherLangZh/text())) then <span><span font-family="{$config:BiblioFont}">{($publisherTrans/text()),($settings:SPACE)}</span><span font-family="{$config:ChineseFont}">{($settings:SPACE),($publisherLangZh/text()),($settings:SPACE)}</span>and<span font-family="{$config:BiblioFont}">{($settings:SPACE),($publisher2Trans/text()),($settings:SPACE)}</span><span font-family="{$config:ChineseFont}">{($settings:SPACE),($publisher2LangZh/text())}</span></span> else (),
-        <span font-family="{$config:BiblioFont}">,</span>
+        <span lang="en">{($settings:SPACE),($placeTrans/text())}</span>,<span lang="en">:{($settings:SPACE)}</span>,
+        if (exists($publisherLangZh/text())) then <span><span lang="en">{($publisherTrans/text()),($settings:SPACE)}</span><span lang="zh">{($settings:SPACE),($publisherLangZh/text()),($settings:SPACE)}</span>and<span lang="en">{($settings:SPACE),($publisher2Trans/text()),($settings:SPACE)}</span><span lang="zh">{($settings:SPACE),($publisher2LangZh/text())}</span></span> else (),
+        <span lang="en">,</span>
             )
         else 
             (
             if (exists($placeLangEn)) then
                 (
-        <span font-family="{$config:BiblioFont}">{($settings:SPACE),($placeLangEn/text())}</span>,
-        <span font-family="{$config:BiblioFont}">:{($settings:SPACE),($publisherLangEn/text())},</span>
+        <span lang="en">{($settings:SPACE),($placeLangEn/text())}</span>,
+        <span lang="en">:{($settings:SPACE),($publisherLangEn/text())},</span>
                 )
             else
                 (
-        <span font-family="{$config:BiblioFont}">{($settings:SPACE),($place/text())}</span>,
-        <span font-family="{$config:BiblioFont}">:{($settings:SPACE),($publisherLangEn/text())},</span>
+        <span lang="en">{($settings:SPACE),($place/text())}</span>,
+        <span lang="en">:{($settings:SPACE),($publisherLangEn/text())},</span>
                 )
             )
         )  
@@ -85,17 +85,17 @@ declare function publisherHTML:output-publisherHTML($entry as element(mods:mods)
         if (not(exists($placeLangZh)) or not(exists($placeLangEn))) then () else
         if (exists($placeLangZh)) then 
             (
-        <span font-family="{$config:BiblioFont}">{($settings:SPACE),($placeTrans/text())}</span>
+        <span lang="en">{($settings:SPACE),($placeTrans/text())}</span>
                     )
         else 
             (
             if (exists($placeLangEn)) then
                 (
-        <span font-family="{$config:BiblioFont}">{($settings:SPACE),($placeLangEn/text())},</span>
+        <span lang="en">{($settings:SPACE),($placeLangEn/text())},</span>
                 )
             else
                 (
-        <span font-family="{$config:BiblioFont}">{($settings:SPACE),($place/text())},</span>
+        <span lang="en">{($settings:SPACE),($place/text())},</span>
                 )
             )
         )
@@ -123,21 +123,21 @@ declare function publisherHTML:output-publisher-reprintHTML($entry as element(mo
     
         if (exists($placeLangZhReprint)) then 
             (
-        <span font-family="{$config:BiblioFont}">{($settings:SPACE),($placeTransReprint/text())}</span>,
-        <span font-family="{$config:BiblioFont}">:{($settings:SPACE),($publisherTransReprint/text())}</span>,
-        <span font-family="{$config:ChineseFont}">{($settings:SPACE),($publisherLangZhReprint/text())},</span>
+        <span lang="en">{($settings:SPACE),($placeTransReprint/text())}</span>,
+        <span lang="en">:{($settings:SPACE),($publisherTransReprint/text())}</span>,
+        <span lang="zh">{($settings:SPACE),($publisherLangZhReprint/text())},</span>
             )
         else 
             (
             if (exists($placeLangEnReprint)) then
                 (
-        <span font-family="{$config:BiblioFont}">{($settings:SPACE),($placeLangEnReprint/text())}</span>,
-        <span font-family="{$config:BiblioFont}">:{($settings:SPACE),($publisherLangEnReprint/text())},</span>
+        <span lang="en">{($settings:SPACE),($placeLangEnReprint/text())}</span>,
+        <span lang="en">:{($settings:SPACE),($publisherLangEnReprint/text())},</span>
                 )
             else
                 (
-        <span font-family="{$config:BiblioFont}">{($settings:SPACE),($placeReprint/text())}</span>,
-        <span font-family="{$config:BiblioFont}">:{($settings:SPACE),($publisherLangEnReprint/text())},</span>
+        <span lang="en">{($settings:SPACE),($placeReprint/text())}</span>,
+        <span lang="en">:{($settings:SPACE),($publisherLangEnReprint/text())},</span>
                 )
             )
         )
@@ -146,17 +146,17 @@ declare function publisherHTML:output-publisher-reprintHTML($entry as element(mo
     
         if (exists($placeLangZhReprint)) then 
             (
-        <span font-family="{$config:BiblioFont}">{($settings:SPACE),($placeTransReprint/text())}</span>
+        <span lang="en">{($settings:SPACE),($placeTransReprint/text())}</span>
                     )
         else 
             (
             if (exists($placeLangEnReprint)) then
                 (
-        <span font-family="{$config:BiblioFont}">{($settings:SPACE),($placeLangEnReprint/text())},</span>
+        <span lang="en">{($settings:SPACE),($placeLangEnReprint/text())},</span>
                 )
             else
                 (
-        <span font-family="{$config:BiblioFont}">{($settings:SPACE),($placeReprint/text())},</span>
+        <span lang="en">{($settings:SPACE),($placeReprint/text())},</span>
                 )
             )
         )

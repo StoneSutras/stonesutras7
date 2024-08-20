@@ -38,9 +38,9 @@ declare function continuingHTML:format-articleinmonograph-host-continuingHTML($e
                 <i>{tei2fo:process-biblioHTML($entry/mods:relatedItem[1]/mods:titleInfo[(@transliteration)]/mods:title)}{$settings:SPACE}</i>,
                 
                 
-                <span font-family="{$config:ChineseFont}">{tei2fo:process-biblioHTML($entry/mods:relatedItem[1]/mods:titleInfo[@lang = ("zh", "ja", "ko")]/mods:title)}<span font-family="{$config:BiblioFont}"></span></span>,
+                <span lang="zh">{tei2fo:process-biblioHTML($entry/mods:relatedItem[1]/mods:titleInfo[@lang = ("zh", "ja", "ko")]/mods:title)}<span lang="en"></span></span>,
                     (:for translated title:) 
-                if ($entry/mods:relatedItem[1]/mods:titleInfo[@type = "translated"]/@displayLabel/string() = "yes")  then <span font-family="{$config:BiblioFont}"> ({tei2fo:process-biblioHTML($entry/mods:relatedItem[1]/mods:titleInfo[@type = "translated"]/mods:title)})</span>  else ()
+                if ($entry/mods:relatedItem[1]/mods:titleInfo[@type = "translated"]/@displayLabel/string() = "yes")  then <span lang="en"> ({tei2fo:process-biblioHTML($entry/mods:relatedItem[1]/mods:titleInfo[@type = "translated"]/mods:title)})</span>  else ()
                     )
                 
             else
@@ -50,7 +50,7 @@ declare function continuingHTML:format-articleinmonograph-host-continuingHTML($e
                      
             (:for newspapers:)         
             if ($entry//mods:frequency = "daily") then
-                  <span font-family="{$config:BiblioFont}">,{$settings:SPACE}
+                  <span lang="en">,{$settings:SPACE}
                     {$entry/mods:relatedItem[1]/mods:part[1]/mods:detail/mods:number/text(), $entry/mods:relatedItem[1]/mods:part[1]/mods:detail/text()}
                     {
                        for $date in ($entry/mods:relatedItem[1]/mods:part[1]/mods:date)
@@ -64,11 +64,11 @@ declare function continuingHTML:format-articleinmonograph-host-continuingHTML($e
                             return
                                 $corrected
                     }
-                    <span font-family="{$config:BiblioFont}">:{$settings:SPACE}
+                    <span lang="en">:{$settings:SPACE}
                         {if (exists($entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:end/text())) then
-                        <span font-family="{$config:BiblioFont}">{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:start/text()}–{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:end/text()}</span>
+                        <span lang="en">{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:start/text()}–{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:end/text()}</span>
                         else
-                        <span font-family="{$config:BiblioFont}">{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:start/text()}</span>
+                        <span lang="en">{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:start/text()}</span>
                         }
                     </span>
                </span>
@@ -80,14 +80,14 @@ declare function continuingHTML:format-articleinmonograph-host-continuingHTML($e
                         (
                         if (($entry/mods:relatedItem[1]/mods:part[1]/mods:detail/@type="volume") and ($entry/mods:relatedItem[1]/mods:part[1]/mods:detail/@type="no")) then 
                                 (
-                                <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[1]/mods:detail[@type="volume"]//text()}, no. {$entry/mods:relatedItem[1]/mods:part[1]/mods:detail[@type="no"]//text()}</span>,
-                                <span font-family="{$config:BiblioFont}">{$settings:SPACE}({dateHTML:output-journaldateHTML($entry)})</span>,
+                                <span lang="en">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[1]/mods:detail[@type="volume"]//text()}, no. {$entry/mods:relatedItem[1]/mods:part[1]/mods:detail[@type="no"]//text()}</span>,
+                                <span lang="en">{$settings:SPACE}({dateHTML:output-journaldateHTML($entry)})</span>,
                                 if (not($entry/mods:relatedItem[1]/mods:part[1]/mods:extent)) then () else
                                     <span>:</span>,
                                     if (exists($entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:end/text())) then
-                                    <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:start/text()}–{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:end/text()}</span>
+                                    <span lang="en">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:start/text()}–{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:end/text()}</span>
                                  else
-                                    <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:start/text()}</span>
+                                    <span lang="en">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:start/text()}</span>
                                 
                                 
                                 )
@@ -95,14 +95,14 @@ declare function continuingHTML:format-articleinmonograph-host-continuingHTML($e
                         else
                             if (($entry/mods:relatedItem[1]/mods:part[1]/mods:detail/@type="volume")) then 
                                 (
-                                <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[1]/mods:detail[@type="volume"]//text()}</span>,
-                                <span font-family="{$config:BiblioFont}">{$settings:SPACE}({dateHTML:output-journaldateHTML($entry)})</span>,
+                                <span lang="en">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[1]/mods:detail[@type="volume"]//text()}</span>,
+                                <span lang="en">{$settings:SPACE}({dateHTML:output-journaldateHTML($entry)})</span>,
                                 if (not($entry/mods:relatedItem[1]/mods:part[1]/mods:extent)) then () else
                                     <span>:
                                     {if (exists($entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:end/text())) then
-                                    <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:start/text()}–{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:end/text()}</span>
+                                    <span lang="en">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:start/text()}–{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:end/text()}</span>
                                  else
-                                    <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:start/text()}</span>}
+                                    <span lang="en">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:start/text()}</span>}
                                 </span>
                                 
                                 )
@@ -110,28 +110,28 @@ declare function continuingHTML:format-articleinmonograph-host-continuingHTML($e
                         else
                              if (($entry/mods:relatedItem[1]/mods:part[1]/mods:detail/@type="no")) then 
                                 (
-                                <span font-family="{$config:BiblioFont}">{$settings:SPACE}{dateHTML:output-journaldateHTML($entry)}, no. {$entry/mods:relatedItem[1]/mods:part[1]/mods:detail[@type="no"]//text()}</span>,
+                                <span lang="en">{$settings:SPACE}{dateHTML:output-journaldateHTML($entry)}, no. {$entry/mods:relatedItem[1]/mods:part[1]/mods:detail[@type="no"]//text()}</span>,
                                 if (not($entry/mods:relatedItem[1]/mods:part[1]/mods:extent)) then () else
                                     <span>:
-                                <span font-family="{$config:BiblioFont}">
+                                <span lang="en">
                                     {if (exists($entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:end/text())) then
-                                <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:start/text()}–{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:end/text()}</span>
+                                <span lang="en">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:start/text()}–{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:end/text()}</span>
                                  else
-                                    <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:start/text()}</span>  
+                                    <span lang="en">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:start/text()}</span>  
                                 }</span>
                                 </span>  
                                 )
                         (:neither number nor volume:)
                         else
                             (
-                            <span font-family="{$config:BiblioFont}">{dateHTML:output-journaldateHTML($entry)}</span>,
+                            <span lang="en">{dateHTML:output-journaldateHTML($entry)}</span>,
                             if (not($entry/mods:relatedItem[1]/mods:part[1]/mods:extent)) then () else
                                     <span>:
-                                <span font-family="{$config:BiblioFont}">
+                                <span lang="en">
                                     {if (exists($entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:end/text())) then
-                                <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:start/text()}–{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:end/text()}</span>
+                                <span lang="en">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:start/text()}–{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:end/text()}</span>
                                  else
-                                    <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:start/text()}</span>  
+                                    <span lang="en">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[1]/mods:extent/mods:start/text()}</span>  
                                 }</span> 
                                 </span>      
                             )
@@ -144,34 +144,34 @@ declare function continuingHTML:format-articleinmonograph-host-continuingHTML($e
                         if(exists ($entry/mods:relatedItem[1]/mods:part[2]/mods:extent/mods:start/text())) then
                                 
                                     (
-                                    <fo-inline font-family="{$config:BiblioFont}">{$settings:SPACE}and{$settings:SPACE}</fo-inline>,
+                                    <fo-inline lang="en">{$settings:SPACE}and{$settings:SPACE}</fo-inline>,
                                     
                                         if (($entry/mods:relatedItem[1]/mods:part[2]/mods:detail/@type="volume") and ($entry/mods:relatedItem[1]/mods:part[2]/mods:detail/@type="no")) then 
                                             (
-                                            <span font-family="{$config:BiblioFont}">{$settings:SPACE}
+                                            <span lang="en">{$settings:SPACE}
                                                 {$entry/mods:relatedItem[1]/mods:part[2]/mods:detail[@type="volume"]/text()}, no.{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[2]/mods:detail[@type="no"]/text()}{$settings:SPACE}({fn:substring(($entry/mods:relatedItem[1]/mods:part[2]/mods:date)[1],1,4)}):
                                             </span>
                                             )
                                         else
                                             if ($entry/mods:relatedItem[1]/mods:part[2]/mods:detail/@type="volume") then
                                             (
-                                            <span font-family="{$config:BiblioFont}">
+                                            <span lang="en">
                                             {$settings:SPACE}and{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[2]/mods:detail[@type="volume"]/text()}
                                             {$settings:SPACE}({fn:substring(($entry/mods:relatedItem[1]/mods:part[2]/mods:date)[1],1,4)})
                                             </span>   
                                             )
                                             else     
                                             (
-                                            <span font-family="{$config:BiblioFont}">
+                                            <span lang="en">
                                             {$settings:SPACE}and{$settings:SPACE}
                                             {fn:substring(($entry/mods:relatedItem[1]/mods:part[2]/mods:date)[1],1,4)}, no.{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[2]/mods:detail[@type="no"]/text()}
                                             </span>   
                                             )
-                                    ,<span font-family="{$config:BiblioFont}">{$settings:SPACE} 
+                                    ,<span lang="en">{$settings:SPACE} 
                                     {if (exists($entry/mods:relatedItem[1]/mods:part[2]/mods:extent/mods:end/text())) then
-                                    <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[2]/mods:extent/mods:start/text()}–{$entry/mods:relatedItem[1]/mods:part[2]/mods:extent/mods:end/text()}</span>
+                                    <span lang="en">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[2]/mods:extent/mods:start/text()}–{$entry/mods:relatedItem[1]/mods:part[2]/mods:extent/mods:end/text()}</span>
                                      else
-                                    <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[2]/mods:extent/mods:start/text()}</span>
+                                    <span lang="en">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[2]/mods:extent/mods:start/text()}</span>
                                     }   
                                     </span>
                                     )
@@ -179,19 +179,19 @@ declare function continuingHTML:format-articleinmonograph-host-continuingHTML($e
                           ()
                         ),
     ".",
-    if ($entry/mods:note/@type="forthcoming") then <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:note[@type="forthcoming"]/text()}.</span> else ()
+    if ($entry/mods:note/@type="forthcoming") then <span lang="en">{$settings:SPACE}{$entry/mods:note[@type="forthcoming"]/text()}.</span> else ()
     
 };
 
 declare function continuingHTML:reprint-format-articleinmonograph-host-continuingHTML($entry as element(mods:mods)) {
     
 
-        <span font-family="{$config:BiblioFont}">{$settings:SPACE}Reprinted in{$settings:SPACE}</span>,
+        <span lang="en">{$settings:SPACE}Reprinted in{$settings:SPACE}</span>,
     
             if (exists ($entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:titleInfo/@transliteration)) then
                     (
                 <i>{$entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:titleInfo[(@transliteration)]/mods:title/text()}{$settings:SPACE}</i>,
-                <span font-family="{$config:ChineseFont}">{$entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:titleInfo[@lang = ("zh", "ja", "ko")]/mods:title/text()}</span>
+                <span lang="zh">{$entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:titleInfo[@lang = ("zh", "ja", "ko")]/mods:title/text()}</span>
                     )
                 
             else
@@ -203,23 +203,23 @@ declare function continuingHTML:reprint-format-articleinmonograph-host-continuin
                             (:volume and number:)
                             if (($entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:part/mods:detail/@type="volume") and ($entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:part/mods:detail/@type="no")) then 
                                 (
-                                <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:part/mods:detail[@type="volume"]/text()}, no. {$entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:part/mods:detail[@type="no"]/text()} ({fn:substring(($entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:part/mods:date)[1],1,4)}): </span>
+                                <span lang="en">{$settings:SPACE}{$entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:part/mods:detail[@type="volume"]/text()}, no. {$entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:part/mods:detail[@type="no"]/text()} ({fn:substring(($entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:part/mods:date)[1],1,4)}): </span>
                                 )
                             else
                                 
                                 if ($entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:part/mods:detail/@type="volume")
                             then
                                 (
-                                <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:part/mods:detail[@type="volume"]/text()} ({fn:substring(($entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:part/mods:date)[1],1,4)}): </span> 
+                                <span lang="en">{$settings:SPACE}{$entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:part/mods:detail[@type="volume"]/text()} ({fn:substring(($entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:part/mods:date)[1],1,4)}): </span> 
                                 )
                               else 
                                 (
-                                <span font-family="{$config:BiblioFont}">{$settings:SPACE}{fn:substring(($entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:part/mods:date)[1],1,4)}, no. {$entry/mods:relatedItem[2]/mods:part/mods:detail[@type="no"]/text()}</span>
+                                <span lang="en">{$settings:SPACE}{fn:substring(($entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:part/mods:date)[1],1,4)}, no. {$entry/mods:relatedItem[2]/mods:part/mods:detail[@type="no"]/text()}</span>
                                 )
-                        ,<span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:part/mods:extent/mods:start/text()}–{$entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:part/mods:extent/mods:end/text()}</span>
+                        ,<span lang="en">{$settings:SPACE}{$entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:part/mods:extent/mods:start/text()}–{$entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:part/mods:extent/mods:end/text()}</span>
                         )
             else
-               <span font-family="{$config:BiblioFont}">{$entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:part/mods:detail/mods:number/text(), $entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:part/mods:detail/text()}
+               <span lang="en">{$entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:part/mods:detail/mods:number/text(), $entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:part/mods:detail/text()}
                {
                    for $date in ($entry/mods:relatedItem[@type="host"][data(@xlink:href) = data($entry/mods:classification["reprint"]/@edition)]/mods:part/mods:date)
                    let $corrected :=
@@ -246,14 +246,14 @@ declare function continuingHTML:format-articleinmonograph-host-continuing-webHTM
     
     <span>{nameHTML:output-nameHTML($entry, "author")}</span>,
     <span>{nameHTML:output-nameHTML($entry, "editor")}</span>, 
-    <span font-family="{$config:BiblioFont}">"</span>,
+    <span lang="en">"</span>,
     <span>{titleHTML:format-titlenotitalicHTML($entry)}</span>,
-    <span font-family="{$config:BiblioFont}">"</span>,
-    <span font-family="{$config:BiblioFont}">{$settings:SPACE}</span>,
+    <span lang="en">"</span>,
+    <span lang="en">{$settings:SPACE}</span>,
             if (exists ($entry/mods:relatedItem/mods:titleInfo/@transliteration)) then
                     (
                 <i>{$entry/mods:relatedItem/mods:titleInfo[(@transliteration)]/mods:title/text()}{$settings:SPACE}</i>,
-                <span font-family="{$config:ChineseFont}">{$entry/mods:relatedItem/mods:titleInfo[@lang = ("zh", "ja", "ko")]/mods:title/text()},</span>
+                <span lang="zh">{$entry/mods:relatedItem/mods:titleInfo[@lang = ("zh", "ja", "ko")]/mods:title/text()},</span>
                     )
                 
             else
@@ -264,16 +264,16 @@ declare function continuingHTML:format-articleinmonograph-host-continuing-webHTM
                         (
                             if (($entry/mods:relatedItem/mods:part/mods:detail/@type="volume") and ($entry/mods:relatedItem/mods:part/mods:detail/@type="no")) then 
                                 (
-                                <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:relatedItem/mods:part/mods:detail[@type="volume"]/text()}.{$entry/mods:relatedItem/mods:part/mods:detail[@type="no"]/text()}</span>
+                                <span lang="en">{$settings:SPACE}{$entry/mods:relatedItem/mods:part/mods:detail[@type="volume"]/text()}.{$entry/mods:relatedItem/mods:part/mods:detail[@type="no"]/text()}</span>
                                 )
                             else
                                 (
-                                <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:relatedItem/mods:part/mods:detail[@type="volume"]/text(),$entry/mods:relatedItem/mods:part/mods:detail[@type="no"]/text()}</span>   
+                                <span lang="en">{$settings:SPACE}{$entry/mods:relatedItem/mods:part/mods:detail[@type="volume"]/text(),$entry/mods:relatedItem/mods:part/mods:detail[@type="no"]/text()}</span>   
                                 )
-                        ,<span font-family="{$config:BiblioFont}">{$settings:SPACE}({fn:substring($entry/mods:relatedItem/mods:part/mods:date/text(),1,4)}): {$entry/mods:relatedItem/mods:part/mods:extent/mods:start/text()}–{$entry/mods:relatedItem/mods:part/mods:extent/mods:end/text()}</span>
+                        ,<span lang="en">{$settings:SPACE}({fn:substring($entry/mods:relatedItem/mods:part/mods:date/text(),1,4)}): {$entry/mods:relatedItem/mods:part/mods:extent/mods:start/text()}–{$entry/mods:relatedItem/mods:part/mods:extent/mods:end/text()}</span>
                         )
             else
-               <span font-family="{$config:BiblioFont}">{$entry/mods:relatedItem/mods:part/mods:detail/mods:number/text(), $entry/mods:relatedItem/mods:part/mods:detail/text()}
+               <span lang="en">{$entry/mods:relatedItem/mods:part/mods:detail/mods:number/text(), $entry/mods:relatedItem/mods:part/mods:detail/text()}
                {
                    for $date in ($entry/mods:relatedItem/mods:part/mods:date)
                    let $corrected :=
@@ -287,8 +287,8 @@ declare function continuingHTML:format-articleinmonograph-host-continuing-webHTM
                             $corrected
                }
                </span>,
-               <span  font-family="{$config:BiblioFont}">. {$settings:SPACE}{$entry/mods:location/mods:url/text()}{$settings:SPACE}</span>,
-                <span font-family="{$config:BiblioFont}">(accessed{$settings:SPACE}
+               <span  lang="en">. {$settings:SPACE}{$entry/mods:location/mods:url/text()}{$settings:SPACE}</span>,
+                <span lang="en">(accessed{$settings:SPACE}
                {
                    for $date in ($entry//mods:originInfo/mods:dateCaptured)
                    let $corrected :=
@@ -313,14 +313,14 @@ declare function continuingHTML:reprint-format-articleinmonograph-host-continuin
     
     <span>{nameHTML:output-nameHTML($entry, "author")}</span>,
     <span>{nameHTML:output-nameHTML($entry, "editor")}</span>, 
-    <span font-family="{$config:BiblioFont}">"</span>,
+    <span lang="en">"</span>,
     <span>{titleHTML:format-titlenotitalicHTML($entry)}</span>,
-    <span font-family="{$config:BiblioFont}">"</span>,
-    <span font-family="{$config:BiblioFont}">{$settings:SPACE}</span>,
+    <span lang="en">"</span>,
+    <span lang="en">{$settings:SPACE}</span>,
             if (exists ($entry/mods:relatedItem/mods:titleInfo/@transliteration)) then
                     (
                 <i>{$entry/mods:relatedItem/mods:titleInfo[(@transliteration)]/mods:title/text()}{$settings:SPACE}</i>,
-                <span font-family="{$config:ChineseFont}">{$entry/mods:relatedItem/mods:titleInfo[@lang = ("zh", "ja", "ko")]/mods:title/text()},</span>
+                <span lang="zh">{$entry/mods:relatedItem/mods:titleInfo[@lang = ("zh", "ja", "ko")]/mods:title/text()},</span>
                     )
                 
             else
@@ -331,16 +331,16 @@ declare function continuingHTML:reprint-format-articleinmonograph-host-continuin
                         (
                             if (($entry/mods:relatedItem/mods:part/mods:detail/@type="volume") and ($entry/mods:relatedItem/mods:part/mods:detail/@type="no")) then 
                                 (
-                                <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:relatedItem/mods:part/mods:detail[@type="volume"]/text()}.{$entry/mods:relatedItem/mods:part/mods:detail[@type="no"]/text()}</span>
+                                <span lang="en">{$settings:SPACE}{$entry/mods:relatedItem/mods:part/mods:detail[@type="volume"]/text()}.{$entry/mods:relatedItem/mods:part/mods:detail[@type="no"]/text()}</span>
                                 )
                             else
                                 (
-                                <span font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:relatedItem/mods:part/mods:detail[@type="volume"]/text(),$entry/mods:relatedItem/mods:part/mods:detail[@type="no"]/text()}</span>   
+                                <span lang="en">{$settings:SPACE}{$entry/mods:relatedItem/mods:part/mods:detail[@type="volume"]/text(),$entry/mods:relatedItem/mods:part/mods:detail[@type="no"]/text()}</span>   
                                 )
-                        ,<span font-family="{$config:BiblioFont}">{$settings:SPACE}({fn:substring($entry/mods:relatedItem/mods:part/mods:date/text(),1,4)}): {$entry/mods:relatedItem/mods:part/mods:extent/mods:start/text()}–{$entry/mods:relatedItem/mods:part/mods:extent/mods:end/text()}</span>
+                        ,<span lang="en">{$settings:SPACE}({fn:substring($entry/mods:relatedItem/mods:part/mods:date/text(),1,4)}): {$entry/mods:relatedItem/mods:part/mods:extent/mods:start/text()}–{$entry/mods:relatedItem/mods:part/mods:extent/mods:end/text()}</span>
                         )
             else
-               <span font-family="{$config:BiblioFont}">{$entry/mods:relatedItem/mods:part/mods:detail/mods:number/text(), $entry/mods:relatedItem/mods:part/mods:detail/text()}
+               <span lang="en">{$entry/mods:relatedItem/mods:part/mods:detail/mods:number/text(), $entry/mods:relatedItem/mods:part/mods:detail/text()}
                {
                    for $date in ($entry/mods:relatedItem/mods:part/mods:date)
                    let $corrected :=
@@ -354,8 +354,8 @@ declare function continuingHTML:reprint-format-articleinmonograph-host-continuin
                             $corrected
                }
                </span>,
-               <span  font-family="{$config:BiblioFont}">. {$settings:SPACE}{$entry/mods:location/mods:url/text()}{$settings:SPACE}</span>,
-                <span font-family="{$config:BiblioFont}">(accessed{$settings:SPACE}
+               <span  lang="en">. {$settings:SPACE}{$entry/mods:location/mods:url/text()}{$settings:SPACE}</span>,
+                <span lang="en">(accessed{$settings:SPACE}
                {
                    for $date in ($entry//mods:originInfo/mods:dateCaptured)
                    let $corrected :=

@@ -90,7 +90,7 @@ declare function modsHTML:formatHTML($book as element(), $entries as element(mod
                                 border-color="white" border-width="1pt"
                                 padding-before="3pt" padding-after="2pt"
                                 padding-start="3pt" padding-end="2pt">
-                                <fo:block font-family="{$config:BiblioFont}" font-variant="small-caps" keep-together.within-page="always" space-before="2in" space-after="2in">
+                                <fo:block lang="en" font-variant="small-caps" keep-together.within-page="always" space-before="2in" space-after="2in">
                                  {$entry/mods:titleInfo[@type="reference"]/mods:title/text()}
                                              {
                                                 if ($foc:DEBUG) then
@@ -106,7 +106,7 @@ declare function modsHTML:formatHTML($book as element(), $entries as element(mod
                                 padding-before="3pt" padding-after="2pt"
                                 padding-start="3pt" padding-end="2pt">
                                 <fo:block keep-together.within-page="always" space-before="2in" space-after="2in">
-                                 {modsHTML:format-biblioHTML(util:expand($entry))}{if ($entry/mods:idno) then <fo:inline font-family="{$config:BiblioFont}">{$settings:SPACE}{$entry/mods:idno/text()}</fo:inline> else ()}
+                                 {modsHTML:format-biblioHTML(util:expand($entry))}{if ($entry/mods:idno) then <fo:inline lang="en">{$settings:SPACE}{$entry/mods:idno/text()}</fo:inline> else ()}
                                 </fo:block>
                               </fo:table-cell>
                             </fo:table-row>

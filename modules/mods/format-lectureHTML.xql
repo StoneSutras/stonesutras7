@@ -31,10 +31,10 @@ declare function lectureHTML:format-lectureHTML($entry as element(mods:mods)) {
     <span>{nameHTML:output-nameHTML($entry, "author")}</span>,
     <span>{nameHTML:output-nameHTML($entry, "editor")}</span>,
     <span>{nameHTML:output-nameHTML($entry, "translator")}</span>,
-    <span font-family="{$config:BiblioFont}">“</span>,
+    <span lang="en">“</span>,
     <span>{titleHTML:format-titlenotitalicHTML($entry)}</span>,
-    <span font-family="{$config:BiblioFont}">”</span>,
-    <span font-family="{$config:BiblioFont}">{$settings:SPACE}</span>,
-    <span font-family="{$config:BiblioFont}">{tei2fo:process-biblioHTML($entry/mods:note[@type="lecture"])}</span>,
+    <span lang="en">”</span>,
+    <span lang="en">{$settings:SPACE}</span>,
+    <span lang="en">{tei2fo:process-biblioHTML($entry/mods:note[@type="lecture"])}</span>,
     "."
 };

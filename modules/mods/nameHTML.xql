@@ -226,11 +226,11 @@ declare function nameHTML:mods-pennameHTML($name as element(mods:name)){
     return
          if (exists($pennametransliteration)) then
                                 (
-                                <span font-family="{$config:BiblioFont}">{($pennametransliteration/text()),($settings:SPACE)} <span font-family="{$config:ChineseFont}">{$penname/text()}</span></span>
+                                <span lang="en">{($pennametransliteration/text()),($settings:SPACE)} <span lang="zh">{$penname/text()}</span></span>
                                 )
                                 else
                                     (
-                                    <span font-family="{$config:BiblioFont}">{$penname/text()}</span>
+                                    <span lang="en">{$penname/text()}</span>
                                     )
 
 };
@@ -273,43 +273,43 @@ declare function nameHTML:name-posgt1HTML($name as element(mods:name)) {
                                         (
                                         if ($mads/mads:authority/@lang = "zh") then
                                             <span>
-                                                <span font-family="{$config:BiblioFont}">{
+                                                <span lang="en">{
                                                 (tei2fo:process-biblioHTML($corporatenametransliteration/ancestor::mads:variant[@transliteration="pinyin"]/mads:name/mads:namePart)),
                                                 ($settings:SPACE)
                                                 }
                                                 </span>
-                                                <span font-family="{$config:ChineseFont}">{($corporatename/text())}</span>
+                                                <span lang="zh">{($corporatename/text())}</span>
                                                 
                                             </span>
                                             
                                        else 
                                              if ($mads/mads:authority/@lang = "ja") then
                                             <span>
-                                                <span font-family="{$config:BiblioFont}">{
+                                                <span lang="en">{
                                                 (tei2fo:process-biblioHTML($corporatenametransliteration/ancestor::mads:variant[@transliteration="romaji"]/mads:name/mads:namePart)),
                                                 ($settings:SPACE)
                                                 }
                                                 </span>
-                                                <span font-family="{$config:ChineseFont}">{($corporatename/text())}</span>
+                                                <span lang="zh">{($corporatename/text())}</span>
                                             </span>
                                             else
                                                 <span>
-                                                <span font-family="{$config:BiblioFont}">{
+                                                <span lang="en">{
                                                 (tei2fo:process-biblioHTML($corporatenametransliteration/ancestor::mads:variant[@transliteration="mccunereischauer"]/mads:name/mads:namePart)),
                                                 ($settings:SPACE)
                                                 }
                                                 </span>
-                                                <span font-family="{$config:ChineseFont}">{($corporatename/text())}</span>
+                                                <span lang="zh">{($corporatename/text())}</span>
                                             </span>
                                         ),
                                         if ($corporatenametranslation) then
-                                                <span font-family="{$config:BiblioFont}">{($settings:SPACE),(tei2fo:process-biblioHTML($corporatenametranslation))}
+                                                <span lang="en">{($settings:SPACE),(tei2fo:process-biblioHTML($corporatenametranslation))}
                                                 </span>
                                                 else
                                                     ()
                                      )
                             else
-                                    (<span font-family="{$config:BiblioFont}">{($corporatename/text())}</span>)
+                                    (<span lang="en">{($corporatename/text())}</span>)
                             
                          
         else
@@ -317,14 +317,14 @@ declare function nameHTML:name-posgt1HTML($name as element(mods:name)) {
                             (  
                                 if ($mads/mads:authority/@lang = "sa") then
                                         (
-                                     <span font-family="{$config:BiblioFont}">{($mads/mads:authority[@lang = "sa"]//text()),($settings:SPACE),"(",($mads/mads:variant[@transliteration="pinyin"]/mads:name/mads:namePart/text()),($settings:SPACE)}</span>,
-                                             <span font-family="{$config:ChineseFont}">{($mads/mads:variant[@lang = "zh"]/mads:name/mads:namePart/text())}</span>, <span font-family="{$config:BiblioFont}">)</span>
+                                     <span lang="en">{($mads/mads:authority[@lang = "sa"]//text()),($settings:SPACE),"(",($mads/mads:variant[@transliteration="pinyin"]/mads:name/mads:namePart/text()),($settings:SPACE)}</span>,
+                                             <span lang="zh">{($mads/mads:variant[@lang = "zh"]/mads:name/mads:namePart/text())}</span>, <span lang="en">)</span>
                                         )
                                 else
                                 if  ($mads/mads:authority/@lang = ("zh", "ja", "ko")) then
                                     (
                                     if ($mads/mads:authority/@lang = "zh") then
-                                         <span font-family="{$config:BiblioFont}">{
+                                         <span lang="en">{
                                             ($familynametransliteration/ancestor::mads:variant[@transliteration="pinyin"]/mads:name/mads:namePart[@type="family"]/text()),
                                             ($settings:SPACE),
                                             ($givennametramsliteration/ancestor::mads:variant[@transliteration="pinyin"]/mads:name/mads:namePart[@type="given"]/text()),
@@ -332,29 +332,29 @@ declare function nameHTML:name-posgt1HTML($name as element(mods:name)) {
                                         </span>
                                     else 
                                         if ($mads/mads:authority/@lang = "ja") then
-                                        <span font-family="{$config:BiblioFont}">{
+                                        <span lang="en">{
                                             ($familynametransliteration/ancestor::mads:variant[@transliteration="romaji"]/mads:name/mads:namePart[@type="family"]/text()),
                                             ($settings:SPACE),
                                             ($givennametramsliteration/ancestor::mads:variant[@transliteration="romaji"]/mads:name/mads:namePart[@type="given"]/text()),
                                             ($settings:SPACE)}
                                         </span>
                                         else
-                                            (<span font-family="{$config:BiblioFont}">{
+                                            (<span lang="en">{
                                             ($familynametransliteration/ancestor::mads:variant[@transliteration="mccunereischauer"]/mads:name/mads:namePart[@type="family"]/text()),
                                             ($settings:SPACE),
                                             ($givennametramsliteration/ancestor::mads:variant[@transliteration="mccunereischauer"]/mads:name/mads:namePart[@type="given"]/text()),
                                             ($settings:SPACE)}
                                             </span>)
                                    ,
-                                    <span font-family="{$config:ChineseFont}">{($familyname/text()),($givenname/text())}</span>
+                                    <span lang="zh">{($familyname/text()),($givenname/text())}</span>
                                     ,
                                      
-                                    if ($familynamevariant/text() and $mads/mads:variant[@lang != ("zh", "ja", "ko")]/@type="expansion") then <span font-family="{$config:BiblioFont}">{($settings:SPACE),"[",($givennamevariant/text()),($settings:SPACE),($familynamevariant/text()), "]"}</span> else ()
+                                    if ($familynamevariant/text() and $mads/mads:variant[@lang != ("zh", "ja", "ko")]/@type="expansion") then <span lang="en">{($settings:SPACE),"[",($givennamevariant/text()),($settings:SPACE),($familynamevariant/text()), "]"}</span> else ()
                                     )
                                 else
                                     (
-                                    <span font-family="{$config:BiblioFont}">{($familyname/text())},{($settings:SPACE),($givenname/text())}</span>,
-                                if ($familynamevariantCJK/text() and $mads/mads:variant[@lang = ("zh", "ja", "ko")]/@type="expansion") then <span font-family="{$config:ChineseFont}">{($settings:SPACE),($familynamevariantCJK/text()),($givennamevariantCJK/text())}</span> else ()
+                                    <span lang="en">{($familyname/text())},{($settings:SPACE),($givenname/text())}</span>,
+                                if ($familynamevariantCJK/text() and $mads/mads:variant[@lang = ("zh", "ja", "ko")]/@type="expansion") then <span lang="zh">{($settings:SPACE),($familynamevariantCJK/text()),($givennamevariantCJK/text())}</span> else ()
                                     )
                             )
 };
@@ -380,42 +380,42 @@ declare function nameHTML:mads-name-posgt1HTML($mads as element(mads:mads)) {
                                         (
                                         if ($mads/mads:authority/@lang = "zh") then
                                             <span>
-                                                <span font-family="{$config:BiblioFont}">{
+                                                <span lang="en">{
                                                 (tei2fo:process-biblioHTML($corporatenametransliteration/ancestor::mads:variant[@transliteration="pinyin"]/mads:name/mads:namePart)),
                                                 ($settings:SPACE)
                                                 }
                                                 </span>
-                                                <span font-family="{$config:ChineseFont}">{($corporatename/text())}</span>
+                                                <span lang="zh">{($corporatename/text())}</span>
                                             </span>
                                             
                                         else 
                                              if ($mads/mads:authority/@lang = "ja") then
                                             <span>
-                                                <span font-family="{$config:BiblioFont}">{
+                                                <span lang="en">{
                                                 (tei2fo:process-biblioHTML($corporatenametransliteration/ancestor::mads:variant[@transliteration="romaji"]/mads:name/mads:namePart)),
                                                 ($settings:SPACE)
                                                 }
                                                 </span>
-                                                <span font-family="{$config:ChineseFont}">{($corporatename/text())}</span>
+                                                <span lang="zh">{($corporatename/text())}</span>
                                             </span>
                                             else
                                                 <span>
-                                                <span font-family="{$config:BiblioFont}">{
+                                                <span lang="en">{
                                                 (tei2fo:process-biblioHTML($corporatenametransliteration/ancestor::mads:variant[@transliteration="mccunereischauer"]/mads:name/mads:namePart)),
                                                 ($settings:SPACE)
                                                 }
                                                 </span>
-                                                <span font-family="{$config:ChineseFont}">{($corporatename/text())}</span>
+                                                <span lang="zh">{($corporatename/text())}</span>
                                             </span>
                                         ),
                                         if ($corporatenametranslation) then
-                                                <span font-family="{$config:BiblioFont}">{($settings:SPACE),"(",(tei2fo:process-biblioHTML($corporatenametranslation)),")"}
+                                                <span lang="en">{($settings:SPACE),"(",(tei2fo:process-biblioHTML($corporatenametranslation)),")"}
                                                 </span>
                                                 else
                                                     ()
                                      )
                             else
-                                    (<span font-family="{$config:BiblioFont}">{($corporatename/text())}</span>)
+                                    (<span lang="en">{($corporatename/text())}</span>)
                             
                          
         else
@@ -425,7 +425,7 @@ declare function nameHTML:mads-name-posgt1HTML($mads as element(mads:mads)) {
                                 if  ($mads/mads:authority/@lang = ("zh", "ja", "ko")) then
                                    (
                                     if ($mads/mads:authority/@lang = "zh") then
-                                         <span font-family="{$config:BiblioFont}">{
+                                         <span lang="en">{
                                             ($familynametransliteration/ancestor::mads:variant[@transliteration="pinyin"]/mads:name/mads:namePart[@type="family"]/text()),
                                             ($settings:SPACE),
                                             ($givennametramsliteration/ancestor::mads:variant[@transliteration="pinyin"]/mads:name/mads:namePart[@type="given"]/text()),
@@ -433,27 +433,27 @@ declare function nameHTML:mads-name-posgt1HTML($mads as element(mads:mads)) {
                                         </span>
                                     else 
                                         if ($mads/mads:authority/@lang = "ja") then
-                                        <span font-family="{$config:BiblioFont}">{
+                                        <span lang="en">{
                                             ($familynametransliteration/ancestor::mads:variant[@transliteration="romaji"]/mads:name/mads:namePart[@type="family"]/text()),
                                             ($settings:SPACE),
                                             ($givennametramsliteration/ancestor::mads:variant[@transliteration="romaji"]/mads:name/mads:namePart[@type="given"]/text()),
                                             ($settings:SPACE)}
                                         </span>
                                         else
-                                            (<span font-family="{$config:BiblioFont}">{
+                                            (<span lang="en">{
                                             ($familynametransliteration/ancestor::mads:variant[@transliteration="mccunereischauer"]/mads:name/mads:namePart[@type="family"]/text()),
                                             ($settings:SPACE),
                                             ($givennametramsliteration/ancestor::mads:variant[@transliteration="mccunereischauer"]/mads:name/mads:namePart[@type="given"]/text()),
                                             ($settings:SPACE)}
                                             </span>)
                                     ,
-                                    <span font-family="{$config:ChineseFont}">{($familyname/text()),($givenname/text())}</span>
+                                    <span lang="zh">{($familyname/text()),($givenname/text())}</span>
                                     )
                                 else
                                     (
                                         
-                                    <span font-family="{$config:BiblioFont}">{($givenname/text()), ($settings:SPACE),($familyname/text())}</span>,
-                                if ($familynamevariantCJK/text() and $mads/mads:variant[@lang = ("zh", "ja", "ko")]/@type="expansion") then <span font-family="{$config:ChineseFont}">{($settings:SPACE),($familynamevariantCJK/text()),($givennamevariantCJK/text())}</span> else ()
+                                    <span lang="en">{($givenname/text()), ($settings:SPACE),($familyname/text())}</span>,
+                                if ($familynamevariantCJK/text() and $mads/mads:variant[@lang = ("zh", "ja", "ko")]/@type="expansion") then <span lang="zh">{($settings:SPACE),($familynamevariantCJK/text()),($givennamevariantCJK/text())}</span> else ()
                                     )
                             )
 };
@@ -492,24 +492,24 @@ declare function nameHTML:mods-nameHTML($name as element(mods:name)){
         if ($name/@type="corporate") then
                             ( 
                             if (exists($name/mods:namePart/@transliteration)) then
-                            (<span font-family="{$config:BiblioFont}">{($corporatenametransliteration/text())}</span>,
-                            <span font-family="{$config:ChineseFont}">
-                                        {($corporatename/text()), if ($name/mods:namePart/@lang="en") then (<span font-family="{$config:BiblioFont}">{$settings:SPACE}[{$corporatenametranslation/text()}]</span>) else ()}
+                            (<span lang="en">{($corporatenametransliteration/text())}</span>,
+                            <span lang="zh">
+                                        {($corporatename/text()), if ($name/mods:namePart/@lang="en") then (<span lang="en">{$settings:SPACE}[{$corporatenametranslation/text()}]</span>) else ()}
                             NO-MADS!</span>)
                             else
-                            (<span font-family="{$config:BiblioFont}">{($corporatename/text())}NO-MADS!</span>)
+                            (<span lang="en">{($corporatename/text())}NO-MADS!</span>)
                             )
                             
         else
     
                             (   if (exists($name/mods:namePart/@transliteration)) then
                                 (
-                                <span font-family="{$config:BiblioFont}">{($familynametransliteration/text()),($settings:SPACE),($givennametramsliteration/text())}NO-MADS!</span>,
-                                <span font-family="{$config:ChineseFont}">{($familyname/text()),($givenname/text())}NO-MADS!</span>
+                                <span lang="en">{($familynametransliteration/text()),($settings:SPACE),($givennametramsliteration/text())}NO-MADS!</span>,
+                                <span lang="zh">{($familyname/text()),($givenname/text())}NO-MADS!</span>
                                 )
                                 else
                                     (
-                                    <span font-family="{$config:BiblioFont}">{($familyname/text()),($settings:SPACE),($givenname/text())}NO-MADS!</span>
+                                    <span lang="en">{($familyname/text()),($settings:SPACE),($givenname/text())}NO-MADS!</span>
                                     )
                             )
 
@@ -529,24 +529,24 @@ declare function nameHTML:mods-name-posgt1HTML($name as element(mods:name)){
         if ($name/@type="corporate") then
                             ( 
                             if (exists($name/mods:namePart/@transliteration)) then
-                            (<span font-family="{$config:BiblioFont}">{($corporatenametransliteration/text())}</span>,
-                            <span font-family="{$config:ChineseFont}">
-                                        {($corporatename/text()), if ($name/mods:namePart/@lang="en") then (<span font-family="{$config:BiblioFont}">{$settings:SPACE}[{$corporatenametranslation/text()}]</span>) else ()}
+                            (<span lang="en">{($corporatenametransliteration/text())}</span>,
+                            <span lang="zh">
+                                        {($corporatename/text()), if ($name/mods:namePart/@lang="en") then (<span lang="en">{$settings:SPACE}[{$corporatenametranslation/text()}]</span>) else ()}
                             NO-MADS!</span>)
                             else
-                            (<span font-family="{$config:BiblioFont}">{($corporatename/text())}NO-MADS!</span>)
+                            (<span lang="en">{($corporatename/text())}NO-MADS!</span>)
                             )
                             
         else
     
                             (   if (exists($name/mods:namePart/@transliteration)) then
                                 (
-                                <span font-family="{$config:BiblioFont}">{($familynametransliteration/text()),($settings:SPACE),($givennametramsliteration/text())}NO-MADS!</span>,
-                                <span font-family="{$config:ChineseFont}">{($familyname/text()),($settings:SPACE),($givenname/text())}NO-MADS!</span>
+                                <span lang="en">{($familynametransliteration/text()),($settings:SPACE),($givennametramsliteration/text())}NO-MADS!</span>,
+                                <span lang="zh">{($familyname/text()),($settings:SPACE),($givenname/text())}NO-MADS!</span>
                                 )
                                 else
                                     (
-                                    <span font-family="{$config:BiblioFont}">{($givenname/text()),($settings:SPACE),($familyname/text())}NO-MADS!</span>
+                                    <span lang="en">{($givenname/text()),($settings:SPACE),($familyname/text())}NO-MADS!</span>
                                     )
                             )
 
