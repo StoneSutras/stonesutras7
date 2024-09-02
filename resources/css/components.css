@@ -12,3 +12,7 @@
 .table-grid [data-column-id="title"] {
     font-variant: small-caps;
 }
+
+.table-grid [data-column-id="copy"] {
+    font-size: 0;
+}
