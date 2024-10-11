@@ -295,13 +295,13 @@ ul.variants {
 }
 
 .home .by-province ul {
-    padding-bottom: 30px;
+    padding-bottom: 0px;
     padding-left: 0;
 }
 .home .by-province li {
     list-style: none;
     padding: 0;
-    margin: 0 0 20px 0;
+    margin: 0 0 10px 0;
 }
 .home .by-province ul {
     margin-top: 0;
