@@ -370,6 +370,12 @@ ul.variants {
     margin: 0 auto;
 }
 
+.article p {
+    margin-top: -5px;
+    margin-bottom: 2; 
+    line-height: 0.8; 
+}
+
 .inscriptions main {
     display: grid;
     margin: 0 auto;
