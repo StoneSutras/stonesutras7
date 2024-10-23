@@ -128,9 +128,9 @@
         </model>
                 </elementSpec>
                 <elementSpec ident="date" mode="add">
-                    <model behaviour="block">
-            <param name="gregorian" value="@gregorian"/>
-            <param name="original" value="@original"/>
+                    <model predicate="@given != '' or gregorian != ''" behaviour="block">
+            <param name="gregorian" value="(gregorian[@type=&#34;case-date-point&#34;])"/>
+            <param name="original" value="(given[@source])"/>
             <pb:template xmlns="" xml:space="preserve">
                             <h3>斷代 Date</h3>
                             <table>
