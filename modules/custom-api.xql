@@ -391,22 +391,28 @@ declare function api:bibliography($request as map(*)) {
             for $ref in $precomputed-references
             let $biblioID := fn:string($ref/@id)
             let $ref_title := fn:string($ref/@title)
+            let $full_reference := fn:string($ref/full_reference)
+            let $copy := fn:string($ref/copy)
             where contains(lower-case($ref), lower-case($query))
             order by $biblioID
             return map {
                 "biblioID": $biblioID,
                 "title": <a href="bibliography-details.html?id={$biblioID}" target="_blank">{$ref_title}</a>,
-                "full_reference": fn:string($ref)
+                "full_reference": $full_reference,
+                "copy": $copy
             }
         else
             for $ref in $precomputed-references
             let $biblioID := fn:string($ref/@id)
             let $ref_title := fn:string($ref/@title)
+            let $full_reference := fn:string($ref/full_reference)
+            let $copy := fn:string($ref/copy)
             order by $biblioID
             return map {
                 "biblioID": $biblioID,
                 "title": <a href="bibliography-details.html?id={$biblioID}" target="_blank">{$ref_title}</a>,
-                "full_reference": fn:string($ref)
+                "full_reference": $full_reference,
+                "copy": $copy
             }
     
     let $sorted-references := subsequence($filtered-references, $start, $limit)
@@ -416,7 +422,6 @@ declare function api:bibliography($request as map(*)) {
         "results": array { $sorted-references }
     }
 };
-
 
 declare function api:bibliography-details($request as map(*)) {
     let $biblioID := $request?parameters?id
