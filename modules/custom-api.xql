@@ -105,7 +105,17 @@ declare function api:inscription-table($request as map(*)) {
                 collection($config:data-catalog)/catalog:object[ft:query(., "site:* AND type:inscription", query:options(()))]
         let $nil := session:set-attribute($config:session-prefix || ".inscriptions", $catalogs)
         for $catalog in $catalogs
-        order by $catalog/@xml:id
+        let $catalogId := analyze-string($catalog/@xml:id, '^([^\d]+)(\d*)\.?(\d*)')
+        order by 
+            $catalogId//fn:group[@nr='1'],
+            if ($catalogId//fn:group[@nr='2']/text()) then
+                number($catalogId//fn:group[@nr='2'])
+            else
+                0,
+            if ($catalogId//fn:group[@nr='3']/text()) then
+                number($catalogId//fn:group[@nr='3'])
+            else
+                0
         let $siteId := ft:field($catalog, "site")
         let $site := collection($config:data-catalog)/id($siteId)[@type=("site", "cave")]
         let $title := (
