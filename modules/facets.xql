@@ -28,8 +28,7 @@ declare function facets:sort($config as map(*), $lang as xs:string?, $facets as 
         if (exists($facets)) then
             for $key in map:keys($facets)
             let $value := map:get($facets, $key)
-            let $sortKey := facets:translate($config, $lang, $key)
-            order by $sortKey ascending
+            order by $key
             return
                 map { $key: $value }
         else
