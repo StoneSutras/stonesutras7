@@ -1,5 +1,5 @@
 <?teipublisher output="web"?>
-<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:pb="http://teipublisher.com/1.0" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:lang="en">
+<TEI xmlns:pb="http://teipublisher.com/1.0" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
     <teiHeader>
         <fileDesc>
             <titleStmt>
@@ -70,7 +70,7 @@
                             </pb:template>
             </model>
             <model behaviour="inline">
-                <param name="content" value="(physicalDescription, location)"/>
+                <param name="content" value="(header/date, physicalDescription, location)"/>
             </model>
         </modelSequence>
                 </elementSpec>
@@ -125,6 +125,25 @@
             <outputRendition xml:space="preserve">
             font-family: "Oswald","Noto Sans", Verdana,"Helvetica",sans-serif; color: #a69933;
             </outputRendition>
+        </model>
+                </elementSpec>
+                <elementSpec ident="date" mode="add">
+                    <model predicate="@given != '' and gregorian != ''" behaviour="block">
+            <param name="gregorian" value="(gregorian[@type=&#34;case-date-point&#34;])"/>
+            <param name="original" value="(given[@source])"/>
+            <pb:template xmlns="" xml:space="preserve">
+                            <h3>斷代 Date</h3>
+                            <table>
+                                <tr>
+                                    <td>公曆 Gregorian:</td>
+                                    <td>[[gregorian]] </td>
+                                </tr>
+                                <tr>
+                                    <td>原始 Original:</td>
+                                    <td>[[original]]</td>
+                                </tr>
+                            </table>
+    </pb:template>
         </model>
                 </elementSpec>
                 <elementSpec ident="physicalDescription" mode="add">
