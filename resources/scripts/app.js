@@ -45,18 +45,21 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
     pbEvents.subscribe('pb-leaflet-marker-click', null, (ev) => {
+        const id = ev.detail.element.id;
         const label = ev.detail.element.getAttribute('label'); // get the label
         const formattedLabel = label.replace(/\s+/g, '_'); // replace " " with "_"
-        let url;
-    
-        //determine whether we get a link of site or inscription (by detecting the "_")
-        if (formattedLabel.includes('_')) {
-            url = `${config.app}/inscriptions/${formattedLabel}`; // if there is "_", use the link of inscriptions
+
+        // Construct URLs
+        const site_url = `${config.app}/sites/${id}`;
+        const inscription_url = `${config.app}/inscriptions/${formattedLabel}`; // format inscription URL
+
+        // Redirect logic: if `id` is empty, use `inscription_url`; otherwise, use `site_url`
+        if (id) {
+            url = site_url;
         } else {
-            url = `${config.app}/sites/${formattedLabel}`; // if not, use sites
+            url = inscription_url;
         }
-    
-        window.location = url; 
+        window.location = url;
     });
 
     let svgPath;
