@@ -28,6 +28,17 @@ declare function mapping:catalog($root as node(), $userParams as map(*)) {
         collection($config:data-catalog)/id($id)
 };
 
+declare function mapping:description($root as node(), $userParams as map(*)) {
+    let $id := root($root)//tei:text/@xml:id
+    let $catalog := collection($config:data-catalog)/id($id)
+    let $description := $catalog//c:description/@src
+    return
+        if ($description) then
+            doc($config:data-catalog || "/" || $description)
+        else
+            ()
+};
+
 declare function mapping:site($root as node(), $userParams as map(*)) {
     let $id := root($root)//tei:text/@xml:id
     let $catalog := collection($config:data-catalog)/id(substring-after($id, 'Site_'))

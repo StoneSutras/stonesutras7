@@ -96,10 +96,15 @@
                                 <pb-param name="data-root" value="${data-root}/" data-template="pages:parse-params"/>
                             </pb-view>
                             <pb-svg slot="page" subscribe="layout"/>
-                            <pb-view id="discussion" slot="page" src="document1" odd="catalog" view="single" map="catalog" disable-history="">
-                                <pb-param name="mode" value="discussion"/>
-                                <pb-param name="data-root" value="${data-root}/" data-template="pages:parse-params"/>
-                            </pb-view>
+                            <div id="discussion" slot="page">    
+                                <pb-view src="document1" odd="catalog" view="single" map="catalog" disable-history="">
+                                    <pb-param name="mode" value="discussion"/>
+                                    <pb-param name="data-root" value="${data-root}/" data-template="pages:parse-params"/>
+                                </pb-view>
+                                <pb-view src="document1" odd="stonesutras" view="single" map="description" disable-history="">
+                                    <pb-param name="data-root" value="${data-root}/" data-template="pages:parse-params"/>
+                                </pb-view>
+                            </div>
                             <div id="tify" slot="page" style="height: 100%"></div>
                         </pb-tabs>
                     </main>
