@@ -128,9 +128,11 @@
         </model>
                 </elementSpec>
                 <elementSpec ident="date" mode="add">
-                    <model predicate="@given != '' and gregorian != ''" behaviour="block">
+                    <model predicate="gregorian/point/text() != &#34;&#34;" behaviour="block">
+            <desc>with gregorian date</desc>
             <param name="gregorian" value="(gregorian[@type=&#34;case-date-point&#34;])"/>
-            <param name="original" value="(given[@source])"/>
+            <param name="original" value="original"/>
+            <param name="given" value="given"/>
             <pb:template xmlns="" xml:space="preserve">
                             <h3>斷代 Date</h3>
                             <table>
@@ -139,9 +141,41 @@
                                     <td>[[gregorian]] </td>
                                 </tr>
                                 <tr>
-                                    <td>原始 Original:</td>
                                     <td>[[original]]</td>
+                                    <td>[[given]]</td>
                                 </tr>
+                            </table>
+    </pb:template>
+        </model>
+                    <model predicate="gregorian/range/@lower != &#34;&#34;" behaviour="block">
+            <desc>with gregorian range</desc>
+            <param name="lower" value="gregorian/range/@lower"/>
+            <param name="original" value="original"/>
+            <param name="upper" value="gregorian/range/@upper"/>
+            <param name="given" value="given"/>
+            <pb:template xmlns="" xml:space="preserve">
+                            <h3>斷代 Date</h3>
+                            <table>
+                                <tr>
+                                    <td>公曆 Gregorian:</td>
+                                    <td>[[lower]] - [[upper]] </td>
+                                </tr>
+                                <tr>
+                                    <td>[[original]]</td>
+                                  <td>[[given]]</td>
+                                </tr>
+                            </table>
+    </pb:template>
+        </model>
+                    <model behaviour="block">
+            <desc>without original date</desc>
+            <param name="given" value="given"/>
+            <param name="original" value="original"/>
+            <pb:template xmlns="" xml:space="preserve">
+                            <h3>斷代 Date</h3>
+                            <table>                                
+                                [[original]]
+                                [[given]]
                             </table>
     </pb:template>
         </model>
@@ -317,6 +351,33 @@
                 </elementSpec>
                 <elementSpec ident="tei:foreign">
                     <model behaviour="inline"/>
+                </elementSpec>
+            <elementSpec ident="original" mode="add">
+                    <model predicate="text() != &#34;&#34;" behaviour="pass-through">
+            <pb:template xmlns="" xml:space="preserve"><tr>
+    <td>原始 Original:</td>
+    <td>[[content]]</td>
+</tr></pb:template>
+        </model>
+                </elementSpec>
+                <elementSpec ident="given" mode="add">
+                    <model predicate="@source != &#34;&#34;" behaviour="pass-through">
+            <param name="source" value="@source"/>
+            <pb:template xmlns="" xml:space="preserve"><tr>
+    <td>給定 Given:</td>
+    <td>[[content]]</td>
+</tr>
+<tr>
+    <td>來源 Souce:</td>
+    <td>[[source]]</td>
+</tr></pb:template>
+        </model>
+                    <model predicate="text()" behaviour="pass-through">
+            <pb:template xmlns="" xml:space="preserve"><tr>
+    <td>給定 Given:</td>
+    <td>[[content]]</td>
+</tr></pb:template>
+        </model>
                 </elementSpec>
             </schemaSpec>
         </body>
