@@ -169,6 +169,12 @@
         </model>
                 </elementSpec>
     <elementSpec ident="div" mode="change">
+                    <model predicate="$parameters?mode='toc' and parent::body" behaviour="block" cssClass="toc">
+            <param name="content" value="./div"/>
+        </model>
+                    <model predicate="$parameters?mode='toc'" behaviour="block">
+            <param name="content" value="(./head, ./div)"/>
+        </model>
                     <model predicate="@type='title_page'" behaviour="block">
             <outputRendition xml:space="preserve">
             border: 1px solid black; padding: 5px;
@@ -179,7 +185,10 @@
             <param name="class" value="if (starts-with($parameters?root//text/@xml:id, 'Site_')) then 'site' else ()"/>
             <pb:template xmlns="" xml:space="preserve"><div lang="[[lang]]" class="[[class]]">[[content]]</div></pb:template>
         </model>
-                    <model behaviour="block"/>
+                    <model behaviour="pass-through">
+            <param name="id" value="generate-id(.)"/>
+            <pb:template xmlns="" xml:space="preserve"><div id="[[id]]">[[content]]</div></pb:template>
+        </model>
                 </elementSpec>
     <elementSpec ident="figure" mode="change">
                     <model behaviour="omit">
@@ -225,6 +234,11 @@
         </model>
                 </elementSpec>
     <elementSpec ident="head" mode="change">
+                    <model predicate="$parameters?mode = 'toc'" behaviour="heading">
+            <param name="id" value="generate-id(parent::div)"/>
+            <param name="level" value="count(ancestor::div) + 1"/>
+            <pb:template xmlns="" xml:space="preserve"><pb-link hash="[[id]]" emit="transcription">[[content]]</pb-link></pb:template>
+        </model>
                     <model predicate="$parameters?mode='articles'" behaviour="heading">
             <param name="level" value="3"/>
         </model>
@@ -334,9 +348,11 @@
             
             
             
+            
             color: var(--bss-color-gold);
 padding-left: .5em;
 padding-right: .5em;
+            
             
             
             
@@ -383,7 +399,7 @@ padding-right: .5em;
                     <model predicate="starts-with(@target, 'note_')" behaviour="omit"/>
                     <model predicate="@type=('infra', 'footnote', 'infrafootnote', 'infrafootnote_zh')" behaviour="pass-through">
             <param name="target" value="@target"/>
-            <pb:template xmlns="" xml:space="preserve"><pb-link xml-id="[[target]]">&#x1F4DA;</pb-link></pb:template>
+            <pb:template xmlns="" xml:space="preserve"><pb-link xml-id="[[target]]">📚</pb-link></pb:template>
         </model>
                     <model predicate="id(@target, root($parameters?root))" behaviour="pass-through">
             <param name="figno" value="count(id(@target, root($parameters?root))/preceding::figure) + 1"/>
@@ -426,8 +442,10 @@ padding-right: .5em;
             
             
             
+            
             margin-left: 1em; 
 font-family: var(--bss-serif-font-family);
+            
             
             
             
@@ -577,7 +595,8 @@ font-family: var(--bss-serif-font-family);
             <pb:template xmlns="" xml:space="preserve"><pb-popover class="witness" remote="https://sutras.adw.uni-heidelberg.de/exist/apps/stonepub/modules/bibliohtml.xql?id=[[target]]"><span>[[ref]][[content]]</span></pb-popover></pb:template>
         </model>
                 </elementSpec>
-</schemaSpec>
+<elementSpec ident="TEI" mode="change"/>
+            </schemaSpec>
         </body>
     </text>
 </TEI>

@@ -78,17 +78,13 @@
                         </app-toolbar>
                     </app-header>
                     <main>
-                        <pb-navigation direction="backward" unit="page" emit="transcription"
-                            subscribe="transcription">
-                            <paper-fab icon="icons:chevron-left"/>
-                        </pb-navigation>
+                        <pb-view src="site" view="single" use-language="" append-footnotes="append-footnotes"
+                            subscribe="transcription" map="language">
+                            <pb-param name="mode" value="toc"/>
+                        </pb-view>
                         <pb-view src="site" view="single" use-language="" append-footnotes="append-footnotes"
                             subscribe="transcription" emit="transcription" map="language">
                         </pb-view>
-                        <pb-navigation direction="forward" unit="page" emit="transcription"
-                            subscribe="transcription">
-                            <paper-fab icon="icons:chevron-right"/>
-                        </pb-navigation>
                     </main>
                 </app-header-layout>
             </app-drawer-layout>
