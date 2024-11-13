@@ -366,10 +366,6 @@ ul.variants {
     column-gap: 40px;
 }
 
-.article pb-view {
-    margin: 0 auto;
-}
-
 .article p {
     margin-top: -5px;
     margin-bottom: 2; 
@@ -386,4 +382,14 @@ ul.variants {
 
 .bibliography main {
     margin: 0 auto;
+}
+
+.article main {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: center;
+}
+
+.article pb-view:part(content) {
+    scroll-padding-top: 128px;
 }
