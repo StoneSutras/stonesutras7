@@ -1,5 +1,5 @@
 <?teipublisher output="web"?>
-<TEI xmlns:pb="http://teipublisher.com/1.0" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:pb="http://teipublisher.com/1.0" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:lang="en">
     <teiHeader>
         <fileDesc>
             <titleStmt>
@@ -270,11 +270,11 @@
                 <elementSpec ident="references">
                     <model behaviour="list" cssClass="discussion">
             <param name="type" value="'custom'"/>
-            <param name="content" value="ref[@value='discussion']"/>
+            <param name="content" value="ref[@value=('discussion', 'epigraphic', 'modern') or @type=('discussion', 'epigraphic', 'modern')]"/>
         </model>
                 </elementSpec>
                 <elementSpec ident="ref">
-                    <model predicate="@value='discussion'" behaviour="template">
+                    <model predicate="@value='discussion' or @type=('epigrapic', 'modern')" behaviour="template">
             <param name="sigle" value="let $target := @xlink:href return (collection($global:data-root || '/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']/string(), '???')[1] =&gt; normalize-space()"/>
             <param name="pages" value="pages/string()"/>
             <param name="content" value="(note[@*:lang='zh'], head((note[@*:lang='en'], note[not(@*:lang)])))"/>
