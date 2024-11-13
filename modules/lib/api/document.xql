@@ -558,13 +558,16 @@ declare function dapi:get-collection($data) {
 };
 
 declare %private function dapi:extract-footnotes($html as element()*) {
-        map {
+    map {
         "footnotes": $html/div[@class="footnotes"],
         "content":
-            element { node-name($html) } {
-                $html/@*,
-                $html/node() except $html/div[@class="footnotes"]
-            }
+            if ($html) then
+                element { node-name($html) } {
+                    $html/@*,
+                    $html/node() except $html/div[@class="footnotes"]
+                }
+            else
+                ()
     }
 };
 
