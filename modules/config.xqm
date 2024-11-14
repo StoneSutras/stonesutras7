@@ -27,7 +27,7 @@ declare namespace c = "http://exist-db.org/ns/catalog";
  : If a version is given, the components will be loaded from a public CDN.
  : This is recommended unless you develop your own components.
  :)
-declare variable $config:webcomponents :="2.23.2";
+declare variable $config:webcomponents :="2.24.4";
 
 (:~
  : CDN URL to use for loading webcomponents. Could be changed if you created your
@@ -172,12 +172,17 @@ declare variable $config:catalog-facets := [
         "heading": "facets.province",
         "max": 5,
         "hierarchical": false(),
-        "output": function($label) {
-            switch($label)
-                case "Shandong" return "山東Shandong"
-                case "Sichuan" return "四川Sichuan"
-                case "Shaanxi" return "陝西Shaanxi"
-                default return $label
+        "output": function($label, $lang) {
+            let $lang := replace($lang, "^([^_]+)_.*$", "$1")
+            return
+                if ($lang = "en") then
+                    $label
+                else
+                    switch($label)
+                        case "Shandong Province" return "山東省"
+                        case "Sichuan Province" return "四川省"
+                        case "Shaanxi Province" return "陝西省"
+                        default return $label
         }
     },
     map {
