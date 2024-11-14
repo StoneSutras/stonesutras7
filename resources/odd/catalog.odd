@@ -325,7 +325,7 @@
                 <elementSpec ident="tei:ref" mode="add">
                     <model predicate="@type='biblio'" behaviour="link">
             <param name="content" value="let $target := @target return collection($global:data-root || '/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']/string()"/>
-            <param name="link" value="@target"/>
+            <param name="link" value="'../bibliography.html?search=' || (let $target := @target return collection($global:data-root || '/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']/string())"/>
             <outputRendition xml:space="preserve">
             font-variant: small-caps;
             </outputRendition>
