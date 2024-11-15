@@ -59,7 +59,10 @@
             <param name="content" value="header"/>
             <pb:set-param name="site" value="let $id := @xml:id return   collection($global:data-root || '/catalog')/object[.//link[@type='inscription']/@xlink:href=$id]"/>
         </model>
-                    <model predicate="$parameters?mode='discussion'" behaviour="block">
+                    <model predicate="$parameters?mode='discussion'" behaviour="block" cssClass="discussion">
+            <param name="content" value="references/ref[@value=('discussion') or @type=('discussion')]"/>
+        </model>
+                    <model predicate="$parameters?mode='references'" behaviour="block">
             <param name="content" value="references"/>
         </model>
                     <modelSequence>
@@ -229,7 +232,29 @@
                 </elementSpec>
                 <elementSpec ident="location" mode="add">
                     <model behaviour="block">
-            <param name="content" value="(coordinates[@srsName=&#34;EPSG:4326&#34;])"/>
+            <param name="latitude" value="tokenize(//coordinates[@srsName=&#34;EPSG:4326&#34;], '\s*,\s*')[2]"/>
+            <param name="azimuth" value="@azimuth/string()"/>
+            <param name="zenith" value="@zenith/string()"/>
+            <param name="slope" value="@slope/string()"/>
+            <param name="longitude" value="tokenize(//coordinates[@srsName=&#34;EPSG:4326&#34;], '\s*,\s*')[1]"/>
+            <param name="ident" value="translate(ancestor::object/@xml:id, '_', ' ')"/>
+            <pb:template xmlns="" xml:space="preserve">
+                            <h3>石面傾斜度 Inclination of Surface</h3>
+                            <table>
+                                <tr>
+                                    <td>方位角 Azimuth angle:</td>
+                                    <td>[[azimuth]] °</td>
+                                </tr>
+                                <tr>
+                                    <td>曲面法綫天頂角 Zenith angle of surface normal:</td>
+                                    <td>[[zenith]]°</td>
+                                </tr>
+                                <tr>
+                                    <td>曲面法綫坡角 Slope angle of surface normal:</td>
+                                    <td>[[slope]]°</td>
+                                </tr>
+                            </table>
+                            <pb-geolocation latitude="[[latitude]]" longitude="[[longitude]]" label="[[ident]]" emit="catalog"/></pb:template>
         </model>
                 </elementSpec>
                 <elementSpec ident="coordinates" mode="add">
@@ -302,20 +327,57 @@
         </model>
                 </elementSpec>
                 <elementSpec ident="references">
-                    <model behaviour="list" cssClass="discussion">
-            <param name="type" value="'custom'"/>
-            <param name="content" value="ref[@value=('discussion', 'epigraphic', 'modern') or @type=('discussion', 'epigraphic', 'modern')]"/>
+                    <model behaviour="block">
+            <param name="rubbing" value="rubbing"/>
+            <param name="illustration" value="ref[@value='illustration']"/>
+            <param name="transcription" value="ref[@value='transcription']"/>
+            <param name="taisho" value="ref[@type=('taisho')]"/>
+            <pb:template xmlns="" xml:space="preserve"><h2>參考資料/References </h2>
+<table>
+  <tr>
+    <td>
+      <h3>拓本 Rubbings </h3>
+    </td>
+  </tr>
+  <td>[[rubbing]]</td>
+  <tr>
+    <td>
+      <h3>圖示 Illustrations</h3>
+    </td>
+  </tr>
+    <td>[[illustration]]</td>
+  <tr>
+    <td><h3>録文 Transcriptions</h3></td>
+  </tr>
+    <td>[[transcription]]</td>
+  <tr>
+    <td><h3>大正藏 Taishō</h3></td>
+  </tr>
+    <td>[[taisho]]</td>
+
+</table>
+</pb:template>
         </model>
                 </elementSpec>
                 <elementSpec ident="ref">
-                    <model predicate="@value='discussion' or @type=('epigrapic', 'modern')" behaviour="template">
+                    <model predicate="@value='discussion' or @type='discussion'" behaviour="template">
+            <param name="sigle" value="let $target := @xlink:href return (collection($global:data-root || '/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']/string(), '???')[1] =&gt; normalize-space()"/>
+            <param name="pages" value="pages/string()"/>
+            <param name="content" value="(note[@*:lang='zh'], head((note[@*:lang='en'], note[not(@*:lang)])))"/>
+            <param name="target" value="ref[@xlink:href]"/>
+            <pb:template xmlns="" xml:space="preserve"><dt>
+  <pb-popover placement="right" remote="https://sutras.adw.uni-heidelberg.de/exist/apps/stonepub/modules/bibliohtml.xql?id=[[target]]"><span class="sigle">[[sigle]]</span></pb-popover>, [[pages]]</dt>
+<dd>[[content]]</dd></pb:template>
+        </model>
+                    <model behaviour="template">
             <param name="sigle" value="let $target := @xlink:href return (collection($global:data-root || '/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']/string(), '???')[1] =&gt; normalize-space()"/>
             <param name="pages" value="pages/string()"/>
             <param name="content" value="(note[@*:lang='zh'], head((note[@*:lang='en'], note[not(@*:lang)])))"/>
             <param name="target" value="@xlink:href"/>
             <pb:template xmlns="" xml:space="preserve"><dt>
   <pb-popover placement="right" remote="https://sutras.adw.uni-heidelberg.de/exist/apps/stonepub/modules/bibliohtml.xql?id=[[target]]"><span class="sigle">[[sigle]]</span></pb-popover>, [[pages]]</dt>
-<dd>[[content]]</dd></pb:template>
+<dd>[[content]]</dd>
+<p/></pb:template>
         </model>
                     <model behaviour="omit"/>
                 </elementSpec>
@@ -377,6 +439,26 @@
     <td>給定 Given:</td>
     <td>[[content]]</td>
 </tr></pb:template>
+        </model>
+                </elementSpec>
+            <elementSpec ident="rubbing" mode="add">
+                    <model behaviour="block">
+            <param name="note_zh" value="note[@xml:lang=&#34;zh&#34;]"/>
+            <param name="note_en" value="note[@xml:lang=&#34;en&#34;]"/>
+            <pb:template xmlns="" xml:space="preserve">
+<tr>
+  <td>[[note_zh]]</td>
+</tr>
+<tr>
+  <td>[[note_en]]</td>
+</tr>
+<tr>
+  <td><p/></td>
+</tr>
+
+
+
+</pb:template>
         </model>
                 </elementSpec>
             </schemaSpec>
