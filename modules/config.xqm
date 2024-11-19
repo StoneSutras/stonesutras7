@@ -419,6 +419,8 @@ declare variable $config:data-catalog := $config:data-root || "/catalog";
 declare variable $config:data-layouts := $config:data-root || "/layouts";
 declare variable $config:data-publication := $config:data-root || "/Publication";
 declare variable $config:data-biblio := $config:data-root || "/biblio";
+declare variable $config:data-authority := $config:data-root || "/biblio/authority";
+
 
 
 (:~

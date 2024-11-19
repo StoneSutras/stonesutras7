@@ -28,7 +28,7 @@ declare namespace mods="http://www.loc.gov/mods/v3";
 declare namespace xlink="http://www.w3.org/1999/xlink";
 declare namespace catalog="http://exist-db.org/ns/catalog";
 declare namespace tei="http://www.tei-c.org/ns/1.0";
-
+declare namespace mads="http://www.loc.gov/mads/";
 
 declare variable $api:SITES := (
      "HDS", "TC", "SY", "EG", "YC", "DZ", "Sili", "Yin", "PY", "HT", "JS", "Yang", "HSY", "CLS", "FHS", "SNS",
@@ -468,3 +468,90 @@ declare function api:bibliography-table($request as map(*)) {
             "results": array { subsequence($bibliographies, $start, $limit) }
         }
 };
+
+declare function api:persons-list($request as map(*)) {
+    let $query := $request?parameters?search
+    let $start := if (exists($request?parameters?start)) then xs:double($request?parameters?start) else 1
+    let $limit := if (exists($request?parameters?limit)) then xs:double($request?parameters?limit) else 50
+    let $persons := 
+        let $mads := 
+            if ($query and $query != "") then
+                collection($config:data-authority)/mads:mads[
+                    mads:authority[mads:name[@type = "personal"]] and 
+                    matches(string(.), $query, "i")
+                ] 
+            else
+                collection($config:data-authority)/mads:mads[
+                    mads:authority[mads:name[@type = "personal"]]
+                ] 
+        for $mad in $mads
+        let $lang := string($mad/mads:authority/@lang)
+        let $transliterationVariants := 
+            if ($mad/mads:variant[@transliteration or @lang]) then
+                let $filteredVariants := 
+                    for $v in $mad/mads:variant[@transliteration or @lang]
+                    let $variantNameParts := 
+                        for $namePart in $v/mads:name/mads:namePart
+                        where 
+                            (not($namePart/@type) or $namePart/@type != "date") and
+                            string-length(normalize-space(string($namePart))) > 0
+                        return string($namePart)
+                    let $variantText := 
+                        if (empty($variantNameParts)) then normalize-space(string($v/mads:name)) 
+                        else string-join($variantNameParts, " ")
+                    return 
+                        if (empty($variantText) or normalize-space($variantText) = "") then () else $variantText
+                return 
+                    if (empty($filteredVariants)) then () 
+                    else subsequence($filteredVariants, 1, 1)
+            else
+                for $namePart in $mad/mads:authority/mads:name/mads:namePart
+                where 
+                    (not($namePart/@type) or $namePart/@type != "date") and
+                    string-length(normalize-space(string($namePart))) > 0
+                return string($namePart)
+        let $name_to_display := 
+            if ($lang = "zh" or $lang = "ja" or $lang = "ko") then
+                if (exists($transliterationVariants)) then
+                    $transliterationVariants[1]
+                else
+                    $mad/authority/string()
+            else
+                let $authorityNameParts := 
+                    for $namePart in $mad/mads:authority/mads:name/mads:namePart
+                    where $namePart/@type != "date" and string-length(string($namePart)) > 0
+                    return string($namePart)
+                return string-join($authorityNameParts, " ")
+        let $final_name_to_display := 
+            if (empty($name_to_display)) then
+                let $authorityNameParts := 
+                    for $namePart in $mad/mads:authority/mads:name/mads:namePart
+                    where $namePart/@type != "date" and string-length(string($namePart)) > 0
+                    return string($namePart)
+                return string-join($authorityNameParts, " ")
+            else
+                $name_to_display
+        let $dateParts := 
+            for $namePart in $mad//mads:namePart
+            where $namePart/@type = "date" and string-length(string($namePart)) > 0
+            return concat("(", string($namePart), ")")
+        let $final_name_with_dates := 
+            if (exists($dateParts)) then
+                concat($final_name_to_display, " ", string-join($dateParts, " "))
+            else
+                $final_name_to_display
+        return 
+            map {
+                "id": string($mad/@ID),
+                "name_to_display": $final_name_with_dates
+            }
+    return 
+        map {
+            "count": count($persons),
+            "results": array { subsequence(
+                for $person in $persons
+                    order by substring(string($person?name_to_display), 1, 1) ascending
+                    return $person, $start, $limit) }
+        }
+};
+
