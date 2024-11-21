@@ -478,15 +478,26 @@ declare function api:persons-list($request as map(*)) {
             if ($query and $query != "") then
                 collection($config:data-authority)/mads:mads[
                     mads:authority[mads:name[@type = "personal"]] and 
-                    matches(string(.), $query, "i")
-                ] 
-            else
+                    (
+                        matches(string(.), $query, "i") or
+                        matches(
+                            string-join(for $child in mads:authority//* return normalize-space(string($child)), " "), 
+                            $query, "i"
+                        ) or
+                        matches(
+                            string-join(for $child in mads:variant//* return normalize-space(string($child)), " "), 
+                            $query, "i"
+                        )
+                    )
+                ]
+            else 
                 collection($config:data-authority)/mads:mads[
                     mads:authority[mads:name[@type = "personal"]]
                 ] 
         for $mad in $mads
         let $lang := string($mad/mads:authority/@lang)
         let $transliterationVariants := 
+        (:if authority lang is CJK, usually it will have at least a trasliteration or a lang arribute, therefore we find the first valid variant to display:)
             if ($mad/mads:variant[@transliteration or @lang]) then
                 let $filteredVariants := 
                     for $v in $mad/mads:variant[@transliteration or @lang]
@@ -499,6 +510,7 @@ declare function api:persons-list($request as map(*)) {
                     let $variantText := 
                         if (empty($variantNameParts)) then normalize-space(string($v/mads:name)) 
                         else string-join($variantNameParts, " ")
+                    (:in several cases, the text is not in <namePart> element but in <name> element...:)
                     return 
                         if (empty($variantText) or normalize-space($variantText) = "") then () else $variantText
                 return 
@@ -512,38 +524,36 @@ declare function api:persons-list($request as map(*)) {
                 return string($namePart)
         let $name_to_display := 
             if ($lang = "zh" or $lang = "ja" or $lang = "ko") then
-                if (exists($transliterationVariants)) then
-                    $transliterationVariants[1]
-                else
-                    $mad/authority/string()
+                let $additionalNameParts := 
+                (:if language is CJK, then the original name should be shown, which is ($additionalNameParts):)
+                    for $namePart in $mad/mads:authority/mads:name/mads:namePart
+                    where $namePart/@type != "date" and string-length(string($namePart)) > 0
+                    return string($namePart)
+                return 
+                    if ((exists($transliterationVariants)) and $transliterationVariants !='') then
+                        concat($transliterationVariants[1], " ", string-join($additionalNameParts, " "))
+                    else
+                        concat($mad/authority/string(), " ", string-join($additionalNameParts, " "))
             else
                 let $authorityNameParts := 
                     for $namePart in $mad/mads:authority/mads:name/mads:namePart
                     where $namePart/@type != "date" and string-length(string($namePart)) > 0
                     return string($namePart)
-                return string-join($authorityNameParts, " ")
-        let $final_name_to_display := 
-            if (empty($name_to_display)) then
-                let $authorityNameParts := 
-                    for $namePart in $mad/mads:authority/mads:name/mads:namePart
-                    where $namePart/@type != "date" and string-length(string($namePart)) > 0
-                    return string($namePart)
-                return string-join($authorityNameParts, " ")
-            else
-                $name_to_display
+                return string-join($authorityNameParts, " ")      
         let $dateParts := 
+        (:the date with parenthesis is the last part to add to the name to display:)
             for $namePart in $mad//mads:namePart
             where $namePart/@type = "date" and string-length(string($namePart)) > 0
             return concat("(", string($namePart), ")")
         let $final_name_with_dates := 
             if (exists($dateParts)) then
-                concat($final_name_to_display, " ", string-join($dateParts, " "))
+                concat($name_to_display, " ", string-join($dateParts, " "))
             else
-                $final_name_to_display
+                $name_to_display
         return 
             map {
                 "id": string($mad/@ID),
-                "name_to_display": $final_name_with_dates
+                "name_to_display": <a href="person.html?id={string($mad/@ID)}">{$final_name_with_dates}</a>
             }
     return 
         map {
@@ -555,3 +565,37 @@ declare function api:persons-list($request as map(*)) {
         }
 };
 
+declare function api:person-info($request as map(*)) {
+    let $id := $request?parameters?id
+    let $authority := collection($config:data-authority)/mads:mads[@ID = $id]/mads:authority
+    let $nameParts := 
+        for $namePart in $authority/mads:name/mads:namePart
+        where $namePart/@type != "date" and string-length(normalize-space(string($namePart))) > 0
+        return normalize-space(string($namePart))
+    let $name := 
+        if (exists($nameParts)) then
+            string-join($nameParts, " ")
+        else
+            normalize-space(string($authority))
+    let $lang := $authority/@lang
+    let $name_lang :=
+        if ($lang = "en") then "English"
+        else if ($lang = "zh") then "Chinese"
+        else if ($lang = "ja") then "Japanese"
+        else if ($lang = "ko") then "Korean"
+        else if ($lang = "de") then "German"
+        else if ($lang = "ru") then "Russian"
+        else if ($lang = "fr") then "French"
+        else "Others"
+    let $record := map {
+        "name": $name,
+        "name_lang": $name_lang
+    }
+    return map {
+        "count": if (exists($authority)) then 1 else 0,
+        "results": if (exists($authority)) then array { $record } else array {}
+    }
+};
+
+
+    
