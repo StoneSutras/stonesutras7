@@ -38,11 +38,15 @@
                         <app-toolbar data-template="templates:include" data-template-path="templates/toolbar.html"/>
                     </app-header>
                     <main>
-                    <pb-table-grid class="table-grid" source="api/persons/json" css-path="../css/gridjs" resizable="" fixed-header="" search="" subscribe="transcription" emit="transcription" per-page="100">
-                        <!--pb-table-column label="ID" property="id" sort="" width="15rem"-->
-                        <pb-table-column label="Name" property="name_to_display" sort="" width="60rem"/>
-                    </pb-table-grid>
-
+                    
+                    <pb-custom-form id="options" auto-submit="paper-input,paper-icon-button">
+                        <paper-input id="query" name="search" label="Search for persons">
+                            <paper-icon-button icon="search" slot="suffix"></paper-icon-button>
+                        </paper-input>
+                    </pb-custom-form>
+                    <pb-split-list url="api/persons" subforms="#options" selected="A" emit="transcription" subscribe="transcription"></pb-split-list>
+                   
+                   
                     </main>
                 </app-header-layout>
             </app-drawer-layout>
