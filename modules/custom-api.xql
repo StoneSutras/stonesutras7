@@ -494,7 +494,7 @@ declare function api:persons($request as map(*)) {
                     })
             return 
                 <span>
-                    <a href="/person.html?id={$person?id}">{$person?name_to_display}</a>
+                    <a href="person.html?id={$person?id}">{$person?name_to_display}</a>
                 </span>
         }
     let $categories := 
@@ -517,7 +517,6 @@ declare function api:persons($request as map(*)) {
         "categories": $categories
     }
 };
-
 
 declare function api:persons-name-to-display($search) {
     let $query := string($search)
@@ -603,8 +602,6 @@ declare function api:persons-name-to-display($search) {
             "name_to_display": string($final_name_with_dates)
         }
 };
-
-
 
 
 declare function api:person-info($request as map(*)) {
