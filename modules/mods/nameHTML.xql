@@ -99,32 +99,23 @@ declare function nameHTML:output-nameHTML($entry as element(mods:mods), $type as
                                                 )   
                                                   
                                                 else
-                                                (if ($type="translator") then
-                                                (
-                                                    if (count($names) = (2, 3)) then
-                                                         (
-                                                             if (count($names) = 2 and $pos = 1) then ", and "
-                                                                    else
+                                                (if ($type = "translator") then
+                                                    (
+                                                        if (count($names) >= 2) then
+                                                            (
+                                                                if ($pos < count($names) - 1) then
+                                                                    ", "
+                                                                else
                                                                     (
-                                                                        if (count($names) = 3 and $pos = (1, 2)) then
-                                                                            (
-                                                                                if ($pos = 1) then ", "
-                                                                                else
-                                                                                    (
-                                                                                        if ($pos = 2) then
-                                                                                        ", and "
-                                                                                        else
-                                                                                        ", trans. "
-                                                                                    )
-                                                                            )
+                                                                        if ($pos = count($names) - 1) then
+                                                                            ", and "
                                                                         else
-                                                                          ", trans. "  
+                                                                            ", trans. "
                                                                     )
-                                                         )
-                                                    else            
-                                                    ", trans. "
-                                                        
-                                                ) 
+                                                            )
+                                                        else
+                                                            ", trans. "
+                                                    )
                                                     else
                                                     (if ($type="author") then
                                                         
