@@ -28,11 +28,11 @@ declare namespace mods="http://www.loc.gov/mods/v3";
 declare namespace xlink="http://www.w3.org/1999/xlink";
 declare namespace catalog="http://exist-db.org/ns/catalog";
 declare namespace tei="http://www.tei-c.org/ns/1.0";
-
+declare namespace mads="http://www.loc.gov/mads/";
 
 declare variable $api:SITES := (
      "HDS", "TC", "SY", "EG", "YC", "DZ", "Sili", "Yin", "PY", "HT", "JS", "Yang", "HSY", "CLS", "FHS", "SNS",
-     "Ziyang", "TS", "LS", "Yi", "Tie", "Ge", "GS", "JCW_east", "JCW_west", "YS", "Ziyang_site", "JSY",
+     "Ziyang", "TS", "LS", "Yi", "Tie", "Ge", "GS", "JCW_east", "YS", "Ziyang_site", "JSY",
      "WFY_1", "WFY_2", "WFY_29", "WFY_33", "WFY_46", "WFY_51", "WFY_59", "WFY_66", "WFY_71", "WFY_73", 
      "WFY_76", "WFY_85", "WFY_109", "WFY_110"
 );
@@ -468,3 +468,176 @@ declare function api:bibliography-table($request as map(*)) {
             "results": array { subsequence($bibliographies, $start, $limit) }
         }
 };
+
+
+declare function api:persons($request as map(*)) {
+    let $search := normalize-space($request?parameters?search)
+    let $letterParam := $request?parameters?category
+    let $persons := api:persons-name-to-display($search)
+    let $sortedPersons := 
+        for $person in $persons
+        let $sortKey := lower-case(string($person?name_to_display))
+        order by $sortKey
+        return map {
+            "sortKey": $sortKey,
+            "name_to_display": $person?name_to_display,
+            "id": $person?id
+        }
+    let $displayItems := 
+        array {
+            for $person in 
+                if ($letterParam = "Alle") then 
+                    $sortedPersons 
+                else 
+                    filter($sortedPersons, function($entry) {
+                        starts-with($entry?sortKey, lower-case($letterParam))
+                    })
+            return 
+                <span>
+                    <a href="person.html?id={$person?id}">{$person?name_to_display}</a>
+                </span>
+        }
+    let $categories := 
+        array {
+            for $index in 1 to string-length('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+            let $alpha := substring('ABCDEFGHIJKLMNOPQRSTUVWXYZ', $index, 1)
+            let $hits := count(filter($sortedPersons, function($entry) { starts-with($entry?sortKey, lower-case($alpha)) }))
+            where $hits > 0
+            return map {
+                "category": $alpha,
+                "count": $hits
+            },
+            map {
+                "category": "Alle",
+                "count": count($sortedPersons)
+            }
+        }
+    return map {
+        "items": $displayItems,
+        "categories": $categories
+    }
+};
+
+declare function api:persons-name-to-display($search) {
+    let $query := string($search)
+    let $mads := 
+        if ($query and $query != "") then
+            collection($config:data-authority)/mads:mads[
+                mads:authority[mads:name[@type = "personal"]] and 
+                (
+                    matches(string(.), $query, "i") or
+                    matches(
+                        string-join(for $child in mads:authority//* return normalize-space(string($child)), " "), 
+                        $query, "i"
+                    ) or
+                    matches(
+                        string-join(for $child in mads:variant//* return normalize-space(string($child)), " "), 
+                        $query, "i"
+                    )
+                )
+            ]
+        else 
+            collection($config:data-authority)/mads:mads[
+                mads:authority[mads:name[@type = "personal"]]
+            ] 
+    for $mad in $mads
+    let $lang := string($mad/mads:authority/@lang)
+    let $transliterationVariants := 
+    (:if authority lang is CJK, usually it will have at least a trasliteration or a lang arribute, therefore we find the first valid variant to display:)
+        if ($mad/mads:variant[@transliteration or @lang]) then
+            let $filteredVariants := 
+                for $v in $mad/mads:variant[@transliteration or @lang]
+                let $variantNameParts := 
+                    for $namePart in $v/mads:name/mads:namePart
+                    where 
+                        (not($namePart/@type) or $namePart/@type != "date") and
+                        string-length(normalize-space(string($namePart))) > 0
+                    return string($namePart)
+                let $variantText := 
+                    if (empty($variantNameParts)) then normalize-space(string($v/mads:name)) 
+                    else string-join($variantNameParts, " ")
+                (:in several cases, the text is not in <namePart> element but in <name> element...:)
+                return 
+                    if (empty($variantText) or normalize-space($variantText) = "") then () else $variantText
+            return 
+                if (empty($filteredVariants)) then () 
+                else subsequence($filteredVariants, 1, 1)
+        else
+            for $namePart in $mad/mads:authority/mads:name/mads:namePart
+            where 
+                (not($namePart/@type) or $namePart/@type != "date") and
+                string-length(normalize-space(string($namePart))) > 0
+            return string($namePart)
+    let $name_to_display := 
+        if ($lang = "zh" or $lang = "ja" or $lang = "ko") then
+            let $additionalNameParts := 
+            (:if language is CJK, then the original name should be shown, which is ($additionalNameParts):)
+                for $namePart in $mad/mads:authority/mads:name/mads:namePart
+                where $namePart/@type != "date" and string-length(string($namePart)) > 0
+                return string($namePart)
+            return 
+                if ((exists($transliterationVariants)) and $transliterationVariants !='') then
+                    concat($transliterationVariants[1], " ", string-join($additionalNameParts, " "))
+                else
+                    concat($mad/authority/string(), " ", string-join($additionalNameParts, " "))
+        else
+            let $authorityNameParts := 
+                for $namePart in $mad/mads:authority/mads:name/mads:namePart
+                where $namePart/@type != "date" and string-length(string($namePart)) > 0
+                return string($namePart)
+            return string-join($authorityNameParts, " ")      
+    let $dateParts := 
+    (:the date with parenthesis is the last part to add to the name to display:)
+        for $namePart in $mad//mads:namePart
+        where $namePart/@type = "date" and string-length(string($namePart)) > 0
+        return concat("(", string($namePart), ")")
+    let $final_name_with_dates := 
+        if (exists($dateParts)) then
+            concat($name_to_display, " ", string-join($dateParts, " "))
+        else
+            $name_to_display
+    return 
+        map {
+            "id": string($mad/@ID),
+            "name_to_display": string($final_name_with_dates)
+        }
+};
+
+
+declare function api:person-info($request as map(*)) {
+    let $id := $request?parameters?id
+    let $authority := collection($config:data-authority)/mads:mads[@ID = $id]/mads:authority
+    
+    let $nameParts := 
+        for $namePart in $authority/mads:name/mads:namePart
+        where $namePart/@type != "date" and string-length(normalize-space(string($namePart))) > 0
+        return normalize-space(string($namePart))
+    
+    let $name := 
+        if (exists($nameParts)) then
+            string-join($nameParts, " ")
+        else
+            normalize-space(string($authority))
+    
+    let $lang := $authority/@lang
+    let $name_lang := 
+        if ($lang = "en") then "English"
+        else if ($lang = "zh") then "Chinese"
+        else if ($lang = "ja") then "Japanese"
+        else if ($lang = "ko") then "Korean"
+        else if ($lang = "de") then "German"
+        else if ($lang = "ru") then "Russian"
+        else if ($lang = "fr") then "French"
+        else "Others"
+    
+    return 
+        map {
+            "name": $name,
+            "name_lang": $name_lang
+        }
+};
+
+
+
+
+    

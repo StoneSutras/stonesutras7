@@ -27,7 +27,7 @@ declare namespace c = "http://exist-db.org/ns/catalog";
  : If a version is given, the components will be loaded from a public CDN.
  : This is recommended unless you develop your own components.
  :)
-declare variable $config:webcomponents :="2.24.4";
+declare variable $config:webcomponents :="2.24.6";
 
 (:~
  : CDN URL to use for loading webcomponents. Could be changed if you created your
@@ -419,6 +419,8 @@ declare variable $config:data-catalog := $config:data-root || "/catalog";
 declare variable $config:data-layouts := $config:data-root || "/layouts";
 declare variable $config:data-publication := $config:data-root || "/Publication";
 declare variable $config:data-biblio := $config:data-root || "/biblio";
+declare variable $config:data-authority := $config:data-root || "/biblio/authority";
+
 
 
 (:~

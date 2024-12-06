@@ -39,7 +39,7 @@
                     <app-header slot="header" reveals="reveals" fixed="fixed" effects="waterfall">
                         <app-toolbar data-template="lib:include" data-template-path="templates/menu.html"/>
                         <app-toolbar data-template="lib:include" data-template-path="templates/toolbar.html">
-                            <p data-target="breadcrumbs" class="breadcrumbs">Inscriptions</p>
+                            <p data-target="breadcrumbs" class="breadcrumbs"><pb-i18n key="menu.inscriptions">Inscriptions</pb-i18n></p>
                         </app-toolbar>
                     </app-header>
                     <main>
@@ -49,8 +49,7 @@
                             <pb-table-column label="ID" property="id" sort="" width="8rem"></pb-table-column>
                             <pb-table-column label="Site" property="site" sort=""></pb-table-column>
                             <pb-table-column label="Title" property="title"></pb-table-column>
-                            <pb-table-column label="Taisho" property="taisho"></pb-table-column>
-                            <pb-table-column label="Dating" property="date"></pb-table-column>
+                            <pb-table-column label="Date" property="date"></pb-table-column>
                         </pb-table-grid>
                     </main>
                 </app-header-layout>

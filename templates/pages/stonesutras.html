@@ -78,6 +78,7 @@
                             <paper-tab slot="tab">Translation</paper-tab>
                             <paper-tab slot="tab">Layout Text</paper-tab>
                             <paper-tab slot="tab">Discussion</paper-tab>
+                            <paper-tab slot="tab">References</paper-tab>
                             <paper-tab slot="tab">Images</paper-tab>
                             <div slot="page" id="catalog">
                                 <pb-view src="document1" map="catalog" odd="catalog" view="single" wait-for="#map" emit="catalog" subscribe="catalog" disable-history="">
@@ -102,6 +103,12 @@
                                     <pb-param name="data-root" value="${data-root}/" data-template="pages:parse-params"/>
                                 </pb-view>
                                 <pb-view src="document1" odd="stonesutras" view="single" map="description" disable-history="">
+                                    <pb-param name="data-root" value="${data-root}/" data-template="pages:parse-params"/>
+                                </pb-view>
+                            </div>
+                            <div id="references" slot="page">    
+                                <pb-view src="document1" odd="catalog" view="single" map="catalog" disable-history="">
+                                    <pb-param name="mode" value="references"/>
                                     <pb-param name="data-root" value="${data-root}/" data-template="pages:parse-params"/>
                                 </pb-view>
                             </div>
