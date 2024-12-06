@@ -1,5 +1,5 @@
 <?teipublisher output="web"?>
-<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:pb="http://teipublisher.com/1.0" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:cb="http://www.cbeta.org/ns/1.0" xml:lang="en">
+<TEI xmlns:pb="http://teipublisher.com/1.0" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:cb="http://www.cbeta.org/ns/1.0" xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
     <teiHeader>
         <fileDesc>
             <titleStmt>
@@ -349,9 +349,11 @@
             
             
             
+            
             color: var(--bss-color-gold);
 padding-left: .5em;
 padding-right: .5em;
+            
             
             
             
@@ -404,7 +406,7 @@ padding-right: .5em;
                     <model predicate="id(@target, root($parameters?root))" behaviour="pass-through">
             <param name="figno" value="count(id(@target, root($parameters?root))/preceding::figure) + 1"/>
             <param name="img" value="'https://sutras.adw.uni-heidelberg.de/images/' || replace(@target, '^(.*)\.[^\.]+$', '$1.jpg')"/>
-            <param name="caption" value="let $figure := id(@target, root($parameters?root)) return   if ($parameters?language = 'zh_CN') then     $figure/head[@xml:lang='zh']   else     $figure/head[not(@xml:lang='zh')]"/>
+            <param name="caption" value="let $figure := id(@target, root($parameters?root)) return   if ($parameters?language = 'zh_Hant') then     $figure/head[@xml:lang='zh']   else     $figure/head[not(@xml:lang='zh')]"/>
             <pb:template xmlns="" xml:space="preserve"><span>[[figno]]</span>
 <span class="illustration" data-figno="[[figno]]">
   <pb-popover>
@@ -429,36 +431,8 @@ padding-right: .5em;
             <desc>If it is inside a paragraph then it is inline, otherwise it is block
                   level</desc>
             <outputRendition xml:space="preserve">
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
             margin-left: 1em; 
 font-family: var(--bss-serif-font-family);
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
             </outputRendition>
         </model>
                 </elementSpec>
