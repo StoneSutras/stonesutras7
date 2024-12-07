@@ -393,3 +393,58 @@ ul.variants {
 .article pb-view:part(content) {
     scroll-padding-top: 128px;
 }
+
+.person main {
+  display: flex;
+  flex-direction: column; 
+  align-items: flex-start; 
+  margin: 0; 
+  height: 100%; 
+  width: 100%; 
+}
+
+.person-head {
+  background-color: #f7f7f7; 
+  width: 100%; 
+  padding: 15px; 
+  padding-left:36px;
+  text-align: left; 
+  border-bottom: 1px solid #ccc; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.person-head h1 {
+  font-size: 1.8rem;
+  margin: 0 0 5px; 
+  color: #333; 
+  font-weight: bold; 
+}
+
+.person-head p {
+  font-size: 1rem;
+  margin: 0;
+  color: #666; 
+}
+
+.person-details {
+  padding-top:20px;
+  padding-left: 80px;
+  margin-left: 30px; 
+  text-align: left; 
+  width: calc(100% - 60px); 
+  box-sizing: border-box; 
+}
+
+.person-details > div {
+  margin-bottom: 30px; 
+}
+
+.person-variants ul {
+  list-style: none; 
+  margin: 0;
+  padding: 0;
+}
+
+#personLoader {
+  width: 100%; 
+  padding: 0px;

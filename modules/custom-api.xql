@@ -606,7 +606,8 @@ declare function api:persons-name-to-display($search) {
 
 declare function api:person-info($request as map(*)) {
     let $id := $request?parameters?id
-    let $authority := collection($config:data-authority)/mads:mads[@ID = $id]/mads:authority
+    let $mads := collection($config:data-authority)/mads:mads[@ID = $id]
+    let $authority := $mads/mads:authority
     
     let $nameParts := 
         for $namePart in $authority/mads:name/mads:namePart
@@ -629,15 +630,57 @@ declare function api:person-info($request as map(*)) {
         else if ($lang = "ru") then "Russian"
         else if ($lang = "fr") then "French"
         else "Others"
+
+    let $variants :=
+        for $variant in collection($config:data-authority)/mads:mads[@ID = $id]/mads:variant
+        let $variantNameParts := 
+            for $namePart in $variant/mads:name/mads:namePart
+            where $namePart/@type != "date" and string-length(normalize-space(string($namePart))) > 0
+            return normalize-space(string($namePart))
+        let $variantText := 
+            if (empty($variantNameParts)) then
+                normalize-space(string($variant))
+            else if (matches($variantNameParts[1], "^[a-zA-Z]")) then
+                string-join($variantNameParts, ", ")
+            else
+                string-join($variantNameParts, " ")
+        where string-length($variantText) > 0
+        return $variantText
+    
+    let $dates := 
+        for $date in $mads//mads:namePart[@type = "date"]
+        where string-length(normalize-space(string($date))) > 0
+        return normalize-space(string($date))
     
     return 
-        map {
-            "name": $name,
-            "name_lang": $name_lang
-        }
+        <div>
+            <div class="person-head">
+                <h1>{$name}</h1>
+                <p>(Language: {$name_lang})</p>
+            </div>
+            <div class="person-details">
+                <div class="person-variants">
+                {
+                    if (exists($variants)) then
+                        <div>
+                            <h2>Other Names:</h2>
+                            <ul>
+                                {for $v in $variants return <li>{$v}</li>}
+                            </ul>
+                        </div>
+                    else ()
+                }
+                </div>
+                <div class="person-date">
+                {
+                    if (exists($dates)) then
+                            <div>
+                                <h2>Date:</h2>
+                                <p>{string-join($dates, ", ")}</p>
+                            </div>
+                    else ()
+                }
+                </div>
+            </div>
+        </div>
 };
-
-
-
-
-    
