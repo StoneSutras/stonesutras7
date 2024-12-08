@@ -573,7 +573,7 @@ declare function api:persons-name-to-display($search) {
             let $additionalNameParts := 
             (:if language is CJK, then the original name should be shown, which is ($additionalNameParts):)
                 for $namePart in $mad/mads:authority/mads:name/mads:namePart
-                where $namePart/@type != "date" and string-length(string($namePart)) > 0
+                where (not($namePart/@type) or $namePart/@type != "date")  and string-length(string($namePart)) > 0
                 return string($namePart)
             return 
                 if ((exists($transliterationVariants)) and $transliterationVariants !='') then
@@ -620,7 +620,7 @@ declare function api:person-info($request as map(*)) {
             else
             string-join($nameParts, " ")
         else
-            normalize-space(string($authority))
+            string-join($authority//mads:namePart[not(@type) or @type != 'date'], " ")
     
     let $lang := $authority/@lang
     let $name_lang := 
