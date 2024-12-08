@@ -486,7 +486,7 @@ declare function api:persons($request as map(*)) {
     let $displayItems := 
         array {
             for $person in 
-                if ($letterParam = "Alle") then 
+                if ($letterParam = "All") then 
                     $sortedPersons 
                 else 
                     filter($sortedPersons, function($entry) {
@@ -508,7 +508,7 @@ declare function api:persons($request as map(*)) {
                 "count": $hits
             },
             map {
-                "category": "Alle",
+                "category": "All",
                 "count": count($sortedPersons)
             }
         }
