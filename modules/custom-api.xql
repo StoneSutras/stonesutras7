@@ -585,7 +585,7 @@ declare function api:persons-name-to-display($search) {
                 for $namePart in $mad/mads:authority/mads:name/mads:namePart
                 where $namePart/@type != "date" and string-length(string($namePart)) > 0
                 return string($namePart)
-            return string-join($authorityNameParts, " ")      
+            return string-join($authorityNameParts, ", ")      
     let $dateParts := 
     (:the date with parenthesis is the last part to add to the name to display:)
         for $namePart in $mad//mads:namePart
@@ -603,7 +603,6 @@ declare function api:persons-name-to-display($search) {
         }
 };
 
-
 declare function api:person-info($request as map(*)) {
     let $id := $request?parameters?id
     let $mads := collection($config:data-authority)/mads:mads[@ID = $id]
@@ -616,6 +615,9 @@ declare function api:person-info($request as map(*)) {
     
     let $name := 
         if (exists($nameParts)) then
+            if (matches($nameParts[1], "^[a-zA-Z]")) then
+            string-join($nameParts, ", ")
+            else
             string-join($nameParts, " ")
         else
             normalize-space(string($authority))
@@ -684,3 +686,5 @@ declare function api:person-info($request as map(*)) {
             </div>
         </div>
 };
+
+
