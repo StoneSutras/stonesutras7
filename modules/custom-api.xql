@@ -610,7 +610,7 @@ declare function api:person-info($request as map(*)) {
     
     let $nameParts := 
         for $namePart in $authority/mads:name/mads:namePart
-        where $namePart/@type != "date" and string-length(normalize-space(string($namePart))) > 0
+        where (not($namePart/@type) or $namePart/@type != "date")  and string-length(string($namePart)) > 0
         return normalize-space(string($namePart))
     
     let $name := 
@@ -618,7 +618,7 @@ declare function api:person-info($request as map(*)) {
             if (matches($nameParts[1], "^[a-zA-Z]")) then
             string-join($nameParts, ", ")
             else
-            string-join($nameParts, " ")
+            string-join($nameParts, "")
         else
             string-join($authority//mads:namePart[not(@type) or @type != 'date'], " ")
     
@@ -637,7 +637,7 @@ declare function api:person-info($request as map(*)) {
         for $variant in collection($config:data-authority)/mads:mads[@ID = $id]/mads:variant
         let $variantNameParts := 
             for $namePart in $variant/mads:name/mads:namePart
-            where $namePart/@type != "date" and string-length(normalize-space(string($namePart))) > 0
+            where (not($namePart/@type) or $namePart/@type != "date") and string-length(normalize-space(string($namePart))) > 0
             return normalize-space(string($namePart))
         let $variantText := 
             if (empty($variantNameParts)) then
@@ -645,7 +645,7 @@ declare function api:person-info($request as map(*)) {
             else if (matches($variantNameParts[1], "^[a-zA-Z]")) then
                 string-join($variantNameParts, ", ")
             else
-                string-join($variantNameParts, " ")
+                string-join($variantNameParts, "")
         where string-length($variantText) > 0
         return $variantText
     
