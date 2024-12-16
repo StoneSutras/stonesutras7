@@ -683,8 +683,68 @@ declare function api:person-info($request as map(*)) {
                     else ()
                 }
                 </div>
+                { api:person-links($id) } 
             </div>
         </div>
+};
+
+declare function api:person-links($id as xs:string) as element(div)? {
+    let $record := doc($config:app-root || '/data/authorities.xml')/Records/Record[ID = $id]
+    
+    let $viaf_id := $record/VIAF_ID
+    let $viaf_link := $record/VIAF_Link
+    let $cbdb_id := $record/CBDB_ID
+    let $cbdb_link := $record/CBDB_link
+    let $ddbc_id := $record/DDBC_id
+    let $ddbc_link := $record/DDBC_link
+    let $wiki_links := 
+        for $lang in ('en', 'zh', 'ja', 'fr', 'de', 'ko')
+        let $link := $record/*[name() = concat('Wikipedia_Link_', $lang)]
+        where string-length($link) > 0
+        return <a href="{$link}" target="_blank">{$lang} 　</a>
+    
+    let $has_links := 
+        string-length($viaf_id) > 0 or
+        string-length($cbdb_id) > 0 or
+        string-length($ddbc_id) > 0 or
+        count($wiki_links) > 0
+    
+    return 
+        if ($has_links) then
+            <div class="person-links">
+                <h2>Links:</h2>
+                <div>
+                    <div>
+                    {
+                        if (string-length($viaf_id) > 0) then
+                            <p>VIAF: <a href="{$viaf_link}" target="_blank">{$viaf_id}</a></p>
+                        else ()
+                    }
+                    </div>
+                    <div>
+                    {
+                        if (string-length($cbdb_id) > 0) then
+                            <p>CBDB: <a href="{$cbdb_link}" target="_blank">{$cbdb_id}</a></p>
+                        else ()
+                    }
+                    </div>
+                    <div>
+                    {
+                        if (string-length($ddbc_id) > 0) then
+                            <p>DDBC: <a href="{$ddbc_link}" target="_blank">{$ddbc_id}</a></p>
+                        else ()
+                    }
+                    </div>
+                    <div>
+                    {
+                        if (count($wiki_links) > 0) then
+                            <p>Wikipedia: { $wiki_links }</p>
+                        else ()
+                    }
+                    </div>
+                </div>
+            </div>
+        else ()
 };
 
 
