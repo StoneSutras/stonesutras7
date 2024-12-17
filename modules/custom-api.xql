@@ -689,7 +689,7 @@ declare function api:person-info($request as map(*)) {
 };
 
 declare function api:person-links($id as xs:string) as element(div)? {
-    let $record := doc($config:app-root || '/data/authorities.xml')/Records/Record[ID = $id]
+    let $record := doc($config:data-root || '/biblio/authorities.xml')/Records/Record[ID = $id]
     
     let $viaf_id := $record/VIAF_ID
     let $viaf_link := $record/VIAF_Link
@@ -711,9 +711,9 @@ declare function api:person-links($id as xs:string) as element(div)? {
     
     return 
         if ($has_links) then
-            <div class="person-links">
-                <h2>Links:</h2>
-                <div>
+            <div>
+            <h2>Links:</h2>
+                <div class="person-links">
                     <div>
                     {
                         if (string-length($viaf_id) > 0) then
