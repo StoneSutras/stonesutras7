@@ -577,7 +577,7 @@ declare function api:persons-name-to-display($search) {
                 return string($namePart)
             return 
                 if ((exists($transliterationVariants)) and $transliterationVariants !='') then
-                    concat($transliterationVariants[1], " ", string-join($additionalNameParts, " "))
+                    concat($transliterationVariants[1], " ", string-join($additionalNameParts, ""))
                 else
                     concat($mad/authority/string(), " ", string-join($additionalNameParts, " "))
         else
