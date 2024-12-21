@@ -511,7 +511,11 @@ font-family: var(--bss-serif-font-family);
             <model predicate="preceding-sibling::title" behaviour="text">
                 <param name="content" value="' — '"/>
             </model>
-            <model behaviour="inline"/>
+            <model behaviour="inline">
+                <outputRendition xml:space="preserve">
+                font-weight: bold; 
+                </outputRendition>
+            </model>
         </modelSequence>
                     <model predicate="@type='scroll'" behaviour="inline">
             <outputRendition xml:space="preserve">

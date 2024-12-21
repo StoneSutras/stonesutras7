@@ -63,7 +63,11 @@
                     </pb-drawer>
                     <main class="content-body">
                         <app-toolbar class="header">
-                            <h4 main-title="">Transcription</h4>
+                            <h4 main-title="">
+                                <pb-view id="title" src="document1" xpath="//teiHeader/fileDesc/titleStmt/title[1]" view="single" history="history" append-footnotes="append-footnotes" odd="stonesutras">
+                                    <pb-param name="data-root" value="${data-root}/" data-template="pages:parse-params"/>
+                                </pb-view>
+                            </h4>
                             <pb-toggle-feature name="cbeta" default="off" selector=".cblb" emit="transcription" subscribe="transcription">
                                 CBETA Linebreaks
                             </pb-toggle-feature>
