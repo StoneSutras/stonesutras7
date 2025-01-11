@@ -71,6 +71,11 @@
                     <app-header slot="header" reveals="reveals" fixed="fixed" effects="waterfall">
                         <app-toolbar data-template="lib:include" data-template-path="templates/menu.html"/>
                         <app-toolbar data-template="lib:include" data-template-path="templates/toolbar.html">
+                            <span data-target="breadcrumbs" class="breadcrumbs"><a href="../../articles.html"><pb-i18n key="menu.articles"></pb-i18n></a> &gt;</span>
+                            <pb-view data-target="breadcrumbs" src="site" view="single" map="language" disable-history=""
+                                not-found="" use-language="">
+                                <pb-param name="mode" value="subtitle"/>
+                            </pb-view>
                             <pb-zoom data-target="toolbar-util" emit="transcription" direction="in" icon="icons:zoom-in"/>
                             <pb-zoom data-target="toolbar-util" emit="transcription" direction="out" icon="icons:zoom-out"/>
                             <!-- Search input -->

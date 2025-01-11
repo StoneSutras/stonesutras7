@@ -169,6 +169,15 @@
         </model>
                 </elementSpec>
     <elementSpec ident="div" mode="change">
+                    <model predicate="$parameters?mode='subtitle'" behaviour="inline">
+            <desc>for the breadcrumb</desc>
+            <param name="subtitle" value="head[@type='subtitle']"/>
+            <pb:template xmlns="" xml:space="preserve"><span class="breadcrumbs">[[subtitle]]</span>
+</pb:template>
+            <outputRendition xml:space="preserve">
+            
+            </outputRendition>
+        </model>
                     <model predicate="$parameters?mode='toc' and parent::body" behaviour="block" cssClass="toc">
             <param name="content" value="./div"/>
         </model>
@@ -238,6 +247,12 @@
             <param name="id" value="generate-id(parent::div)"/>
             <param name="level" value="count(ancestor::div) + 1"/>
             <pb:template xmlns="" xml:space="preserve"><pb-link hash="[[id]]" emit="transcription">[[content]]</pb-link></pb:template>
+        </model>
+                    <model predicate="$parameters?mode='subtitle' and parent::div" behaviour="inline">
+            <desc>for the breadcrumb</desc>
+            <outputRendition xml:space="preserve">
+            null
+            </outputRendition>
         </model>
                     <model predicate="$parameters?mode='articles'" behaviour="heading">
             <param name="level" value="3"/>
@@ -350,9 +365,11 @@
             
             
             
+            
             color: var(--bss-color-gold);
 padding-left: .5em;
 padding-right: .5em;
+            
             
             
             
@@ -431,8 +448,10 @@ padding-right: .5em;
             <desc>If it is inside a paragraph then it is inline, otherwise it is block
                   level</desc>
             <outputRendition xml:space="preserve">
+            
             margin-left: 1em; 
 font-family: var(--bss-serif-font-family);
+            
             </outputRendition>
         </model>
                 </elementSpec>
@@ -513,7 +532,7 @@ font-family: var(--bss-serif-font-family);
             </model>
             <model behaviour="inline">
                 <outputRendition xml:space="preserve">
-                font-weight: bold; 
+                font-weight: bold;
                 </outputRendition>
             </model>
         </modelSequence>
