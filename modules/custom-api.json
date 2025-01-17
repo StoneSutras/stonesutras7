@@ -670,7 +670,47 @@
 				}
 			}
 		},
-			
+		 "/biblio-test": {
+			"get": {
+				"summary": "For testing the XQL code",
+				"description": "Retrieve the text of a bibliography entry based on its ID.",
+				"tags": ["bibliography"],
+				"operationId": "custom:biblio-test",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"description": "ID of the bibliography entry",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "HTML representation of the bibliography entry",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Bibliography entry not found",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},	
 		"/api/persons": {
 		    "get": {
 		        "summary": "Retrieve sorted list of persons",

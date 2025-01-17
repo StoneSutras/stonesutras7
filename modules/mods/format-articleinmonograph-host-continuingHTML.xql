@@ -141,42 +141,38 @@ declare function continuingHTML:format-articleinmonograph-host-continuingHTML($e
                            
                         ,
                         (:if published over two issues output the second issue:)
-                        if(exists ($entry/mods:relatedItem[1]/mods:part[2]/mods:extent/mods:start/text())) then
-                                
-                                    (
-                                    <fo-inline lang="en">{$settings:SPACE}and{$settings:SPACE}</fo-inline>,
-                                    
-                                        if (($entry/mods:relatedItem[1]/mods:part[2]/mods:detail/@type="volume") and ($entry/mods:relatedItem[1]/mods:part[2]/mods:detail/@type="no")) then 
-                                            (
-                                            <span lang="en">{$settings:SPACE}
-                                                {$entry/mods:relatedItem[1]/mods:part[2]/mods:detail[@type="volume"]/text()}, no.{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[2]/mods:detail[@type="no"]/text()}{$settings:SPACE}({fn:substring(($entry/mods:relatedItem[1]/mods:part[2]/mods:date)[1],1,4)}):
-                                            </span>
-                                            )
+                        let $parts := $entry/mods:relatedItem[1]/mods:part
+                        let $count := count($parts)
+
+                        for $part at $pos in $parts
+                        return
+                            if ($count >= 2 and $pos >= 2) then
+                                (
+                                    if ($count = $pos) then
+                                        <fo:inline font-family="{$config:BiblioFont}">{$settings:SPACE}and{$settings:SPACE}</fo:inline>
+                                    else
+                                        <fo:inline font-family="{$config:BiblioFont}">;{$settings:SPACE}</fo:inline>,
+
+                                    (: vol. and no. :)
+                                    if (($part/mods:detail[@type = "volume"] and $part/mods:detail[@type = "no"])) then
+                                        <fo:inline font-family="{$config:BiblioFont}">
+                                            {$part/mods:detail[@type = "volume"]//text()}, no.{$settings:SPACE}{$part/mods:detail[@type = "no"]//text()}{$settings:SPACE}({fn:substring($part/mods:date, 1, 4)}):
+                                        </fo:inline>
+                                    else
+                                        (: other case :)
+                                        <fo:inline font-family="{$config:BiblioFont}">
+                                            {fn:substring($part/mods:date, 1, 4)}, no.{$settings:SPACE}{$part/mods:detail[@type = "no"]//text()}:
+                                        </fo:inline>,
+
+                                    (: page number :)
+                                    <fo:inline font-family="{$config:BiblioFont}">
+                                        {if (exists($part/mods:extent/mods:end)) then
+                                            $part/mods:extent/mods:start || '–' || $part/mods:extent/mods:end
                                         else
-                                            if ($entry/mods:relatedItem[1]/mods:part[2]/mods:detail/@type="volume") then
-                                            (
-                                            <span lang="en">
-                                            {$settings:SPACE}and{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[2]/mods:detail[@type="volume"]/text()}
-                                            {$settings:SPACE}({fn:substring(($entry/mods:relatedItem[1]/mods:part[2]/mods:date)[1],1,4)})
-                                            </span>   
-                                            )
-                                            else     
-                                            (
-                                            <span lang="en">
-                                            {$settings:SPACE}and{$settings:SPACE}
-                                            {fn:substring(($entry/mods:relatedItem[1]/mods:part[2]/mods:date)[1],1,4)}, no.{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[2]/mods:detail[@type="no"]/text()}
-                                            </span>   
-                                            )
-                                    ,<span lang="en">{$settings:SPACE} 
-                                    {if (exists($entry/mods:relatedItem[1]/mods:part[2]/mods:extent/mods:end/text())) then
-                                    <span lang="en">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[2]/mods:extent/mods:start/text()}–{$entry/mods:relatedItem[1]/mods:part[2]/mods:extent/mods:end/text()}</span>
-                                     else
-                                    <span lang="en">{$settings:SPACE}{$entry/mods:relatedItem[1]/mods:part[2]/mods:extent/mods:start/text()}</span>
-                                    }   
-                                    </span>
-                                    )
-                        else
-                          ()
+                                            $part/mods:extent/mods:start}
+                                    </fo:inline>
+                                )
+                            else ()
                         ),
     ".",
     if ($entry/mods:note/@type="forthcoming") then <span lang="en">{$settings:SPACE}{$entry/mods:note[@type="forthcoming"]/text()}.</span> else ()
