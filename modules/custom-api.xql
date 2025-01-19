@@ -390,7 +390,7 @@ declare function api:bibliography($request as map(*)) {
         if ($query) then
             for $ref in $precomputed-references
             let $biblioID := fn:string($ref/@id)
-            let $ref_title := fn:string($ref/@title)
+            let $ref_title := fn:string($ref/title)
             let $full_reference := fn:string($ref/full_reference)
             let $copy := fn:string($ref/copy)
             where contains(lower-case($ref), lower-case($query))
@@ -404,7 +404,7 @@ declare function api:bibliography($request as map(*)) {
         else
             for $ref in $precomputed-references
             let $biblioID := fn:string($ref/@id)
-            let $ref_title := fn:string($ref/@title)
+            let $ref_title := fn:string($ref/title)
             let $full_reference := fn:string($ref/full_reference)
             let $copy := fn:string($ref/copy)
             order by $biblioID
@@ -437,49 +437,32 @@ declare function api:bibliography-details($request as map(*)) {
         error(xs:QName("not-found"), concat("The bibliography entry with ID '", $biblioID, "' does not exist."))
 };
 
-(:used for testing a single bibliography entry:)
-declare function api:biblio-test($request as map(*)) {
-    let $biblioID := $request?parameters?id
-    let $mods :=
-        collection($config:data-biblio)/*:mods[@ID = $biblioID]
-    
-    return if (exists($mods)) then
-        <div>
-            <meta charset="utf-8"/>
-            {modsHTML:format-biblioHTML($mods)}
-        </div>
-    else
-        error(xs:QName("not-found"), concat("The bibliography entry with ID '", $biblioID, "' does not exist."))
-};
 
 (:used for generating the precached xml or static html:)
-declare function api:bibliography-table($request as map(*)) {
-    let $start := if (exists($request?parameters?start)) then xs:double($request?parameters?start) else 1
-    let $limit := if (exists($request?parameters?limit)) then xs:double($request?parameters?limit) else 5003
-    let $bibliographies :=
-        let $files :=
-                collection($config:data-biblio)/*:mods[*:titleInfo[@type = "reference"]]
+declare function api:bibliography-table($request as map(*)) as map(*)* {
+    let $files := collection($config:data-biblio)/*:mods[*:titleInfo[@type = "reference"]]
+    return
         for $biblio in $files
-        order by $biblio/@ID
+        let $biblioID := string($biblio/@ID)
         let $title := $biblio/*:titleInfo[@type = "reference"]/*:title/string()
-        
-        let $foentry :=
+        let $foentry := 
             try {
                 modsHTML:format-biblioHTML($biblio)
             } catch * {
                 $title
             }
- 
-        return
-            map {
-                "biblioID": string($biblio/@ID),
-                "title":$title,
-                "full_reference": fn:serialize($foentry)
-            }
-    return
-        map {
-            "count": count($bibliographies),
-            "results": array { subsequence($bibliographies, $start, $limit) }
+        let $full_reference := fn:serialize($foentry)
+        let $copy := 
+            concat(
+                '&lt;pb-clipboard label=&quot;&quot;&gt;',
+                $full_reference,
+                '&lt;/pb-clipboard&gt;'
+            )
+        return map {
+            "biblioID": $biblioID,
+            "title": $title,
+            "full_reference": $full_reference,
+            "copy": $copy
         }
 };
 
