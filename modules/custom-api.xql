@@ -437,6 +437,20 @@ declare function api:bibliography-details($request as map(*)) {
         error(xs:QName("not-found"), concat("The bibliography entry with ID '", $biblioID, "' does not exist."))
 };
 
+(:used for testing a single bibliography entry:)
+declare function api:biblio-test($request as map(*)) {
+    let $biblioID := $request?parameters?id
+    let $mods :=
+        collection($config:data-biblio)/*:mods[@ID = $biblioID]
+    
+    return if (exists($mods)) then
+        <div>
+            <meta charset="utf-8"/>
+            {modsHTML:format-biblioHTML($mods)}
+        </div>
+    else
+        error(xs:QName("not-found"), concat("The bibliography entry with ID '", $biblioID, "' does not exist."))
+};
 
 (:used for generating the precached xml or static html:)
 declare function api:bibliography-table($request as map(*)) as map(*)* {

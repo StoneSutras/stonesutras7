@@ -52,7 +52,9 @@ declare function nameHTML:output-nameHTML($entry as element(mods:mods), $type as
                                                 )
                                                 else if ($type="editor") then
                                                 (
-                                                    if ((count($names) = (2, 3, 4)) and (not($entry/mods:name[1]/mods:role/mods:roleTerm/@type = "etal"))) then
+                                                    if ((count($names) = 2 or count($names) = 3 or count($names) = 4) 
+                                                        and not($entry/mods:name[1]/mods:role/mods:roleTerm[text() = "Editor" and @type = "etal"])) 
+                                                    then
                                                          (
                                                              if (count($names) = 2 and $pos = 1) then ", and "
                                                                     else
@@ -89,13 +91,10 @@ declare function nameHTML:output-nameHTML($entry as element(mods:mods), $type as
                                                     else
                                                         
                                                      (
-                                                    if ($entry/mods:name/mods:role/mods:roleTerm/@type = "etal") 
-                                                        then " et al., eds. " 
-                                                        else ", ed. "
-                                                            )
-                                                    
-                                                    
-                                                        
+                                                   if (exists($entry/mods:name/mods:role/mods:roleTerm[@type = "etal" and text() = "Editor"])) 
+                                                    then " et al., eds. " 
+                                                    else ", ed. "
+                                                            ) 
                                                 )   
                                                   
                                                 else
