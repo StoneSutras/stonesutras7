@@ -393,7 +393,8 @@ declare function api:bibliography($request as map(*)) {
             let $ref_title := fn:string($ref/title)
             let $full_reference := fn:string($ref/full_reference)
             let $copy := fn:string($ref/copy)
-            where contains(lower-case($ref), lower-case($query))
+            where contains(lower-case($ref), lower-case($query)) 
+               or contains(lower-case($biblioID), lower-case($query))
             order by $biblioID
             return map {
                 "biblioID": $biblioID,
@@ -695,6 +696,7 @@ declare function api:person-info($request as map(*)) {
                 }
                 </div>
                 { api:person-links($id) } 
+                { api:get-mentioned-info($id) }
             </div>
         </div>
 };
@@ -757,5 +759,31 @@ declare function api:person-links($id as xs:string) as element(div)? {
             </div>
         else ()
 };
+
+declare function api:get-mentioned-info($id as xs:string) as element(div) {
+    let $record := doc($config:data-root || '/biblio/authorities.xml')/Records/Record[ID = $id]
+    let $is_mentioned := $record/Mentioned/Is_Mentioned_in_Biblio
+    let $mods_ids := 
+        for $mod_id in $record//*[starts-with(name(), 'MODS_ID')]
+        let $mod := collection($config:data-biblio)/*:mods[@ID = $mod_id]
+        return 
+            <li>
+                <a href="bibliography.html?search={string($mod_id)}" target="_blank">
+                    {modsHTML:format-biblioHTML($mod)}
+                </a>
+            </li>
+    
+    return
+        if ($is_mentioned = 'Y') then
+            <div>
+                <h2>Mentioned in Bibliography:</h2>
+                <ul>
+                    { $mods_ids }
+                </ul>
+            </div>
+        else 
+            <div></div>  
+};
+
 
 
