@@ -280,6 +280,59 @@ declare function api:characters($request as map(*)) {
         </div>
 };
 
+declare function api:characters_new($request as map(*)) {
+    let $query := $request?parameters?search
+    let $start := if (exists($request?parameters?start)) then xs:double($request?parameters?start) else 1
+    let $limit := if (exists($request?parameters?limit)) then xs:double($request?parameters?limit) else 50
+    
+    let $character-table :=
+        try {
+            doc($config:data-root || '/characters_table.xml')/character/char
+        } catch * {
+            error(xs:QName("file-not-found"), "The precomputed character file does not exist.")
+        }
+    
+    let $filtered-characters :=
+        for $char in $character-table
+        let $character := fn:string($char/char)
+        let $inscription_title := fn:string($char/title_zh) || fn:string($char/title_en)
+        let $image := fn:string($char/image)
+        let $source := fn:string($char/source)
+        let $columnrow := fn:string($char/column) || "/" ||fn:string($char/row)
+        let $heightwidth := fn:string($char/height) || "/" || fn:string($char/width)
+        let $condition := fn:string($char/condition)
+        let $date := 
+            if ($char/date_point) then
+                fn:string($char/date_point)
+            else if ($char/date_range_lower or $char/date_range_upper) then
+                fn:string($char/date_range_lower) || "–" || fn:string($char/date_range_upper)
+            else
+                ""
+        where not($query) or 
+              contains(lower-case($character), lower-case($query)) or
+              contains(lower-case($inscription_title), lower-case($query)) or
+              contains(lower-case($source), lower-case($query))
+        order by $char/Source_column_row
+        return map {
+            "character": $character,
+            "image": <a href="https://sutras.adw.uni-heidelberg.de/images/characters/{$image}" target="_blank">
+                        <img src="https://sutras.adw.uni-heidelberg.de/images/characters/{$image}" alt="{$character}" style="width: 100px; height: auto;"/>
+                     </a>,
+            "columnrow": $columnrow,
+            "heightwidth": $heightwidth,
+            "source": <a href="inscription/{$source}" target="_blank">{$source}</a>,
+            "date": $date,
+            "condition":$condition
+        }
+    
+    let $sorted-characters := subsequence($filtered-characters, $start, $limit)
+    
+    return map {
+        "count": count($filtered-characters),
+        "results": array { $sorted-characters }
+    }
+};
+
 declare function api:research-articles($request as map(*)) {
     let $lang := replace($request?parameters?language, "^([^_-]+)[_-].*$", "$1")
     let $options := query:options(())

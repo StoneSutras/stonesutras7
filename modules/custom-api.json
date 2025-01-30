@@ -857,6 +857,95 @@
 					}
 				}
 			}
+		},
+
+		"/api/character_new": {
+			"get": {
+				"summary": "character-table",
+				"operationId": "api:characters_new",
+				"parameters": [
+					{
+						"name": "search",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						},
+						"description": "Keyword to search for characters"
+					},
+					{
+						"name": "start",
+						"in": "query",
+						"schema": {
+							"type": "integer"
+						}
+					},
+					{
+						"name": "limit",
+						"in": "query",
+						"schema": {
+							"type": "integer"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "character-table",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"count": {
+											"type": "integer",
+											"description": "Total count of characters matching the query"
+										},
+										"results": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"character": {
+														"type": "string",
+														"description": "The character or symbol."
+													  },
+													  "image": {
+														"type": "string",
+														"description": "The URL of the image representing the character."
+													  },
+													  "title": {
+														"type": "string",
+														"description": "The title of the inscription, combining both Chinese and English titles."
+													  },
+													  "source": {
+														"type": "string",
+														"description": "The source or origin of the character."
+													  },
+													  "date": {
+														"type": "string",
+														"description": "The date associated with the character, either as a single point or a range."
+													  },
+													  "columnrow": {
+														"type": "string",
+														"description": "The column and row of the character."
+													  },
+													  "heightwidth": {
+														"type": "string",
+														"description": "The height and width of the character."
+													  },
+													  "condition": {
+														"type": "string",
+														"description": "The condition of the character."
+													  }
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 
     },

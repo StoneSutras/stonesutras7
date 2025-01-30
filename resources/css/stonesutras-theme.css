@@ -187,14 +187,11 @@ ul.variants {
     padding: 0;
 }
 
-.characters {
+.characters main {
+    max-width: var(--pb-view-max-width);
+    margin: 20px auto; 
     display: flex;
-    flex-wrap: wrap;
-    column-gap: 20px;
-}
-
-.characters a:link, .characters a:visited, .characters a:hover {
-    color: var(--pb-color-primary);
+    justify-content: center; 
 }
 
 .character {
