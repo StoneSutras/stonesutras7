@@ -287,7 +287,7 @@ declare function api:characters_new($request as map(*)) {
     
     let $character-table :=
         try {
-            doc($config:data-root || '/characters_table.xml')/character/char
+            doc($config:data-root || '/catalog/characters_table.xml')/character/char
         } catch * {
             error(xs:QName("file-not-found"), "The precomputed character file does not exist.")
         }
