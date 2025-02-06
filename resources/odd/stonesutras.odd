@@ -180,8 +180,19 @@
         </model>
                     <model predicate="$parameters?mode='toc' and parent::body" behaviour="block" cssClass="toc">
             <param name="content" value="./div"/>
+            <outputRendition xml:space="preserve">
+            position: fixed;
+top: 120px;
+left: 20px;
+width: 200px;
+font-size: 14px;
+height: auto;
+overflow-y: auto;
+padding: 20px;
+flex: none;
+            </outputRendition>
         </model>
-                    <model predicate="$parameters?mode='toc'" behaviour="block">
+                    <model predicate="$parameters?mode='toc'" behaviour="block" cssClass="toc">
             <param name="content" value="(./head, ./div)"/>
         </model>
                     <model predicate="@type='title_page'" behaviour="block">
