@@ -23,19 +23,22 @@ declare function layout:extract-text($node as node()) {
         case element(tei:supplied) return
             let $sup :=  <sup>{ for $child in $node/node() return layout:extract-text($child) }</sup>
             return
-                if ($sup//lb) then (
-                    for $lb in $sup//lb
-                    let $before := $lb/preceding-sibling::lb
+                if ($sup//lb[not(@ed)]) then (
+                    for $lb in $sup//lb[not(@ed)]
+                    let $before := $lb/preceding-sibling::lb[not(@ed)]
                     for $node in $lb/preceding-sibling::node()
                     where empty($before) or $node >> $before
                     return (
                         <sup>{$node}</sup>, <lb/>
                     ),
-                    <sup>{$sup//lb[last()]/following-sibling::node()}</sup>
+                    <sup>{$sup//lb[not(@ed)][last()]/following-sibling::node()}</sup>
                 ) else
                     $sup
         case element(tei:lb) return
-            <lb/>
+            if ($node/@ed) then
+                ()
+            else
+                <lb/>
         case element(tei:space) return
             for $i in 1 to $node/@extent
             return
