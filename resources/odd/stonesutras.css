@@ -123,3 +123,7 @@ img {
 .fn-content {
     font-size: var(--pb-footnote-font-size);
 }
+
+.tippy-content {
+    font-size: 13px;
+}
