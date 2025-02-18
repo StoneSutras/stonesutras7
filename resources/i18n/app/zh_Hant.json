@@ -30,6 +30,7 @@
     "facets": {
         "type": "文檔類型",
         "site": "地點",
-        "province": "省份"
+        "province": "省份",
+        "volume": "卷"
     }
 }

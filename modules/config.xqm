@@ -154,7 +154,7 @@ declare variable $config:facets := [
 declare variable $config:article-facets := [
     map {
         "dimension": "volume",
-        "heading": "Volume",
+        "heading": "facets.volume",
         "max": 20,
         "hierarchical": false(),
         "output": function($label, $lang) {
@@ -182,6 +182,7 @@ declare variable $config:catalog-facets := [
                         case "Shandong Province" return "山東省"
                         case "Sichuan Province" return "四川省"
                         case "Shaanxi Province" return "陝西省"
+                        case "Sichuan" return "四川省"
                         default return $label
         }
     },
@@ -199,7 +200,7 @@ declare variable $config:catalog-facets := [
     },
     map {
         "dimension": "site",
-        "heading": "Site",
+        "heading": "facets.site",
         "hierarchical": false(),
         "output": function($label, $lang) {
             let $lang := replace($lang, "^([^_]+)_.*$", "$1")

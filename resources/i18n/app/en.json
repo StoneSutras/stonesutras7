@@ -27,6 +27,7 @@
     "facets": {
         "type": "Type of document",
         "site": "Site",
-        "province": "Province"
+        "province": "Province",
+        "volume": "Volume"
     }
 }
