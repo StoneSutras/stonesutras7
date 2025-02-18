@@ -298,7 +298,7 @@ declare function api:characters_new($request as map(*)) {
         let $inscription_title := fn:string($char/title_zh) || fn:string($char/title_en)
         let $image := fn:string($char/image)
         let $source := fn:string($char/source)
-        let $columnrow := fn:string($char/column) || "/" ||fn:string($char/row)
+        let $columnrow := fn:string($char/column) || "/" || fn:string($char/row)
         let $heightwidth := fn:string($char/height) || "/" || fn:string($char/width)
         let $condition := fn:string($char/condition)
         let $date := 
@@ -308,10 +308,10 @@ declare function api:characters_new($request as map(*)) {
                 fn:string($char/date_range_lower) || "–" || fn:string($char/date_range_upper)
             else
                 ""
-        where not($query) or 
+        where normalize-space($image) ne "" and (not($query) or 
               contains(lower-case($character), lower-case($query)) or
               contains(lower-case($inscription_title), lower-case($query)) or
-              contains(lower-case($source), lower-case($query))
+              contains(lower-case($source), lower-case($query)))
         order by $char/Source_column_row
         return map {
             "character": $character,
@@ -322,7 +322,7 @@ declare function api:characters_new($request as map(*)) {
             "heightwidth": $heightwidth,
             "source": <a href="inscription/{$source}" target="_blank">{$source}</a>,
             "date": $date,
-            "condition":$condition
+            "condition": $condition
         }
     
     let $sorted-characters := subsequence($filtered-characters, $start, $limit)
