@@ -119,9 +119,15 @@ declare function api:inscription-table($request as map(*)) {
         let $siteId := ft:field($catalog, "site")
         let $site := collection($config:data-catalog)/id($siteId)[@type=("site", "cave")]
         let $title := (
-            $catalog/catalog:header/catalog:title[@*:lang="zh"]/string(),
+            for $t in $catalog/catalog:header/catalog:title[@*:lang="zh"]/node()
+            return $t,
             <br/>,
-            $catalog/catalog:header/catalog:title[@*:lang="en"]/string()
+            for $t in $catalog/catalog:header/catalog:title[@*:lang="en"]/node()
+            return 
+                if (name($t) = "hi" and $t/@rend = "italic") then 
+                    element i { $t/node() } (: transforming to <i> for italics :)
+                else 
+                    $t
         )
         let $taisho := $catalog/catalog:references/catalog:ref[@type="taisho"]
         (: 
