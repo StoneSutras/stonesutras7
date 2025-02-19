@@ -819,9 +819,11 @@ declare function api:person-links($id as xs:string) as element(div)? {
         else ()
 };
 
+
 declare function api:get-mentioned-info($id as xs:string) as element(div) {
     let $record := doc($config:data-root || '/biblio/authorities.xml')/Records/Record[ID = $id]
-    let $is_mentioned := $record/Mentioned/Is_Mentioned_in_Biblio
+    let $is_mentioned_in_biblio := $record/Mentioned/Is_Mentioned_in_Biblio
+    let $is_mentioned_in_articles := $record/Mentioned/Is_Mentioned_in_Articles
     let $mods_ids := 
         for $mod_id in $record//*[starts-with(name(), 'MODS_ID')]
         let $mod := collection($config:data-biblio)/*:mods[@ID = $mod_id]
@@ -831,18 +833,38 @@ declare function api:get-mentioned-info($id as xs:string) as element(div) {
                     {modsHTML:format-biblioHTML($mod)}
                 </a>
             </li>
-    
+    let $tei_xml_ids :=
+        for $tei_xml_id in $record//*[starts-with(name(), 'TEI_XML_ID')]
+    let $title_en := collection($config:data-publication)//tei:text[@xml:id = $tei_xml_id]/tei:body/tei:div[@xml:lang="en"]/tei:head[@type="subtitle"]
+        return 
+            <li>
+                <a href="articles/{string($tei_xml_id)}" target="_blank">
+                    {string($title_en)} 
+                </a>
+            </li>
     return
-        if ($is_mentioned = 'Y') then
-            <div>
-                <h2>Mentioned in Bibliography:</h2>
-                <ul>
-                    { $mods_ids }
-                </ul>
-            </div>
-        else 
-            <div></div>  
+        <div>
+            {
+                if ($is_mentioned_in_biblio = 'Y') then
+                    <div>
+                        <h2>Mentioned in Bibliography:</h2>
+                        <ul>
+                            { $mods_ids }
+                        </ul>
+                    </div>
+                else 
+                    ()
+            }
+            {
+                if ($is_mentioned_in_articles = 'Y') then
+                    <div>
+                        <h2>Mentioned in Articles:</h2>
+                        <ul>
+                            { $tei_xml_ids }
+                        </ul>
+                    </div>
+                else 
+                    ()
+            }
+        </div>
 };
-
-
-
