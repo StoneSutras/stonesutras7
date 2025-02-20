@@ -819,7 +819,6 @@ declare function api:person-links($id as xs:string) as element(div)? {
         else ()
 };
 
-
 declare function api:get-mentioned-info($id as xs:string) as element(div) {
     let $record := doc($config:data-root || '/biblio/authorities.xml')/Records/Record[ID = $id]
     let $is_mentioned_in_biblio := $record/Mentioned/Is_Mentioned_in_Biblio
@@ -835,13 +834,31 @@ declare function api:get-mentioned-info($id as xs:string) as element(div) {
             </li>
     let $tei_xml_ids :=
         for $tei_xml_id in $record//*[starts-with(name(), 'TEI_XML_ID')]
-    let $title_en := collection($config:data-publication)//tei:text[@xml:id = $tei_xml_id]/tei:body/tei:div[@xml:lang="en"]/tei:head[@type="subtitle"]
-        return 
-            <li>
-                <a href="articles/{string($tei_xml_id)}" target="_blank">
-                    {string($title_en)} 
-                </a>
-            </li>
+    let $title_en := 
+        try {
+            collection($config:data-publication)//tei:text[@xml:id = $tei_xml_id]/tei:body/tei:div[@xml:lang="en"]/tei:head[@type="subtitle"][1]
+        } catch * {
+            ()
+        }
+    
+    let $title_zh := 
+        try {
+            collection($config:data-publication)//tei:text[@xml:id = $tei_xml_id]/tei:body/tei:div[@xml:lang="zh"]/tei:head[@type="subtitle"][1]
+        } catch * {
+            ()
+        }
+    
+    let $final_title :=
+        if ($title_en) then $title_en
+        else if ($title_zh) then $title_zh
+        else "Title not available"
+    
+    return 
+        <li>
+            <a href="articles/{string($tei_xml_id)}" target="_blank">
+                {string($final_title)}
+            </a>
+        </li>
     return
         <div>
             {
