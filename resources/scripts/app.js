@@ -94,7 +94,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     loadSvg = true;
                 }
                 break;
-            case 4:
+            case 5:
                 if (!tify) {
                     tify = new Tify({
                         container: '#tify',

@@ -72,7 +72,7 @@ declare function api:resolve($request as map(*)) {
         if ($byId) then
             $byId
         else
-            doc($config:data-root || "/" || $request?parameters?collection || "/" || $request?parameters?idOrDoc)
+            doc($config:data-root || "/" || $request?parameters?id)
     return
         if ($root) then
             vapi:view(
@@ -83,7 +83,7 @@ declare function api:resolve($request as map(*)) {
                             $request?parameters,
                             map {
                                 "docid": substring-after(document-uri(root($root)), $config:data-root || '/'),
-                                "id": if ($byId) then $request?parameters?id else (),
+                                "id": if ($byId) then $request?parameters?id else $root//tei:text/@xml:id,
                                 "data-root": $config:data-root
                             }
                         ))

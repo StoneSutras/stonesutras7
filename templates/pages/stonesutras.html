@@ -25,7 +25,7 @@
 
     <body class="inscription">
         <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json" 
-            require-language="" supported-languages="en, zh_Hant">
+            require-language="" supported-languages="en, zh_Hant" url-ignore="odd,view,selectors">
             <script id="appConfig" type="application/json" data-template="pages:parse-params">
                 {
                     "app": "${app}",
@@ -77,7 +77,7 @@
                         odd="stonesutras" subscribe="transcription" emit="transcription" disable-history="" use-language="">
                             <pb-param name="data-root" value="${data-root}/" data-template="pages:parse-params"/>
                         </pb-view>
-                        <pb-tabs emit="tabs">
+                        <pb-tabs emit="tabs" selected="2">
                             <paper-tab slot="tab">Data</paper-tab>
                             <paper-tab slot="tab">Translation</paper-tab>
                             <paper-tab slot="tab">Layout Text</paper-tab>
