@@ -831,34 +831,46 @@ declare function api:get-mentioned-info($id as xs:string) as element(div) {
                 <a href="bibliography.html?search={string($mod_id)}" target="_blank">
                     {modsHTML:format-biblioHTML($mod)}
                 </a>
-            </li>
+                </li>
     let $tei_xml_ids :=
         for $tei_xml_id in $record//*[starts-with(name(), 'TEI_XML_ID')]
-    let $title_en := 
-        try {
-            collection($config:data-publication)//tei:text[@xml:id = $tei_xml_id]/tei:body/tei:div[@xml:lang="en"]/tei:head[@type="subtitle"][1]
-        } catch * {
-            ()
-        }
-    
-    let $title_zh := 
-        try {
-            collection($config:data-publication)//tei:text[@xml:id = $tei_xml_id]/tei:body/tei:div[@xml:lang="zh"]/tei:head[@type="subtitle"][1]
-        } catch * {
-            ()
-        }
-    
-    let $final_title :=
-        if ($title_en) then $title_en
-        else if ($title_zh) then $title_zh
-        else "Title not available"
-    
-    return 
-        <li>
-            <a href="articles/{string($tei_xml_id)}" target="_blank">
-                {string($final_title)}
-            </a>
-        </li>
+        let $is_site := starts-with($tei_xml_id, 'Site_')
+        
+        let $title_en := 
+            try {
+                if ($is_site) then
+                    collection($config:data-publication)//tei:text[@xml:id = $tei_xml_id]/tei:body/tei:div[@xml:lang="en"]/tei:head[1]
+                else
+                    collection($config:data-publication)//tei:text[@xml:id = $tei_xml_id]/tei:body/tei:div[@xml:lang="en"]/tei:head[@type="subtitle"][1]
+            } catch * {
+                ()
+            }
+        
+        let $title_zh := 
+            try {
+                if (not($is_site)) then
+                    collection($config:data-publication)//tei:text[@xml:id = $tei_xml_id]/tei:body/tei:div[@xml:lang="zh"]/tei:head[@type="subtitle"][1]
+                else
+                    ()
+            } catch * {
+                ()
+            }
+        
+        let $final_title :=
+            if ($title_en) then $title_en
+            else if ($title_zh) then $title_zh
+            else "Title not available"
+        
+        let $url :=
+            if ($is_site) then concat("articles/", string($tei_xml_id))     (:or link to sites/ID:)
+            else concat("articles/", string($tei_xml_id))
+        
+        return 
+            <li>
+                <a href="{$url}" target="_blank">
+                    {string($final_title)}
+                </a>
+            </li>
     return
         <div>
             {
