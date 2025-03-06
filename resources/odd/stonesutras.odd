@@ -305,6 +305,15 @@ flex: none;
                     <model predicate="parent::div and @type='author'" behaviour="heading" cssClass="author">
             <param name="level" value="2"/>
         </model>
+                    <model predicate="parent::div and .//foreign" behaviour="heading">
+            <param name="level" value="count(ancestor::div)"/>
+            <param name="content" value="text()"/>
+            <param name="foreign" value="foreign"/>
+            <pb:template xmlns="" xml:space="preserve"><span>[[content]]　[[foreign]]</span></pb:template>
+            <outputRendition xml:space="preserve">
+            color: #a69933;
+            </outputRendition>
+        </model>
                     <model predicate="parent::div" behaviour="heading">
             <param name="level" value="count(ancestor::div)"/>
             <outputRendition xml:space="preserve">
@@ -377,9 +386,11 @@ flex: none;
             
             
             
+            
             color: var(--bss-color-gold);
 padding-left: .5em;
 padding-right: .5em;
+            
             
             
             
@@ -460,8 +471,10 @@ padding-right: .5em;
                   level</desc>
             <outputRendition xml:space="preserve">
             
+            
             margin-left: 1em; 
 font-family: var(--bss-serif-font-family);
+            
             
             </outputRendition>
         </model>
