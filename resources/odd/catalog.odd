@@ -359,6 +359,9 @@
 
 </table>
 </pb:template>
+            <outputRendition xml:space="preserve">
+            null
+            </outputRendition>
         </model>
                 </elementSpec>
                 <elementSpec ident="ref">
@@ -368,8 +371,11 @@
             <param name="content" value="(note[@*:lang='zh'], head((note[@*:lang='en'], note[not(@*:lang)])))"/>
             <param name="target" value="ref[@xlink:href]"/>
             <pb:template xmlns="" xml:space="preserve"><dt>
-  <pb-popover placement="right" remote="https://sutras.adw.uni-heidelberg.de/exist/apps/stonepub/modules/bibliohtml.xql?id=[[target]]"><span class="sigle">[[sigle]]</span></pb-popover>, [[pages]]</dt>
+  <pb-popover placement="right" remote="https://sutras.adw.uni-heidelberg.de/exist/apps/stonepub/modules/bibliohtml.xql?id=[[target]]"><span class="sigle" style="font-variant: small-caps;">[[sigle]]</span></pb-popover>, [[pages]]</dt>
 <dd>[[content]]</dd></pb:template>
+            <outputRendition xml:space="preserve">
+            null
+            </outputRendition>
         </model>
                     <model behaviour="template">
             <param name="sigle" value="let $target := @xlink:href return (collection($global:data-root || '/biblio')/mods:mods[@ID = $target]/mods:titleInfo[@type = 'reference']/string(), '???')[1] =&gt; normalize-space()"/>
@@ -377,9 +383,12 @@
             <param name="content" value="(note[@*:lang='zh'], head((note[@*:lang='en'], note[not(@*:lang)])))"/>
             <param name="target" value="@xlink:href"/>
             <pb:template xmlns="" xml:space="preserve"><dt>
-  <pb-popover placement="right" remote="https://sutras.adw.uni-heidelberg.de/exist/apps/stonepub/modules/bibliohtml.xql?id=[[target]]"><span class="sigle">[[sigle]]</span></pb-popover>, [[pages]]</dt>
+  <pb-popover placement="right" remote="https://sutras.adw.uni-heidelberg.de/exist/apps/stonepub/modules/bibliohtml.xql?id=[[target]]"><span class="sigle" style="font-variant: small-caps;">[[sigle]]</span></pb-popover>, [[pages]]</dt>
 <dd>[[content]]</dd>
 <p/></pb:template>
+            <outputRendition xml:space="preserve">
+            
+            </outputRendition>
         </model>
                     <model behaviour="omit"/>
                 </elementSpec>
