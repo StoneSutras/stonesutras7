@@ -315,9 +315,7 @@ declare function api:characters_new($request as map(*)) {
             else
                 ""
         where normalize-space($image) ne "" and (not($query) or 
-              contains(lower-case($character), lower-case($query)) or
-              contains(lower-case($inscription_title), lower-case($query)) or
-              contains(lower-case($source), lower-case($query)))
+              contains(lower-case($character), lower-case($query)))
         order by $char/Source_column_row
         return map {
             "character": $character,
