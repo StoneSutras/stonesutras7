@@ -7,7 +7,7 @@ import module namespace config="http://www.tei-c.org/tei-simple/config" at "conf
 
 declare variable $layout:font-size := 24;
 
-declare variable $layout:interpunktion := '』『」「。，、： ；？！.,:;?!&#10;&#13;“”‘’（）·«»⌉⌈/[]［］…';
+declare variable $layout:interpunktion := '』『」「。，、： ；？！.,:;?!&#10;&#13;“”‘’（）·«»⌉⌈/[]［］…<>《》';
 
 declare variable $layout:spaces := "                                     ";
 
