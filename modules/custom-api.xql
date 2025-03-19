@@ -324,7 +324,7 @@ declare function api:characters_new($request as map(*)) {
                      </a>,
             "columnrow": $columnrow,
             "heightwidth": $heightwidth,
-            "source": <a href="inscription/{$source}" target="_blank">{$source}</a>,
+            "source": <a href="https://stonesutras.org/inscriptions/{$source}" target="_blank">{$source}</a>,
             "date": $date,
             "condition": $condition
         }
