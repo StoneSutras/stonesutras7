@@ -372,7 +372,8 @@
             <param name="target" value="ref[@xlink:href]"/>
             <pb:template xmlns="" xml:space="preserve"><dt>
   <pb-popover placement="right" remote="https://sutras.adw.uni-heidelberg.de/exist/apps/stonepub/modules/bibliohtml.xql?id=[[target]]"><span class="sigle" style="font-variant: small-caps;">[[sigle]]</span></pb-popover>, [[pages]]</dt>
-<dd>[[content]]</dd></pb:template>
+<dd>[[content]]</dd>
+<br/></pb:template>
             <outputRendition xml:space="preserve">
             null
             </outputRendition>
@@ -471,6 +472,16 @@
 
 </pb:template>
         </model>
+                </elementSpec>
+            <elementSpec ident="tei:l" mode="add">
+                    <model behaviour="block">
+            <outputRendition xml:space="preserve">
+            padding-left: 2em
+            </outputRendition>
+        </model>
+                </elementSpec>
+                <elementSpec ident="tei:lg" mode="add">
+                    <model behaviour="inline"/>
                 </elementSpec>
             </schemaSpec>
         </body>
