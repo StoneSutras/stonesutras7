@@ -334,7 +334,7 @@
             <param name="illustration" value="ref[@value='illustration']"/>
             <param name="transcription" value="ref[@value='transcription']"/>
             <param name="taisho" value="ref[@type=('taisho')]"/>
-            <pb:template xmlns="" xml:space="preserve"><h2>參考資料/References </h2>
+            <pb:template xmlns="" xml:space="preserve">
 <table>
   <tr>
     <td>
