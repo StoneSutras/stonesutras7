@@ -122,7 +122,7 @@ declare function api:inscription-table($request as map(*)) {
             for $t in $catalog/catalog:header/catalog:title[@*:lang="zh"]/node()
             return $t,
             <br/>,
-            for $t in $catalog/catalog:header/catalog:title[@*:lang="en"]/node()
+            for $t in $catalog/catalog:header/catalog:title[@*:lang="en" and @type="given"]/node()
             return 
                 if (name($t) = "hi" and $t/@rend = "italic") then 
                     element i { $t/node() } (: transforming to <i> for italics :)
