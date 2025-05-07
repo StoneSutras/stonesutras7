@@ -254,12 +254,22 @@ flex: none;
         </model>
                 </elementSpec>
     <elementSpec ident="head" mode="change">
-                    <model predicate="$parameters?mode = 'toc' and parent::div and parent::div[parent::div[parent::div]]" behaviour="heading">
+                    <model predicate="$parameters?mode = 'toc' and parent::div and parent::div[parent::div[parent::div[parent::div]]]" behaviour="heading">
+            <desc>for the (third-level) subtitles of TOC</desc>
             <param name="id" value="generate-id(parent::div)"/>
             <param name="level" value="count(ancestor::div) + 1"/>
             <pb:template xmlns="" xml:space="preserve"><pb-link hash="[[id]]" emit="transcription">[[content]]</pb-link></pb:template>
             <outputRendition xml:space="preserve">
-            padding-left: 2em;
+            padding-left: 4em;  font-weight: normal;
+            </outputRendition>
+        </model>
+                    <model predicate="$parameters?mode = 'toc' and parent::div and parent::div[parent::div[parent::div]]" behaviour="heading">
+            <desc>for the (second-level) subtitles of TOC</desc>
+            <param name="id" value="generate-id(parent::div)"/>
+            <param name="level" value="count(ancestor::div) + 1"/>
+            <pb:template xmlns="" xml:space="preserve"><pb-link hash="[[id]]" emit="transcription">[[content]]</pb-link></pb:template>
+            <outputRendition xml:space="preserve">
+            padding-left: 2em;  font-weight: normal;
             </outputRendition>
         </model>
                     <model predicate="$parameters?mode = 'toc'" behaviour="heading">
