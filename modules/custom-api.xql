@@ -122,12 +122,22 @@ declare function api:inscription-table($request as map(*)) {
             for $t in $catalog/catalog:header/catalog:title[@*:lang="zh"]/node()
             return $t,
             <br/>,
-            for $t in $catalog/catalog:header/catalog:title[@*:lang="en" and @type="given"]/node()
-            return 
-                if (name($t) = "hi" and $t/@rend = "italic") then 
-                    element i { $t/node() } (: transforming to <i> for italics :)
-                else 
-                    $t
+            let $en-title := $catalog/catalog:header/catalog:title[@*:lang="en" and @type="given"]
+            return
+                if (empty($en-title)) then
+                    for $t in $catalog/catalog:header/catalog:title[@*:lang="en"]/node()
+                    return 
+                        if (name($t) = "hi" and $t/@rend = "italic") then 
+                            element i { $t/node() }
+                        else 
+                            $t
+                else
+                    for $t in $en-title/node()
+                    return 
+                        if (name($t) = "hi" and $t/@rend = "italic") then 
+                            element i { $t/node() }
+                        else 
+                            $t
         )
         let $taisho := $catalog/catalog:references/catalog:ref[@type="taisho"]
         (: 
