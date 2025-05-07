@@ -254,6 +254,14 @@ flex: none;
         </model>
                 </elementSpec>
     <elementSpec ident="head" mode="change">
+                    <model predicate="$parameters?mode = 'toc' and parent::div and parent::div[parent::div[parent::div]]" behaviour="heading">
+            <param name="id" value="generate-id(parent::div)"/>
+            <param name="level" value="count(ancestor::div) + 1"/>
+            <pb:template xmlns="" xml:space="preserve"><pb-link hash="[[id]]" emit="transcription">[[content]]</pb-link></pb:template>
+            <outputRendition xml:space="preserve">
+            padding-left: 2em;
+            </outputRendition>
+        </model>
                     <model predicate="$parameters?mode = 'toc'" behaviour="heading">
             <param name="id" value="generate-id(parent::div)"/>
             <param name="level" value="count(ancestor::div) + 1"/>
@@ -364,55 +372,9 @@ flex: none;
                     <model behaviour="inline" useSourceRendition="true">
             <param name="content" value="('/', @n, '/')"/>
             <outputRendition xml:space="preserve">
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
             color: var(--bss-color-gold);
 padding-left: .5em;
 padding-right: .5em;
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
             </outputRendition>
         </model>
                 </elementSpec>
@@ -472,8 +434,10 @@ padding-right: .5em;
             <outputRendition xml:space="preserve">
             
             
+            
             margin-left: 1em; 
 font-family: var(--bss-serif-font-family);
+            
             
             
             </outputRendition>
