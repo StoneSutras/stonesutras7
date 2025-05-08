@@ -31,3 +31,7 @@ td {
     width: 320px;
     z-index: -1;
 }
+
+.space {
+  margin-left: 0.5em;
+}
