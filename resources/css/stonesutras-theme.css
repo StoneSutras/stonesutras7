@@ -54,9 +54,16 @@ html.glightbox-open {
     overflow: unset;
 }
 
-a:link, a:visited, a:hover {
-    text-decoration: none;
-    color: var(--bss-color-lb);
+a:link,
+a:visited {
+  text-decoration: none;
+  color: var(--bss-color-lb);
+  line-height: 1.6; 
+}
+
+a:hover {
+  text-decoration: underline; 
+  color: var(--bss-color-lb); 
 }
 
 .menubar a:link, .menubar a:visited, .menubar a:hover {
@@ -446,3 +453,8 @@ ul.variants {
   width: 100%; 
   padding: 0px;
 }
+
+body {
+    --pb-highlight-color: #66180a;
+}
+
