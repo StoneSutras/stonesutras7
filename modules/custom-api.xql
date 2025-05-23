@@ -837,9 +837,15 @@ declare function api:get-mentioned-info($id as xs:string) as element(div) {
         return 
             <li>
                 <a href="bibliography.html?search={string($mod_id)}" target="_blank">
-                    {modsHTML:format-biblioHTML($mod)}
+                {
+                    try {
+                        modsHTML:format-biblioHTML($mod)
+                    } catch * {
+                        concat("Cannot display (mods id = ", string($mod_id), ")")
+                    }
+                }
                 </a>
-                </li>
+            </li>
     let $tei_xml_ids :=
         for $tei_xml_id in $record//*[starts-with(name(), 'TEI_XML_ID')]
         let $is_site := starts-with($tei_xml_id, 'Site_')
@@ -904,4 +910,93 @@ declare function api:get-mentioned-info($id as xs:string) as element(div) {
                     ()
             }
         </div>
-};
+    };
+
+    declare function api:places($request as map(*)) {
+        let $search := normalize-space($request?parameters?search)
+        let $typeParam := $request?parameters?category
+        let $places := api:places-name-to-display($search)
+    
+        let $sortedPlaces := 
+            for $place in $places
+            let $sortKey := lower-case(string($place?name_to_display))
+            let $type := string($place?type)
+            order by $sortKey
+            return map {
+                "sortKey": $sortKey,
+                "name_to_display": $place?name_to_display,
+                "id": $place?id,
+                "type": $type
+            }
+    
+        let $displayItems := 
+            array {
+                for $place in 
+                    if ($typeParam = "All" or not($typeParam)) then 
+                        $sortedPlaces
+                    else 
+                        filter($sortedPlaces, function($entry) {
+                            $entry?type = $typeParam
+                        })
+                return 
+                    <span>
+                        <a href="place.html?id={$place?id}">{$place?name_to_display}</a>
+                    </span>
+            }
+    
+        let $categories := 
+            let $types := distinct-values(for $p in $sortedPlaces return $p?type)
+            return array {
+                for $type in $types
+                let $hits := count(filter($sortedPlaces, function($entry) { $entry?type = $type }))
+                where $hits > 0
+                order by $type
+                return map {
+                    "category": $type,
+                    "count": $hits
+                },
+                map {
+                    "category": "All",
+                    "count": count($sortedPlaces)
+                }
+            }
+    
+        return map {
+            "items": $displayItems,
+            "categories": $categories
+        }
+    };
+
+        
+    declare function api:places-name-to-display($search as xs:string?) as map()* {
+        let $query := normalize-space($search)
+        let $places :=
+            if ($query != "") then
+                collection($config:data-biblio)//place[
+                    contains(lower-case(name_zh), lower-case($query)) or
+                    contains(lower-case(name_en), lower-case($query))
+                ]
+            else
+                collection($config:data-biblio)//place
+    
+        for $place in $places
+        let $id := string($place/@id)
+        let $name_zh := string($place/name_zh)
+        let $name_en := string($place/name_en)
+        let $type := string($place/@type)
+        let $final_name_with_dates := 
+            if ($name_zh != "" and $name_en != "") then
+                concat($name_en, " (", $name_zh, ")")
+            else if ($name_zh != "") then
+                $name_zh
+            else
+                $name_en
+    
+        return map {
+            "id": $id,
+            "name_to_display": $final_name_with_dates,
+            "type": $type
+        }
+    };
+
+

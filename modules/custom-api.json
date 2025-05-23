@@ -867,8 +867,79 @@
                     }
                 }
             }
+        },	
+		"/api/places": {
+		    "get": {
+		        "summary": "Retrieve sorted list of places",
+		        "description": "Retrieve a sorted and filtered list of places with optional search and pagination.",
+		        "operationId": "custom:places",
+		        "parameters": [
+		            {
+		                "name": "search",
+		                "in": "query",
+		                "schema": {
+		                    "type": "string"
+		                },
+		                "description": "Keyword to search for places."
+		            },
+		            {
+		                "name": "category",
+		                "in": "query",
+		                "schema": {
+		                    "type": "string"
+		                },
+		                "description": "Filter results by type of place."
+		            }
+		        ],
+	        "responses": {
+                "200": {
+                    "description": "List of register entries",
+                    "content": {
+                        "application/json": {
+                            "schema":{
+                                "type": "object"
+                            	}
+                            }
+                        }
+                    }
+                }
+            }
         },
-	
+
+		"/places/{id}": {
+			"get": {
+			    "summary": "Retrieve the HTML template used for displaying a place",
+				"description": "Get the HTML template associated with the given document. This is called whenever the users tries to view a document. The actual content of the document will then be loaded by the template.",
+				"operationId": "api:place-info",
+				"x-error-handler": "vapi:handle-error",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "ID of place",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"example": "arai"
+						},
+						"allowReserved": true
+					}
+				],
+			"responses": {
+                    "200":{
+                        "description": "place infomation",
+                        "content": {
+                            "text/html":{
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
 		"/api/bibliography/json": {
 			"get": {
 				"summary": "Search for Bibliography",

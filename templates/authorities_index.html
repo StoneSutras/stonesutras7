@@ -1,0 +1,132 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes" />
+    <link rel="shortcut icon" type="image/x-icon" href="resources/images/favicon.ico" />
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-16.png" sizes="16x16" />
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-24.png" sizes="24x24" />
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-32.png" sizes="32x32" />
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-64.png" sizes="64x64" />
+
+    <title data-template="config:app-title" />
+    <meta name="description" content="Default single text layout" />
+    <meta name="pb-template" content="view.html" />
+
+    <link rel="stylesheet" type="text/css" href="resources/fonts/font.css" />
+    <link rel="stylesheet" href="resources/css/stonesutras-theme.css" />
+    <style>
+        .main-content {
+            display: flex;
+            min-height: 500px;
+            background-color: #f9f9f9;
+            /* 頁面背景色 */
+            border-radius: 8px;
+            /* 可選：增加圓角 */
+            overflow: hidden;
+            /* 確保內容不溢出圓角 */
+            margin: 20px;
+            /* 調整外邊距 */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            /* 可選：添加陰影 */
+        }
+
+        .sidebar {
+            width: 200px;
+            background-color: #fff;
+            /* background color for the left menu bar */
+            padding: 20px;
+            border-right: 1px solid #ccc;
+            /* separating line */
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar a {
+            display: block;
+            text-decoration: none;
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            /* hover */
+        }
+
+        .sidebar a:hover {
+            background-color: #eee;
+            color: #007bff;
+            /* hover color */
+        }
+
+        #content-area {
+            flex-grow: 1;
+            padding: 20px;
+            padding-left: 30px;
+            /* between line and right content */
+        }
+    </style>
+    <script type="module" src="pb-components-bundle.js" data-template="pages:load-components" />
+</head>
+
+<body>
+    <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json"
+        require-language="" supported-languages="en, zh_Hant">
+        <script id="appConfig" type="application/json" data-template="pages:parse-params">
+                {
+                    "app": "${app}"
+                }
+            </script>
+        <app-drawer-layout force-narrow="force-narrow">
+            <app-drawer data-template="templates:include" data-template-path="templates/drawer.html" />
+            <app-header-layout>
+                <app-header slot="header" reveals="reveals" fixed="fixed" effects="waterfall">
+                    <app-toolbar data-template="templates:include" data-template-path="templates/menu.html" />
+                    <app-toolbar data-template="templates:include" data-template-path="templates/toolbar.html" />
+                </app-header>
+                <main class="main-content">
+                    <aside class="sidebar">
+                        <ul>
+                            <li><a href="#" onclick="loadContent('persons.html')">Persons</a></li>
+                            <li><a href="#" onclick="loadContent('places.html')">Places</a></li>
+                            <li><a href="#" onclick="loadContent('times.html')">Times</a></li>
+                        </ul>
+                    </aside>
+
+                    <div id="content-area">
+                    </div>
+                </main>
+            </app-header-layout>
+        </app-drawer-layout>
+    </pb-page>
+    <div class="splash" />
+
+    <script>
+        function loadContent(url) {
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('content-area').innerHTML = data;
+                });
+
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            loadContent('persons.html');
+        });
+
+        function updateUrlForPlaces(url) {
+            const baseUrl = window.location.href.split('?')[0].split('#')[0];
+            const newUrl = baseUrl + '?search=&amp;category=All#';
+            history.replaceState(null, '', newUrl);
+            loadContent(url);
+        }
+    </script>
+</body>
+
+</html>

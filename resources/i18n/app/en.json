@@ -18,7 +18,9 @@
         "articles": "Research",
         "inscriptions": "Inscriptions",
         "bibliography": "Bibliography",
-        "characters": "Characters"
+        "characters": "Characters",
+        "persons": "Persons",
+        "Authorities_Index":"Index"
     },
     "inscriptions": "Inscriptions",
     "errors": {
