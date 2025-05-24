@@ -20,24 +20,29 @@
             display: flex;
             min-height: 500px;
             background-color: #f9f9f9;
-            /* 頁面背景色 */
+            /* Page background color */
             border-radius: 8px;
-            /* 可選：增加圓角 */
+            /* Optional: Add rounded corners */
             overflow: hidden;
-            /* 確保內容不溢出圓角 */
+            /* Ensure content does not overflow rounded corners */
             margin: 20px;
-            /* 調整外邊距 */
+            /* Adjust outer margin */
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            /* 可選：添加陰影 */
+            /* Optional: Add shadow */
         }
 
         .sidebar {
             width: 200px;
             background-color: #fff;
-            /* background color for the left menu bar */
+            /* Background color for the left menu bar */
             padding: 20px;
             border-right: 1px solid #ccc;
-            /* separating line */
+            /* Separating line */
+            position: fixed; /* Added to make it fixed */
+            top: 100px;
+            left: 20px; /* Adjust based on your margin */
+            bottom: 0; /* Make its height extend to the bottom of the viewport */
+            overflow-y: auto; /* Allow scrolling if content is too long */
         }
 
         .sidebar ul {
@@ -56,20 +61,20 @@
             padding: 10px 15px;
             border-radius: 5px;
             transition: background-color 0.3s ease;
-            /* hover */
+            /* Hover effect */
         }
 
         .sidebar a:hover {
             background-color: #eee;
             color: #007bff;
-            /* hover color */
+            /* Hover color */
         }
 
         #content-area {
             flex-grow: 1;
-            padding: 20px;
-            padding-left: 30px;
-            /* between line and right content */
+            padding: 30px;
+            padding-left: 240px;
+            /* Space between line and right content */
         }
     </style>
     <script type="module" src="pb-components-bundle.js" data-template="pages:load-components" />

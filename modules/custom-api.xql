@@ -966,7 +966,6 @@ declare function api:get-mentioned-info($id as xs:string) as element(div) {
             "categories": $categories
         }
     };
-
         
     declare function api:places-name-to-display($search as xs:string?) as map()* {
         let $query := normalize-space($search)
@@ -999,4 +998,49 @@ declare function api:get-mentioned-info($id as xs:string) as element(div) {
         }
     };
 
+
+declare function api:place-info($request as map(*)) {
+    let $id := $request?parameters?id
+    let $places := collection($config:data-biblio)/places
+    let $place := $places/place[@id = $id] 
+    let $name_zh := string($place/name_zh)
+    let $name_en := string($place/name_en)
+    let $type := string($place/@type)
+    let $sources := $place/*[starts-with(name(), 'source')] ! string()
+    
+    let $name := 
+        if ($name_zh != "" and $name_en != "") then
+            concat($name_en, " (", $name_zh, ")")
+        else if ($name_zh != "") then
+            $name_zh
+        else
+            $name_en
+    
+    return 
+        <div>
+            <div class="person-head">
+                <h1>{$name}</h1>
+                <p>(Type: {$type})</p>
+            </div>
+            <div class="person-details">
+                <div class="person-variants">
+                {
+                }
+                </div>
+                <div class="person-date">
+                {
+                }
+                </div>
+                <div class="person-date">                
+                    <h2>Mentioned in:</h2>
+                    {<ul>
+                        {
+                            for $source in $sources
+                                return <li><a href="Publication/{$source}">{$source}</a></li>
+                        }
+                    </ul>}                
+                </div>
+            </div>
+        </div>
+};
 

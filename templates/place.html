@@ -1,0 +1,70 @@
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes"/>
+        <link rel="shortcut icon" type="image/x-icon" href="resources/images/favicon.ico"/>
+        <link rel="shortcut icon" type="image/png" href="resources/images/favicon-16.png" sizes="16x16"/>
+        <link rel="shortcut icon" type="image/png" href="resources/images/favicon-24.png" sizes="24x24"/>
+        <link rel="shortcut icon" type="image/png" href="resources/images/favicon-32.png" sizes="32x32"/>
+        <link rel="shortcut icon" type="image/png" href="resources/images/favicon-64.png" sizes="64x64"/>
+
+        <title data-template="config:app-title"/>
+        <meta name="description" content="Default single text layout"/>
+        <meta name="pb-template" content="view.html"/>
+
+        <link rel="stylesheet" type="text/css" href="resources/fonts/font.css"/>
+        <link rel="stylesheet" href="resources/css/stonesutras-theme.css"/>
+        <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
+    </head>
+
+    <body class="person">
+        <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json"
+            require-language="" supported-languages="en, zh_Hant">
+            <script id="appConfig" type="application/json" data-template="pages:parse-params">
+                {
+                    "app": "${app}"
+                }
+            </script>
+
+            <script>
+                const urlParams = new URLSearchParams(window.location.search);
+                const id = urlParams.get('id'); 
+                if (id) {
+                    const pbLoad = document.querySelector('pb-load');
+                    if (pbLoad) {
+                        pbLoad.setAttribute('url', `place/${id}`);
+                    }
+                }
+            </script>
+            <script>
+              document.addEventListener('DOMContentLoaded', function () {
+                const urlParams = new URLSearchParams(window.location.search);
+                const id = urlParams.get('id');
+                
+                if (id) {
+                  const loader = document.getElementById('personLoader');
+                  loader.url = `place/${id}`; 
+
+                }
+              });
+            </script>
+
+            <app-drawer-layout force-narrow="force-narrow">
+                <app-drawer data-template="lib:include" data-template-path="templates/drawer.html"/>
+                <app-header-layout>
+                    <app-header slot="header" reveals="reveals" fixed="fixed" effects="waterfall">
+                        <app-toolbar data-template="lib:include" data-template-path="templates/menu.html"/>
+                        <app-toolbar data-template="lib:include" data-template-path="templates/toolbar.html">
+                            <p data-target="breadcrumbs" class="breadcrumbs"><pb-i18n key="menu.places">Places</pb-i18n></p>
+                        </app-toolbar>
+                    </app-header>
+                    <main>
+                        <pb-load id="personLoader" url="" expand="" auto="">Loading...
+                        </pb-load>
+                    </main>
+                    </app-header-layout>
+            </app-drawer-layout>
+        </pb-page>
+        <div class="splash"/>
+    </body>
+</html>

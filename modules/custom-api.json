@@ -906,7 +906,7 @@
             }
         },
 
-		"/places/{id}": {
+		"/place/{id}": {
 			"get": {
 			    "summary": "Retrieve the HTML template used for displaying a place",
 				"description": "Get the HTML template associated with the given document. This is called whenever the users tries to view a document. The actual content of the document will then be loaded by the template.",
@@ -920,7 +920,7 @@
 						"required": true,
 						"schema": {
 							"type": "string",
-							"example": "arai"
+							"example": "Jingshiyu"
 						},
 						"allowReserved": true
 					}
