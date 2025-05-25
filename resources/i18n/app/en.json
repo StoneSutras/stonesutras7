@@ -20,7 +20,8 @@
         "bibliography": "Bibliography",
         "characters": "Characters",
         "persons": "Persons",
-        "authorities_index":"Index"
+        "knowledge":"Knowledge",
+        "about": "About"
     },
     "inscriptions": "Inscriptions",
     "errors": {

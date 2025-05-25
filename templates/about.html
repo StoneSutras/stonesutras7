@@ -14,16 +14,11 @@
 
         <link rel="stylesheet" type="text/css" href="resources/fonts/font.css"/>
         <link rel="stylesheet" href="resources/css/stonesutras-theme.css"/>
-        <style>
-            main {
-                max-width: var(--pb-view-max-width);
-                margin: 20px;
-            }
-        </style>
         <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
+        <script type="module" src="pb-leaflet-map.js" data-template="pages:load-components"/>
     </head>
 
-    <body>
+    <body class="home">
         <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json"
             require-language="" supported-languages="en, zh_Hant">
             <script id="appConfig" type="application/json" data-template="pages:parse-params">
@@ -32,27 +27,23 @@
                 }
             </script>
             <app-drawer-layout force-narrow="force-narrow">
-                <app-drawer data-template="templates:include" data-template-path="templates/drawer.html"/>
+                <app-drawer data-template="lib:include" data-template-path="templates/drawer.html"/>
                 <app-header-layout>
                     <app-header slot="header" reveals="reveals" fixed="fixed" effects="waterfall">
                         <app-toolbar data-template="lib:include" data-template-path="templates/menu.html"/>
                         <app-toolbar data-template="lib:include" data-template-path="templates/toolbar.html">
-                            <span data-target="breadcrumbs" class="breadcrumbs" data-template="pages:parse-params">
-                                <pb-i18n key="menu.characters"></pb-i18n>
-                            </span>
+                            <!-- Search input -->
+                            <pb-search data-target="toolbar-util" action="${app}/search.html" data-template="pages:parse-params" value="${query}" redirect="redirect"/>
                         </app-toolbar>
                     </app-header>
                     <main>
-                        <pb-search id="search-form" subscribe="search" place-holder="Enter character"
-                            data-template="pages:parse-params" value="${query}" 
-                            subforms=".options" submit-on-load="submit-on-load">
-                            <paper-button slot="searchButton"><pb-i18n key="search.search"></pb-i18n></paper-button>
-                        </pb-search>
-                        <pb-load url="api/characters" auto="auto"></pb-load>
+                        <h2>About the Website</h2>
+                        
                     </main>
                 </app-header-layout>
             </app-drawer-layout>
         </pb-page>
         <div class="splash"/>
+       
     </body>
 </html>

@@ -1,0 +1,37 @@
+<html>
+<style>
+    .facets-layout {
+        display: flex;
+        gap: 160px;
+        align-items: flex-start;
+    }
+
+    .left-pane {
+        width: 250px;
+    }
+
+    .right-pane {
+        flex: 1;
+        min-width: 0;
+    }
+</style>
+
+<body class="articles">
+    <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json"
+        require-language="" supported-languages="en, zh_Hant">
+        <main class="facets-layout">
+            <div class="left-pane">
+                <pb-custom-form class="facets" url="api/search/article-facets" event="pb-results-received"
+                    subscribe="transcription" emit="articles" />
+            </div>
+            <div class="right-pane">
+                <pb-load url="api/articles" auto="" event="pb-search-resubmit" use-language="" subscribe="articles"
+                    emit="transcription" />
+            </div>
+        </main>
+
+    </pb-page>
+
+</body>
+
+</html>
