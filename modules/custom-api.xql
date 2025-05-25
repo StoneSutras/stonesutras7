@@ -1016,6 +1016,9 @@ declare function api:place-info($request as map(*)) {
         else
             $name_en
     
+    let $wiki-link := $place/Wikipedia_link/string()
+
+    
     return 
         <div>
             <div class="person-head">
@@ -1023,24 +1026,45 @@ declare function api:place-info($request as map(*)) {
                 <p>(Type: {$type})</p>
             </div>
             <div class="person-details">
-                <div class="person-variants">
-                {
-                }
-                </div>
-                <div class="person-date">
-                {
-                }
-                </div>
                 <div class="person-date">                
                     <h2>Mentioned in:</h2>
-                    {<ul>
-                        {
-                            for $source in $sources
-                                return <li><a href="Publication/{$source}">{$source}</a></li>
-                        }
-                    </ul>}                
+                    <ul>
+                    {
+                        for $source in $sources
+                        let $doc := doc(concat($config:data-publication, '/', $source))
+                        let $title := ($doc//tei:title)[1]
+                        let $label := if (exists($title)) then string($title) else "title unavailable"
+                        return <li><a href="Publication/{$source}">{$label}</a></li>
+                    }
+                    </ul>                
                 </div>
+                
+                {
+                  if ($wiki-link) then
+                    <div class="wiki-link">
+                      <h2>Wikipedia:</h2>
+                      <p><a href="{$wiki-link}" target="_blank">{$wiki-link}</a></p>
+                    </div>
+                  else ()
+                }
+                
+
             </div>
         </div>
 };
+
+declare function api:place-coordinates($request as map(*)) {
+  let $id := $request?parameters?id
+  let $place := collection($config:data-root)//place[@id = $id]
+  let $lat := string($place/coordinates/lat)
+  let $lon := string($place/coordinates/lon)
+  return map {
+    "latitude": $lat,
+    "longitude": $lon,
+    "label": string($place/name_zh)
+  }
+};
+
+
+
 

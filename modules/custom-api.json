@@ -939,6 +939,52 @@
                 }
             }
         },
+        
+        "/place/{id}/coordinates": {
+		    "get": {
+		        "summary": "Getting the coordinates of a place",
+		        "description": "This is used for leaflet element",
+		        "operationId": "custom:place-coordinates",
+				"x-error-handler": "vapi:handle-error",
+				"parameters": [
+									{
+										"name": "id",
+										"in": "path",
+										"description": "ID of place",
+										"required": true,
+										"schema": {
+											"type": "string",
+											"example": "Jingshiyu"
+										},
+										"allowReserved": true
+									}
+								],
+		        "responses": {
+		            "200": {
+		                "description": "Coordinates and label for a single place",
+		                "content": {
+		                    "application/json": {
+		                        "schema": {
+		                            "type": "object",
+		                            "properties": {
+		                                    "latitude":{
+		                                        "type": "string"
+		                                    },
+		                                    "longitude":{
+		                                        "type": "string"
+		                                    },
+		                                    "label": {
+		                                        "type": "string"
+			                                }
+			                            }
+			                        }
+			                    }
+			                }
+			            }
+			        }
+			    }			
+			},
+
 
 		"/api/bibliography/json": {
 			"get": {
