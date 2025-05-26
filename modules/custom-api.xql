@@ -623,9 +623,9 @@ declare function api:persons-name-to-display($search) {
     let $lang := string($mad/mads:authority/@lang)
     let $transliterationVariants := 
     (:if authority lang is CJK, usually it will have at least a trasliteration or a lang arribute, therefore we find the first valid variant to display:)
-        if ($mad/mads:variant[@transliteration or @lang]) then
+        if ($mad/mads:variant[(@transliteration or (@lang and not(@lang = 'zh')))]) then
             let $filteredVariants := 
-                for $v in $mad/mads:variant[@transliteration or @lang]
+                for $v in $mad/mads:variant[(@transliteration or (@lang and not(@lang = 'zh')))]
                 let $variantNameParts := 
                     for $namePart in $v/mads:name/mads:namePart
                     where 
