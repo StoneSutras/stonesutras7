@@ -347,6 +347,49 @@ declare function api:characters_new($request as map(*)) {
     }
 };
 
+
+declare function api:test-places($request as map(*)) {
+  let $lang := replace($request?parameters?language, "^([^_-]+)[_-].*$", "$1")
+  let $search := $request?parameters?search
+  let $options := query:options(())
+
+  let $query := if ($search and normalize-space($search) != "") 
+                then $search 
+                else "*:*"
+  
+  let $places := collection($config:data-biblio)/places/place[@type != ""][ft:query(., $query, $options)]
+
+  let $nil := session:set-attribute($config:session-prefix || ".places", $places)
+
+  let $grouped :=
+    for $type in distinct-values($places/@type)
+    order by $type
+    return
+      <div class="place-category">
+        <h2>{$type}</h2>
+        {
+          for $place in $places[@type = $type]
+            let $id := string($place/@id)
+            let $name_zh := normalize-space($place/name_zh)
+            let $name_en := normalize-space($place/name_en)
+            let $final_name_with_dates := 
+              if ($name_zh != "" and $name_en != "") then
+                concat($name_en, "  ", $name_zh)
+              else if ($name_zh != "") then
+                $name_zh
+              else
+                $name_en
+            order by lower-case($final_name_with_dates)
+            let $href := concat("place.html?id=", $id)
+            return <div class="place"><a href="{$href}">{$final_name_with_dates}</a></div>
+        }
+      </div>
+
+  return <div class="all-places">{$grouped}</div>
+};
+
+
+
 declare function api:research-articles($request as map(*)) {
     let $lang := replace($request?parameters?language, "^([^_-]+)[_-].*$", "$1")
     let $options := query:options(())
@@ -402,6 +445,22 @@ declare function api:catalog-facets($request as map(*)) {
         }
         </div>
 };
+
+declare function api:place-facets($request as map(*)) {
+    
+    let $hits := session:get-attribute($config:session-prefix || ".places")
+    where count($hits) > 0
+    return
+        <div>
+        {
+            for $config in $config:place-facets?*
+            return
+                facets:display($config, $hits)
+        }
+        </div>
+};
+
+
 
 (:~
  : Keep this. This function does the actual lookup in the imported modules.
@@ -912,7 +971,7 @@ declare function api:get-mentioned-info($id as xs:string) as element(div) {
         </div>
     };
 
-    declare function api:places($request as map(*)) {
+  declare function api:places($request as map(*)) {
         let $search := normalize-space($request?parameters?search)
         let $typeParam := $request?parameters?category
         let $places := api:places-name-to-display($search)
@@ -966,6 +1025,7 @@ declare function api:get-mentioned-info($id as xs:string) as element(div) {
             "categories": $categories
         }
     };
+
         
     declare function api:places-name-to-display($search as xs:string?) as map()* {
         let $query := normalize-space($search)
@@ -1064,7 +1124,6 @@ declare function api:place-coordinates($request as map(*)) {
     "label": string($place/name_zh)
   }
 };
-
 
 
 

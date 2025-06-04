@@ -21,7 +21,8 @@
         "characters": "Characters",
         "persons": "Persons",
         "knowledge":"Knowledge",
-        "about": "About"
+        "about": "About",
+        "places":"Places"
     },
     "inscriptions": "Inscriptions",
     "errors": {
@@ -31,6 +32,7 @@
         "type": "Type of document",
         "site": "Site",
         "province": "Province",
-        "volume": "Volume"
+        "volume": "Volume",
+        "place_type":"Place Type"
     }
 }

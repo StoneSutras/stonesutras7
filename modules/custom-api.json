@@ -528,6 +528,26 @@
 				}
 			}
 		},
+		"/api/search/place-facets": {
+			"get": {
+				"summary": "List facets",
+				"description": "Return a list of facet counts for current search results",
+				"operationId": "custom:place-facets",
+				"tags": ["search"],
+				"responses": {
+					"200": {
+						"description": "Facets returned",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
         "/api/inscriptions/json": {
             "get": {
                 "summary": "Get list of inscriptions for site",
@@ -868,6 +888,44 @@
                 }
             }
         },	
+		"/api/test-places": {
+		    "get": {
+		        "summary": "Retrieve sorted list of places",
+		        "description": "Retrieve a sorted and filtered list of places with optional search and pagination.",
+		        "operationId": "custom:test-places",
+		        "parameters": [
+		            {
+		                "name": "search",
+		                "in": "query",
+		                "schema": {
+		                    "type": "string"
+		                },
+		                "description": "Keyword to search for places."
+		            },
+		            {
+		                "name": "category",
+		                "in": "query",
+		                "schema": {
+		                    "type": "string",
+		                    "default": "all"
+		                },
+		                "description": "Filter results by type of place."
+		            }
+		        ],
+	        "responses": {
+                "200": {
+                    "description": "List of places",
+                    "content": {
+                        "text/html": {
+                            "schema":{
+                                "type": "string"
+                            	}
+                            }
+                        }
+                    }
+                }
+            }
+        },
 		"/api/places": {
 		    "get": {
 		        "summary": "Retrieve sorted list of places",

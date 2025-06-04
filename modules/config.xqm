@@ -238,6 +238,51 @@ declare variable $config:inscription-facets := [
     }
 ];
 
+declare variable $config:place-facets := [
+    map {
+        "dimension": "place_type",
+        "heading": "facets.place_type",
+        "max": 50,
+        "hierarchical": false(),
+        "output": function($label, $lang) {
+            let $lang := replace($lang, "^([^_]+)_.*$", "$1")
+            return
+                if ($lang = "en") then
+                    $label
+                else
+                    switch($label)
+                        case "Country" return "國家"
+                        case "Gate" return "門"
+                        case "Mountain" return "山"
+                        case "City" return "城市"
+                        case "River" return "河流"
+                        case "Monastery" return "寺院"
+                        case "District" return "區"
+                        case "Cloister" return "修道院"
+                        case "Town" return "鎮"
+                        case "Site" return "遺址"
+                        case "Cliff" return "懸崖"
+                        case "Village" return "村"
+                        case "Province" return "省"
+                        case "Institution" return "機構"
+                        case "Stupa" return "佛塔"
+                        case "Ridge" return "山脊"
+                        case "Valley" return "山谷"
+                        case "Peak" return "山峰"
+                        case "County" return "縣"
+                        case "Cave" return "洞穴"
+                        case "Lake" return "湖泊"
+                        case "Reservoir" return "水庫"
+                        case "Park" return "公園"
+                        case "Pool" return "水池"
+                        case "Canyon" return "峽谷"
+                        default return $label
+        }
+    }
+];
+
+
+
 (:
  : The function to be called to determine the next content chunk to display.
  : It takes two parameters:

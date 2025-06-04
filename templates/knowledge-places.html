@@ -1,0 +1,16 @@
+<main>
+    <style>
+    main {
+      display: flex;
+      justify-content: space-between; 
+    }
+    
+    main > pb-load {
+      width: 80%;
+      columns: 2; 
+      column-gap: 20px;
+    }
+    </style>
+        <pb-custom-form class="facets" url="api/search/place-facets" event="pb-results-received" subscribe="transcription" emit="places"/>
+        <pb-load url="api/test-places" auto="" event="pb-search-resubmit" use-language="" subscribe="places" emit="transcription"/>
+    </main>
