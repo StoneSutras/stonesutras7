@@ -1,12 +1,20 @@
 <main class="characters">
-    <pb-table-grid class="table-grid" source="api/character_new" css-path="../css/gridjs" resizable="" fixed-header=""
-        search="" subscribe="transcription" emit="transcription" per-page="50">
-        <pb-table-column label="Char" property="character" sort="" width="8rem" />
-        <pb-table-column label="Image" property="image" sort="" width="10rem" />
-        <pb-table-column label="Column/Row" property="columnrow" sort="" width="9rem" />
-        <pb-table-column label="Height/Width" property="heightwidth" sort="" width="11rem" />
-        <pb-table-column label="condition" property="condition" sort="" width="12rem" />
-        <pb-table-column label="Source" property="source" sort="" width="10rem" />
-        <pb-table-column label="Date" property="date" sort="" width="8rem" />
+    <style>
+    /* Main container of the table */
+    .characters .table-grid {
+        margin: 20px auto; 
+        max-width: 1200px; 
+        box-shadow: none !important;
+        border: none !important; 
+    }
+    </style>
+    <pb-table-grid class="table-grid" source="api/character_new" css-path="../css/gridjs" resizable="" fixed-header="" search="" subscribe="transcription" emit="transcription" per-page="50">
+        <pb-table-column label="Char" property="character" sort="" width="10%"/>
+        <pb-table-column label="Image" property="image" sort="" width="10%"/>
+        <pb-table-column label="Column/Row" property="columnrow" sort="" width="15%"/>
+        <pb-table-column label="Height/Width" property="heightwidth" sort="" width="15%"/>
+        <pb-table-column label="condition" property="condition" sort="" width="15%"/>
+        <pb-table-column label="Source" property="source" sort="" width="15%"/>
+        <pb-table-column label="Date" property="date" sort="" width="10%"/>
     </pb-table-grid>
 </main>
