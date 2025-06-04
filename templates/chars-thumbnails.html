@@ -3,10 +3,10 @@
         /* Overall Container for Thumbnails */
         #thumbnails-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 16px;
-            padding: 6px;
-            margin-top: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 8px;
+            padding: 0px;
+            margin-top: 6px;
         }
 
         /* Styles for each Character Card (similar to paper-card in search) */
@@ -47,7 +47,7 @@
             height: 100px;
             object-fit: contain;
             border-radius: 2px;
-            padding: 2px;
+            padding: 0px;
         }
 
         .character-name {
@@ -99,5 +99,6 @@
     </pb-search>
     <pb-paginate per-page="33" range="10" subscribe="results"></pb-paginate>
     <pb-load url="api/characters_thumbnails" auto="auto" emit="results" />
+
 
 </main>

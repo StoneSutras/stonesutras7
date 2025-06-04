@@ -394,7 +394,14 @@ declare function api:characters_thumbnails($request as map(*)) {
                                     </template>
                                 </pb-popover>
                             </a>
-                            <p class="character-name">{$item?character}</p>
+                            <p class="character-name">
+                                {$item?character}
+                                { 
+                                    if (normalize-space($item?source) ne "") then
+                                        " (" || $item?source || ")"
+                                    else () 
+                                }
+                            </p>
                             
                         </div>
                     </div>
