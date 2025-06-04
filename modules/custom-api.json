@@ -735,6 +735,54 @@
                 }
             }
         },	  
+        
+        "/api/characters_thumbnails": {
+            "get": {
+                "summary": "Get list of characters",
+                "operationId": "api:characters_thumbnails",
+				"parameters": [
+					{
+						"name": "query",
+						"in": "query",
+						"schema":{
+							"type": "string"
+						},
+						 "description": "Query"
+					}, 
+					{
+			        "name": "start",
+			        "in": "query",
+			        "schema": {
+			          "type": "string",
+			          "default": 1
+			        },
+			        "description": "Pagination start offset (1-based)"
+			      },
+			      {
+			        "name": "per-page",
+			        "in": "query",
+			        "schema": {
+			          "type": "string",
+			          "default": 50
+			        },
+			        "description": "Number of results per page"
+			      }
+				],
+                "responses": {
+                    "200":{
+                        "description": "List of sites",
+                        "content": {
+                            "text/html":{
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },	
+        
         "/bibliography-details": {
 			"get": {
 				"summary": "Retrieve details of a bibliography entry",

@@ -1,0 +1,103 @@
+<main>
+    <style>
+        /* Overall Container for Thumbnails */
+        #thumbnails-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 16px;
+            padding: 6px;
+            margin-top: 10px;
+        }
+
+        /* Styles for each Character Card (similar to paper-card in search) */
+        .character-card {
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: none;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Matches content area (main content of the card) */
+        .character-card .matches {
+            padding: 0;
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Styles for the thumbnail item within the card */
+        .thumbnail-item {
+            text-align: center;
+            padding: 0;
+            background-color: transparent;
+            transition: none;
+
+            box-shadow: none;
+        }
+
+        .thumbnail-item:hover {
+            box-shadow: none;
+        }
+
+        .thumbnail-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            border-radius: 2px;
+            padding: 2px;
+        }
+
+        .character-name {
+            margin-top: 2px;
+            font-size: 0.95em;
+            color: #333;
+            word-break: break-word;
+        }
+
+        /* Styles for the pb-popover content */
+        .character-details {
+            padding: 15px;
+            max-width: 280px;
+            font-size: 0.9em;
+            line-height: 1.5;
+            color: #444;
+        }
+
+        .character-details h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            color: #0056b3;
+        }
+
+        .character-details p {
+            margin-bottom: 5px;
+        }
+
+        .character-details strong {
+            color: #222;
+        }
+
+        .character-details a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .character-details a:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+    <pb-search id="search-form" subscribe="search" place-holder="Enter character" data-template="pages:parse-params"
+        value="${query}" subforms=".options" submit-on-load="submit-on-load">
+        <paper-button slot="searchButton">
+            <pb-i18n key="search.search" />
+        </paper-button>
+    </pb-search>
+    <pb-paginate per-page="33" range="10" subscribe="results"></pb-paginate>
+    <pb-load url="api/characters_thumbnails" auto="auto" emit="results" />
+
+</main>

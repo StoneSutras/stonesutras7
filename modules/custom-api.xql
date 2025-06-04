@@ -272,6 +272,7 @@ declare function api:variants($request as map(*)) {
         </ul>
 };
 
+(:
 declare function api:characters($request as map(*)) {
     let $query := $request?parameters?query
     let $matches :=
@@ -292,6 +293,112 @@ declare function api:characters($request as map(*)) {
                         <h2>{$char/@xmlid/string()}</h2>
                     </div>
                 </a>
+        }
+        </div>
+};:)
+
+declare function api:characters_thumbnails($request as map(*)) {
+    let $query := $request?parameters?query
+    let $start := if (exists($request?parameters?start)) then xs:double($request?parameters?start) else 1
+    let $per-page := if (exists($request?parameters?per-page)) then xs:double($request?parameters?per-page) else 55
+
+    let $character-table :=
+        try {
+            doc($config:data-root || '/catalog/characters_table.xml')/character/char
+        } catch * {
+            error(xs:QName("file-not-found"), "The precomputed character file does not exist.")
+        }
+
+    let $filtered-characters :=
+        for $char in $character-table
+        let $character := fn:string($char/char)
+        let $image := fn:string($char/image)
+        let $source := fn:string($char/source)
+        let $column := fn:string($char/column)
+        let $row := fn:string($char/row)
+        let $height := fn:string($char/height)
+        let $width := fn:string($char/width)
+        let $condition := fn:string($char/condition)
+        let $date := 
+            if ($char/date_point) then
+                fn:string($char/date_point)
+            else if ($char/date_range_lower or $char/date_range_upper) then
+                fn:string($char/date_range_lower) || "–" || fn:string($char/date_range_upper)
+            else
+                ""
+        where normalize-space($image) ne "" and (not($query) or 
+              contains(lower-case($character), lower-case($query)))
+        order by $char/Source_column_row
+        return map {
+            "character": $character,
+            "imageUrl": "https://sutras.adw.uni-heidelberg.de/images/characters/" || $image,
+            "altText": $character,
+            "source": $source,
+            "column": $column,
+            "row": $row,
+            "height": $height,
+            "width": $width,
+            "condition": $condition,
+            "date": $date
+        }
+
+    let $total-characters := count($filtered-characters)
+    let $paginated-characters := subsequence($filtered-characters, $start, $per-page) 
+
+    (: Set HTTP headers for pagination consistency with sapi:search :)
+    let $set-headers := (
+        response:set-header("pb-total", xs:string($total-characters)),
+        response:set-header("pb-start", xs:string($start))
+    )
+
+    return
+        <div id="thumbnails-container">
+        {
+            for $item at $p in $paginated-characters  
+            return
+                <paper-card class="character-card">
+                    <div class="matches">
+                        <div class="thumbnail-item">
+                            <a href="{$item?imageUrl}" target="_blank">
+                                <pb-popover theme="light">
+                                    <img src="{$item?imageUrl}" alt="{$item?altText}" style="width: 100px; height: 100px;"/>
+                                    <template slot="alternate">
+                                        <div class="character-details">
+                                            { 
+                                                if (normalize-space($item?source) ne "") then
+                                                    <p><strong>Source: </strong> <a href="https://stonesutras.org/inscriptions/{$item?source}" target="_blank">{$item?source}</a>
+                                                    </p>
+                                                else ()
+                                            }
+                                            {
+                                                if (normalize-space($item?date) ne "") then
+                                                    <p><strong>Date: </strong> {$item?date}</p>
+                                                else ()
+                                            }
+                                            {
+                                                if (normalize-space($item?column) ne "" and normalize-space($item?row) ne "") then
+                                                    <p><strong>Column/Row: </strong> {$item?column}/{$item?row}</p>
+                                                else ()
+                                            }
+                                            {
+                                                if (normalize-space($item?height) ne "" and normalize-space($item?width) ne "") then
+                                                    <p><strong>Height/Width: </strong> {$item?height}/{$item?width}</p>
+                                                else ()
+                                            }
+                                            {
+                                                if (normalize-space($item?condition) ne "") then
+                                                    <p><strong>Condition: </strong> {$item?condition}</p>
+                                                else ()
+                                            }
+                                        </div> 
+                                    </template>
+                                </pb-popover>
+                            </a>
+                            <p class="character-name">{$item?character}</p>
+                            
+                        </div>
+                    </div>
+                </paper-card>
         }
         </div>
 };
