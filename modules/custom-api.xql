@@ -1173,15 +1173,14 @@ declare function api:get-mentioned-info($id as xs:string) as element(div) {
     };
 
 
-declare function api:place-info($request as map(*)) {
+declare function api:place-name($request as map(*)) {
     let $id := $request?parameters?id
     let $places := collection($config:data-biblio)/places
     let $place := $places/place[@id = $id] 
     let $name_zh := string($place/name_zh)
     let $name_en := string($place/name_en)
     let $type := string($place/@type)
-    let $sources := $place/*[starts-with(name(), 'source')] ! string()
-    
+
     let $name := 
         if ($name_zh != "" and $name_en != "") then
             concat($name_en, " (", $name_zh, ")")
@@ -1190,15 +1189,23 @@ declare function api:place-info($request as map(*)) {
         else
             $name_en
     
-    let $wiki-link := $place/Wikipedia_link/string()
-
-    
     return 
         <div>
             <div class="person-head">
                 <h1>{$name}</h1>
                 <p>(Type: {$type})</p>
             </div>
+        </div>
+};
+
+declare function api:place-info($request as map(*)) {
+    let $id := $request?parameters?id
+    let $places := collection($config:data-biblio)/places
+    let $place := $places/place[@id = $id] 
+    let $sources := $place/*[starts-with(name(), 'source')] ! string()
+    let $wiki-link := $place/Wikipedia_link/string()
+    
+        return 
             <div class="person-details">
                 <div class="person-date">                
                     <h2>Mentioned in:</h2>
@@ -1221,11 +1228,9 @@ declare function api:place-info($request as map(*)) {
                     </div>
                   else ()
                 }
-                
-
             </div>
-        </div>
 };
+
 
 declare function api:place-coordinates($request as map(*)) {
   let $id := $request?parameters?id

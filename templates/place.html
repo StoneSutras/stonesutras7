@@ -1,34 +1,55 @@
 <html>
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes" />
-    <link rel="shortcut icon" type="image/x-icon" href="resources/images/favicon.ico" />
-    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-16.png" sizes="16x16" />
-    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-24.png" sizes="24x24" />
-    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-32.png" sizes="32x32" />
-    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-64.png" sizes="64x64" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes"/>
+    <link rel="shortcut icon" type="image/x-icon" href="resources/images/favicon.ico"/>
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-16.png" sizes="16x16"/>
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-24.png" sizes="24x24"/>
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-32.png" sizes="32x32"/>
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-64.png" sizes="64x64"/>
 
-    <title data-template="config:app-title" />
-    <meta name="description" content="Default single text layout" />
-    <meta name="pb-template" content="view.html" />
+    <title data-template="config:app-title"/>
+    <meta name="description" content="Default single text layout"/>
+    <meta name="pb-template" content="view.html"/>
 
-    <link rel="stylesheet" type="text/css" href="resources/fonts/font.css" />
-    <link rel="stylesheet" href="resources/css/stonesutras-theme.css" />
-    <script type="module" src="pb-components-bundle.js" data-template="pages:load-components" />
-    <script type="module" src="pb-leaflet-map.js" data-template="pages:load-components" />
+    <link rel="stylesheet" type="text/css" href="resources/fonts/font.css"/>
+    <link rel="stylesheet" href="resources/css/stonesutras-theme.css"/>
+    <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
+    <script type="module" src="pb-leaflet-map.js" data-template="pages:load-components"/>
     <style>
-        pb-leaflet-map {
-            height: 40vh;
-            width: 80%;
-            padding-left: 100px;
-        }
-    </style>
+    main {
+        display: flex; 
+        flex-direction: column; 
+        gap: 20px; 
+        width: 100%; 
+    }
+
+    #nameLoader {
+        width: 100%; 
+    }
+
+    .content-below-name {
+        display: flex; 
+        justify-content: space-between; 
+        align-items: flex-start; 
+        gap: 20px; 
+        width: 100%; 
+    }
+
+    #infoLoader {
+        flex: 1; 
+    }
+
+    #map {
+        height: 600px;
+        flex: 1; 
+    }
+</style>
 </head>
 
 <body class="person">
-    <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json"
-        require-language="" supported-languages="en, zh_Hant">
+    <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json" require-language="" supported-languages="en, zh_Hant">
         <script id="appConfig" type="application/json" data-template="pages:parse-params">
                 {
                     "app": "${app}"
@@ -39,8 +60,15 @@
             document.addEventListener('DOMContentLoaded', function () {
                 const id = new URLSearchParams(window.location.search).get('id');
                 if (id) {
-                    const personLoader = document.getElementById('personLoader');
-                    if (personLoader) personLoader.setAttribute('url', `place/${id}`);
+                    const nameLoader = document.getElementById('nameLoader');
+                    if (nameLoader) nameLoader.setAttribute('url', `place/${id}/name`);
+                }
+            });
+            document.addEventListener('DOMContentLoaded', function () {
+                const id = new URLSearchParams(window.location.search).get('id');
+                if (id) {
+                    const nameLoader = document.getElementById('infoLoader');
+                    if (nameLoader) nameLoader.setAttribute('url', `place/${id}/info`);
                 }
             });
         </script>
@@ -69,10 +97,10 @@
 
 
         <app-drawer-layout force-narrow="force-narrow">
-            <app-drawer data-template="lib:include" data-template-path="templates/drawer.html" />
+            <app-drawer data-template="lib:include" data-template-path="templates/drawer.html"/>
             <app-header-layout>
                 <app-header slot="header" reveals="reveals" fixed="fixed" effects="waterfall">
-                    <app-toolbar data-template="lib:include" data-template-path="templates/menu.html" />
+                    <app-toolbar data-template="lib:include" data-template-path="templates/menu.html"/>
                     <app-toolbar data-template="lib:include" data-template-path="templates/toolbar.html">
                         <p data-target="breadcrumbs" class="breadcrumbs">
                             <pb-i18n key="menu.places">Places</pb-i18n>
@@ -80,39 +108,28 @@
                     </app-toolbar>
                 </app-header>
                 <main>
-                    <pb-load id="personLoader" url="" expand="" auto="">Loading...
+                    <pb-load id="nameLoader" url="" expand="" auto="">Loading...
+                    </pb-load>
+                        <div class="content-below-name">
+
+                    <pb-load id="infoLoader" url="" expand="" auto="">
                     </pb-load>
                     <pb-leaflet-map id="map" subscribe="map" zoom="14" crs="EPSG3857" fit-markers="" cluster="">
-                        <pb-map-layer base="" label="Mapbox OSM"
-                            url="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoid29sZmdhbmdtbSIsImEiOiJjam1kMjVpMnUwNm9wM3JwMzdsNGhhcnZ0In0.v65crewF-dkNsPF3o1Q4uw"
-                            attribution='© &lt;a href="https://www.mapbox.com/about/maps/"&gt;Mapbox&lt;/a&gt; © &lt;a href="http://www.openstreetmap.org/copyright"&gt;OpenStreetMap&lt;/a&gt; &lt;strong&gt;&lt;a href="https://www.mapbox.com/map-feedback/" target="_blank"&gt;Improve this map&lt;/a&gt;&lt;/strong&gt;'
-                            max-zoom="18" zoom="13" tile-size="512"></pb-map-layer>
-                        <pb-map-layer base="" show="" label="ESRI World Imagery"
-                            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-                            attribution='© Esri - © Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'></pb-map-layer>
-                        <pb-map-layer base="" label="OpenStreetMap" url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-                            attribution="©&lt;a href=&#34;https://www.openstreetmap.org/copyright&#34;&gt;OpenStreetMap&lt;/a&gt; contributors" />
-                        <pb-map-layer label="Southern and Northern Dynasties"
-                            url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=ad0497-png-{z}-{x}-{y}"
-                            attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space" />
-                        <pb-map-layer label="Sui Dynasty"
-                            url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=ad0612-png-{z}-{x}-{y}"
-                            attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space" />
-                        <pb-map-layer label="Tang Dynasty"
-                            url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=ad0741-png-{z}-{x}-{y}"
-                            attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space" />
-                        <pb-map-layer label="Tang Admin"
-                            url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=Tang_Admin-png-{z}-{x}-{y}"
-                            attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space" />
-                        <pb-map-layer label="Tang Traffic"
-                            url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=Tang_TrafficRoute-png-{z}-{x}-{y}"
-                            attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space" />
-                    </pb-leaflet-map>
+                        <pb-map-layer base="" label="Mapbox OSM" url="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoid29sZmdhbmdtbSIsImEiOiJjam1kMjVpMnUwNm9wM3JwMzdsNGhhcnZ0In0.v65crewF-dkNsPF3o1Q4uw" attribution="© &lt;a href=&#34;https://www.mapbox.com/about/maps/&#34;&gt;Mapbox&lt;/a&gt; © &lt;a href=&#34;http://www.openstreetmap.org/copyright&#34;&gt;OpenStreetMap&lt;/a&gt; &lt;strong&gt;&lt;a href=&#34;https://www.mapbox.com/map-feedback/&#34; target=&#34;_blank&#34;&gt;Improve this map&lt;/a&gt;&lt;/strong&gt;" max-zoom="18" zoom="13" tile-size="512"/>
+                        <pb-map-layer base="" show="" label="ESRI World Imagery" url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" attribution="© Esri - © Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"/>
+                        <pb-map-layer base="" label="OpenStreetMap" url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="©&lt;a href=&#34;https://www.openstreetmap.org/copyright&#34;&gt;OpenStreetMap&lt;/a&gt; contributors"/>
+                        <pb-map-layer label="Southern and Northern Dynasties" url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=ad0497-png-{z}-{x}-{y}" attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space"/>
+                        <pb-map-layer label="Sui Dynasty" url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=ad0612-png-{z}-{x}-{y}" attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space"/>
+                        <pb-map-layer label="Tang Dynasty" url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=ad0741-png-{z}-{x}-{y}" attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space"/>
+                        <pb-map-layer label="Tang Admin" url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=Tang_Admin-png-{z}-{x}-{y}" attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space"/>
+                        <pb-map-layer label="Tang Traffic" url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=Tang_TrafficRoute-png-{z}-{x}-{y}" attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space"/>
+                    </pb-leaflet-map>    </div>
+
                 </main>
             </app-header-layout>
         </app-drawer-layout>
     </pb-page>
-    <div class="splash" />
+    <div class="splash"/>
 </body>
 
 </html>

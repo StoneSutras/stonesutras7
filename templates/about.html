@@ -1,49 +1,223 @@
 <html>
-    <head>
-        <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes"/>
-        <link rel="shortcut icon" type="image/x-icon" href="resources/images/favicon.ico"/>
-        <link rel="shortcut icon" type="image/png" href="resources/images/favicon-16.png" sizes="16x16"/>
-        <link rel="shortcut icon" type="image/png" href="resources/images/favicon-24.png" sizes="24x24"/>
-        <link rel="shortcut icon" type="image/png" href="resources/images/favicon-32.png" sizes="32x32"/>
-        <link rel="shortcut icon" type="image/png" href="resources/images/favicon-64.png" sizes="64x64"/>
 
-        <title data-template="config:app-title"/>
-        <meta name="description" content="Default single text layout"/>
-        <meta name="pb-template" content="view.html"/>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes"/>
+    <link rel="shortcut icon" type="image/x-icon" href="resources/images/favicon.ico"/>
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-16.png" sizes="16x16"/>
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-24.png" sizes="24x24"/>
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-32.png" sizes="32x32"/>
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-64.png" sizes="64x64"/>
 
-        <link rel="stylesheet" type="text/css" href="resources/fonts/font.css"/>
-        <link rel="stylesheet" href="resources/css/stonesutras-theme.css"/>
-        <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
-        <script type="module" src="pb-leaflet-map.js" data-template="pages:load-components"/>
-    </head>
+    <title data-template="config:app-title"/>
+    <meta name="description" content="Default single text layout"/>
+    <meta name="pb-template" content="view.html"/>
 
-    <body class="home">
-        <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json"
-            require-language="" supported-languages="en, zh_Hant">
-            <script id="appConfig" type="application/json" data-template="pages:parse-params">
+    <link rel="stylesheet" type="text/css" href="resources/fonts/font.css"/>
+    <link rel="stylesheet" href="resources/css/stonesutras-theme.css"/>
+    <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
+
+<style>
+    .main-content {
+        display: flex;
+        min-height: 500px;
+        border-radius: 8px;
+        /* Optional: Add rounded corners */
+        overflow: hidden;
+        /* Ensure content does not overflow rounded corners */
+        margin: 20px;
+        /* Adjust outer margin */
+    }
+
+    .sidebar {
+        width: 180px;
+        background-color: #fff;
+        /* Background color for the left menu bar */
+        padding: 20px;
+        border-right: 1px solid #ccc;
+        /* Separating line */
+        position: fixed;
+        /* Added to make it fixed */
+        top: 140px;
+        left: 20px;
+        /* Adjust based on your margin */
+        bottom: 0;
+        /* Make its height extend to the bottom of the viewport */
+        overflow-y: auto;
+        /* Allow scrolling if content is too long */
+    }
+
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .sidebar li {
+        margin-bottom: 15px;
+    }
+
+    .sidebar a {
+        display: block;
+        text-decoration: none;
+        color: #333;
+        padding: 10px 15px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease; 
+    }
+
+    .sidebar a:hover {
+        background-color: #eee;
+        color: #690404;
+        /* Hover color */
+    }
+
+    .sidebar a.active {
+            background-color: rgba(105, 4, 4, 0.8);
+        color: #ffffff;             
+        font-weight: bold;          
+    }
+
+    .sidebar a.active:hover {
+        background-color: #690404;  
+        color: #ffffff;             
+    }
+
+    #content-area {
+        flex-grow: 1;
+        padding-top: 0px;
+        padding-left: 240px;
+        /* Space between line and right content */
+    }
+</style>
+    <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const sidebarLinks = document.querySelectorAll('.sidebar ul li a');
+
+            sidebarLinks.forEach(function(link) {
+                link.addEventListener('click', function (event) {
+
+                    sidebarLinks.forEach(function(sLink) {
+                        sLink.classList.remove('active');
+                    });
+        
+                    this.classList.add('active');
+        
+                });
+            });
+        
+            
+        });
+    function initFacets(container = document) {
+    const facets = container.querySelector('.facets');
+
+    if (facets) {
+        facets.addEventListener('pb-custom-form-loaded', function(ev) {
+            const elems = ev.detail.querySelectorAll('.facet');
+
+            elems.forEach(facet => {
+                facet.addEventListener('change', () => {
+                    if (!facet.checked) {
+                        pbRegistry.state[facet.name] = null;
+                    }
+
+                    const table = facet.closest('table');
+                    if (table) {
+                        table.querySelectorAll('.nested .facet').forEach(nested => {
+                            if (nested !== facet) {
+                                nested.checked = false;
+                            }
+                        });
+                    }
+
+                    facets.submit();
+                });
+            });
+        });
+    }
+}
+
+    </script>
+</head>
+
+<body>
+    <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json" require-language="" supported-languages="en, zh_Hant">
+        <script id="appConfig" type="application/json" data-template="pages:parse-params">
                 {
                     "app": "${app}"
                 }
             </script>
-            <app-drawer-layout force-narrow="force-narrow">
-                <app-drawer data-template="lib:include" data-template-path="templates/drawer.html"/>
-                <app-header-layout>
-                    <app-header slot="header" reveals="reveals" fixed="fixed" effects="waterfall">
-                        <app-toolbar data-template="lib:include" data-template-path="templates/menu.html"/>
-                        <app-toolbar data-template="lib:include" data-template-path="templates/toolbar.html">
-                            <!-- Search input -->
-                            <pb-search data-target="toolbar-util" action="${app}/search.html" data-template="pages:parse-params" value="${query}" redirect="redirect"/>
-                        </app-toolbar>
-                    </app-header>
-                    <main>
-                        <h2>About the Website</h2>
-                        
-                    </main>
-                </app-header-layout>
-            </app-drawer-layout>
-        </pb-page>
-        <div class="splash"/>
-       
-    </body>
+        <app-drawer-layout force-narrow="force-narrow">
+            <app-drawer data-template="templates:include" data-template-path="templates/drawer.html"/>
+            <app-header-layout>
+                <app-header slot="header" reveals="reveals" fixed="fixed" effects="waterfall">
+                    <app-toolbar data-template="templates:include" data-template-path="templates/menu.html"/>
+                    <app-toolbar data-template="templates:include" data-template-path="templates/toolbar.html">
+                           <p data-target="breadcrumbs" class="breadcrumbs">
+                                <pb-i18n key="menu.indices">Indices</pb-i18n>
+                            </p>
+                    </app-toolbar>
+                </app-header>
+                <main class="main-content">
+                    <aside class="sidebar">
+                        <ul>
+                            <li>
+                                <a href="#" onclick="loadContent('about-project.html')">Project</a>
+                            </li>
+                            <li>
+                                <a href="#" onclick="loadContent('about-acknowledgement.html')">Acknowledgement</a>
+                            </li>
+                            <li>
+                                <a href="#" onclick="loadContent('about-partners.html')">Partners</a>
+                            </li>
+                            <li>
+                                <a href="#" onclick="loadContent('about-impressum .html')">Impressum </a>
+                            </li>
+                        </ul>
+                    </aside>
+
+                    <div id="content-area">
+                    </div>
+                </main>
+            </app-header-layout>
+        </app-drawer-layout>
+    </pb-page>
+    <div class="splash"/>
+
+    <script>
+       function loadContent(url) {
+    fetch(url)
+        .then(response => response.text())
+        .then(data => {
+            const contentArea = document.getElementById('content-area');
+            contentArea.innerHTML = data;
+
+            // Update active state in sidebar
+            const sidebarLinks = document.querySelectorAll('.sidebar ul li a');
+            sidebarLinks.forEach(function(sLink) {
+                sLink.classList.remove('active');
+                if (sLink.getAttribute('onclick').includes(url)) {
+                    sLink.classList.add('active');
+                }
+            });
+
+            // 重新初始化 facets 等功能
+            initFacets(contentArea);
+        });
+}
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadContent('about-project.html'); // Default load Project content
+        });
+
+        function updateUrlForPlaces(url) {
+            const baseUrl = window.location.href.split('?')[0].split('#')[0];
+            const newUrl = baseUrl + '';
+            history.replaceState(null, '', newUrl);
+            loadContent(url);
+        }
+    </script>
+</body>
+
 </html>

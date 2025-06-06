@@ -1012,7 +1012,41 @@
             }
         },
 
-		"/place/{id}": {
+		"/place/{id}/name": {
+			"get": {
+			    "summary": "Retrieve the HTML template used for displaying a place",
+				"description": "Get the HTML template associated with the given document. This is called whenever the users tries to view a document. The actual content of the document will then be loaded by the template.",
+				"operationId": "api:place-name",
+				"x-error-handler": "vapi:handle-error",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "ID of place",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"example": "Jingshiyu"
+						},
+						"allowReserved": true
+					}
+				],
+			"responses": {
+                    "200":{
+                        "description": "place name",
+                        "content": {
+                            "text/html":{
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        
+        	"/place/{id}/info": {
 			"get": {
 			    "summary": "Retrieve the HTML template used for displaying a place",
 				"description": "Get the HTML template associated with the given document. This is called whenever the users tries to view a document. The actual content of the document will then be loaded by the template.",
