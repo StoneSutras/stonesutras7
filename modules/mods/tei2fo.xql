@@ -130,7 +130,7 @@ declare function tei2fo:process($nodes as node()*) {
                     case "italic" return
                         <i>{tei2fo:process(tei2fo:normalize-ws($node/node()))}</i>
                     case "normal" return
-                        <fo:inline font-style="normal">{tei2fo:process(tei2fo:normalize-ws($node/node()))}</fo:inline>
+                        <fo:inline style="font-style: normal">{tei2fo:process(tei2fo:normalize-ws($node/node()))}</fo:inline>
                     case "bold" return
                         <fo:inline font-weight="bold">{tei2fo:process(tei2fo:normalize-ws($node/node()))}</fo:inline>
                     case "smaller" return
@@ -525,7 +525,7 @@ declare function tei2fo:process-biblio($nodes as node()*) {
             case element(mads:foreign) return
                 switch ($node/@lang)
                     case "zh" return
-                        <fo:inline xml:lang="zh" font-style="normal" font-family="{$foc:ChineseFont}">{ tei2fo:process-biblio($node/node()) }</fo:inline>
+                        <fo:inline xml:lang="zh" style="font-style: normal" font-family="{$foc:ChineseFont}">{ tei2fo:process-biblio($node/node()) }</fo:inline>
                     case "en" return
                         <fo:inline white-space-treatment="preserve" font-family="{$foc:DefaultFont}">{tei2fo:process-biblio($node/node())}</fo:inline>
                     (: case "sa" return
@@ -539,7 +539,7 @@ declare function tei2fo:process-biblio($nodes as node()*) {
             case element(mods:foreign) return
                 switch ($node/@lang)
                     case "zh" return
-                        <fo:inline xml:lang="zh" font-style="normal" font-family="{$foc:ChineseFont}">{ tei2fo:process-biblio($node/node()) }</fo:inline>
+                        <fo:inline xml:lang="zh" style="font-style: normal" font-family="{$foc:ChineseFont}">{ tei2fo:process-biblio($node/node()) }</fo:inline>
                     case "en" return
                         <fo:inline white-space-treatment="preserve" font-family="{$foc:DefaultFont}">{tei2fo:process-biblio($node/node())}</fo:inline>
                     (: case "sa" return
@@ -562,7 +562,7 @@ declare function tei2fo:process-biblio($nodes as node()*) {
                     case "italic" return
                         <fo:inline font-style="italic">{tei2fo:process-biblio($node/node())}</fo:inline>
                     case "normal" return
-                        <fo:inline font-style="normal">{tei2fo:process($node/node())}</fo:inline>
+                        <fo:inline style="font-style: normal">{tei2fo:process($node/node())}</fo:inline>
                     case "dash" return
                         <fo:inline keep-together.within-line="always" font-family="'PERPETUA TITLING MT'" font-size="75%" white-space-treatment="preserve" hyphenate="false">——</fo:inline>
                     case "small-caps" return
@@ -616,7 +616,7 @@ declare function tei2fo:process-biblioHTML($nodes as node()*) {
             case element(mads:foreign) return
                 switch ($node/@lang)
                     case "zh" return
-                        <fo:inline xml:lang="zh" font-style="normal" font-family="{$foc:ChineseFont}">{ tei2fo:process-biblioHTML($node/node()) }</fo:inline>
+                        <span xml:lang="zh" style="font-style: normal" font-family="{$foc:ChineseFont}">{ tei2fo:process-biblioHTML($node/node()) }</span>
                     case "en" return
                         <fo:inline white-space-treatment="preserve" font-family="{$foc:DefaultFont}">{tei2fo:process-biblioHTML($node/node())}</fo:inline>
                     (: case "sa" return
@@ -630,7 +630,7 @@ declare function tei2fo:process-biblioHTML($nodes as node()*) {
             case element(mods:foreign) return
                 switch ($node/@lang)
                     case "zh" return
-                        <fo:inline xml:lang="zh" font-style="normal" font-family="{$foc:ChineseFont}">{ tei2fo:process-biblioHTML($node/node()) }</fo:inline>
+                        <span xml:lang="zh" style="font-style: normal" font-family="{$foc:ChineseFont}">{ tei2fo:process-biblioHTML($node/node()) }</span>
                     case "en" return
                         <fo:inline white-space-treatment="preserve" font-family="{$foc:DefaultFont}">{tei2fo:process-biblioHTML($node/node())}</fo:inline>
                     (: case "sa" return
@@ -652,7 +652,7 @@ declare function tei2fo:process-biblioHTML($nodes as node()*) {
                     case "italic" return
                         <i>{tei2fo:process-biblioHTML($node/node())}</i>
                     case "normal" return
-                        <fo:inline font-style="normal">{tei2fo:process($node/node())}</fo:inline>
+                        <fo:inline style="font-style: normal">{tei2fo:process($node/node())}</fo:inline>
                     case "dash" return
                         <fo:inline keep-together.within-line="always" font-family="'PERPETUA TITLING MT'" font-size="75%" white-space-treatment="preserve" hyphenate="false">——</fo:inline>
                     case "small-caps" return
