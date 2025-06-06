@@ -333,7 +333,7 @@ declare function api:characters_thumbnails($request as map(*)) {
             "character": $character,
             "imageUrl": "https://sutras.adw.uni-heidelberg.de/images/characters/" || $image,
             "altText": $character,
-            "source": $source,
+            "source": replace($source, '_', ' '),
             "column": $column,
             "row": $row,
             "height": $height,
