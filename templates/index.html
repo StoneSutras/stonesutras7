@@ -1,17 +1,17 @@
 <html>
 
 <head>
-    <meta charset="utf-8"/>
-    <title data-template="config:app-title"/>
-    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes"/>
-    <link rel="shortcut icon" type="image/x-icon" href="resources/images/favicon.ico"/>
-    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-16.png" sizes="16x16"/>
-    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-24.png" sizes="24x24"/>
-    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-32.png" sizes="32x32"/>
-    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-64.png" sizes="64x64"/>
-    <link rel="stylesheet" href="resources/css/stonesutras-theme.css"/>
-    <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
-    <script type="module" src="pb-leaflet-map.js" data-template="pages:load-components"/>
+    <meta charset="utf-8" />
+    <title data-template="config:app-title" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes" />
+    <link rel="shortcut icon" type="image/x-icon" href="resources/images/favicon.ico" />
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-16.png" sizes="16x16" />
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-24.png" sizes="24x24" />
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-32.png" sizes="32x32" />
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-64.png" sizes="64x64" />
+    <link rel="stylesheet" href="resources/css/stonesutras-theme.css" />
+    <script type="module" src="pb-components-bundle.js" data-template="pages:load-components" />
+    <script type="module" src="pb-leaflet-map.js" data-template="pages:load-components" />
     <script id="appConfig" type="application/json" data-template="pages:parse-params">
         {
             "app": "${app}"
@@ -27,6 +27,7 @@
                 height: 100%;
                 margin-top: 0;
             }
+
             .province ul {
                 list-style: none;
                 margin: 0;
@@ -47,23 +48,37 @@
             <app-drawer slot="drawer" align="right">
                 <div class="drawer-content">
                     <pb-media-query query="(max-width: 1023px)">
-                            <!-- language selector -->
-                            <pb-lang name="lang" data-template="pages:languages"/>
-                        </pb-media-query>
-                    </div>
-                </app-drawer>
-                <app-header-layout>
+                        <!-- language selector -->
+                        <pb-lang name="lang" data-template="pages:languages" />
+                    </pb-media-query>
+                </div>
+            </app-drawer>
+            <app-header-layout>
                 <app-header slot="header" reveals="reveals" fixed="fixed" effects="waterfall">
                     <app-toolbar class="menubar">
-                        <a href="${app}/home.html" class="logo" data-template="pages:parse-params"/>
+                        <a href="${app}/home.html" class="logo" data-template="pages:parse-params" />
                         <pb-media-query query="(min-width: 1024px)">
-                            <a href="${app}/home.html" data-template="pages:parse-params"><pb-i18n key="menu.start">Start</pb-i18n></a>
-                            <a href="${app}/index.html" data-template="pages:parse-params"><pb-i18n key="menu.sites">Sites</pb-i18n></a>
-                            <a href="${app}/inscriptions.html" data-template="pages:parse-params"><pb-i18n key="menu.inscriptions">Inscriptions</pb-i18n></a>
-                            <a href="${app}/characters.html" data-template="pages:parse-params"><pb-i18n key="menu.characters">Characters</pb-i18n></a>
-                            <a href="${app}/articles.html" data-template="pages:parse-params"><pb-i18n key="menu.articles">Articles</pb-i18n></a>
-                            <a href="${app}/indices.html" data-template="pages:parse-params"><pb-i18n key="menu.indices">Indices</pb-i18n></a>
-                            <a href="${app}/bibliography.html" data-template="pages:parse-params"><pb-i18n key="menu.bibliography">Bibliography</pb-i18n></a>
+                            <a href="${app}/home.html" data-template="pages:parse-params">
+                                <pb-i18n key="menu.start">Start</pb-i18n>
+                            </a>
+                            <a href="${app}/index.html" data-template="pages:parse-params">
+                                <pb-i18n key="menu.sites">Sites</pb-i18n>
+                            </a>
+                            <a href="${app}/inscriptions.html" data-template="pages:parse-params">
+                                <pb-i18n key="menu.inscriptions">Inscriptions</pb-i18n>
+                            </a>
+                            <a href="${app}/characters.html" data-template="pages:parse-params">
+                                <pb-i18n key="menu.characters">Characters</pb-i18n>
+                            </a>
+                            <a href="${app}/articles.html" data-template="pages:parse-params">
+                                <pb-i18n key="menu.articles">Articles</pb-i18n>
+                            </a>
+                            <a href="${app}/indices.html" data-template="pages:parse-params">
+                                <pb-i18n key="menu.indices">Indices</pb-i18n>
+                            </a>
+                            <a href="${app}/bibliography.html" data-template="pages:parse-params">
+                                <pb-i18n key="menu.bibliography">Bibliography</pb-i18n>
+                            </a>
                             <pb-restricted login="login" group="tei">
                                 <paper-menu-button>
                                     <a href="#" slot="dropdown-trigger">
@@ -75,44 +90,70 @@
                                                 <pb-i18n key="appgen.xar-download">Download App as .xar</pb-i18n>
                                             </pb-download>
                                         </paper-item>
-                                        <paper-item data-template="pages:edit-odd-list"/>
+                                        <paper-item data-template="pages:edit-odd-list" />
                                         <paper-item>
-                                            <a href="${app}/api.html" data-template="pages:parse-params" target="_blank">API Documentation</a>
+                                            <a href="${app}/api.html" data-template="pages:parse-params"
+                                                target="_blank">API Documentation</a>
                                         </paper-item>
                                     </paper-listbox>
                                 </paper-menu-button>
                             </pb-restricted>
 
                             <!-- language selector -->
-                            <pb-lang name="lang" data-template="pages:languages"/>
+                            <pb-lang name="lang" data-template="pages:languages" />
                         </pb-media-query>
                         <pb-login id="login" group="tei">
-                            <iron-icon slot="icon" icon="account-circle"/>
+                            <iron-icon slot="icon" icon="account-circle" />
                         </pb-login>
-                        <pb-progress indeterminate="indeterminate" bottom-item="bottom-item" subscribe="docs"/>
+                        <pb-progress indeterminate="indeterminate" bottom-item="bottom-item" subscribe="docs" />
                     </app-toolbar>
                     <app-toolbar data-template="lib:include" data-template-path="templates/toolbar.html">
-                        <div class="breadcrumbs" data-target="breadcrumbs"><pb-i18n key="menu.sites"></pb-i18n></div>
+                        <div class="breadcrumbs" data-target="breadcrumbs">
+                            <pb-i18n key="menu.sites" />
+                        </div>
                         <!-- Search input -->
-                        <pb-search data-target="toolbar-util" action="${app}/search.html" data-template="pages:parse-params" value="${query}" redirect="redirect"/>
+                        <pb-search data-target="toolbar-util" action="${app}/search.html"
+                            data-template="pages:parse-params" value="${query}" redirect="redirect" />
                     </app-toolbar>
                 </app-header>
                 <main class="sites-map">
                     <div id="sites">
-                        <pb-load url="api/sites" auto="" wait-for="pb-leaflet-map" emit="sites"></pb-load>
+                        <pb-load url="api/sites" auto="" wait-for="pb-leaflet-map" emit="sites" />
                         <!--
                         <pb-custom-form class="facets" url="api/search/inscription-facets" event="pb-results-received" subscribe="sites" emit="sites"></pb-custom-form>
                         <pb-load url="api/sites" auto="" wait-for="pb-leaflet-map" event="pb-search-resubmit" use-language="" subscribe="sites" emit="sites"></pb-load>
                         -->
                     </div>
                     <pb-leaflet-map id="map" zoom="12" crs="EPSG3857" fit-markers="" cluster="" subscribe="map">
-                        <pb-map-layer base="" label="Mapbox OSM" url="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoid29sZmdhbmdtbSIsImEiOiJjam1kMjVpMnUwNm9wM3JwMzdsNGhhcnZ0In0.v65crewF-dkNsPF3o1Q4uw"
-                            attribution='© &lt;a href="https://www.mapbox.com/about/maps/"&gt;Mapbox&lt;/a&gt; © &lt;a href="http://www.openstreetmap.org/copyright"&gt;OpenStreetMap&lt;/a&gt; &lt;strong&gt;&lt;a href="https://www.mapbox.com/map-feedback/" target="_blank"&gt;Improve this map&lt;/a&gt;&lt;/strong&gt;'
-                            max-zoom="18" tile-size="512"></pb-map-layer>
-                        <pb-map-layer base="" show="" max-zoom="18" label="ESRI World Imagery" url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-                            attribution='© Esri - © Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'></pb-map-layer>
-                        <pb-map-icon name="site" icon-url="${app}/resources/images/buddha_9179981.png" icon-size="32, 32" 
-                            icon-anchor="16, 32" popup-anchor="0, 0" data-template="pages:parse-params"/>
+                        <pb-map-layer base="" show="" label="Mapbox OSM"
+                            url="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoid29sZmdhbmdtbSIsImEiOiJjam1kMjVpMnUwNm9wM3JwMzdsNGhhcnZ0In0.v65crewF-dkNsPF3o1Q4uw"
+                            attribution="© &lt;a href=&#34;https://www.mapbox.com/about/maps/&#34;&gt;Mapbox&lt;/a&gt; © &lt;a href=&#34;http://www.openstreetmap.org/copyright&#34;&gt;OpenStreetMap&lt;/a&gt; &lt;strong&gt;&lt;a href=&#34;https://www.mapbox.com/map-feedback/&#34; target=&#34;_blank&#34;&gt;Improve this map&lt;/a&gt;&lt;/strong&gt;"
+                            max-zoom="18" tile-size="512" />
+                        <pb-map-layer base="" max-zoom="18" label="ESRI World Imagery"
+                            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                            attribution="© Esri - © Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community" />
+                        <pb-map-layer base="" label="OpenStreetMap" url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            attribution="©&lt;a href=&#34;https://www.openstreetmap.org/copyright&#34;&gt;OpenStreetMap&lt;/a&gt; contributors" />
+                        <pb-map-layer label="Southern and Northern Dynasties"
+                            url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=ad0497-png-{z}-{x}-{y}"
+                            attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space" />
+                        <pb-map-layer label="Sui Dynasty"
+                            url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=ad0612-png-{z}-{x}-{y}"
+                            attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space" />
+                        <pb-map-layer label="Tang Dynasty"
+                            url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=ad0741-png-{z}-{x}-{y}"
+                            attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space" />
+                        <pb-map-layer label="Tang Admin"
+                            url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=Tang_Admin-png-{z}-{x}-{y}"
+                            attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space" />
+                        <pb-map-layer label="Tang Traffic"
+                            url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=Tang_TrafficRoute-png-{z}-{x}-{y}"
+                            attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space" />
+                        <pb-map-icon name="site" icon-url="${app}/resources/images/buddha_9179981.png"
+                            icon-size="32, 32" icon-anchor="16, 32" popup-anchor="0, 0"
+                            data-template="pages:parse-params" />
+
+
                     </pb-leaflet-map>
                 </main>
             </app-header-layout>
@@ -122,7 +163,7 @@
                 <pb-i18n key="dialogs.generatingFile">Generating File...</pb-i18n>
             </h2>
             <paper-dialog-scrollable>
-                <pb-i18n key="dialogs.downloadMessage"/>
+                <pb-i18n key="dialogs.downloadMessage" />
             </paper-dialog-scrollable>
             <div class="buttons">
                 <paper-button dialog-confirm="dialog-confirm" autofocus="autofocus">
@@ -131,8 +172,10 @@
             </div>
         </paper-dialog>
         <paper-dialog id="errorDialog">
-            <h2><pb-i18n key="dialogs.error">Error</pb-i18n></h2>
-            <paper-dialog-scrollable/>
+            <h2>
+                <pb-i18n key="dialogs.error">Error</pb-i18n>
+            </h2>
+            <paper-dialog-scrollable />
             <div class="buttons">
                 <paper-button dialog-confirm="dialog-confirm" autofocus="autofocus">
                     <pb-i18n key="dialogs.close">Close</pb-i18n>
@@ -140,8 +183,8 @@
             </div>
         </paper-dialog>
     </pb-page>
-    <div class="splash"/>
-    <script src="resources/scripts/app.js"></script>
+    <div class="splash" />
+    <script src="resources/scripts/app.js" />
 </body>
 
-</html> 
+</html>

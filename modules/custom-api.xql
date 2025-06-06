@@ -1021,8 +1021,8 @@ declare function api:get-mentioned-info($id as xs:string) as element(div) {
             </li>
     let $tei_xml_ids :=
         for $tei_xml_id in $record//*[starts-with(name(), 'TEI_XML_ID')]
-        let $is_site := starts-with($tei_xml_id, 'Site_')
-        
+        let $is_site := starts-with($tei_xml_id, 'Site_') or starts-with($tei_xml_id, 'Stele_')
+
         let $title_en := 
             try {
                 if ($is_site) then
@@ -1088,8 +1088,15 @@ declare function api:get-mentioned-info($id as xs:string) as element(div) {
   declare function api:places($request as map(*)) {
         let $search := normalize-space($request?parameters?search)
         let $typeParam := $request?parameters?category
-        let $places := api:places-name-to-display($search)
-    
+        let $places :=
+            if ($search != "") then
+                collection($config:data-biblio)//place[
+                    contains(lower-case(name_zh), lower-case($search)) or
+                    contains(lower-case(name_en), lower-case($search))
+                ]
+            else
+                collection($config:data-biblio)//place    
+                
         let $sortedPlaces := 
             for $place in $places
             let $sortKey := lower-case(string($place?name_to_display))
@@ -1139,39 +1146,6 @@ declare function api:get-mentioned-info($id as xs:string) as element(div) {
             "categories": $categories
         }
     };
-
-        
-    declare function api:places-name-to-display($search as xs:string?) as map()* {
-        let $query := normalize-space($search)
-        let $places :=
-            if ($query != "") then
-                collection($config:data-biblio)//place[
-                    contains(lower-case(name_zh), lower-case($query)) or
-                    contains(lower-case(name_en), lower-case($query))
-                ]
-            else
-                collection($config:data-biblio)//place
-    
-        for $place in $places
-        let $id := string($place/@id)
-        let $name_zh := string($place/name_zh)
-        let $name_en := string($place/name_en)
-        let $type := string($place/@type)
-        let $final_name_with_dates := 
-            if ($name_zh != "" and $name_en != "") then
-                concat($name_en, " (", $name_zh, ")")
-            else if ($name_zh != "") then
-                $name_zh
-            else
-                $name_en
-    
-        return map {
-            "id": $id,
-            "name_to_display": $final_name_with_dates,
-            "type": $type
-        }
-    };
-
 
 declare function api:place-name($request as map(*)) {
     let $id := $request?parameters?id
