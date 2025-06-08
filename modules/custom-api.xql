@@ -574,6 +574,19 @@ declare function api:place-facets($request as map(*)) {
         </div>
 };
 
+declare function api:image-facets($request as map(*)) {
+    
+    let $hits := session:get-attribute($config:session-prefix || ".images")
+    where count($hits) > 0
+    return
+        <div>
+        {
+            for $config in $config:image-facets?*
+            return
+                facets:display($config, $hits)
+        }
+        </div>
+};
 
 
 (:~
@@ -1217,6 +1230,109 @@ declare function api:place-coordinates($request as map(*)) {
     "label": string($place/name_zh)
   }
 };
+
+
+declare function api:impressum($request as map(*)) {
+  try {
+    let $xml-id := $request?parameters?id
+    return
+      if (not($xml-id)) then
+        <div class="error">Error: Missing parameter 'id'.</div>
+      else
+        let $doc := collection($config:data-root)//tei:TEI//tei:text[@xml:id = $xml-id]
+        return
+          if (empty($doc)) then
+            <div class="error">Error: No TEI document found with id '{$xml-id}'.</div>
+          else
+            let $title := try {
+                            normalize-space(string($doc/../tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title))
+                          } catch * {
+                            'Untitled'
+                          },
+                $body-divs := $doc/tei:body/tei:div
+            return
+              <div class="impressum" data-id="{$xml-id}">
+                <h2>{$title}</h2>
+                {
+                  for $div in $body-divs
+                  return
+                    <div class="section">
+                      {
+                        let $head := try { normalize-space(($div/tei:head/text())[1]) } catch * { '' }
+                        return if ($head) then <h3>{$head}</h3> else ()
+                      }
+                      <ul>
+                        {
+                          for $item in $div/tei:list/tei:item
+                          return
+                            try {
+                              <li>{normalize-space(string($item))}</li>
+                            } catch * {
+                              <li class="error">[Error reading item]</li>
+                            }
+                        }
+                      </ul>
+                    </div>
+                }
+              </div>
+  } catch * {
+    <div class="error">Unexpected error: {
+      if ($err:description) then $err:description else 'Unknown problem.'
+    }</div>
+  }
+};
+
+
+declare function api:tei-figures($request as map(*)) {
+  let $image-base-url := "https://sutras.adw.uni-heidelberg.de/images/"
+  let $lang := replace($request?parameters?language, "^([^_-]+)[_-].*$", "$1")
+  let $options := query:options(())
+  let $volumes := collection($config:data-publication)//tei:body[ft:query(., "volume:*", $options)][ancestor::tei:TEI//tei:seriesStmt]
+  let $nil := session:set-attribute($config:session-prefix || ".images", $volumes)
+  
+  return
+        <div class="volume-group-for-grid"> 
+            {
+                for $volume in $volumes
+                    group by $id := $volume/ancestor::tei:TEI//tei:seriesStmt/tei:title[1]/@n
+                    order by $id
+                    let $seriesStmt := head($volume/ancestor::tei:TEI)/tei:teiHeader//tei:seriesStmt
+                        for $articles in $volume
+                        let $figures := $articles//tei:figure
+                        where exists($figures)
+                        return
+                                for $figure in $figures
+                                let $xml-id := $figure/@xml:id
+                                let $head_zh := $figure/tei:head[1]
+                                let $head_en := $figure/tei:head[2]
+                                let $image-filename-base := replace(string($xml-id), "^(.*)\.[^\.]+$", "$1")
+                                let $image-url := concat($image-base-url, $image-filename-base, ".jpg")
+                                return
+                                    <div class="image-container">
+                                        <pb-popover theme="light">
+                                            <img src="{$image-url}" alt="Figure {string($xml-id)}" loading="lazy"/>
+                                            <template slot="alternate">
+                                                <div class="character-details">
+                                                    {<p>Figure ID: {string($xml-id)}</p>}
+                                                    { 
+                                                         if (string($head_en) ne "") then
+                                                            <p>{$head_en}</p>
+                                                        else ()
+                                                    }
+                                                    {
+                                                        if (string($head_zh) ne "") then
+                                                            <p>{$head_zh}</p>
+                                                        else ()
+                                                    }
+                                                </div> 
+                                            </template>
+                                        </pb-popover>
+                                    </div>
+            }
+        </div>
+} ;
+
+
 
 
 

@@ -281,7 +281,20 @@ declare variable $config:place-facets := [
     }
 ];
 
-
+declare variable $config:image-facets := [
+    map {
+        "dimension": "volume",
+        "heading": "facets.volume",
+        "max": 20,
+        "hierarchical": false(),
+        "output": function($label, $lang) {
+            let $lang := replace($lang, "^([^_]+)_.*$", "$1")
+            let $articles := collection($config:data-publication)//tei:seriesStmt/tei:title[@n = $label][@xml:lang=$lang]
+            return
+                $articles[1]/string()
+        }
+    }
+];
 
 (:
  : The function to be called to determine the next content chunk to display.
