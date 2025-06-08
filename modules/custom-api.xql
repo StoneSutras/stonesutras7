@@ -462,7 +462,7 @@ declare function api:characters_new($request as map(*)) {
 };
 
 
-declare function api:test-places($request as map(*)) {
+declare function api:places($request as map(*)) {
   let $lang := replace($request?parameters?language, "^([^_-]+)[_-].*$", "$1")
   let $search := $request?parameters?search
   let $options := query:options(())
@@ -1098,67 +1098,6 @@ declare function api:get-mentioned-info($id as xs:string) as element(div) {
         </div>
     };
 
-  declare function api:places($request as map(*)) {
-        let $search := normalize-space($request?parameters?search)
-        let $typeParam := $request?parameters?category
-        let $places :=
-            if ($search != "") then
-                collection($config:data-biblio)//place[
-                    contains(lower-case(name_zh), lower-case($search)) or
-                    contains(lower-case(name_en), lower-case($search))
-                ]
-            else
-                collection($config:data-biblio)//place    
-                
-        let $sortedPlaces := 
-            for $place in $places
-            let $sortKey := lower-case(string($place?name_to_display))
-            let $type := string($place?type)
-            order by $sortKey
-            return map {
-                "sortKey": $sortKey,
-                "name_to_display": $place?name_to_display,
-                "id": $place?id,
-                "type": $type
-            }
-    
-        let $displayItems := 
-            array {
-                for $place in 
-                    if ($typeParam = "All" or not($typeParam)) then 
-                        $sortedPlaces
-                    else 
-                        filter($sortedPlaces, function($entry) {
-                            $entry?type = $typeParam
-                        })
-                return 
-                    <span>
-                        <a href="place.html?id={$place?id}">{$place?name_to_display}</a>
-                    </span>
-            }
-    
-        let $categories := 
-            let $types := distinct-values(for $p in $sortedPlaces return $p?type)
-            return array {
-                for $type in $types
-                let $hits := count(filter($sortedPlaces, function($entry) { $entry?type = $type }))
-                where $hits > 0
-                order by $type
-                return map {
-                    "category": $type,
-                    "count": $hits
-                },
-                map {
-                    "category": "All",
-                    "count": count($sortedPlaces)
-                }
-            }
-    
-        return map {
-            "items": $displayItems,
-            "categories": $categories
-        }
-    };
 
 declare function api:place-name($request as map(*)) {
     let $id := $request?parameters?id

@@ -956,11 +956,11 @@
                 }
             }
         },	
-		"/api/test-places": {
+		"/api/places": {
 		    "get": {
 		        "summary": "Retrieve sorted list of places",
 		        "description": "Retrieve a sorted and filtered list of places with optional search and pagination.",
-		        "operationId": "custom:test-places",
+		        "operationId": "custom:places",
 		        "parameters": [
 		            {
 		                "name": "search",
@@ -987,43 +987,6 @@
                         "text/html": {
                             "schema":{
                                 "type": "string"
-                            	}
-                            }
-                        }
-                    }
-                }
-            }
-        },
-		"/api/places": {
-		    "get": {
-		        "summary": "Retrieve sorted list of places",
-		        "description": "Retrieve a sorted and filtered list of places with optional search and pagination.",
-		        "operationId": "custom:places",
-		        "parameters": [
-		            {
-		                "name": "search",
-		                "in": "query",
-		                "schema": {
-		                    "type": "string"
-		                },
-		                "description": "Keyword to search for places."
-		            },
-		            {
-		                "name": "category",
-		                "in": "query",
-		                "schema": {
-		                    "type": "string"
-		                },
-		                "description": "Filter results by type of place."
-		            }
-		        ],
-	        "responses": {
-                "200": {
-                    "description": "List of register entries",
-                    "content": {
-                        "application/json": {
-                            "schema":{
-                                "type": "object"
                             	}
                             }
                         }
