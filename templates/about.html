@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -15,36 +16,28 @@
 
     <link rel="stylesheet" type="text/css" href="resources/fonts/font.css"/>
     <link rel="stylesheet" href="resources/css/stonesutras-theme.css"/>
-    <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
+    <script type="module" src="https://cdn.tei-publisher.com/@2.23.2/dist/pb-components-bundle.js"></script>
+
 
 <style>
     .main-content {
         display: flex;
         min-height: 500px;
         border-radius: 8px;
-        /* Optional: Add rounded corners */
         overflow: hidden;
-        /* Ensure content does not overflow rounded corners */
         margin: 20px;
-        /* Adjust outer margin */
     }
 
     .sidebar {
         width: 180px;
         background-color: #fff;
-        /* Background color for the left menu bar */
         padding: 20px;
         border-right: 1px solid #ccc;
-        /* Separating line */
         position: fixed;
-        /* Added to make it fixed */
         top: 140px;
         left: 20px;
-        /* Adjust based on your margin */
         bottom: 0;
-        /* Make its height extend to the bottom of the viewport */
         overflow-y: auto;
-        /* Allow scrolling if content is too long */
     }
 
     .sidebar ul {
@@ -62,117 +55,242 @@
         color: #333;
         padding: 10px 15px;
         border-radius: 5px;
-        transition: background-color 0.3s ease, color 0.3s ease; 
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .sidebar a:hover {
         background-color: #eee;
         color: #690404;
-        /* Hover color */
     }
 
     .sidebar a.active {
-            background-color: rgba(105, 4, 4, 0.8);
-        color: #ffffff;             
-        font-weight: bold;          
+        background-color: rgba(105, 4, 4, 0.8);
+        color: #ffffff;
+        font-weight: bold;
     }
 
     .sidebar a.active:hover {
-        background-color: #690404;  
-        color: #ffffff;             
+        background-color: #690404;
+        color: #ffffff;
     }
 
     #content-area {
         flex-grow: 1;
         padding-top: 0px;
         padding-left: 240px;
-        /* Space between line and right content */
     }
 </style>
-    <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        <![CDATA[
+        function initFacets(container = document) {
+            const facets = container.querySelector('.facets');
+
+            if (facets) {
+                facets.addEventListener('pb-custom-form-loaded', function(ev) {
+                    const elems = ev.detail.querySelectorAll('.facet');
+
+                    elems.forEach(facet => {
+                        facet.addEventListener('change', () => {
+                            if (!facet.checked) {
+                                pbRegistry.state[facet.name] = null;
+                            }
+
+                            const table = facet.closest('table');
+                            if (table) {
+                                table.querySelectorAll('.nested .facet').forEach(nested => {
+                                    if (nested !== facet) {
+                                        nested.checked = false;
+                                    }
+                                });
+                            }
+
+                            facets.submit();
+                        });
+                    });
+                });
+            }
+        }
+        let appBasePath = ''; // Initialize it, will be set from appConfig
+
+        /**
+         * Loads content into the #content-area and updates the URL.
+         * @param {string} pageName The name of the page (e.g., 'project', 'acknowledgement').
+         * @param {string} relativeContentUrl The RELATIVE URL of the content to load (e.g., 'about-project.html').
+         * @param {boolean} pushState Whether to push a new state to the history. Defaults to true.
+         */
+        function loadContent(pageName, relativeContentUrl, pushState = true) {
+            // **核心修改：将相对URL与appBasePath组合成绝对URL进行fetch**
+            const fullFetchUrl = `${appBasePath}/${relativeContentUrl}`;
+
+            fetch(fullFetchUrl) // 使用绝对 URL 进行 fetch
+                .then(response => response.text())
+                .then(data => {
+                    const contentArea = document.getElementById('content-area');
+                    contentArea.innerHTML = data;
+
+                    const sidebarLinks = document.querySelectorAll('.sidebar ul li a');
+                    sidebarLinks.forEach(sLink => {
+                        sLink.classList.remove('active');
+                        if (sLink.dataset.page === pageName) {
+                            sLink.classList.add('active');
+                        }
+                    });
+
+                    if (pushState) {
+                        // 推送的URL保持一致的 about.html?page= 结构，不受 pb-view 影响
+                        const newUrl = `${window.location.origin}${appBasePath}/about.html?page=${pageName}`;
+                        history.pushState({ page: pageName, contentUrl: relativeContentUrl }, pageName, newUrl);
+                    }
+
+                    initFacets(contentArea);
+
+                    if (pageName === 'acknowledgement') {
+                        initializeShandongTabs(contentArea);
+                    }
+                })
+                .catch(error => console.error('Error loading content:', error));
+        }
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Extract 'app' variable from the appConfig JSON
+            const appConfigScript = document.getElementById('appConfig');
+            if (appConfigScript) {
+                try {
+                    const config = JSON.parse(appConfigScript.textContent);
+                    if (config.app) {
+                        appBasePath = config.app;
+                        // Remove trailing slash if present, for consistency
+                        if (appBasePath.endsWith('/')) {
+                            appBasePath = appBasePath.slice(0, -1);
+                        }
+                    }
+                } catch (e) {
+                    console.error("Error parsing appConfig:", e);
+                }
+            }
+
 
             const sidebarLinks = document.querySelectorAll('.sidebar ul li a');
 
             sidebarLinks.forEach(function(link) {
                 link.addEventListener('click', function (event) {
+                    event.preventDefault();
 
-                    sidebarLinks.forEach(function(sLink) {
-                        sLink.classList.remove('active');
-                    });
-        
-                    this.classList.add('active');
-        
+                    const pageName = this.dataset.page;
+                    const contentUrl = this.dataset.contentUrl; 
+
+               
+                    if (pageName) {
+                        if (contentUrl) {
+                           
+                            loadContent(pageName, contentUrl);
+                        }
+                    }
                 });
             });
-        
-            
+
+            // Handle browser back/forward buttons
+            window.addEventListener('popstate', (event) => {
+              
+                if (event.state) {
+                    if (event.state.page) {
+                        if (event.state.contentUrl) {
+                           
+                            loadContent(event.state.page, event.state.contentUrl, false);
+                        }
+                    }
+                } else {
+                    // Default to Project if no specific state
+                    loadContent('project', 'about-project.html', false);
+                }
+            });
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const initialPage = urlParams.get('page');
+
+            const pageMap = {
+                'project': 'about-project.html',
+                'acknowledgement': 'about-acknowledgement.html', 
+                'partners': 'about-partners.html',
+                'impressum': 'about-impressum.html'
+            };
+
+            if (initialPage) {
+                if (pageMap[initialPage]) {
+                    loadContent(initialPage, pageMap[initialPage], false); 
+                } else {
+                    loadContent('project', 'about-project.html');
+                }
+            } else {
+                loadContent('project', 'about-project.html');
+            }
         });
-    function initFacets(container = document) {
-    const facets = container.querySelector('.facets');
 
-    if (facets) {
-        facets.addEventListener('pb-custom-form-loaded', function(ev) {
-            const elems = ev.detail.querySelectorAll('.facet');
+        function initializeShandongTabs(container) {
+            const tabButtons = container.querySelectorAll('.tab-button');
+            const contentDisplayArea = container.querySelector('#content-display-area'); 
 
-            elems.forEach(facet => {
-                facet.addEventListener('change', () => {
-                    if (!facet.checked) {
-                        pbRegistry.state[facet.name] = null;
-                    }
+            if (!contentDisplayArea) {
+                console.error('Content display area (#content-display-area) not found in acknowledgement.html content.');
+                return;
+            }
 
-                    const table = facet.closest('table');
-                    if (table) {
-                        table.querySelectorAll('.nested .facet').forEach(nested => {
-                            if (nested !== facet) {
-                                nested.checked = false;
-                            }
-                        });
-                    }
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
 
-                    facets.submit();
+                    const documentId = button.getAttribute('data-pb-document-id');
+                    contentDisplayArea.innerHTML = '';
+
+                    const pbView = document.createElement('pb-view');
+                    pbView.setAttribute('src', documentId); 
+                    contentDisplayArea.appendChild(pbView);
                 });
             });
-        });
-    }
-}
 
+            if (tabButtons.length > 0) {
+                tabButtons[0].click();
+            }
+        }
+        ]]>
     </script>
 </head>
 
 <body>
     <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json" require-language="" supported-languages="en, zh_Hant">
         <script id="appConfig" type="application/json" data-template="pages:parse-params">
-                {
-                    "app": "${app}"
-                }
-            </script>
+            {
+                "app": "${app}"
+            }
+        </script>
         <app-drawer-layout force-narrow="force-narrow">
             <app-drawer data-template="templates:include" data-template-path="templates/drawer.html"/>
             <app-header-layout>
                 <app-header slot="header" reveals="reveals" fixed="fixed" effects="waterfall">
                     <app-toolbar data-template="templates:include" data-template-path="templates/menu.html"/>
                     <app-toolbar data-template="templates:include" data-template-path="templates/toolbar.html">
-                           <p data-target="breadcrumbs" class="breadcrumbs">
-                                <pb-i18n key="menu.indices">Indices</pb-i18n>
-                            </p>
+                        <p data-target="breadcrumbs" class="breadcrumbs">
+                            <pb-i18n key="menu.indices">Indices</pb-i18n>
+                        </p>
                     </app-toolbar>
                 </app-header>
                 <main class="main-content">
                     <aside class="sidebar">
                         <ul>
                             <li>
-                                <a href="#" onclick="loadContent('about-project.html')">Project</a>
+                                <a href="${app}/about.html?page=project" data-page="project" data-content-url="about-project.html">Project</a>
                             </li>
                             <li>
-                                <a href="#" onclick="loadContent('about-acknowledgement.html')">Acknowledgement</a>
+                                <a href="${app}/about.html?page=acknowledgement" data-page="acknowledgement" data-content-url="about-acknowledgement.html">Acknowledgement</a>
                             </li>
                             <li>
-                                <a href="#" onclick="loadContent('about-partners.html')">Partners</a>
+                                <a href="${app}/about.html?page=partners" data-page="partners" data-content-url="about-partners.html">Partners</a>
                             </li>
                             <li>
-                                <a href="#" onclick="loadContent('about-impressum .html')">Impressum </a>
+                                <a href="${app}/about.html?page=impressum" data-page="impressum" data-content-url="about-impressum.html">Impressum</a>
                             </li>
                         </ul>
                     </aside>
@@ -184,39 +302,6 @@
         </app-drawer-layout>
     </pb-page>
     <div class="splash"/>
-
-    <script>
-       function loadContent(url) {
-    fetch(url)
-        .then(response => response.text())
-        .then(data => {
-            const contentArea = document.getElementById('content-area');
-            contentArea.innerHTML = data;
-
-            // Update active state in sidebar
-            const sidebarLinks = document.querySelectorAll('.sidebar ul li a');
-            sidebarLinks.forEach(function(sLink) {
-                sLink.classList.remove('active');
-                if (sLink.getAttribute('onclick').includes(url)) {
-                    sLink.classList.add('active');
-                }
-            });
-            
-            initFacets(contentArea);
-        });
-}
-
-        document.addEventListener('DOMContentLoaded', () => {
-            loadContent('about-project.html'); // Default load Project content
-        });
-
-        function updateUrlForPlaces(url) {
-            const baseUrl = window.location.href.split('?')[0].split('#')[0];
-            const newUrl = baseUrl + '';
-            history.replaceState(null, '', newUrl);
-            loadContent(url);
-        }
-    </script>
 </body>
 
 </html>
