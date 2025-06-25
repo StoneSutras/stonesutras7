@@ -1143,7 +1143,66 @@
 	
 			},
 
+		"/api/temples": {
+		    "get": {
+		        "summary": "Retrieve sorted list of places",
+		        "description": "Retrieve a sorted and filtered list of places with optional search and pagination.",
+		        "operationId": "custom:temples",
+		        "parameters": [
+		            {
+		                "name": "search",
+		                "in": "query",
+		                "schema": {
+		                    "type": "string"
+		                },
+		                "description": "Keyword to search for places."
+		            }
+		        ],
+	        "responses": {
+                "200": {
+                    "description": "List of places",
+                    "content": {
+                        "text/html": {
+                            "schema":{
+                                "type": "string"
+                            	}
+                            }
+                        }
+                    }
+                }
+            }
+        },
 
+		"/api/sutras": {
+		    "get": {
+		        "summary": "Retrieve sorted list of places",
+		        "description": "Retrieve a sorted and filtered list of places with optional search and pagination.",
+		        "operationId": "custom:sutras",
+		        "parameters": [
+		            {
+		                "name": "search",
+		                "in": "query",
+		                "schema": {
+		                    "type": "string"
+		                },
+		                "description": "Keyword to search for places."
+		            }
+		        ],
+	        "responses": {
+                "200": {
+                    "description": "List of places",
+                    "content": {
+                        "text/html": {
+                            "schema":{
+                                "type": "string"
+                            	}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        
 		"/api/bibliography/json": {
 			"get": {
 				"summary": "Search for Bibliography",

@@ -1226,7 +1226,7 @@ declare function api:tei-figures($request as map(*)) {
   let $image-base-url := "https://sutras.adw.uni-heidelberg.de/images/"
   let $lang := replace($request?parameters?language, "^([^_-]+)[_-].*$", "$1")
   let $options := query:options(())
-  let $volumes := collection($config:data-publication)//tei:body[ft:query(., "volume:*", $options)][ancestor::tei:TEI//tei:seriesStmt]
+  let $volumes := collection($config:data-publication)//tei:figure[ft:query(., "volume:*", $options)][ancestor::tei:TEI//tei:seriesStmt]
   let $nil := session:set-attribute($config:session-prefix || ".images", $volumes)
   
   return
@@ -1236,15 +1236,14 @@ declare function api:tei-figures($request as map(*)) {
                     group by $id := $volume/ancestor::tei:TEI//tei:seriesStmt/tei:title[1]/@n
                     order by $id
                     let $seriesStmt := head($volume/ancestor::tei:TEI)/tei:teiHeader//tei:seriesStmt
-                        for $articles in $volume
-                        let $figures := $articles//tei:figure
-                        where exists($figures)
+                        for $figures in $volume
                         return
                                 for $figure in $figures
                                 let $xml-id := $figure/@xml:id
+                                let $url := $figure/tei:graphic/@url
                                 let $head_zh := $figure/tei:head[1]
                                 let $head_en := $figure/tei:head[2]
-                                let $image-filename-base := replace(string($xml-id), "^(.*)\.[^\.]+$", "$1")
+                                let $image-filename-base := replace(string($url), "^(.*)\.[^\.]+$", "$1")
                                 let $image-url := concat($image-base-url, $image-filename-base, ".jpg")
                                 return
                                     <div class="image-container">
@@ -1271,7 +1270,83 @@ declare function api:tei-figures($request as map(*)) {
         </div>
 } ;
 
+declare function api:temples($request as map(*)) {
+  let $search := $request?parameters?search
+  let $temples := collection($config:data-biblio)/monastery
 
+  for $temple in $temples
+    let $id := string($temple/@xml:id)
+    let $name_zh :=
+        if ($temple/name[@xml:lang='zh']/placeName)
+        then normalize-space( ($temple/name[@xml:lang='zh']/placeName)[1] )
+        else ""
+    let $name_pinyin :=
+        if ($temple/name[@transliteration='pinyin'])
+        then normalize-space(($temple/name[@transliteration='pinyin'])[1] )
+        else ""
 
+    let $final_name :=
+        if (starts-with($id, 'unclear') ) then (: Check if it's 'unclear' followed by a number :)
+            $id
+        else if ($name_pinyin != "" and $name_zh != "") then
+            concat($name_pinyin, " ", $name_zh)
+        else if ($name_zh != "") then
+            $name_zh
+        else
+            $name_pinyin
+
+    (: the 'pinyin' one is the Template :)
+    where $id != 'pinyin'
+
+    order by lower-case($final_name)
+
+    return <li>{$final_name} (xml:id is {$id})</li>
+};
+
+declare function api:sutras($request as map(*)) {
+    let $search := $request?parameters?search
+    let $sutras := collection($config:data-sutras)/mods:mods
+
+    for $sutra in $sutras
+        let $id := string($sutra/@ID)
+        let $title_zh :=
+            if ($sutra/mods:titleInfo[@lang='zh']/mods:title)
+            then normalize-space( ($sutra/mods:titleInfo[@lang='zh']/mods:title)[1] )
+            else ""
+        let $title_pinyin :=
+            if ($sutra/mods:titleInfo[@transliteration='pinyin']/mods:title)
+            then normalize-space(($sutra/mods:titleInfo[@transliteration='pinyin']/mods:title)[1] )
+            else ""
+        let $title_en :=
+            if ($sutra/mods:titleInfo[@lang='en' and @type='translated']/mods:title)
+            then normalize-space(($sutra/mods:titleInfo[@lang='en' and @type='translated']/mods:title)[1] )
+            else ""
+        let $title_ja :=
+            if ($sutra/mods:titleInfo[@lang='ja']/mods:title)
+            then normalize-space( ($sutra/mods:titleInfo[@lang='ja']/mods:title)[1] )
+            else ""
+        let $title_romaji :=
+            if ($sutra/mods:titleInfo[@transliteration='romaji']/mods:title)
+            then normalize-space( ($sutra/mods:titleInfo[@transliteration='romaji']/mods:title)[1] )
+            else ""
+        let $final_title :=
+            if ($title_ja != "" ) then
+                concat($title_ja, " ",$title_romaji)
+            else if ($title_pinyin != "" and $title_zh != "") then
+                concat($title_pinyin, " ", $title_zh)
+            else if ($title_zh != "") then
+                $title_zh
+            else if ($title_pinyin != "") then
+                $title_pinyin
+            else
+                $title_en (: Fallback to English title if no Chinese or Pinyin found :)
+
+        where $id != 'pinyin' (: Assuming 'pinyin' might be used as a template ID, similar to temples :)
+              and ($search = '' or contains(lower-case($final_title), lower-case($search)))
+
+        order by lower-case($final_title)
+
+        return <li>{$final_title} (ID is {$id})</li>
+};
 
 

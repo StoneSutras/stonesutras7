@@ -479,7 +479,7 @@ declare variable $config:data-layouts := $config:data-root || "/layouts";
 declare variable $config:data-publication := $config:data-root || "/Publication";
 declare variable $config:data-biblio := $config:data-root || "/biblio";
 declare variable $config:data-authority := $config:data-root || "/biblio/authority";
-
+declare variable $config:data-sutras := $config:data-root || "/biblio/sutras";
 
 
 (:~
