@@ -1,81 +1,190 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <title>Acknowledgement</title>
   <style>
+    body {
+      display: flex;
+      padding-left: 50px;
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
     .about-section {
-        padding-left: 50px;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        color: #333;
-        max-width: 900px; /* Limit width for better readability */
+      display: flex;
+      flex-direction: row;
+      max-width: 1200px;
+      width: 100%;
+      padding-left: 0;
+      box-sizing: border-box;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      /* No border or separation here, everything stays within the white background */
     }
 
     .about-section h2 {
-        text-align: left;
-        color: #2c3e50;
-        font-size: 2.2em;
-        margin-bottom: 40px;
-        position: relative;
-        padding-bottom: 10px;
-        padding-left: 0px;
+      text-align: left;
+      color: #2c3e50;
+      font-size: 2.2em;
+      margin-top: 0;
+      margin-bottom: 30px;
+      position: relative;
+      padding-bottom: 10px;
+      padding-left: 0px;
     }
-       
+
     .about-section p {
-        font-size: 1.1em;
+      font-size: 1.1em;
+    }
+
+    .left-sidebar {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 30px 0 30px 30px;
+      flex-shrink: 0;
+      /* Removed border-right to keep it within the same white background */
     }
 
     .tabs {
       display: flex;
-      border-bottom: 1px solid #ddd;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
+      flex-direction: column;
+      /* Removed border-right here as well */
+      margin-right: 30px;
+      /* Still maintains separation from content */
+      flex-shrink: 0;
+      padding-top: 0;
+      padding-right: 30px;
+      /* Keep padding to the right of the buttons */
     }
+
     .tab-button {
-      padding: 12px 20px;
+      padding: 14px 25px;
       cursor: pointer;
-      border: 1px solid #ddd;
-      border-bottom: none;
-      background-color: #f9f9f9;
-      margin-right: 5px;
-      border-top-left-radius: 8px;
-      border-top-right-radius: 8px;
-      transition: background-color 0.3s ease;
+      border: none;
+      /* No borders for buttons */
+      background-color: transparent;
+      /* Transparent background by default */
+      margin-bottom: 8px;
+      margin-right: 0;
+      border-radius: 6px;
+      transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
       white-space: nowrap;
+      text-align: left;
+      color: #555;
+      /* Default text color */
+      font-weight: 500;
+      position: relative;
+      overflow: hidden;
     }
+
+    /* Underline for active state */
+    .tab-button::after {
+      content: '';
+      position: absolute;
+      left: 25px;
+      /* Aligned with text start, considering padding */
+      right: 25px;
+      /* Aligned with text end */
+      bottom: 5px;
+      /* Position below text */
+      height: 2px;
+      /* Thickness of the underline */
+      background-color: transparent;
+      /* Hidden by default */
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      transform: scaleX(0);
+      /* Start hidden */
+      transform-origin: left;
+    }
+
     .tab-button:hover {
-      background-color: #e9e9e9;
+      background-color: #f5f5f5;
+      /* Lighter grey on hover */
+      color: #333;
+      transform: translateX(3px);
     }
+
     .tab-button.active {
-      background-color: #fff;
-      border-color: #ddd;
-      border-bottom: 1px solid #fff;
+      background-color: #ededed;
+      /* A subtle grey background for active */
+      color: #333;
+      /* Darker text for active */
       font-weight: bold;
+      /* Removed box-shadow for a flatter look */
     }
-    #content-display-area { /* Changed ID for clarity */
-      border: 1px dashed #ccc;
-      padding: 10px;
-      background-color: #fafafa;
+
+    /* Active state underline */
+    .tab-button.active::after {
+      background-color: #666;
+      /* Dark grey for the active underline */
+      transform: scaleX(1);
+      /* Show the underline */
+    }
+
+    #content-display-area {
+      /* No border for content area */
+      padding-left: 30px;
+      background-color: #ffffff;
+      /* Consistent white background */
+      flex-grow: 1;
+      min-width: 0;
+      margin-top: 0px;
+      margin-right: 30px;
     }
   </style>
 </head>
+
 <body>
+  <div class="about-section">
+    <h2>Acknowledgement</h2>
+  </div>
 
   <div class="about-section">
-    <pb-document id="document1" path="Publication/impressum_Shandong_1.xml" odd="stonesutras" view="div"></pb-document>
-    <pb-document id="document2" path="Publication/impressum_Shandong_2.xml" odd="stonesutras" view="div"></pb-document>
-    <pb-document id="document3" path="Publication/impressum_Shandong_3.xml" odd="stonesutras" view="div"></pb-document>
-    <pb-document id="document4" path="Publication/impressum_Shandong_4.xml" odd="stonesutras" view="div"></pb-document>
-    <pb-document id="document5" path="Publication/impressum_Shandong_5.xml" odd="stonesutras" view="div"></pb-document>
+    <pb-document id="document1" path="Publication/impressum_Shandong_1.xml" odd="stonesutras" view="div" />
+    <pb-document id="document2" path="Publication/impressum_Shandong_2.xml" odd="stonesutras" view="div" />
+    <pb-document id="document3" path="Publication/impressum_Shandong_3.xml" odd="stonesutras" view="div" />
+    <pb-document id="document4" path="Publication/impressum_Shandong_4.xml" odd="stonesutras" view="div" />
+    <pb-document id="document5" path="Publication/impressum_Shandong_5.xml" odd="stonesutras" view="div" />
+    <pb-document id="document6" path="Publication/Shaanxi/impressum_shaanxi_1.xml" odd="stonesutras" view="div" />
+    <pb-document id="document7" path="Publication/Shaanxi/impressum_shaanxi_2.xml" odd="stonesutras" view="div" />
+    <pb-document id="document8" path="Publication/Shaanxi/impressum_shaanxi_3.xml" odd="stonesutras" view="div" />
+    <pb-document id="document9" path="Publication/Publication_Sichuan/impressum_Sichuan_1.xml" odd="stonesutras"
+      view="div" />
+    <pb-document id="document10" path="Publication/Publication_Sichuan/impressum_Sichuan_2.xml" odd="stonesutras"
+      view="div" />
+    <pb-document id="document11" path="Publication/Publication_Sichuan/impressum_Sichuan_3.xml" odd="stonesutras"
+      view="div" />
+    <pb-document id="document12" path="Publication/Publication_Sichuan/impressum_Sichuan_4.xml" odd="stonesutras"
+      view="div" />
+    <pb-document id="document13" path="Publication/Publication_Sichuan/impressum_Sichuan_5.xml" odd="stonesutras"
+      view="div" />
+    <pb-document id="document14" path="Publication/Publication_Sichuan/impressum_Sichuan_6.xml" odd="stonesutras"
+      view="div" />
 
-    <h2>Acknowledgement</h2> <div class="tabs">
+    <div class="tabs">
       <button class="tab-button active" data-pb-document-id="document1">Shandong Vol. 1</button>
       <button class="tab-button" data-pb-document-id="document2">Shandong Vol. 2</button>
       <button class="tab-button" data-pb-document-id="document3">Shandong Vol. 3</button>
       <button class="tab-button" data-pb-document-id="document4">Shandong Vol. 4</button>
       <button class="tab-button" data-pb-document-id="document5">Shandong Vol. 5</button>
+      <button class="tab-button" data-pb-document-id="document6">Shaanxi Vol. 1</button>
+      <button class="tab-button" data-pb-document-id="document7">Shaanxi Vol. 2</button>
+      <button class="tab-button" data-pb-document-id="document8">Shaanxi Vol. 3</button>
+      <button class="tab-button" data-pb-document-id="document9">Sichuan Vol. 1</button>
+      <button class="tab-button" data-pb-document-id="document10">Sichuan Vol. 2</button>
+      <button class="tab-button" data-pb-document-id="document11">Sichuan Vol. 3</button>
+      <button class="tab-button" data-pb-document-id="document12">Sichuan Vol. 4</button>
+      <button class="tab-button" data-pb-document-id="document13">Sichuan Vol. 5</button>
+      <button class="tab-button" data-pb-document-id="document14">Sichuan Vol. 6</button>
+
     </div>
 
     <div id="content-display-area">
-      </div>
-  </div> </body>
+    </div>
+  </div>
+</body>
+
 </html>
