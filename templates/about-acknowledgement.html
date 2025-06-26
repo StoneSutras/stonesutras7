@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 
 <head>
-  <title>Acknowledgement</title>
+  <title>Acknowledgements</title>
   <style>
     body {
       display: flex;
@@ -78,26 +78,6 @@
       font-weight: 500;
       position: relative;
       overflow: hidden;
-    }
-
-    /* Underline for active state */
-    .tab-button::after {
-      content: '';
-      position: absolute;
-      left: 25px;
-      /* Aligned with text start, considering padding */
-      right: 25px;
-      /* Aligned with text end */
-      bottom: 5px;
-      /* Position below text */
-      height: 2px;
-      /* Thickness of the underline */
-      background-color: transparent;
-      /* Hidden by default */
-      transition: background-color 0.3s ease, transform 0.3s ease;
-      transform: scaleX(0);
-      /* Start hidden */
-      transform-origin: left;
     }
 
     .tab-button:hover {

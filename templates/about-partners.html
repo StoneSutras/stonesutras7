@@ -1,3 +1,169 @@
 <div class="about-section">
+    <style>/* General Styling for the section */
+.about-section {
+    padding-left: 50px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+
+    max-width: 900px; /* Limit width for better readability */
+
+}
+
+.about-section h2 {
+    text-align: left;
+    color: #2c3e50;
+    font-size: 2.2em;
+    margin-bottom: 30px;
+    position: relative;
+    padding-bottom: 10px;
+    padding-left: 0px;
+}
+
+/* Grid layout for the partners */
+.partners-grid {
+    display: grid;
+    /* Two columns: first for province (fixed width), second for partners (takes remaining space) */
+    grid-template-columns: minmax(150px, 25%) 1fr;
+    gap: 25px; /* Space between rows and columns */
+    padding: 0;
+    list-style: none; /* Remove default list styling if converting ul/li to grid items */
+}
+
+/* Styling for each province row (now a grid row) */
+.partners-grid .by-province {
+    display: contents; /* Makes the children of .by-province direct grid items */
+}
+
+.partners-grid .province {
+    background-color: #ecf0f1; /* Light background for province column */
+    padding: 15px 20px;
+    border-radius: 6px;
+    display: flex; /* Use flexbox to center province names vertically */
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start; /* Align text to the start */
+    border-left: 5px solid #3498db; /* Accent border */
+}
+
+.partners-grid .province h3 {
+    margin: 0;
+    font-size: 1.1em;
+    line-height: 1.4;
+    color: #2c3e50;
+}
+
+.partners-grid .province h3[lang="en"] {
+    font-weight: normal;
+    color: #555;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+/* Styling for the partner list column */
+.partners-grid .partner-list-cell {
+    padding: 15px 0; /* Padding around the ul */
+}
+
+.partners-grid ul {
+    list-style: none; /* Remove default bullet points */
+    padding: 0;
+    margin: 0;
+}
+
+.partners-grid ul li {
+    margin-bottom: 15px;
+    line-height: 1.6;
+    color: #444;
+    font-size: 1em;
+    padding-left: 25px; /* Space for custom bullet */
+    position: relative;
+}
+
+/* Custom bullet point */
+.partners-grid ul li::before {
+    content: '\2022'; /* Unicode character for a bullet */
+    color: #3498db; /* Accent color for bullet */
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.partners-grid ul li br {
+    display: none; 
+}
+/* If you want to keep the line break for translation, remove the above 'display: none' */
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .partners-grid {
+        grid-template-columns: 1fr; /* Stack columns on smaller screens */
+    }
+
+    .partners-grid .province {
+        align-items: center; /* Center align province names when stacked */
+        text-align: center;
+        border-left: none; /* Remove left border */
+        border-bottom: 5px solid #3498db; /* Add bottom border for separation */
+        border-radius: 6px 6px 0 0; /* Adjust border-radius */
+    }
+
+    .partners-grid .province h3[lang="en"] {
+        margin-top: 0; /* Adjust spacing */
+    }
+
+    .partners-grid .partner-list-cell {
+        padding-top: 0; /* No top padding when stacked after province */
+        padding-bottom: 20px;
+    }
+}</style>
+
     <h2>Partners</h2>
+    <table>
+     <tr class="by-province">
+                                    <td class="province">
+                                        <h3 lang="zh">山東省</h3>
+                                        <h3 lang="en">Shandong Province</h3>
+                                    </td>
+                                    <td>
+                                        <ul>
+                                            <li>山東省石刻藝術博物館<br/>
+                                                Shandong Stone Carving Art Museum</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr class="by-province" style="margin-bottom: 5px;">
+                                    <td class="province">
+                                        <h3 lang="zh">四川省</h3>
+                                        <h3 lang="en">Sichuan Province</h3>
+                                    </td>
+                                    <td>
+                                        <ul>
+                                            <li>北京大學考古文博學院<br/>
+                                                Institute of Archaeology and Museology, Peking University</li>
+                                            <li>成都市文物考古研究所<br/>
+                                                Chengdu Municipal Institute of Cultural Relics and Archaeology</li>
+                                            <li>四川省文物考古研究院<br/>
+                                                Sichuan Provincial Research Institute of Cultural Relics and Archaeology</li>
+                                            <li>安岳縣文物管理局<br/>
+                                                Bureau for Cultural Relics of Anyue County</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr class="by-province" style="margin-bottom: 5px;">
+                                    <td class="province">
+                                        <h3 lang="zh">陝西省</h3>
+                                        <h3 lang="en">Shaanxi Province</h3>
+                                    </td>
+                                    <td>
+                                        <ul>
+                                            <li>陝西省文物保護研究院<br/>
+                                            Shaanxi Institute for the Preservation of Cultural Heritage</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </table>
 </div>
