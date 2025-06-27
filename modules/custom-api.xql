@@ -1241,10 +1241,23 @@ declare function api:tei-figures($request as map(*)) {
                                 for $figure in $figures
                                 let $xml-id := $figure/@xml:id
                                 let $url := $figure/tei:graphic/@url
+                                where not(ends-with(lower-case(string($url)), '.swf')) and not(ends-with(lower-case(string($url)), '.svg'))
                                 let $head_zh := $figure/tei:head[1]
                                 let $head_en := $figure/tei:head[2]
                                 let $image-filename-base := replace(string($url), "^(.*)\.[^\.]+$", "$1")
-                                let $image-url := concat($image-base-url, $image-filename-base, ".jpg")
+                                let $text-ancestor-id := $figure/ancestor::tei:text/@xml:id
+                                let $specific-xml-ids-to-be-JPG := ('W51_DSC7890.JPG', 'DSC_0070.JPG', 'DSC_2312.JPG', 'cave_40_DSC_0108.JPG', 'caves_42_41_40_DSC_0111.JPG', 'cave75_DSC_0015.JPG', 'cave75_DSC_1175.JPG', 'cave77_DSC_0018.JPG', 'WFY_8_89_90_DSC_0513.JPG', 'WFY_92_93_94_DSC_0450.JPG', 'WFY_cave82_DSC_0022.JPG', 'cave74_DSC_0166.JPG', 'WFY_73_IMGP6682.JPG')
+                                let $new-specific-xml-ids-to-be-jpg := ('Section_a-b_DSC_0322.jpg', 'WFY_29-33_DSC0631.jpg', 'Wofoyuan_links_Höhlen_29-42.tif', 'pagoda_25b_DSC0492.jpg')
+                                let $extension :=
+                                if ($xml-id = $new-specific-xml-ids-to-be-jpg) then 'jpg' 
+                                    else if ($xml-id = $specific-xml-ids-to-be-JPG) then 'JPG' 
+                                    else if ($text-ancestor-id = 'Site_WFY_Section_AandB' or $text-ancestor-id = 'Site_WFY_Section_Bb_Cave39') then 'JPG'
+                                    else if (ends-with($xml-id, 'tif')) then 'jpg'
+                                    else if (ends-with($xml-id, 'TIF')) then 'jpg'
+                                    else if (ends-with($xml-id, 'JPG')) then 'jpg'
+                                    else if (ends-with($xml-id, 'jpg')) then 'jpg'
+                                    else 'jpg'
+                                let $image-url := concat($image-base-url, $image-filename-base, ".", $extension)
                                 return
                                     <div class="image-container">
                                         <pb-popover theme="light">
