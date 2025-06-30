@@ -495,7 +495,7 @@ declare function api:places($request as map(*)) {
                 $name_en
             order by lower-case($final_name_with_dates)
             let $href := concat("place.html?id=", $id)
-            return <div class="place"><a href="{$href}">{$final_name_with_dates}</a></div>
+            return <div class="place"><a>{$final_name_with_dates}</a></div>
         }
       </div>
 
@@ -1246,6 +1246,9 @@ declare function api:tei-figures($request as map(*)) {
                                 let $head_en := $figure/tei:head[2]
                                 let $image-filename-base := replace(string($url), "^(.*)\.[^\.]+$", "$1")
                                 let $text-ancestor-id := $figure/ancestor::tei:text/@xml:id
+                                let $xml-base-url := base-uri($figure)
+                                let $xml-base-url-part := substring-after(string($xml-base-url), 'Publication/')
+
                                 let $specific-xml-ids-to-be-JPG := ('W51_DSC7890.JPG', 'DSC_0070.JPG', 'DSC_2312.JPG', 'cave_40_DSC_0108.JPG', 'caves_42_41_40_DSC_0111.JPG', 'cave75_DSC_0015.JPG', 'cave75_DSC_1175.JPG', 'cave77_DSC_0018.JPG', 'WFY_8_89_90_DSC_0513.JPG', 'WFY_92_93_94_DSC_0450.JPG', 'WFY_cave82_DSC_0022.JPG', 'cave74_DSC_0166.JPG', 'WFY_73_IMGP6682.JPG')
                                 let $new-specific-xml-ids-to-be-jpg := ('Section_a-b_DSC_0322.jpg', 'WFY_29-33_DSC0631.jpg', 'Wofoyuan_links_Höhlen_29-42.tif', 'pagoda_25b_DSC0492.jpg')
                                 let $extension :=
@@ -1264,7 +1267,7 @@ declare function api:tei-figures($request as map(*)) {
                                             <img src="{$image-url}" alt="Figure {string($xml-id)}" loading="lazy"/>
                                             <template slot="alternate">
                                                 <div class="character-details">
-                                                    {<p>Figure ID: {string($xml-id)}</p>}
+                                                    {<p>See: <a href="{concat('Publication/', $xml-base-url-part)}">{string($text-ancestor-id)}</a></p>}
                                                     { 
                                                          if (string($head_en) ne "") then
                                                             <p>{$head_en}</p>
@@ -1282,6 +1285,7 @@ declare function api:tei-figures($request as map(*)) {
             }
         </div>
 } ;
+
 
 declare function api:temples($request as map(*)) {
   let $search := $request?parameters?search
@@ -1361,5 +1365,63 @@ declare function api:sutras($request as map(*)) {
 
         return <li>{$final_title} (ID is {$id})</li>
 };
+(:  
+declare function api:texts($request as map(*)) {
+  let $docs := collection($config:data-docs)//tei:text
+  for $doc in $docs
+    let $text-id := string($doc/@xml:id)
+    for $witness in $doc//tei:witness
+      where $witness/@sigil[starts-with(., 'T_')]
+      let $witDetail := $witness/tei:witDetail
+      let $witness-content := normalize-space($witDetail/string())
+      let $sigil := string($witness/@sigil)
+      return
+        <div>
+          <rdg-wit-attribute>{$sigil}, </rdg-wit-attribute>
+          <text-xml-id>{$text-id}, </text-xml-id>
+          <related-witnesses>{$witDetail}</related-witnesses>
+        </div>
+};:)
 
 
+declare function api:texts-table($request as map(*)) {
+    let $lang := replace($request?parameters?language, "^([^_-]+)[_-].*$", "$1")
+    let $query := $request?parameters?search
+    let $start := if (exists($request?parameters?start)) then xs:integer($request?parameters?start) else 1
+    let $limit := if (exists($request?parameters?limit)) then xs:integer($request?parameters?limit) else 100
+    let $docs := collection($config:data-docs)//tei:text
+    let $taisho-headings := collection($config:data-docs)//Taisho/heading
+
+    let $filtered-references :=
+            for $doc in $docs
+                let $text-id := string($doc/@xml:id)
+                order by $text-id
+                    for $witness in $doc//tei:witness
+                      where $witness/@sigil[starts-with(., 'T_')]
+                      let $witDetail := $witness/tei:witDetail
+                      let $Tnumber := string($witDetail/@target)
+                      let $witness-content := normalize-space($witDetail/string())
+                      let $sigil := string($witness/@sigil)
+                      
+                      let $cleaned-Tnumber := replace($Tnumber, "^T_", "")
+                      let $formatted-Tnumber := if (string-length($cleaned-Tnumber) = 3) then concat("0", $cleaned-Tnumber) else $cleaned-Tnumber
+                      
+                      let $heading-text := ($taisho-headings[lower-case(@number) = lower-case($formatted-Tnumber)]/string())[1]
+
+                where $witness-content != "" and $text-id != "" 
+                
+                return map {
+                    "Tnumber": $Tnumber,
+                    "Sigil": $sigil,
+                    "Source": $text-id,
+                    "witness-content": $witness-content,
+                    "heading": $heading-text
+                }
+    
+    let $sorted-references := subsequence($filtered-references, $start, $limit)
+    
+    return map {
+        "count": count($filtered-references),
+        "results": array { $sorted-references }
+    }
+};

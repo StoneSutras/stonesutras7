@@ -1203,6 +1203,92 @@
             }
         },
         
+        
+		"/api/texts/json": {
+			"get": {
+				"summary": "Search for Bibliography",
+				"operationId": "api:texts-table",
+				"parameters": [
+					{
+						"name": "search",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						},
+						"description": "Keyword to search for bibliography titles"
+					},
+					{
+						"name": "start",
+						"in": "query",
+						"schema": {
+							"type": "integer"
+						}
+					},
+					{
+						"name": "limit",
+						"in": "query",
+						"schema": {
+							"type": "integer"
+						}
+					},
+					{
+						"name": "language",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List of bibliographies",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"count": {
+											"type": "integer",
+											"description": "Total count of bibliographies matching the query"
+										},
+										"results": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"Tnumber": {
+														"type": "string",
+														"description": "Bibliography ID"
+													},
+													"Sigil":{
+														"type": "string",
+														"description": "Bibliography ID"
+													},
+													"heading":{
+														"type": "string",
+														"description": "Bibliography ID"
+													},
+													"Source": {
+														"type": "string",
+														"description": "Bibliography full reference"
+													},
+													"witness-content": {
+														"type": "string",
+														"description": "The string for clipboard"
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+        
+        
 		"/api/bibliography/json": {
 			"get": {
 				"summary": "Search for Bibliography",
@@ -1369,6 +1455,7 @@
     		}
     
         },
+        
     
         "/api/impressum/{id}/": {
     			"get": {

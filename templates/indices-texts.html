@@ -1,0 +1,41 @@
+<main>
+  <style>
+    main {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    main &gt;
+
+    pb-load {
+      width: 75%;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      line-height: 1.6;
+      margin-bottom: 0.5em;
+      padding-left: 0.5em;
+      list-style: none;
+    }
+  </style>
+
+  <pb-table-grid class="table-grid" source="api/texts/json" css-path="../css/gridjs" resizable="" fixed-header=""
+    search="" subscribe="transcription" emit="transcription" per-page="30">
+    <pb-table-column label="Taisho Number" property="Tnumber" sort="" width="12rem" />
+    <pb-table-column label="Sigil" property="Sigil" sort="" width="12rem" />
+    <pb-table-column label="Heading" property="heading" sort="" width="12rem" />
+
+    <pb-table-column label="Filename" property="Source" sort="" width="12rem" />
+    <pb-table-column label="Detail" property="witness-content" sort="" width="12rem" />
+
+  </pb-table-grid>
+
+  <!-- <pb-load url="api/texts/json" auto="" event="" use-language="" subscribe=""
+  emit="" />-->
+</main>
