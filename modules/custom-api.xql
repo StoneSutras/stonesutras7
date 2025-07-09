@@ -461,16 +461,15 @@ declare function api:characters_new($request as map(*)) {
     }
 };
 
-
 declare function api:places($request as map(*)) {
   let $lang := replace($request?parameters?language, "^([^_-]+)[_-].*$", "$1")
   let $search := $request?parameters?search
   let $options := query:options(())
 
-  let $query := if ($search and normalize-space($search) != "") 
-                then $search 
+  let $query := if ($search and normalize-space($search) != "")
+                then $search
                 else "*:*"
-  
+
   let $places := collection($config:data-biblio)/places/place[@type != ""][ft:query(., $query, $options)]
 
   let $nil := session:set-attribute($config:session-prefix || ".places", $places)
@@ -486,22 +485,23 @@ declare function api:places($request as map(*)) {
             let $id := string($place/@id)
             let $name_zh := normalize-space($place/name_zh)
             let $name_en := normalize-space($place/name_en)
-            let $final_name_with_dates := 
+            let $final_name_with_dates :=
               if ($name_zh != "" and $name_en != "") then
-                concat($name_en, "  ", $name_zh)
+                concat($name_en, " ", $name_zh)
               else if ($name_zh != "") then
                 $name_zh
               else
                 $name_en
             order by lower-case($final_name_with_dates)
-            let $href := concat("place.html?id=", $id)
-            return <div class="place"><a>{$final_name_with_dates}</a></div>
+            return
+              <div class="place">
+                <a data-place-id="{$id}" class="place-item-link">{$final_name_with_dates}</a>
+              </div>
         }
       </div>
 
   return <div class="all-places">{$grouped}</div>
 };
-
 
 
 declare function api:research-articles($request as map(*)) {
@@ -1100,7 +1100,7 @@ declare function api:get-mentioned-info($id as xs:string) as element(div) {
 
 
 declare function api:place-name($request as map(*)) {
-    let $id := $request?parameters?id
+    let $id := $request?pathParameters?id
     let $places := collection($config:data-biblio)/places
     let $place := $places/place[@id = $id] 
     let $name_zh := string($place/name_zh)
@@ -1117,6 +1117,7 @@ declare function api:place-name($request as map(*)) {
     
     return 
         <div>
+            <p>DEBUG: received id = {$id}</p>
             <div class="person-head">
                 <h1>{$name}</h1>
                 <p>(Type: {$type})</p>
@@ -1221,72 +1222,88 @@ declare function api:impressum($request as map(*)) {
   }
 };
 
-
 declare function api:tei-figures($request as map(*)) {
   let $image-base-url := "https://sutras.adw.uni-heidelberg.de/images/"
   let $lang := replace($request?parameters?language, "^([^_-]+)[_-].*$", "$1")
   let $options := query:options(())
-  let $volumes := collection($config:data-publication)//tei:figure[ft:query(., "volume:*", $options)][ancestor::tei:TEI//tei:seriesStmt]
+
+  let $volumes := collection($config:data-publication)//tei:figure[
+      ft:query(., "volume:*", $options)
+    ][ancestor::tei:TEI//tei:seriesStmt]
+
   let $nil := session:set-attribute($config:session-prefix || ".images", $volumes)
-  
+
+  let $figure-map := map:merge((
+    for $figure in $volumes
+    let $url := normalize-space($figure/tei:graphic/@url)
+    where not(ends-with(lower-case($url), '.swf')) and not(ends-with(lower-case($url), '.svg'))
+    group by $u := $url
+    return map:entry($u,
+      for $f in $volumes
+      let $fu := normalize-space($f/tei:graphic/@url)
+      where $fu = $u
+      let $e := map {
+        "xml-id": $f/@xml:id,
+        "text-id": $f/ancestor::tei:text/@xml:id,
+        "base-url": base-uri($f),
+        "head-en": $f/tei:head[2],
+        "head-zh": $f/tei:head[1]
+      }
+      return $e
+    )
+  ))
+
   return
-        <div class="volume-group-for-grid"> 
-            {
-                for $volume in $volumes
-                    group by $id := $volume/ancestor::tei:TEI//tei:seriesStmt/tei:title[1]/@n
-                    order by $id
-                    let $seriesStmt := head($volume/ancestor::tei:TEI)/tei:teiHeader//tei:seriesStmt
-                        for $figures in $volume
-                        return
-                                for $figure in $figures
-                                let $xml-id := $figure/@xml:id
-                                let $url := $figure/tei:graphic/@url
-                                where not(ends-with(lower-case(string($url)), '.swf')) and not(ends-with(lower-case(string($url)), '.svg'))
-                                let $head_zh := $figure/tei:head[1]
-                                let $head_en := $figure/tei:head[2]
-                                let $image-filename-base := replace(string($url), "^(.*)\.[^\.]+$", "$1")
-                                let $text-ancestor-id := $figure/ancestor::tei:text/@xml:id
-                                let $xml-base-url := base-uri($figure)
-                                let $xml-base-url-part := substring-after(string($xml-base-url), 'Publication/')
+    <div class="volume-group-for-grid">
+      {
+        for $url in map:keys($figure-map)
+        let $entries := map:get($figure-map, $url)
+        let $image-filename-base := replace($url, "^(.*)\.[^\.]+$", "$1")
 
-                                let $specific-xml-ids-to-be-JPG := ('W51_DSC7890.JPG', 'DSC_0070.JPG', 'DSC_2312.JPG', 'cave_40_DSC_0108.JPG', 'caves_42_41_40_DSC_0111.JPG', 'cave75_DSC_0015.JPG', 'cave75_DSC_1175.JPG', 'cave77_DSC_0018.JPG', 'WFY_8_89_90_DSC_0513.JPG', 'WFY_92_93_94_DSC_0450.JPG', 'WFY_cave82_DSC_0022.JPG', 'cave74_DSC_0166.JPG', 'WFY_73_IMGP6682.JPG')
-                                let $new-specific-xml-ids-to-be-jpg := ('Section_a-b_DSC_0322.jpg', 'WFY_29-33_DSC0631.jpg', 'Wofoyuan_links_Höhlen_29-42.tif', 'pagoda_25b_DSC0492.jpg')
-                                let $extension :=
-                                if ($xml-id = $new-specific-xml-ids-to-be-jpg) then 'jpg' 
-                                    else if ($xml-id = $specific-xml-ids-to-be-JPG) then 'JPG' 
-                                    else if ($text-ancestor-id = 'Site_WFY_Section_AandB' or $text-ancestor-id = 'Site_WFY_Section_Bb_Cave39') then 'JPG'
-                                    else if (ends-with($xml-id, 'tif')) then 'jpg'
-                                    else if (ends-with($xml-id, 'TIF')) then 'jpg'
-                                    else if (ends-with($xml-id, 'JPG')) then 'jpg'
-                                    else if (ends-with($xml-id, 'jpg')) then 'jpg'
-                                    else 'jpg'
-                                let $image-url := concat($image-base-url, $image-filename-base, ".", $extension)
-                                return
-                                    <div class="image-container">
-                                        <pb-popover theme="light">
-                                            <img src="{$image-url}" alt="Figure {string($xml-id)}" loading="lazy"/>
-                                            <template slot="alternate">
-                                                <div class="character-details">
-                                                    {<p>See: <a href="{concat('Publication/', $xml-base-url-part)}">{string($text-ancestor-id)}</a></p>}
-                                                    { 
-                                                         if (string($head_en) ne "") then
-                                                            <p>{$head_en}</p>
-                                                        else ()
-                                                    }
-                                                    {
-                                                        if (string($head_zh) ne "") then
-                                                            <p>{$head_zh}</p>
-                                                        else ()
-                                                    }
-                                                </div> 
-                                            </template>
-                                        </pb-popover>
-                                    </div>
-            }
-        </div>
-} ;
+        let $extension := "jpg"
+        let $image-url := concat($image-base-url, $image-filename-base, ".", $extension)
+        let $first := head($entries)
+
+        (: 构造所有 <a href="...">text-id</a>，再组合成逗号分隔字符串 :)
+        let $links := string-join(
+          for $e in distinct-values(for $x in $entries return $x?text-id)
+          let $base := head(
+            for $x in $entries
+            where $x?text-id = $e
+            return $x?base-url
+          )
+          let $path := substring-after(string($base), 'Publication/')
+          return concat('<a href="Publication/', $path, '">', $e, '</a>')
+        , ', ')
+
+        return
+          <div class="image-container">
+            <pb-popover theme="light">
+              <img src="{$image-url}" alt="Figure" loading="lazy"/>
+              <template slot="alternate">
+                <div class="character-details">
+                  <p>See: {
+                    parse-xml-fragment($links)
+                  }</p>
+                  {
+                    let $head_en := $first?head-en
+                    return if (string($head_en) ne "") then <p>{$head_en}</p> else ()
+                  }
+                  {
+                    let $head_zh := $first?head-zh
+                    return if (string($head_zh) ne "") then <p>{$head_zh}</p> else ()
+                  }
+                </div>
+              </template>
+            </pb-popover>
+          </div>
+      }
+    </div>
+};
 
 
+
+(:  
 declare function api:temples($request as map(*)) {
   let $search := $request?parameters?search
   let $temples := collection($config:data-biblio)/monastery
@@ -1365,7 +1382,7 @@ declare function api:sutras($request as map(*)) {
 
         return <li>{$final_title} (ID is {$id})</li>
 };
-(:  
+
 declare function api:texts($request as map(*)) {
   let $docs := collection($config:data-docs)//tei:text
   for $doc in $docs
@@ -1383,43 +1400,83 @@ declare function api:texts($request as map(*)) {
         </div>
 };:)
 
-
 declare function api:texts-table($request as map(*)) {
     let $lang := replace($request?parameters?language, "^([^_-]+)[_-].*$", "$1")
     let $query := $request?parameters?search
     let $start := if (exists($request?parameters?start)) then xs:integer($request?parameters?start) else 1
     let $limit := if (exists($request?parameters?limit)) then xs:integer($request?parameters?limit) else 100
-    let $docs := collection($config:data-docs)//tei:text
-    let $taisho-headings := collection($config:data-docs)//Taisho/heading
+
+    let $taisho-headings := collection($config:data-docs)/Taisho/heading
+    let $heading-map := map:merge(
+        for $h in $taisho-headings
+        return map:entry(upper-case($h/@number), string($h))
+    )
+
+    let $refs := 
+        for $object in collection($config:data-catalog)/catalog:object
+        let $xml-id := string($object/@xml:id)
+        for $ref in $object/catalog:references/catalog:ref[@type="taisho"]
+        return map {
+            "ref": $ref,
+            "xml-id": $xml-id
+        }
 
     let $filtered-references :=
-            for $doc in $docs
-                let $text-id := string($doc/@xml:id)
-                order by $text-id
-                    for $witness in $doc//tei:witness
-                      where $witness/@sigil[starts-with(., 'T_')]
-                      let $witDetail := $witness/tei:witDetail
-                      let $Tnumber := string($witDetail/@target)
-                      let $witness-content := normalize-space($witDetail/string())
-                      let $sigil := string($witness/@sigil)
-                      
-                      let $cleaned-Tnumber := replace($Tnumber, "^T_", "")
-                      let $formatted-Tnumber := if (string-length($cleaned-Tnumber) = 3) then concat("0", $cleaned-Tnumber) else $cleaned-Tnumber
-                      
-                      let $heading-text := ($taisho-headings[lower-case(@number) = lower-case($formatted-Tnumber)]/string())[1]
+        for $entry in $refs
+            let $ref := $entry?ref
+            let $taisho-id := upper-case(string($ref/@xlink:href))
+            let $num-part := replace($taisho-id, "^T_([^0-9]*)([0-9.]+).*", "$2")
+            let $number-sort-key := 
+                if (matches($num-part, "^[0-9.]+$")) then xs:double($num-part) else 9999999
+            order by $number-sort-key
+            where starts-with($taisho-id, 'T_')
+            let $page := string-join($ref/catalog:pages ! normalize-space(.), ", ")
+            let $cleaned-Tnumber := replace($taisho-id, "^T_", "")
+            let $int-part := replace($cleaned-Tnumber, "^([0-9]+).*", "$1")
+            let $suffix := 
+                if (matches($cleaned-Tnumber, "^[0-9]+(?:\.[0-9]+)?([A-Z])$")) 
+                then replace($cleaned-Tnumber, "^[0-9]+(?:\.[0-9]+)?([A-Z])$", "$1") 
+                else ""
+            
+            let $padded-number :=
+                if (string-length($int-part) = 4) then $int-part
+                else if (string-length($int-part) = 3) then concat("0", $int-part)
+                else if (string-length($int-part) = 2) then concat("00", $int-part)
+                else if (string-length($int-part) = 1) then concat("000", $int-part)
+                else $int-part
+            
+            let $formatted-Tnumber := upper-case(concat($padded-number, $suffix))
 
-                where $witness-content != "" and $text-id != "" 
-                
-                return map {
-                    "Tnumber": $Tnumber,
-                    "Sigil": $sigil,
-                    "Source": $text-id,
-                    "witness-content": $witness-content,
-                    "heading": $heading-text
-                }
-    
+            let $heading-text := $heading-map(upper-case($formatted-Tnumber))
+
+            return map {
+                "Tnumber": $taisho-id,
+                "inscription": concat('<a href="inscriptions/', $entry?xml-id, '" target="_blank" rel="noopener noreferrer">', $entry?xml-id, '</a>'),
+                "page": $page,
+                "sutras_title":  <pb-popover theme="light">
+                              <span>
+                                {$heading-text}  <svg xmlns="http://www.w3.org/2000/svg" 
+                                     style="width: 14px; height: 14px; margin-left: 4px; vertical-align: middle;" 
+                                     fill="currentColor" viewBox="0 0 16 16">
+                                  <path d="M6.354 5.5H4a2.5 2.5 0 0 0 0 5h2.354a.5.5 0 0 1 0 1H4a3.5 3.5 0 0 1 0-7h2.354a.5.5 0 0 1 0 1z"/>
+                                  <path d="M9.646 10.5H12a2.5 2.5 0 0 0 0-5H9.646a.5.5 0 0 1 0-1H12a3.5 3.5 0 0 1 0 7H9.646a.5.5 0 0 1 0-1z"/>
+                                  <path d="M4.879 8.5a.5.5 0 0 1 0-1h6.242a.5.5 0 0 1 0 1H4.879z"/>
+                                </svg>
+                              </span>
+                              <template slot="alternate">
+                                <div class="popover-links">
+                                  <p><a href="http://21dzk.l.u-tokyo.ac.jp/SAT/T{$formatted-Tnumber}.html" target="_blank" rel="noopener noreferrer">SAT</a></p>
+                                  <p><a href="https://mbingenheimer.net/tools/bibls/transbibl.html#T{$formatted-Tnumber}" target="_blank" rel="noopener noreferrer">Western transl.</a></p>
+                                  <p><a href="https://dazangthings.nz/cbc/text/T{$formatted-Tnumber}" target="_blank" rel="noopener noreferrer">CBC@</a></p>
+                                  <p><a href="https://cbetaonline.dila.edu.tw/zh/T{$formatted-Tnumber}" target="_blank" rel="noopener noreferrer">Cbeta</a></p>
+                                </div>
+                              </template>
+                            </pb-popover>
+
+            }
+
     let $sorted-references := subsequence($filtered-references, $start, $limit)
-    
+
     return map {
         "count": count($filtered-references),
         "results": array { $sorted-references }

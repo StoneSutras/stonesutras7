@@ -1206,7 +1206,7 @@
         
 		"/api/texts/json": {
 			"get": {
-				"summary": "Search for Bibliography",
+				"summary": "For the Texts-Table",
 				"operationId": "api:texts-table",
 				"parameters": [
 					{
@@ -1215,7 +1215,7 @@
 						"schema": {
 							"type": "string"
 						},
-						"description": "Keyword to search for bibliography titles"
+						"description": "Keyword to search for texts"
 					},
 					{
 						"name": "start",
@@ -1241,7 +1241,7 @@
 				],
 				"responses": {
 					"200": {
-						"description": "List of bibliographies",
+						"description": "List of texts",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -1249,7 +1249,7 @@
 									"properties": {
 										"count": {
 											"type": "integer",
-											"description": "Total count of bibliographies matching the query"
+											"description": "Total count of texts"
 										},
 										"results": {
 											"type": "array",
@@ -1258,23 +1258,19 @@
 												"properties": {
 													"Tnumber": {
 														"type": "string",
-														"description": "Bibliography ID"
+														"description": "Taisho Number"
 													},
-													"Sigil":{
+													"sutras_title":{
 														"type": "string",
-														"description": "Bibliography ID"
+														"description": "Sutras Title"
 													},
-													"heading":{
+													"inscription": {
 														"type": "string",
-														"description": "Bibliography ID"
+														"description": "Source"
 													},
-													"Source": {
+													"page": {
 														"type": "string",
-														"description": "Bibliography full reference"
-													},
-													"witness-content": {
-														"type": "string",
-														"description": "The string for clipboard"
+														"description": "Page"
 													}
 												}
 											}

@@ -27,13 +27,10 @@
 
   <pb-table-grid class="table-grid" source="api/texts/json" css-path="../css/gridjs" resizable="" fixed-header=""
     search="" subscribe="transcription" emit="transcription" per-page="30">
-    <pb-table-column label="Taisho Number" property="Tnumber" sort="" width="12rem" />
-    <pb-table-column label="Sigil" property="Sigil" sort="" width="12rem" />
-    <pb-table-column label="Heading" property="heading" sort="" width="12rem" />
-
-    <pb-table-column label="Filename" property="Source" sort="" width="12rem" />
-    <pb-table-column label="Detail" property="witness-content" sort="" width="12rem" />
-
+    <pb-table-column label="T no." property="Tnumber" sort="" width="8rem" />
+    <pb-table-column label="Sutra Title" property="sutras_title" sort="" width="20rem" />
+    <pb-table-column label="T Pages" property="page" sort="" width="12rem" />
+    <pb-table-column label="Inscription" property="inscription" sort="" width="12rem" />
   </pb-table-grid>
 
   <!-- <pb-load url="api/texts/json" auto="" event="" use-language="" subscribe=""
