@@ -588,6 +588,20 @@ declare function api:image-facets($request as map(*)) {
         </div>
 };
 
+declare function api:reign-facets($request as map(*)) {
+    
+    let $hits := session:get-attribute($config:session-prefix || ".reigns")
+    where count($hits) > 0
+    return
+        <div>
+        {
+            for $config in $config:reign-facets?*
+            return
+                facets:display($config, $hits)
+        }
+        </div>
+};
+
 
 (:~
  : Keep this. This function does the actual lookup in the imported modules.
@@ -1098,9 +1112,9 @@ declare function api:get-mentioned-info($id as xs:string) as element(div) {
         </div>
     };
 
-
+(:  
 declare function api:place-name($request as map(*)) {
-    let $id := $request?pathParameters?id
+    let $id := $request?parameters?id
     let $places := collection($config:data-biblio)/places
     let $place := $places/place[@id = $id] 
     let $name_zh := string($place/name_zh)
@@ -1123,7 +1137,7 @@ declare function api:place-name($request as map(*)) {
                 <p>(Type: {$type})</p>
             </div>
         </div>
-};
+};:)
 
 declare function api:place-info($request as map(*)) {
     let $id := $request?parameters?id
@@ -1132,9 +1146,26 @@ declare function api:place-info($request as map(*)) {
     let $sources := $place/*[starts-with(name(), 'source')] ! string()
     let $wiki-link := $place/Wikipedia_link/string()
     
+    let $name_zh := string($place/name_zh)
+    let $name_en := string($place/name_en)
+    let $type := string($place/@type)
+
+    let $name := 
+        if ($name_zh != "" and $name_en != "") then
+            concat($name_en, " (", $name_zh, ")")
+        else if ($name_zh != "") then
+            $name_zh
+        else
+            $name_en
+            
         return 
-            <div class="person-details">
-                <div class="person-date">                
+            <div class="place-details">
+                <div class="place-head">
+                    <h1>{$name}</h1>
+                    <p>(Type: {$type})</p>
+                </div>
+
+                <div class="place-data">                
                     <h2>Mentioned in:</h2>
                     <ul>
                     {
@@ -1142,7 +1173,7 @@ declare function api:place-info($request as map(*)) {
                         let $doc := doc(concat($config:data-publication, '/', $source))
                         let $title := ($doc//tei:title)[1]
                         let $label := if (exists($title)) then string($title) else "title unavailable"
-                        return <li><a href="Publication/{$source}">{$label}</a></li>
+                        return <li><a href="Publication/{$source}" target="_blank">{$label}</a></li>
                     }
                     </ul>                
                 </div>
@@ -1151,7 +1182,7 @@ declare function api:place-info($request as map(*)) {
                   if ($wiki-link) then
                     <div class="wiki-link">
                       <h2>Wikipedia:</h2>
-                      <p><a href="{$wiki-link}" target="_blank">{$wiki-link}</a></p>
+                      <p><a href="{$wiki-link}" target="_blank">{$name_zh}</a></p>
                     </div>
                   else ()
                 }
@@ -1227,77 +1258,76 @@ declare function api:tei-figures($request as map(*)) {
   let $lang := replace($request?parameters?language, "^([^_-]+)[_-].*$", "$1")
   let $options := query:options(())
 
-  let $volumes := collection($config:data-publication)//tei:figure[
-      ft:query(., "volume:*", $options)
-    ][ancestor::tei:TEI//tei:seriesStmt]
+  let $figures := collection($config:data-publication)//tei:figure[
+    ancestor::tei:TEI//tei:seriesStmt and
+    ft:query(., "volume:*", $options) and
+    not(ends-with(lower-case(tei:graphic/@url), '.swf')) and
+    not(ends-with(lower-case(tei:graphic/@url), '.svg'))
+  ]
 
-  let $nil := session:set-attribute($config:session-prefix || ".images", $volumes)
-
-  let $figure-map := map:merge((
-    for $figure in $volumes
-    let $url := normalize-space($figure/tei:graphic/@url)
-    where not(ends-with(lower-case($url), '.swf')) and not(ends-with(lower-case($url), '.svg'))
-    group by $u := $url
-    return map:entry($u,
-      for $f in $volumes
-      let $fu := normalize-space($f/tei:graphic/@url)
-      where $fu = $u
-      let $e := map {
-        "xml-id": $f/@xml:id,
-        "text-id": $f/ancestor::tei:text/@xml:id,
-        "base-url": base-uri($f),
-        "head-en": $f/tei:head[2],
-        "head-zh": $f/tei:head[1]
-      }
-      return $e
-    )
-  ))
+  let $nil := session:set-attribute($config:session-prefix || ".images", $figures)
 
   return
     <div class="volume-group-for-grid">
-      {
-        for $url in map:keys($figure-map)
-        let $entries := map:get($figure-map, $url)
-        let $image-filename-base := replace($url, "^(.*)\.[^\.]+$", "$1")
+    {
+      for $figure-group in $figures
+      let $url := normalize-space(head($figure-group)/tei:graphic/@url)
+      group by $url
 
-        let $extension := "jpg"
-        let $image-url := concat($image-base-url, $image-filename-base, ".", $extension)
-        let $first := head($entries)
+      let $first-entry := head($figure-group)
+      let $xml-id := $first-entry/@xml:id/string()
+      let $text-ancestor-id := $first-entry/ancestor::tei:text/@xml:id/string()
+      let $image-filename-base := replace($url, "^(.*)\.[^\.]+$", "$1")
 
-        (: 构造所有 <a href="...">text-id</a>，再组合成逗号分隔字符串 :)
-        let $links := string-join(
-          for $e in distinct-values(for $x in $entries return $x?text-id)
-          let $base := head(
-            for $x in $entries
-            where $x?text-id = $e
-            return $x?base-url
-          )
-          let $path := substring-after(string($base), 'Publication/')
-          return concat('<a href="Publication/', $path, '">', $e, '</a>')
-        , ', ')
+      (: ================================================================ :)
+      let $specific-xml-ids-to-be-JPG := ('W51_DSC7890.JPG', 'DSC_0070.JPG', 'DSC_2312.JPG', 'cave_40_DSC_0108.JPG', 'caves_42_41_40_DSC_0111.JPG', 'cave75_DSC_0015.JPG', 'cave75_DSC_1175.JPG', 'cave77_DSC_0018.JPG', 'WFY_8_89_90_DSC_0513.JPG', 'WFY_92_93_94_DSC_0450.JPG', 'WFY_cave82_DSC_0022.JPG', 'cave74_DSC_0166.JPG', 'WFY_73_IMGP6682.JPG')
+      let $new-specific-xml-ids-to-be-jpg := ('Section_a-b_DSC_0322.jpg', 'WFY_29-33_DSC0631.jpg', 'Wofoyuan_links_Höhlen_29-42.tif', 'pagoda_25b_DSC0492.jpg')
+      
+      let $extension :=
+        if ($xml-id = $new-specific-xml-ids-to-be-jpg) then 'jpg'
+        else if ($xml-id = $specific-xml-ids-to-be-JPG) then 'JPG'
+        else if ($text-ancestor-id = ('Site_WFY_Section_AandB', 'Site_WFY_Section_Bb_Cave39')) then 'JPG'
+        else if (ends-with(lower-case($xml-id), ('.tif', '.jpg'))) then 'jpg'
+        else 'jpg'
 
-        return
-          <div class="image-container">
-            <pb-popover theme="light">
-              <img src="{$image-url}" alt="Figure" loading="lazy"/>
-              <template slot="alternate">
-                <div class="character-details">
-                  <p>See: {
-                    parse-xml-fragment($links)
-                  }</p>
-                  {
-                    let $head_en := $first?head-en
-                    return if (string($head_en) ne "") then <p>{$head_en}</p> else ()
-                  }
-                  {
-                    let $head_zh := $first?head-zh
-                    return if (string($head_zh) ne "") then <p>{$head_zh}</p> else ()
-                  }
-                </div>
-              </template>
-            </pb-popover>
-          </div>
-      }
+      let $image-url := concat($image-base-url, $image-filename-base, ".", $extension)
+      (: ================================================================ :)
+      
+      let $links :=
+        let $distinct-text-ids := distinct-values($figure-group/ancestor::tei:text/@xml:id/string())
+        let $base-url-map := map:merge(
+          for $f in $figure-group
+          group by $tid := $f/ancestor::tei:text/@xml:id/string()
+          return map:entry($tid, head($f) => base-uri())
+        )
+        for $text-id at $pos in $distinct-text-ids
+        let $base := map:get($base-url-map, $text-id)
+        let $path := substring-after(string($base), 'Publication/')
+        let $anchor := <a href="{concat('Publication/', $path)}">{$text-id}</a>
+        return if ($pos > 1) then (", ", $anchor) else $anchor
+
+      return
+        <div class="image-container">
+          <pb-popover theme="light">
+            <img src="{$image-url}" alt="Figure" loading="lazy"/>
+            <template slot="alternate">
+              <div class="character-details">
+                <p>See: { $links }</p>
+                {
+                  let $head_en := $first-entry/tei:head[2]
+                  where string($head_en) ne ""
+                  return <p>{$head_en}</p>
+                }
+                {
+                  let $head_zh := $first-entry/tei:head[1]
+                  where string($head_zh) ne ""
+                  return <p>{$head_zh}</p>
+                }
+              </div>
+            </template>
+          </pb-popover>
+        </div>
+    }
     </div>
 };
 
@@ -1432,7 +1462,9 @@ declare function api:texts-table($request as map(*)) {
             where starts-with($taisho-id, 'T_')
             let $page := string-join($ref/catalog:pages ! normalize-space(.), ", ")
             let $cleaned-Tnumber := replace($taisho-id, "^T_", "")
+            (: 提取前面的整数部分，不包括小数点或字母 :)
             let $int-part := replace($cleaned-Tnumber, "^([0-9]+).*", "$1")
+            (: 提取字母后缀（如有），忽略小数部分 :)
             let $suffix := 
                 if (matches($cleaned-Tnumber, "^[0-9]+(?:\.[0-9]+)?([A-Z])$")) 
                 then replace($cleaned-Tnumber, "^[0-9]+(?:\.[0-9]+)?([A-Z])$", "$1") 
@@ -1481,4 +1513,88 @@ declare function api:texts-table($request as map(*)) {
         "count": count($filtered-references),
         "results": array { $sorted-references }
     }
+};
+
+declare function api:reigns($request as map(*)) {
+  let $search := $request?parameters?search
+  let $options := query:options(())
+
+  let $query := if ($search and normalize-space($search) != "")
+                then $search
+                else "*:*"
+
+  let $reigns-all := collection($config:data-biblio)/reign_mentions_summary/reign_entry[ft:query(., $query, $options)]
+  let $reigns-filtered := $reigns-all
+
+  let $nil := session:set-attribute($config:session-prefix || ".reigns", $reigns-filtered)
+
+  let $grouped :=
+    for $reign in $reigns-filtered 
+    let $dynasty_name_zh := normalize-space($reign/dynasty_info/dynasty_name_zh)
+    let $dynasty_name_en := normalize-space($reign/dynasty_info/dynasty_name_en)
+
+    let $display_dynasty_name :=
+      if ($dynasty_name_zh != "" and $dynasty_name_en != "") then
+        concat($dynasty_name_zh, " (", $dynasty_name_en, ")")
+      else if ($dynasty_name_zh != "") then
+        $dynasty_name_zh
+      else if ($dynasty_name_en != "") then
+        $dynasty_name_en
+      else
+        "未知朝代"
+
+    group by $dynasty_key := $display_dynasty_name
+    let $sample := $reign[1]
+    let $dynasty_from := number($sample/dynasty_info/dynasty_from)
+    order by $dynasty_from
+    return
+      <div class="dynasty-category">
+        <h2>{$dynasty_key}</h2>
+        {
+          for $current-reign in $reign 
+          let $reign_id := string($current-reign/reign_id)
+          let $reign_name_zh := normalize-space($current-reign/reign_name_zh)
+          let $reign_name_en := normalize-space($current-reign/reign_name_en)
+
+            let $reign_from_raw := $current-reign/reign_from
+            let $reign_to_raw := $current-reign/reign_to
+            
+            let $reign_from := 
+              if ($reign_from_raw castable as xs:integer) then string(xs:integer($reign_from_raw)) else ""
+            
+            let $reign_to := 
+              if ($reign_to_raw castable as xs:integer) then string(xs:integer($reign_to_raw)) else ""
+            
+            let $reign_year_range :=
+              if ($reign_from != "" and $reign_to != "") then
+                concat(" (", $reign_from, "—", $reign_to, ")")
+              else if ($reign_from != "") then
+                concat(" (", $reign_from, "—?)")
+              else
+                ""
+
+            
+            let $final_reign_name :=
+              if ($reign_name_zh != "" and $reign_name_en != "") then
+                concat($reign_name_zh, " (", $reign_name_en, ")", $reign_year_range)
+              else if ($reign_name_zh != "") then
+                concat($reign_name_zh, $reign_year_range)
+              else if ($reign_name_en != "") then
+                concat($reign_name_en, $reign_year_range)
+              else
+                concat("未知年号", $reign_year_range)
+
+
+          order by lower-case($reign_id) 
+          return
+            <div class="reign">
+              <a data-reign-id="{$reign_id}" class="reign-item-link">{$final_reign_name}</a>
+            </div>
+        }
+      </div>
+
+  return
+    <div class="all-reigns">
+      {$grouped}
+    </div>
 };

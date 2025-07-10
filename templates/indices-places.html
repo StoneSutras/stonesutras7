@@ -1,18 +1,281 @@
-<main>
+<html>
+
+<head>
   <style>
     main {
       display: flex;
       justify-content: space-between;
+      justify-content: center;
+
     }
 
-    main &gt;
+    #placeListLoader {
+      width: 25%;
+      padding-right: 20px;
+      padding-left: 50px;
+      box-sizing: border-box;
+      overflow-y: auto;
+      max-height: calc(100vh - 100px);
+    }
 
-    pb-load {
-      width: 75%;
+    #place-info-container {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      width: 800px;
+      /* Adjust this value as needed */
+      margin-left: 40px;
+      /* Keep it left-aligned */
+      margin-right: 20px;
+      /* Allow auto margin on the right */
+      padding: 0;
+      /* Add some vertical padding for overall spacing if needed */
+    }
+
+    /* Style for the loaded content, similar to previous cards */
+    .place-details {
+      background-color: #f8f8f8;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      margin-bottom: 20px;
+      /* Space between details and map */
+      border: 1px solid #eee;
+      overflow: hidden;
+    }
+
+    .place-head h1 {
+      color: #333;
+      font-size: 2em;
+      /* Slightly larger for main heading */
+      margin-top: 0;
+      margin-bottom: 5px;
+      /* Less space between heading and type */
+      text-align: left;
+      position: relative;
+      padding-bottom: 10px;
+      /* Space for the underline */
+    }
+
+    /* Decoration line for the main heading */
+    .place-head h1::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      /* Align with the bottom of the padding */
+      width: 100%;
+      /* Slightly longer line for main heading */
+      height: 3px;
+      background-color: #5a5a5a;
+      border-radius: 2px;
+    }
+
+    .place-head p {
+      color: #666;
+      font-size: 1.1em;
+      margin-top: 0;
+      margin-bottom: 20px;
+      text-align: left;
+      font-style: italic;
+      /* Example: make the type italic */
+    }
+
+    .place-data h2 {
+      color: #333;
+      font-size: 1.5em;
+      margin-top: 20px;
+      /* Space above sub-heading */
+      margin-bottom: 10px;
+      padding-top: 8px;
+      padding-bottom: 4px;
+      text-align: left;
+    }
+
+    .place-data ul {
+      list-style: none;
+      /* Remove default bullet points */
+      padding: 0;
+      margin-bottom: 4px;
+      border-bottom: 1px solid #e0e0e0;
+      /* Lighter border for sub-heading */
+
+    }
+
+    .place-data li {
+      margin-bottom: 8px;
+    }
+
+    .place-data a {
+      display: inline-block;
+      color: #5a5a5a;
+      padding: 5px 0;
+      /* Padding for links */
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1em;
+      transition: color 0.3s ease, transform 0.2s ease;
+      position: relative;
+    }
+
+    .place-data a:hover {
+      color: #000;
+      transform: translateX(3px);
+      /* Subtle shift on hover */
+    }
+
+    /* Underline effect for links in the list */
+    .place-data a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0px;
+      /* Thinner underline */
+      bottom: 0;
+      left: 0;
+      background-color: #5a5a5a;
+      transition: width 0.3s ease;
+    }
+
+    .place-data a:hover::after {
+      width: 100%;
+    }
+
+    /* Style for the map component */
+    pb-leaflet-map {
+      width: 100%;
+      /* Make the map fill the container width */
+      height: 400px;
+      /* Set a fixed height for the map, adjust as needed */
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      /* Ensures border-radius applies to the map content */
+      border: 1px solid #eee;
+      /* Consistent border */
+    }
+
+    #infoLoader {
+      paading-top: 0;
+    }
+
+    #map {
+      width: 100%;
+    }
+
+    .all-places {
+      display: block;
+      width: 100%;
+    }
+
+    .place-category {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f8f8;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      margin-bottom: 20px;
+      border: 1px solid #eee;
+      overflow: hidden;
+      max-width: 400px;
+      /* Still keeping it narrow as per your last request */
+      margin-left: 0;
+      margin-right: auto;
+    }
+
+    .place-category h2 {
+      color: #333;
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-top: 0;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 10px;
+      text-align: left;
+      position: relative;
+    }
+
+    /* Decoration line under the heading */
+    .place-category h2::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+
+      background-color: #5a5a5a;
+      border-radius: 2px;
+    }
+
+    .place {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: flex-start;
+      padding-top: 10px;
+    }
+
+    .place-item-link {
+      display: inline-block;
+      color: #5a5a5a;
+      padding: 8px 15px;
+      text-decoration: none;
+      font-weight: 500;
+      /* Use font-weight for boldness, not font-style */
+      font-size: 1.05em;
+      transition: color 0.3s ease, background-color 0.3s ease, transform 0.2s ease;
+      border-radius: 5px;
+      position: relative;
+    }
+
+    .place-item-link:hover {
+      color: #000;
+      background-color: #e9e9e9;
+      transform: translateY(-1px);
+    }
+
+    .place-item-link:hover::after {
+      width: 100%;
     }
   </style>
-  <pb-custom-form class="facets" url="api/search/place-facets" event="pb-results-received" subscribe="transcription"
-    emit="places" />
-  <pb-load url="api/places" auto="" event="pb-search-resubmit" use-language="" subscribe="places"
-    emit="transcription" />
-</main>
+</head>
+
+<body class="place">
+  <main class="places-content">
+    <pb-custom-form class="facets" url="api/search/place-facets" event="pb-results-received" subscribe="transcription"
+      emit="places"></pb-custom-form>
+    <pb-load id="placeListLoader" url="api/places" auto="" event="pb-search-resubmit" use-language="" subscribe="places"
+      emit="transcription"></pb-load>
+
+    <div id="place-info-container">
+      <pb-load id="infoLoader" url="" expand="" auto="">Please click on a specific location to view detailed
+        information, including external links and map coordinates.</pb-load>
+      <pb-leaflet-map id="map" subscribe="map" zoom="14" crs="EPSG3857" fit-markers="" cluster="">
+        <pb-map-layer base="" show="" label="Mapbox OSM"
+          url="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoid29sZmdhbmdtbSIsImEiOiJjam1kMjVpMnUwNm9wM3JwMzdsNGhhcnZ0In0.v65crewF-dkNsPF3o1Q4uw"
+          attribution="© &lt;a href=&#34;https://www.mapbox.com/about/maps/&#34;&gt;Mapbox&lt;/a&gt; © &lt;a href=&#34;http://www.openstreetmap.org/copyright&#34;&gt;OpenStreetMap&lt;/a&gt; &lt;strong&gt;&lt;a href=&#34;https://www.mapbox.com/map-feedback/&#34; target=&#34;_blank&#34;&gt;Improve this map&lt;/a&gt;&lt;/strong&gt;"
+          max-zoom="18" zoom="13" tile-size="512" />
+        <pb-map-layer base="" label="ESRI World Imagery"
+          url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+          attribution="© Esri - © Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community" />
+        <pb-map-layer base="" label="OpenStreetMap" url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution="©&lt;a href=&#34;https://www.openstreetmap.org/copyright&#34;&gt;OpenStreetMap&lt;/a&gt; contributors" />
+        <pb-map-layer label="Southern and Northern Dynasties"
+          url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=ad0497-png-{z}-{x}-{y}"
+          attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space" />
+        <pb-map-layer label="Sui Dynasty"
+          url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=ad0612-png-{z}-{x}-{y}"
+          attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space" />
+        <pb-map-layer label="Tang Dynasty"
+          url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=ad0741-png-{z}-{x}-{y}"
+          attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space" />
+        <pb-map-layer label="Tang Admin"
+          url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=Tang_Admin-png-{z}-{x}-{y}"
+          attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space" />
+        <pb-map-layer label="Tang Traffic"
+          url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=Tang_TrafficRoute-png-{z}-{x}-{y}"
+          attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space" />
+      </pb-leaflet-map>
+
+    </div>
+  </main>
+</body>
+
+</html>

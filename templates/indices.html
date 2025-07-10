@@ -1,221 +1,323 @@
+<!DOCTYPE html>
 <html>
 
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes"/>
-    <link rel="shortcut icon" type="image/x-icon" href="resources/images/favicon.ico"/>
-    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-16.png" sizes="16x16"/>
-    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-24.png" sizes="24x24"/>
-    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-32.png" sizes="32x32"/>
-    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-64.png" sizes="64x64"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes" />
+    <link rel="shortcut icon" type="image/x-icon" href="resources/images/favicon.ico" />
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-16.png" sizes="16x16" />
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-24.png" sizes="24x24" />
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-32.png" sizes="32x32" />
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-64.png" sizes="64x64" />
 
-    <title data-template="config:app-title"/>
-    <meta name="description" content="Default single text layout"/>
-    <meta name="pb-template" content="view.html"/>
+    <title data-template="config:app-title" />
+    <meta name="description" content="Default single text layout" />
+    <meta name="pb-template" content="view.html" />
 
-    <link rel="stylesheet" type="text/css" href="resources/fonts/font.css"/>
-    <link rel="stylesheet" href="resources/css/stonesutras-theme.css"/>
-    <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
+    <link rel="stylesheet" type="text/css" href="resources/fonts/font.css" />
+    <link rel="stylesheet" href="resources/css/stonesutras-theme.css" />
+    <script type="module" src="pb-components-bundle.js" data-template="pages:load-components" />
+    <script type="module" src="pb-leaflet-map.js" data-template="pages:load-components" />
 
-<style>
-    .main-content {
-        display: flex;
-        min-height: 500px;
-        border-radius: 8px;
-        /* Optional: Add rounded corners */
-        overflow: hidden;
-        /* Ensure content does not overflow rounded corners */
-        margin: 20px;
-        /* Adjust outer margin */
-    }
+    <style>
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            min-height: 500px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 20px;
+        }
 
-    .sidebar {
-        width: 150px;
-        background-color: #fff;
-        /* Background color for the left menu bar */
-        padding: 20px;
-        border-right: 1px solid #ccc;
-        /* Separating line */
-        position: fixed;
-        /* Added to make it fixed */
-        top: 140px;
-        left: 20px;
-        /* Adjust based on your margin */
-        bottom: 0;
-        /* Make its height extend to the bottom of the viewport */
-        overflow-y: auto;
-        /* Allow scrolling if content is too long */
-    }
+        .top-nav {
+            width: 100%;
+            background-color: #fff;
+            padding: 10px 0;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            justify-content: center;
+        }
 
-    .sidebar ul {
-        list-style: none;
-        padding: 0;
-    }
+        .top-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 15px;
+        }
 
-    .sidebar li {
-        margin-bottom: 15px;
-    }
+        .top-nav li {
+            margin-bottom: 0;
+        }
 
-    .sidebar a {
-        display: block;
-        text-decoration: none;
-        color: #333;
-        padding: 10px 15px;
-        border-radius: 5px;
-        transition: background-color 0.3s ease, color 0.3s ease; 
-    }
+        .top-nav a {
+            display: block;
+            text-decoration: none;
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
 
-    .sidebar a:hover {
-        background-color: #eee;
-        color: #690404;
-        /* Hover color */
-    }
+        .top-nav a:hover {
+            background-color: #eee;
+            color: #690404;
+        }
 
-    .sidebar a.active {
-         background-color: rgba(105, 4, 4, 0.8);
-        color: #ffffff;             
-        font-weight: bold;         
-    }
+        .top-nav a.active {
+            background-color: rgba(105, 4, 4, 0.8);
+            color: #ffffff;
+            font-weight: bold;
+        }
 
-    .sidebar a.active:hover {
-        background-color: #690404;  
-        color: #ffffff;             
-    }
+        .top-nav a.active:hover {
+            background-color: #690404;
+            color: #ffffff;
+        }
 
-    #content-area {
-        flex-grow: 1;
-        padding-top: 0px;
-        padding-left: 240px;
-        /* Space between line and right content */
-    }
-</style>
-    <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        #content-area {
+            flex-grow: 1;
+            padding-top: 20px;
+            padding-left: 0;
+        }
 
-            const sidebarLinks = document.querySelectorAll('.sidebar ul li a');
+        .places-container {
+            display: flex;
+            justify-content: space-between;
+            padding-right: 20px;
+        }
 
-            sidebarLinks.forEach(function(link) {
-                link.addEventListener('click', function (event) {
+        #placeListLoader {
+            width: 30%;
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+            padding-right: 20px;
+        }
 
-                    sidebarLinks.forEach(function(sLink) {
-                        sLink.classList.remove('active');
-                    });
-        
-                    this.classList.add('active');
-        
-                });
-            });
-        
-           
-        });
-    function initFacets(container = document) {
-    const facets = container.querySelector('.facets');
-
-    if (facets) {
-        facets.addEventListener('pb-custom-form-loaded', function(ev) {
-            const elems = ev.detail.querySelectorAll('.facet');
-
-            elems.forEach(facet =&gt; {
-                facet.addEventListener('change', () =&gt; {
-                    if (!facet.checked) {
-                        pbRegistry.state[facet.name] = null;
-                    }
-
-                    const table = facet.closest('table');
-                    if (table) {
-                        table.querySelectorAll('.nested .facet').forEach(nested =&gt; {
-                            if (nested !== facet) {
-                                nested.checked = false;
-                            }
-                        });
-                    }
-
-                    facets.submit();
-                });
-            });
-        });
-    }
-}
-
-    </script>
+        .place-item-link {
+            cursor: pointer;
+            text-decoration: underline;
+            color: blue;
+        }
+    </style>
 </head>
 
 <body>
-    <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json" require-language="" supported-languages="en, zh_Hant">
+    <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json"
+        require-language="" supported-languages="en, zh_Hant">
         <script id="appConfig" type="application/json" data-template="pages:parse-params">
-                {
-                    "app": "${app}"
-                }
-            </script>
+            {
+                "app": "${app}"
+            }
+        </script>
         <app-drawer-layout force-narrow="force-narrow">
-            <app-drawer data-template="templates:include" data-template-path="templates/drawer.html"/>
+            <app-drawer data-template="templates:include" data-template-path="templates/drawer.html" />
             <app-header-layout>
                 <app-header slot="header" reveals="reveals" fixed="fixed" effects="waterfall">
-                    <app-toolbar data-template="templates:include" data-template-path="templates/menu.html"/>
+                    <app-toolbar data-template="templates:include" data-template-path="templates/menu.html" />
                     <app-toolbar data-template="templates:include" data-template-path="templates/toolbar.html">
-                         <p data-target="breadcrumbs" class="breadcrumbs">
-                                <pb-i18n key="menu.indices">Indices</pb-i18n>
-                            </p>
+                        <p data-target="breadcrumbs" class="breadcrumbs">
+                            <pb-i18n key="menu.indices">Indices</pb-i18n>
+                        </p>
                     </app-toolbar>
                 </app-header>
+
+                <nav class="top-nav">
+                    <ul>
+                        <li>
+                            <a href="#" onclick="loadContent('indices-persons.html')">Persons</a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="loadContent('indices-places.html')">Places</a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="loadContent('time.html')">Time</a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="loadContent('indices-images.html')">Images</a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="loadContent('indices-texts.html')">Texts</a>
+                        </li>
+                    </ul>
+                </nav>
+
                 <main class="main-content">
-                    <aside class="sidebar">
-                        <ul>
-                            <!--<li><a href="#" onclick="loadContent('indices-articles.html')">Project Publications</a></li>
-                            <li><a href="#" onclick="loadContent('indices-chars.html')">Characters</a></li>-->
-                            <li>
-                                    <a href="#" onclick="loadContent('indices-persons.html')">Persons</a>
-                                </li>
-                            <li>
-                                    <a href="#" onclick="loadContent('indices-places.html')">Places</a>
-                                </li>
-                            <li>
-                                    <a href="#" onclick="loadContent('time.html')">Time</a>
-                                </li>
-                                <li>
-                                    <a href="#" onclick="loadContent('indices-images.html')">Images</a>
-                                </li>
-                                <li>
-                                    <a href="#" onclick="loadContent('indices-texts.html')">Texts</a>
-                                </li>
-                                <!--<li><a href="#" onclick="loadContent('indices-temples.html')">Temples</a></li>
-                            <li><a href="#" onclick="loadContent('indices-sutras.html')">Sutras</a></li>-->
-
-                        </ul>
-                    </aside>
-
                     <div id="content-area">
                     </div>
                 </main>
             </app-header-layout>
         </app-drawer-layout>
     </pb-page>
-    <div class="splash"/>
-
+    <div class="splash" />
     <script>
-       function loadContent(url) {
-    fetch(url)
-        .then(response =&gt; response.text())
-        .then(data =&gt; {
-            const contentArea = document.getElementById('content-area');
-            contentArea.innerHTML = data;
+        function updateMapWithCoordinates(placeId) {
+            const pbPageElement = document.querySelector("pb-page");
+            if (!pbPageElement) {
+                return;
+            }
 
-            // 重新初始化 facets 等功能
-            initFacets(contentArea);
-        });
-}
+            if (typeof pbPageElement.getEndpoint !== 'function') {
+                return;
+            }
 
-        document.addEventListener('DOMContentLoaded', () =&gt; {
-            loadContent('persons.html');
-        });
+            const endpoint = pbPageElement.getEndpoint();
+            if (!endpoint) {
+                return;
+            }
 
-        function updateUrlForPlaces(url) {
-            const baseUrl = window.location.href.split('?')[0].split('#')[0];
-            const newUrl = baseUrl + '?search=&amp;category=All#';
-            history.replaceState(null, '', newUrl);
-            loadContent(url);
+            const url = `${endpoint}/place/${placeId}/coordinates`;
+
+            fetch(url)
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status} for URL: ${url}`);
+                    }
+                    return response.json();
+                })
+                .then(function (json) {
+                    pbEvents.emit("pb-update-map", "map", [json]);
+                })
+                .catch(function (error) {
+                });
         }
+
+        function loadPlaceDetails(placeId) {
+            const infoLoader = document.getElementById('infoLoader');
+            const newUrl = `place/${placeId}/info`;
+
+            if (infoLoader) {
+                infoLoader.setAttribute('url', newUrl);
+                if (typeof infoLoader.load === 'function') {
+                    infoLoader.load();
+                }
+            }
+
+            updateMapWithCoordinates(placeId);
+        }
+
+        function initFacets(container = document) {
+            const facets = container.querySelector('.facets');
+
+            if (facets) {
+                facets.addEventListener('pb-custom-form-loaded', function (ev) {
+                    const elems = ev.detail.querySelectorAll('.facet');
+
+                    elems.forEach(facet => {
+                        facet.addEventListener('change', () => {
+                            if (facet.checked === false) {
+                                if (typeof pbRegistry !== 'undefined') {
+                                    if (pbRegistry.state) {
+                                        pbRegistry.state[facet.name] = null;
+                                    }
+                                }
+                            }
+
+                            const table = facet.closest('table');
+                            if (table) {
+                                table.querySelectorAll('.nested .facet').forEach(nested => {
+                                    if (nested !== facet) {
+                                        nested.checked = false;
+                                    }
+                                });
+                            }
+                            facets.submit();
+                        });
+                    });
+                });
+            }
+        }
+
+        function setupPlaceListInteraction() {
+            const placeListLoader = document.getElementById('placeListLoader');
+            if (placeListLoader) {
+                placeListLoader.addEventListener('pb-load-success', function (event) {
+                    const firstPlaceLink = placeListLoader.querySelector('.place-item-link');
+                    if (firstPlaceLink) {
+                        const firstPlaceId = firstPlaceLink.getAttribute('data-place-id');
+                        if (firstPlaceId) {
+                            loadPlaceDetails(firstPlaceId);
+                        }
+                    }
+                });
+
+                placeListLoader.addEventListener('click', function (e) {
+                    let targetElement = e.target;
+
+                    while (targetElement) {
+                        if (targetElement === this) {
+                            break;
+                        }
+
+                        const placeId = targetElement.getAttribute('data-place-id');
+                        if (placeId) {
+                            e.preventDefault();
+                            loadPlaceDetails(placeId);
+                            break;
+                        }
+                        if (targetElement.tagName === 'A') {
+                            e.preventDefault();
+                        }
+                        targetElement = targetElement.parentElement;
+                    }
+                });
+            }
+        }
+
+        function loadContent(url) {
+            return fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    const contentArea = document.getElementById('content-area');
+                    contentArea.innerHTML = '';
+
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = data;
+
+                    while (tempDiv.firstChild) {
+                        contentArea.appendChild(tempDiv.firstChild);
+                    }
+
+                    initFacets(contentArea);
+
+                    if (url === 'indices-places.html') {
+                        setupPlaceListInteraction();
+
+                        const initialPlaceId = new URLSearchParams(window.location.search).get('id');
+                        if (initialPlaceId) {
+                            updateMapWithCoordinates(initialPlaceId);
+                        }
+                    }
+                    return contentArea;
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.top-nav ul li a');
+
+            navLinks.forEach(function (link) {
+                link.addEventListener('click', function (event) {
+                    event.preventDefault();
+
+                    navLinks.forEach(function (sLink) {
+                        sLink.classList.remove('active');
+                    });
+                    this.classList.add('active');
+
+                    const urlMatch = this.getAttribute('onclick').match(/loadContent\('([^']+)'\)/);
+                    if (urlMatch) {
+                        const contentUrl = urlMatch[1];
+                        loadContent(contentUrl);
+                    }
+                });
+            });
+
+            const initialLink = document.querySelector('.top-nav ul li a[onclick*="persons.html"]');
+            if (initialLink) {
+                initialLink.classList.add('active');
+                loadContent('indices-persons.html');
+            }
+        });
     </script>
 </body>
 
