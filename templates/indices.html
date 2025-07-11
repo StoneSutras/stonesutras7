@@ -2,22 +2,22 @@
 <html>
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes" />
-    <link rel="shortcut icon" type="image/x-icon" href="resources/images/favicon.ico" />
-    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-16.png" sizes="16x16" />
-    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-24.png" sizes="24x24" />
-    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-32.png" sizes="32x32" />
-    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-64.png" sizes="64x64" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes"/>
+    <link rel="shortcut icon" type="image/x-icon" href="resources/images/favicon.ico"/>
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-16.png" sizes="16x16"/>
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-24.png" sizes="24x24"/>
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-32.png" sizes="32x32"/>
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-64.png" sizes="64x64"/>
 
-    <title data-template="config:app-title" />
-    <meta name="description" content="Default single text layout" />
-    <meta name="pb-template" content="view.html" />
+    <title data-template="config:app-title"/>
+    <meta name="description" content="Default single text layout"/>
+    <meta name="pb-template" content="view.html"/>
 
-    <link rel="stylesheet" type="text/css" href="resources/fonts/font.css" />
-    <link rel="stylesheet" href="resources/css/stonesutras-theme.css" />
-    <script type="module" src="pb-components-bundle.js" data-template="pages:load-components" />
-    <script type="module" src="pb-leaflet-map.js" data-template="pages:load-components" />
+    <link rel="stylesheet" type="text/css" href="resources/fonts/font.css"/>
+    <link rel="stylesheet" href="resources/css/stonesutras-theme.css"/>
+    <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
+    <script type="module" src="pb-leaflet-map.js" data-template="pages:load-components"/>
 
     <style>
         .main-content {
@@ -26,6 +26,7 @@
             min-height: 500px;
             border-radius: 8px;
             overflow: hidden;
+            justify-content: center;
             margin: 20px;
         }
 
@@ -103,25 +104,24 @@
 </head>
 
 <body>
-    <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json"
-        require-language="" supported-languages="en, zh_Hant">
+    <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json" require-language="" supported-languages="en, zh_Hant">
         <script id="appConfig" type="application/json" data-template="pages:parse-params">
             {
                 "app": "${app}"
             }
         </script>
         <app-drawer-layout force-narrow="force-narrow">
-            <app-drawer data-template="templates:include" data-template-path="templates/drawer.html" />
+            <app-drawer data-template="templates:include" data-template-path="templates/drawer.html"/>
             <app-header-layout>
                 <app-header slot="header" reveals="reveals" fixed="fixed" effects="waterfall">
-                    <app-toolbar data-template="templates:include" data-template-path="templates/menu.html" />
+                    <app-toolbar data-template="templates:include" data-template-path="templates/menu.html"/>
                     <app-toolbar data-template="templates:include" data-template-path="templates/toolbar.html">
                         <p data-target="breadcrumbs" class="breadcrumbs">
                             <pb-i18n key="menu.indices">Indices</pb-i18n>
                         </p>
                     </app-toolbar>
                 </app-header>
-
+                
                 <nav class="top-nav">
                     <ul>
                         <li>
@@ -131,7 +131,7 @@
                             <a href="#" onclick="loadContent('indices-places.html')">Places</a>
                         </li>
                         <li>
-                            <a href="#" onclick="loadContent('time.html')">Time</a>
+                            <a href="#" onclick="loadContent('indices-time.html')">Time</a>
                         </li>
                         <li>
                             <a href="#" onclick="loadContent('indices-images.html')">Images</a>
@@ -144,181 +144,272 @@
 
                 <main class="main-content">
                     <div id="content-area">
-                    </div>
+                        </div>
                 </main>
             </app-header-layout>
         </app-drawer-layout>
     </pb-page>
-    <div class="splash" />
-    <script>
-        function updateMapWithCoordinates(placeId) {
-            const pbPageElement = document.querySelector("pb-page");
-            if (!pbPageElement) {
-                return;
+    <div class="splash"/>
+  <script>
+            function updateMapWithCoordinates(placeId) {
+                const pbPageElement = document.querySelector("pb-page");
+                if (!pbPageElement) {
+                    return;
+                }
+
+                if (typeof pbPageElement.getEndpoint !== 'function') {
+                    return;
+                }
+
+                const endpoint = pbPageElement.getEndpoint();
+                if (!endpoint) {
+                    return;
+                }
+
+                const url = `${endpoint}/place/${placeId}/coordinates`;
+
+                fetch(url)
+                    .then(function (response) {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status} for URL: ${url}`);
+                        }
+                        return response.json();
+                    })
+                    .then(function (json) {
+                        pbEvents.emit("pb-update-map", "map", [json]);
+                    })
+                    .catch(function (error) {
+                    });
             }
 
-            if (typeof pbPageElement.getEndpoint !== 'function') {
-                return;
-            }
+            function loadPlaceDetails(placeId) {
+                const infoLoader = document.getElementById('infoLoader');
+                const newUrl = `place/${placeId}/info`;
 
-            const endpoint = pbPageElement.getEndpoint();
-            if (!endpoint) {
-                return;
-            }
-
-            const url = `${endpoint}/place/${placeId}/coordinates`;
-
-            fetch(url)
-                .then(function (response) {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status} for URL: ${url}`);
+                if (infoLoader) {
+                    infoLoader.setAttribute('url', newUrl);
+                    if (typeof infoLoader.load === 'function') {
+                        infoLoader.load();
                     }
-                    return response.json();
-                })
-                .then(function (json) {
-                    pbEvents.emit("pb-update-map", "map", [json]);
-                })
-                .catch(function (error) {
-                });
+                }
+
+                updateMapWithCoordinates(placeId);
+            }
+            
+function loadReignDetails(reignId) {
+    const reignInfoLoader = document.getElementById('reignInfoLoader');
+    // Assumes backend endpoint for reign info is 'reign/{reignId}/info'
+    // Please adjust this URL if your actual API path is different.
+    const newUrl = `reign/${reignId}/info`;
+
+    if (reignInfoLoader) {
+        reignInfoLoader.setAttribute('url', newUrl);
+        if (typeof reignInfoLoader.load === 'function') {
+            reignInfoLoader.load();
+        } else {
+            console.warn('reignInfoLoader.load() method not found. Ensure pb-components-bundle.js is loaded correctly.');
         }
+    } else {
+        console.error('Element with ID "reignInfoLoader" not found. Cannot load reign details.');
+    }
+}
 
-        function loadPlaceDetails(placeId) {
-            const infoLoader = document.getElementById('infoLoader');
-            const newUrl = `place/${placeId}/info`;
+            function initFacets(container = document) {
+                const facets = container.querySelector('.facets');
 
-            if (infoLoader) {
-                infoLoader.setAttribute('url', newUrl);
-                if (typeof infoLoader.load === 'function') {
-                    infoLoader.load();
+                if (facets) {
+                    facets.addEventListener('pb-custom-form-loaded', function(ev) {
+                        const elems = ev.detail.querySelectorAll('.facet');
+
+                        elems.forEach(facet => {
+                            facet.addEventListener('change', () => {
+                                if (facet.checked === false) {
+                                    if (typeof pbRegistry !== 'undefined') {
+                                        if (pbRegistry.state) {
+                                            pbRegistry.state[facet.name] = null;
+                                        }
+                                    }
+                                }
+
+                                const table = facet.closest('table');
+                                if (table) {
+                                    table.querySelectorAll('.nested .facet').forEach(nested => {
+                                        if (nested !== facet) {
+                                            nested.checked = false;
+                                        }
+                                    });
+                                }
+                                facets.submit();
+                            });
+                        });
+                    });
                 }
             }
 
-            updateMapWithCoordinates(placeId);
-        }
-
-        function initFacets(container = document) {
-            const facets = container.querySelector('.facets');
-
-            if (facets) {
-                facets.addEventListener('pb-custom-form-loaded', function (ev) {
-                    const elems = ev.detail.querySelectorAll('.facet');
-
-                    elems.forEach(facet => {
-                        facet.addEventListener('change', () => {
-                            if (facet.checked === false) {
-                                if (typeof pbRegistry !== 'undefined') {
-                                    if (pbRegistry.state) {
-                                        pbRegistry.state[facet.name] = null;
-                                    }
-                                }
+            function setupPlaceListInteraction() {
+                const placeListLoader = document.getElementById('placeListLoader');
+                if (placeListLoader) {
+                    placeListLoader.addEventListener('pb-load-success', function(event) {
+                        const firstPlaceLink = placeListLoader.querySelector('.place-item-link');
+                        if (firstPlaceLink) {
+                            const firstPlaceId = firstPlaceLink.getAttribute('data-place-id');
+                            if (firstPlaceId) {
+                                loadPlaceDetails(firstPlaceId);
                             }
+                        }
+                    });
 
-                            const table = facet.closest('table');
-                            if (table) {
-                                table.querySelectorAll('.nested .facet').forEach(nested => {
-                                    if (nested !== facet) {
-                                        nested.checked = false;
-                                    }
-                                });
+                    placeListLoader.addEventListener('click', function(e) {
+                        let targetElement = e.target;
+                        
+                        while (targetElement) {
+                            if (targetElement === this) {
+                                break;
                             }
-                            facets.submit();
-                        });
+                            
+                            const placeId = targetElement.getAttribute('data-place-id');
+                            if (placeId) {
+                                e.preventDefault();
+                                loadPlaceDetails(placeId);
+                                break;
+                            }
+                            if (targetElement.tagName === 'A') {
+                                 e.preventDefault();
+                            }
+                            targetElement = targetElement.parentElement;
+                        }
                     });
-                });
+                }
             }
-        }
+            
+            function setupReignListInteraction() {
+  
+    const reignListLoader = document.querySelector('pb-load[url="api/reigns"]'); // 查找有特定URL的pb-load
+    // 假设 TimeLoader 是 pb-load 的子元素，或者 reignListLoader 就是 TimeLoader
+    const timeLoaderElement = document.getElementById('reignInfoLoader'); 
 
-        function setupPlaceListInteraction() {
-            const placeListLoader = document.getElementById('placeListLoader');
-            if (placeListLoader) {
-                placeListLoader.addEventListener('pb-load-success', function (event) {
-                    const firstPlaceLink = placeListLoader.querySelector('.place-item-link');
-                    if (firstPlaceLink) {
-                        const firstPlaceId = firstPlaceLink.getAttribute('data-place-id');
-                        if (firstPlaceId) {
-                            loadPlaceDetails(firstPlaceId);
-                        }
-                    }
-                });
+    // 假设 'TimeLoader' 是列表加载器内部的加载指示器，而列表加载器本身是 `reignListLoader`
 
-                placeListLoader.addEventListener('click', function (e) {
-                    let targetElement = e.target;
-
-                    while (targetElement) {
-                        if (targetElement === this) {
-                            break;
-                        }
-
-                        const placeId = targetElement.getAttribute('data-place-id');
-                        if (placeId) {
-                            e.preventDefault();
-                            loadPlaceDetails(placeId);
-                            break;
-                        }
-                        if (targetElement.tagName === 'A') {
-                            e.preventDefault();
-                        }
-                        targetElement = targetElement.parentElement;
-                    }
-                });
-            }
-        }
-
-        function loadContent(url) {
-            return fetch(url)
-                .then(response => response.text())
-                .then(data => {
-                    const contentArea = document.getElementById('content-area');
-                    contentArea.innerHTML = '';
-
-                    const tempDiv = document.createElement('div');
-                    tempDiv.innerHTML = data;
-
-                    while (tempDiv.firstChild) {
-                        contentArea.appendChild(tempDiv.firstChild);
-                    }
-
-                    initFacets(contentArea);
-
-                    if (url === 'indices-places.html') {
-                        setupPlaceListInteraction();
-
-                        const initialPlaceId = new URLSearchParams(window.location.search).get('id');
-                        if (initialPlaceId) {
-                            updateMapWithCoordinates(initialPlaceId);
-                        }
-                    }
-                    return contentArea;
-                });
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const navLinks = document.querySelectorAll('.top-nav ul li a');
-
-            navLinks.forEach(function (link) {
-                link.addEventListener('click', function (event) {
-                    event.preventDefault();
-
-                    navLinks.forEach(function (sLink) {
-                        sLink.classList.remove('active');
-                    });
-                    this.classList.add('active');
-
-                    const urlMatch = this.getAttribute('onclick').match(/loadContent\('([^']+)'\)/);
-                    if (urlMatch) {
-                        const contentUrl = urlMatch[1];
-                        loadContent(contentUrl);
-                    }
-                });
-            });
-
-            const initialLink = document.querySelector('.top-nav ul li a[onclick*="persons.html"]');
-            if (initialLink) {
-                initialLink.classList.add('active');
-                loadContent('indices-persons.html');
+    if (reignListLoader) {
+        // --- Add pb-load-start listener for TimeLoader ---
+        reignListLoader.addEventListener('pb-load-start', function() {
+            if (timeLoaderElement) {
+                timeLoaderElement.textContent = '加载中...';
+                timeLoaderElement.style.display = 'block'; // Make sure it's visible
+                timeLoaderElement.classList.add('loading'); // Apply loading animation
             }
         });
-    </script>
+
+        reignListLoader.addEventListener('pb-load-success', function(event) {
+            // 移除 TimeLoader 的加载状态，隐藏它。
+            if (timeLoaderElement) {
+                timeLoaderElement.classList.remove('loading');
+                timeLoaderElement.textContent = '';
+                timeLoaderElement.style.display = 'none';
+            }
+
+            // 查找年号列表中的第一个可点击的年号条目链接。
+            // 这需要 reign-list.xml 返回的内容中有 .reign-item-link 和 data-reign-id
+            const firstReignLink = reignListLoader.querySelector('.reign-item-link');
+            if (firstReignLink) {
+                const firstReignId = firstReignLink.getAttribute('data-reign-id');
+                if (firstReignId) {
+                    loadReignDetails(firstReignId); // 调用 loadReignDetails 函数加载详情
+                }
+            } else {
+                console.warn('No .reign-item-link found in reign list after loading.');
+            }
+        });
+
+        // 为年号列表容器添加点击事件监听器。
+        // 使用事件委托，捕获对年号条目链接的点击。
+        reignListLoader.addEventListener('click', function(e) {
+            let targetElement = e.target;
+            
+            while (targetElement) {
+                if (targetElement === this) {
+                    break; 
+                }
+                
+                const reignId = targetElement.getAttribute('data-reign-id');
+                if (reignId) {
+                    e.preventDefault();
+                    loadReignDetails(reignId); // 调用 loadReignDetails 函数加载详情
+                    break; 
+                }
+                if (targetElement.tagName === 'A') {
+                     e.preventDefault();
+                }
+                targetElement = targetElement.parentElement; 
+            }
+        });
+    } else {
+        // 并且 TimeLoader 是一个独立的元素，不被 pb-load 控制。
+        // 在这种情况下，TimeLoader 可能用于展示初始信息而不是列表加载。
+        console.error('Element with url="api/reigns" not found. Reign list interaction cannot be set up.');
+        if (timeLoaderElement) {
+            timeLoaderElement.textContent = '无法加载年号列表。';
+            timeLoaderElement.classList.remove('loading');
+        }
+    }
+}
+
+            function loadContent(url) {
+                return fetch(url)
+                    .then(response => response.text())
+                    .then(data => {
+                        const contentArea = document.getElementById('content-area');
+                        contentArea.innerHTML = '';
+
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = data;
+
+                        while (tempDiv.firstChild) {
+                            contentArea.appendChild(tempDiv.firstChild);
+                        }
+                        
+                        initFacets(contentArea);
+
+                        if (url === 'indices-places.html') {
+                            setupPlaceListInteraction(); // 保持对 Places 的处理
+                            const initialPlaceId = new URLSearchParams(window.location.search).get('id');
+                            if (initialPlaceId) {
+                                updateMapWithCoordinates(initialPlaceId);
+                            }
+                        } else if (url === 'indices-time.html') {
+                            setupReignListInteraction();
+                        }
+                        return contentArea;
+                    });
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const navLinks = document.querySelectorAll('.top-nav ul li a');
+
+                navLinks.forEach(function(link) {
+                    link.addEventListener('click', function (event) {
+                        event.preventDefault();
+
+                        navLinks.forEach(function(sLink) {
+                            sLink.classList.remove('active');
+                        });
+                        this.classList.add('active');
+
+                        const urlMatch = this.getAttribute('onclick').match(/loadContent\('([^']+)'\)/);
+                        if (urlMatch) {
+                            const contentUrl = urlMatch[1];
+                            loadContent(contentUrl);
+                        }
+                    });
+                });
+
+                const initialLink = document.querySelector('.top-nav ul li a[onclick*="persons.html"]');
+                if (initialLink) {
+                    initialLink.classList.add('active');
+                    loadContent('indices-persons.html');
+                }
+            });
+        </script>
 </body>
 
 </html>

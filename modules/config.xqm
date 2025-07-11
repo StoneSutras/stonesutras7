@@ -296,6 +296,21 @@ declare variable $config:image-facets := [
     }
 ];
 
+
+declare variable $config:reign-facets := [
+    map {
+        "dimension": "dynasty_en",
+        "heading": "Dynasty",
+        "max": 50,
+        "hierarchical": false(),
+        "output": function($label, $lang) {
+            let $lang := replace($lang, "^([^_]+)_.*$", "$1")
+            return
+                $label
+
+        }
+    }
+];
 (:
  : The function to be called to determine the next content chunk to display.
  : It takes two parameters:

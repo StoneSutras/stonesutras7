@@ -1,0 +1,256 @@
+<main>
+    <style>
+        #content-area {
+            width: 100%;
+
+            margin-left: auto;
+            margin-right: auto;
+            margin: 0 auto;
+            display: block;
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        /* Container for reign information */
+        #reignInfoContainer {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            width: 800px;
+            margin-left: 40px;
+            margin-right: 20px;
+            padding: 0;
+        }
+
+        /* Styles for the loaded content within reignInfoContainer */
+        .reign-details {
+            background-color: #f8f8f8;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+            /* Space if there are other elements below */
+            border: 1px solid #eee;
+            overflow: hidden;
+        }
+
+        /* Styling for the main heading (reign name) */
+        .reign-head h1 {
+            color: #333;
+            font-size: 2em;
+            /* Slightly larger for main heading */
+            margin-top: 0;
+            margin-bottom: 5px;
+            /* Less space between heading and period */
+            text-align: left;
+            position: relative;
+            padding-bottom: 10px;
+            /* Space for the underline */
+        }
+
+        /* Decoration line for the main heading */
+        .reign-head h1::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            /* Align with the bottom of the padding */
+            width: 100%;
+            /* Slightly longer line for main heading */
+            height: 3px;
+            background-color: #5a5a5a;
+            border-radius: 2px;
+        }
+
+        /* Style for the reign period */
+        .reign-head .reign-period {
+            color: #666;
+            font-size: 0.8em;
+            /* Smaller size for the period */
+            margin-left: 5px;
+            /* Space between reign name and period */
+        }
+
+        /* Style for the dynasty information paragraph */
+        .reign-head p.dynasty-info {
+            color: #666;
+            font-size: 1.1em;
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: left;
+            /* Example: make the type italic */
+        }
+
+        .dynasty-info span:first-of-type {
+            font-weight: bold;
+            /* Make the Chinese dynasty name bold */
+        }
+
+        .dynasty-info .dynasty-en {
+            font-style: normal;
+            /* Override italic for English name if needed */
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+
+        .dynasty-info .dynasty-period {
+            font-weight: normal;
+        }
+
+        /* Styling for the "Mentioned in" heading */
+        .reign-data h2 {
+            color: #333;
+            font-size: 1.5em;
+            margin-top: 20px;
+            /* Space above sub-heading */
+            margin-bottom: 10px;
+            padding-top: 8px;
+            padding-bottom: 4px;
+            text-align: left;
+            border-bottom: 0px solid #e0e0e0;
+            /* Lighter border for sub-heading */
+        }
+
+        /* Styling for the list of mentioned items */
+        .reign-data ul {
+            list-style: none;
+            /* Remove default bullet points */
+            padding: 0;
+            margin-bottom: 4px;
+        }
+
+        /* Styling for individual list items */
+        .reign-data li {
+            margin-bottom: 8px;
+        }
+
+        /* Styling for links within the list */
+        .reign-data a {
+            display: inline-block;
+            color: #5a5a5a;
+            padding: 5px 0;
+            /* Padding for links */
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1em;
+            transition: color 0.3s ease, transform 0.2s ease;
+            position: relative;
+        }
+
+        /* Hover effect for links */
+        .reign-data a:hover {
+            color: #000;
+            transform: translateX(3px);
+            /* Subtle shift on hover */
+        }
+
+        /* Underline effect for links in the list */
+        .reign-data a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            /* Thinner underline */
+            bottom: 0;
+            left: 0;
+            background-color: #5a5a5a;
+            transition: width 0.3s ease;
+        }
+
+        /* Expand underline on hover */
+        .reign-data a:hover::after {
+            width: 100%;
+        }
+
+        .all-reigns {
+            width: 90%;
+            margin-left: 60px;
+            padding-right: 20px;
+            padding-left: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            max-height: calc(200vh - 180px);
+        }
+
+        .dynasty-category {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            border-radius: 10px;
+            background-color: #f8f8f8;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #eee;
+            width: 80%;
+            overflow: hidden;
+            /* 防止内容溢出 */
+        }
+
+        .dynasty-category h2 {
+            color: #333;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            position: relative;
+        }
+
+        .dynasty-category h2::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -2px;
+            transform: translateX(-50%);
+            background-color: #5a5a5a;
+            border-radius: 2px;
+        }
+
+        .reign {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding-top: 10px;
+        }
+
+        .reign-item-link {
+            display: inline-block;
+            color: #5a5a5a;
+            padding: 8px 15px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.05em;
+            transition: color 0.3s ease, background-color 0.3s ease, transform 0.2s ease;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .reign-item-link:hover {
+            color: #000;
+            background-color: #e9e9e9;
+            transform: translateY(-1px);
+            /* 轻微上浮效果 */
+        }
+
+        #reignInfoContainer {
+            width: 500px;
+        }
+
+        #reignInfoLoader {
+            padding-left: 10px;
+            width: 500px;
+        }
+    </style>
+    <pb-custom-form class="facets" url="api/search/reign-facets" event="pb-results-received" subscribe="transcription"
+        emit="places" />
+    <pb-load url="api/reigns" auto="" event="pb-search-resubmit" use-language="" subscribe="places"
+        emit="transcription" />
+    <div id="reignInfoContainer">
+        <pb-load id="reignInfoLoader" url="" expand="" auto="">
+            <p>Listed are the reigns mentioned in inscriptions. </p> 
+            <p> Please click on a specific reign to view detailed information</p> 
+        </pb-load>
+    </div>
+</main>
