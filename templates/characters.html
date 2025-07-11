@@ -1,136 +1,139 @@
 <html>
 
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes"/>
-    <link rel="shortcut icon" type="image/x-icon" href="resources/images/favicon.ico"/>
-    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-16.png" sizes="16x16"/>
-    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-24.png" sizes="24x24"/>
-    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-32.png" sizes="32x32"/>
-    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-64.png" sizes="64x64"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes" />
+    <link rel="shortcut icon" type="image/x-icon" href="resources/images/favicon.ico" />
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-16.png" sizes="16x16" />
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-24.png" sizes="24x24" />
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-32.png" sizes="32x32" />
+    <link rel="shortcut icon" type="image/png" href="resources/images/favicon-64.png" sizes="64x64" />
 
-    <title data-template="config:app-title"/>
-    <meta name="description" content="Default single text layout"/>
-    <meta name="pb-template" content="view.html"/>
+    <title data-template="config:app-title" />
+    <meta name="description" content="Default single text layout" />
+    <meta name="pb-template" content="view.html" />
 
-    <link rel="stylesheet" type="text/css" href="resources/fonts/font.css"/>
-    <link rel="stylesheet" href="resources/css/stonesutras-theme.css"/>
-    <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
+    <link rel="stylesheet" type="text/css" href="resources/fonts/font.css" />
+    <link rel="stylesheet" href="resources/css/stonesutras-theme.css" />
+    <script type="module" src="pb-components-bundle.js" data-template="pages:load-components" />
 
-<style>
-    .main-content {
-        display: flex;
-        min-height: 500px;
-        border-radius: 8px;
-        overflow: hidden;
-        margin: 20px;
-        padding-left: 2%;
-    }
+    <style>
+        .main-content {
+            display: flex;
+            min-height: 500px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 20px;
+            padding-left: 0;
+        }
 
-    .sidebar {
-        width: 200px;
-        background-color: #fff;
-        /* Background color for the left menu bar */
-        padding: 20px;
-        border-right: 1px solid #ccc;
-        /* Separating line */
-        position: fixed;
-        /* Added to make it fixed */
-        top: 140px;
-        left: 20px;
-        /* Adjust based on your margin */
-        bottom: 0;
-        /* Make its height extend to the bottom of the viewport */
-        overflow-y: auto;
-        /* Allow scrolling if content is too long */
-    }
 
-    .sidebar ul {
-        list-style: none;
-        padding: 0;
-    }
+        .top-nav {
+            width: 100%;
+            background-color: #fff;
+            padding: 10px 0;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            justify-content: center;
+        }
 
-    .sidebar li {
-        margin-bottom: 15px;
-    }
+        .top-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 15px;
+        }
 
-    .sidebar a {
-        display: block;
-        text-decoration: none;
-        color: #333;
-        padding: 10px 15px;
-        border-radius: 5px;
-        transition: background-color 0.3s ease, color 0.3s ease; 
-    }
+        .top-nav li {
+            margin-bottom: 0;
+        }
 
-    .sidebar a:hover {
-        background-color: #eee;
-        color: #690404;
-        /* Hover color */
-    }
+        .top-nav a {
+            display: block;
+            text-decoration: none;
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
 
-    .sidebar a.active {
-         background-color: rgba(105, 4, 4, 0.8);
-        color: #ffffff;             
-        font-weight: bold;         
-    }
+        .top-nav a:hover {
+            background-color: #eee;
+            color: #690404;
+        }
 
-    .sidebar a.active:hover {
-        background-color: #690404;  
-        color: #ffffff;             
-    }
+        .top-nav a.active {
+            background-color: rgba(105, 4, 4, 0.8);
+            color: #ffffff;
+            font-weight: bold;
+        }
 
-    #content-area {
-        flex-grow: 1;
-        padding-top: 0px;
-        padding-left: 240px;
-        /* Space between line and right content */
-    }
-</style>
-    <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
+        .top-nav a.active:hover {
+            background-color: #690404;
+            color: #ffffff;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            margin: 0px;
+        }
+
+        #content-area {
+            padding: 20px;
+        }
+
+
+        #content-area {
+            flex-grow: 1;
+            padding-top: 0px;
+            padding-left: 0px;
+            /* Space between line and right content */
+        }
+    </style>
+    <script type="module" src="pb-components-bundle.js" data-template="pages:load-components" />
     <script>
         document.addEventListener('DOMContentLoaded', function () {
 
-            const sidebarLinks = document.querySelectorAll('.sidebar ul li a');
+            const topNavLinks = document.querySelectorAll('.top-nav .nav-link');
 
-            sidebarLinks.forEach(function(link) {
-                link.addEventListener('click', function (event) {
-
-                    sidebarLinks.forEach(function(sLink) {
-                        sLink.classList.remove('active');
+            topNavLinks.forEach(function (link) {
+                link.addEventListener('click', function () {
+                    topNavLinks.forEach(function (other) {
+                        other.classList.remove('active');
                     });
-        
                     this.classList.add('active');
-        
                 });
             });
-        
-           
+
+
+
         });
-    function initFacets(container = document) {
-    const facets = container.querySelector('.facets');
+        function initFacets(container = document) {
+            const facets = container.querySelector('.facets');
 
-    if (facets) {
-        facets.addEventListener('pb-custom-form-loaded', function(ev) {
-            const elems = ev.detail.querySelectorAll('.facet');
+            if (facets) {
+                facets.addEventListener('pb-custom-form-loaded', function (ev) {
+                    const elems = ev.detail.querySelectorAll('.facet');
 
-            elems.forEach(facet =&gt; {
-                facet.addEventListener('change', () =&gt; {
-                    if (!facet.checked) {
-                        pbRegistry.state[facet.name] = null;
-                    }
-
-                    const table = facet.closest('table');
-                    if (table) {
-                        table.querySelectorAll('.nested .facet').forEach(nested =&gt; {
-                            if (nested !== facet) {
-                                nested.checked = false;
+                    elems.forEach(facet =& gt; {
+                        facet.addEventListener('change', () =& gt; {
+                            if (!facet.checked) {
+                                pbRegistry.state[facet.name] = null;
                             }
-                        });
-                    }
 
-                    facets.submit();
-                });
+                            const table = facet.closest('table');
+                            if (table) {
+                                table.querySelectorAll('.nested .facet').forEach(nested =& gt; {
+                                    if (nested !== facet) {
+                                        nested.checked = false;
+                                    }
+                                });
+            }
+
+            facets.submit();
+        });
             });
         });
     }
@@ -140,51 +143,57 @@
 </head>
 
 <body>
-    <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json" require-language="" supported-languages="en, zh_Hant">
+    <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json"
+        require-language="" supported-languages="en, zh_Hant">
         <script id="appConfig" type="application/json" data-template="pages:parse-params">
                 {
                     "app": "${app}"
                 }
             </script>
         <app-drawer-layout force-narrow="force-narrow">
-            <app-drawer data-template="templates:include" data-template-path="templates/drawer.html"/>
+            <app-drawer data-template="templates:include" data-template-path="templates/drawer.html" />
             <app-header-layout>
                 <app-header slot="header" reveals="reveals" fixed="fixed" effects="waterfall">
-                    <app-toolbar data-template="templates:include" data-template-path="templates/menu.html"/>
+                    <app-toolbar data-template="templates:include" data-template-path="templates/menu.html" />
                     <app-toolbar data-template="templates:include" data-template-path="templates/toolbar.html">
-                         <p data-target="breadcrumbs" class="breadcrumbs">
-                                <pb-i18n key="menu.characters">Characters</pb-i18n>
-                            </p>
+                        <p data-target="breadcrumbs" class="breadcrumbs">
+                            <pb-i18n key="menu.characters">Characters</pb-i18n>
+                        </p>
                     </app-toolbar>
                 </app-header>
                 <main class="main-content">
-                    <aside class="sidebar">
-                        <ul>
-                            <li><a href="#" onclick="loadContent('chars-thumbnails.html')">Thumbnails view</a></li>
-                            <li><a href="#" onclick="loadContent('chars-table.html')">Table view</a></li>
-                        </ul>
-                    </aside>
+                    <div id="content-wrapper">
+                        <nav class="top-nav">
+                            <ul>
+                                <li><a href="#" class="nav-link active"
+                                        onclick="loadContent('chars-thumbnails.html')">Thumbnails view</a></li>
+                                <li><a href="#" class="nav-link" onclick="loadContent('chars-table.html')">Table
+                                        view</a></li>
+                            </ul>
+                        </nav>
 
-                    <div id="content-area">
+
+                        <div id="content-area"></div>
                     </div>
                 </main>
+
             </app-header-layout>
         </app-drawer-layout>
     </pb-page>
-    <div class="splash"/>
+    <div class="splash" />
 
     <script>
-       function loadContent(url) {
-    fetch(url)
-        .then(response =&gt; response.text())
-        .then(data =&gt; {
-            const contentArea = document.getElementById('content-area');
-            contentArea.innerHTML = data;
-            initFacets(contentArea);
-        });
-}
+        function loadContent(url) {
+            fetch(url)
+                .then(response =& gt; response.text())
+        .then(data =& gt; {
+                const contentArea = document.getElementById('content-area');
+                contentArea.innerHTML = data;
+                initFacets(contentArea);
+            });
+        }
 
-        document.addEventListener('DOMContentLoaded', () =&gt; {
+        document.addEventListener('DOMContentLoaded', () =& gt; {
             loadContent('chars-thumbnails.html');
         });
 

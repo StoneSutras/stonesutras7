@@ -6,7 +6,13 @@
             grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
             gap: 8px;
             padding: 0px;
-            margin-top: 6px;
+            margin-top: 8px;
+
+        }
+
+        main {
+            margin-left: 10%;
+            margin-right: 10%;
         }
 
         /* Styles for each Character Card (similar to paper-card in search) */
@@ -97,7 +103,7 @@
             <pb-i18n key="search.search" />
         </paper-button>
     </pb-search>
-    <pb-paginate per-page="33" range="10" subscribe="results"></pb-paginate>
+    <pb-paginate per-page="33" range="10" subscribe="results" />
     <pb-load url="api/characters_thumbnails" auto="auto" emit="results" />
 
 
