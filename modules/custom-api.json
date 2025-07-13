@@ -568,6 +568,26 @@
 				}
 			}
 		},
+		"/api/search/clinks-facets": {
+			"get": {
+				"summary": "List facets",
+				"description": "Return a list of facet counts for current search results",
+				"operationId": "custom:clinks-facets",
+				"tags": ["search"],
+				"responses": {
+					"200": {
+						"description": "Facets returned",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/api/search/reign-facets": {
 			"get": {
 				"summary": "List facets",
@@ -1110,23 +1130,56 @@
 		                        "schema": {
 		                            "type": "object",
 		                            "properties": {
-		                                    "latitude":{
-		                                        "type": "string"
-		                                    },
-		                                    "longitude":{
-		                                        "type": "string"
-		                                    },
-		                                    "label": {
-		                                        "type": "string"
-			                                }
-			                            }
-			                        }
-			                    }
-			                }
-			            }
-			        }
-			    }			
-			},
+	                                    "latitude":{
+	                                        "type": "string"
+	                                    },
+	                                    "longitude":{
+	                                        "type": "string"
+	                                    },
+	                                    "label": {
+	                                        "type": "string"
+		                                }
+		                            }
+		                        }
+		                    }
+		                }
+		            }
+		        }
+		    }			
+		},
+		"/reign/{id}/info":  {
+			"get": {
+			    "summary": "Retrieve the HTML template used for displaying a reign",
+				"description": "Get the HTML template associated with the given document. This is called whenever the users tries to view a document. The actual content of the document will then be loaded by the template.",
+				"operationId": "api:reign-info",
+				"x-error-handler": "vapi:handle-error",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "ID of reign",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"example": "R617"
+						},
+						"allowReserved": true
+					}
+				],
+			"responses": {
+                    "200":{
+                        "description": "reign infomation",
+                        "content": {
+                            "text/html":{
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
 			
 		
 		"/api/reigns": {
@@ -1168,11 +1221,47 @@
             }
         },
 			  
-        "/api/images": {
+        "/api/figures": {
 		    "get": {
-		        "summary": "Getting a list of all images",
-		        "description": "This will make a list of all images",
+		        "summary": "Getting a list of all figures",
+		        "description": "This will make a list of all figures",
 		        "operationId": "custom:tei-figures",
+				"x-error-handler": "vapi:handle-error",
+				"parameters": [
+									{
+										"name": "search",
+										"in": "query",
+										"description": "",
+										"schema": {
+											"type": "string",
+											"example": ""
+										},
+										"allowReserved": true
+									}
+								],
+    			"responses": {
+                        "200":{
+                            "description": "figures",
+                            "content": {
+                                "text/html":{
+                                    "schema": {
+                                        "type": "string"
+    			                                
+			                            }
+			                        }
+			                    }
+			                }
+			            }
+			        }
+	
+			},
+
+
+        "/api/clinks": {
+		    "get": {
+		        "summary": "Getting a list of all images in c:links",
+		        "description": "This will make a list of all images",
+		        "operationId": "custom:catalog-links",
 				"x-error-handler": "vapi:handle-error",
 				"parameters": [
 									{

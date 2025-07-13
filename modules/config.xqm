@@ -296,6 +296,50 @@ declare variable $config:image-facets := [
     }
 ];
 
+declare variable $config:clinks-facets := [
+    map {
+        "dimension": "image_type",
+        "heading": "facets.type",
+        "max": 20,
+        "hierarchical": false(),
+        "output": function($label, $lang) {
+            let $lang := replace($lang, "^([^_]+)_.*$", "$1")
+            return
+                $label
+        }
+    },    
+    map {
+        "dimension": "province_en",
+        "heading": "facets.province",
+        "max": 5,
+        "hierarchical": false(),
+        "output": function($label, $lang) {
+            let $lang := replace($lang, "^([^_]+)_.*$", "$1")
+            return
+                if ($lang = "en") then
+                    $label
+                else
+                    switch($label)
+                        case "Shandong Province" return "山東省"
+                        case "Sichuan Province" return "四川省"
+                        case "Shaanxi Province" return "陝西省"
+                        case "Sichuan" return "四川省"
+                        default return $label
+        }
+    },
+    map {
+        "dimension": "site",
+        "heading": "facets.site",
+        "hierarchical": false(),
+        "output": function($label, $lang) {
+            let $lang := replace($lang, "^([^_]+)_.*$", "$1")
+            let $catalog := collection($config:data-catalog)/id($label)[@type=('site', 'cave')]
+            return
+                ($catalog/c:header/c:title[@*:lang=$lang][@type="given"])[1]/string()
+        }
+    }
+];
+
 
 declare variable $config:reign-facets := [
     map {

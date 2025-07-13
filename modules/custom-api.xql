@@ -476,10 +476,12 @@ declare function api:places($request as map(*)) {
 
   let $grouped :=
     for $type in distinct-values($places/@type)
+    let $type_en_label := api:translate-type(map { "type": $type, "lang": "en" })
+    let $type_zh_label := api:translate-type(map { "type": $type, "lang": "zh" })
     order by $type
     return
       <div class="place-category">
-        <h2>{$type}</h2>
+        <h2>{concat($type_en_label, " ", $type_zh_label)}</h2>
         {
           for $place in $places[@type = $type]
             let $id := string($place/@id)
@@ -502,6 +504,43 @@ declare function api:places($request as map(*)) {
 
   return <div class="all-places">{$grouped}</div>
 };
+
+declare function api:translate-type($params as map(*)) as xs:string {
+  let $type := $params?type
+  let $lang := $params?lang
+  return
+    if ($lang = "zh") then
+      switch ($type)
+        case "Country" return "國家"
+        case "Gate" return "門"
+        case "Mountain" return "山"
+        case "City" return "城市"
+        case "River" return "河流"
+        case "Monastery" return "寺院"
+        case "District" return "區"
+        case "Cloister" return "修道院"
+        case "Town" return "鎮"
+        case "Site" return "遺址"
+        case "Cliff" return "懸崖"
+        case "Village" return "村"
+        case "Province" return "省"
+        case "Institution" return "機構"
+        case "Stupa" return "佛塔"
+        case "Ridge" return "山脊"
+        case "Valley" return "山谷"
+        case "Peak" return "山峰"
+        case "County" return "縣"
+        case "Cave" return "洞穴"
+        case "Lake" return "湖泊"
+        case "Reservoir" return "水庫"
+        case "Park" return "公園"
+        case "Pool" return "水池"
+        case "Canyon" return "峽谷"
+        default return ""
+    else
+      $type
+};
+
 
 
 declare function api:research-articles($request as map(*)) {
@@ -582,6 +621,20 @@ declare function api:image-facets($request as map(*)) {
         <div>
         {
             for $config in $config:image-facets?*
+            return
+                facets:display($config, $hits)
+        }
+        </div>
+};
+
+declare function api:clinks-facets($request as map(*)) {
+    
+    let $hits := session:get-attribute($config:session-prefix || ".clinks")
+    where count($hits) > 0
+    return
+        <div>
+        {
+            for $config in $config:clinks-facets?*
             return
                 facets:display($config, $hits)
         }
@@ -1203,6 +1256,87 @@ declare function api:place-coordinates($request as map(*)) {
 };
 
 
+declare function api:reign-info($request as map(*)) {
+    let $id := $request?parameters?id
+    let $reigns := collection($config:data-biblio)/reign_mentions_summary
+    let $reign := $reigns/reign_entry[reign_id = $id]
+
+
+    let $reign_name_zh := string($reign/reign_name_zh)
+    let $reign_from_raw := string($reign/reign_from)
+    let $reign_to_raw := string($reign/reign_to)
+    let $reign_from := 
+              if ($reign_from_raw castable as xs:integer) then string(xs:integer($reign_from_raw)) else ""
+    let $reign_to := 
+              if ($reign_to_raw castable as xs:integer) then string(xs:integer($reign_to_raw)) else ""
+            
+    let $reign_period :=
+      if ($reign_from != "" and $reign_to != "") then
+        concat(" (", $reign_from, "–", $reign_to, ")")
+      else if ($reign_from != "") then
+        concat(" (", $reign_from, "–?)")
+      else
+        ""
+
+    let $dynasty_name_zh := string($reign/dynasty_info/dynasty_name_zh)
+    let $dynasty_name_en := string($reign/dynasty_info/dynasty_name_en)
+    let $dynasty_from_raw := string($reign/dynasty_info/dynasty_from)
+    let $dynasty_to_raw := string($reign/dynasty_info/dynasty_to)
+    let $dynasty_from := if ($dynasty_from_raw castable as xs:integer) then string(xs:integer($dynasty_from_raw)) else ""
+    let $dynasty_to := if ($dynasty_to_raw castable as xs:integer) then string(xs:integer($dynasty_to_raw)) else ""
+
+    let $dynasty_period := 
+        if ($dynasty_from != '' and $dynasty_to != '') then
+            concat('(', $dynasty_from, ' - ', $dynasty_to, ')')
+        else if ($dynasty_from != '') then
+            concat('(', $dynasty_from, ' - ?)')
+        else if ($dynasty_to != '') then
+            concat('(? - ', $dynasty_to, ')')
+        else
+            ''
+
+    let $mentioned_in_raw := string($reign/mentioned_in)
+    let $sources := tokenize($mentioned_in_raw, ',') ! normalize-space(.)
+
+    return
+        <div class="reign-details">
+            <div class="reign-head">
+                <h1>
+                    {$reign_name_zh} 
+                    {if ($reign_period != '') then <span class="reign-period">{$reign_period}</span> else ()}
+                </h1>
+                {if ($dynasty_name_zh != '' or $dynasty_name_en != '') then
+                    <p class="dynasty-info">
+                        Dynasty: 
+                        {if ($dynasty_name_zh != '') then <span>{$dynasty_name_zh} </span> else ()}
+                        {if ($dynasty_name_en != '') then <span class="dynasty-en">({$dynasty_name_en}) </span> else ()}
+                        {if ($dynasty_period != '') then <span class="dynasty-period">{$dynasty_period}</span> else ()}
+                    </p>
+                else ()}
+            </div>
+
+            <div class="reign-data">
+                <h2>Mentioned in:</h2>
+                {
+                    if (exists($sources) and $sources[1] != '') then
+                        <ul>
+                        {
+                            for $source in $sources
+                            let $doc := collection($config:data-catalog)/catalog:object[@xml:id=string($source)]
+                            let $title := $doc/catalog:header/catalog:title[1] 
+                            let $label := if (exists($title)) then string($title) else $source 
+                            return <li><a href="inscriptions/{$source}" target="_blank">{$label}</a></li> 
+                        }
+                        </ul>
+                    else
+                        <p>Never mentioned</p>
+                }
+            </div>
+            
+           
+        </div>
+};
+
 declare function api:impressum($request as map(*)) {
   try {
     let $xml-id := $request?parameters?id
@@ -1331,7 +1465,77 @@ declare function api:tei-figures($request as map(*)) {
     </div>
 };
 
+declare function api:catalog-links($request as map(*)) {
+  let $image-base-url := "https://sutras.adw.uni-heidelberg.de/images/"
+  let $lang := replace($request?parameters?language, "^([^_-]+)[_-].*$", "$1")
+  let $options := query:options(())
 
+  let $links := collection($config:data-catalog)//catalog:link[ (@type = "rubbing" or @type = "stone") and
+    ancestor::catalog:object  and
+    ft:query(., "type:*", $options) and
+    not(ends-with(lower-case(@xlink:href), '.swf')) and
+    not(ends-with(lower-case(@xlink:href), '.svg')) and
+    string(@xlink:href) != "" and 
+    (
+        normalize-space(self::catalog:link/catalog:caption[@xml:lang='en']) ne '' or 
+        normalize-space(self::catalog:link/catalog:caption[@xml:lang='zh']) ne ''   
+    )
+   
+
+  ]
+  let $nil := session:set-attribute($config:session-prefix || ".clinks", $links)
+
+  return
+    <div class="image-grid">
+    {
+      for $link in $links
+      let $original-href := normalize-space($link/@xlink:href)
+      let $valid-image-extensions_regex := '\.(jpe?g|png|gif|tif?f)$'
+      where $original-href ne '' and matches(lower-case($original-href), $valid-image-extensions_regex)
+
+      let $base-filename := replace($original-href, '\.[^.]*$', '')
+
+      let $extension :=
+        if (ends-with(lower-case($original-href), '.tif')) then 'jpg'
+        else if (ends-with(lower-case($original-href), '.tiff')) then 'jpg'
+        else if (ends-with(lower-case($original-href), '.jpeg')) then 'jpg'
+        else if (ends-with(lower-case($original-href), '.png')) then 'png'
+        else if (ends-with(lower-case($original-href), '.gif')) then 'gif'
+        else 'jpg' 
+        
+      let $effective-href := concat($base-filename, '.', $extension)
+
+      let $xlink := string($effective-href) (: DEBUG 用，显示有效 href :)
+      let $xml-id := $link/ancestor::catalog:object/@xml:id/string()
+
+      let $image-url := concat($image-base-url, $effective-href) 
+
+      let $caption-zh := $link/catalog:caption[@xml:lang = 'zh']/string()
+      let $caption-en := $link/catalog:caption[@xml:lang = 'en']/string()
+
+      let $anchor := <a href="{concat('inscriptions/', $xml-id)}">{$xml-id}</a>
+
+      return
+        <div class="image-container">
+          <pb-popover theme="light">
+            <img src="{$image-url}" alt="Figure for {$xml-id}" loading="lazy"/>
+            <template slot="alternate">
+              <div class="image-details">
+                <p>DEBUG xlink:href: {$xlink}</p>
+                <p>See: { $anchor }</p>
+                {
+                  if (string($caption-en) ne "") then <p>{$caption-en}</p> else ()
+                }
+                {
+                  if (string($caption-zh) ne "") then <p>{$caption-zh}</p> else ()
+                }
+              </div>
+            </template>
+          </pb-popover>
+        </div>
+    }
+    </div>
+};
 
 (:  
 declare function api:temples($request as map(*)) {
@@ -1567,9 +1771,9 @@ declare function api:reigns($request as map(*)) {
             
             let $reign_year_range :=
               if ($reign_from != "" and $reign_to != "") then
-                concat(" (", $reign_from, "—", $reign_to, ")")
+                concat(" (", $reign_from, "–", $reign_to, ")")
               else if ($reign_from != "") then
-                concat(" (", $reign_from, "—?)")
+                concat(" (", $reign_from, "–?)")
               else
                 ""
 
