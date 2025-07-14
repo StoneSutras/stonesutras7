@@ -34,6 +34,7 @@
         "site": "地點",
         "province": "省份",
         "volume": "卷",
-        "place_type":"地點類型"
+        "place_type":"地點類型",
+        "source":"來源"
     }
 }

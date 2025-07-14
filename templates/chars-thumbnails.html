@@ -1,19 +1,65 @@
-<main>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <style>
-        /* Overall Container for Thumbnails */
+        body {
+            margin: 0; /* 移除body默认边距 */
+            display: flex; /* 让body成为Flex容器，处理顶栏和下方内容 */
+            flex-direction: column; /* 让body内的元素垂直堆叠 */
+            min-height: 100vh; /* 确保body至少占满视口高度 */
+        }
+
+        /* 假设有一个占据全宽的顶栏（topbar） */
+        .topbar {
+            width: 100%;
+            background-color: #333;
+            color: white;
+            padding: 15px 20px;
+            box-sizing: border-box; /* 包含padding在内的宽度 */
+            text-align: center;
+            /* 你的顶栏内容和样式 */
+        }
+
+        /* --- 核心布局：下方两列 --- */
+        .content-wrapper {
+            display: flex; /* 使这个包装器成为Flex容器，处理左右两列 */
+            flex-grow: 1; /* 让这个包装器占用body的剩余空间 */
+            /* 左右两边的边距，但内部的右侧内容可以延伸 */
+            margin-left: 10%; /* 左侧固定边距 */
+            margin-right: 0; /* 右侧不设固定边距，让右边内容可以延伸 */
+        }
+
+        /* 左边的 Facets 栏 */
+        .facets-column {
+            flex-shrink: 0; /* 防止收缩 */
+            width: 250px; /* Facets 固定宽度 */
+            padding: 15px;
+            background-color: #f8f8f8;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-right: 20px; /* Facets 和主内容之间的间距 */
+            box-sizing: border-box;
+        }
+
+        /* 右边的主要内容区域 */
+        .main-content-column {
+            flex-grow: 1; /* 占据剩余所有空间 */
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding-right: 10%; /* 模拟原 main 的右侧边距，但内容可以向右延伸 */
+            box-sizing: border-box;
+        }
+
+        /* Thumbnail Grid Styles (保持不变) */
         #thumbnails-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
             gap: 8px;
             padding: 0px;
             margin-top: 8px;
-
         }
-
-        main {
-            margin-left: 10%;
-            margin-right: 10%;
-        }
+        /* ... 其他所有 .character-card, .thumbnail-item, .character-name, .character-details 样式照旧 ... */
 
         /* Styles for each Character Card (similar to paper-card in search) */
         .character-card {
@@ -40,7 +86,6 @@
             padding: 0;
             background-color: transparent;
             transition: none;
-
             box-shadow: none;
         }
 
@@ -96,15 +141,22 @@
             text-decoration: underline;
         }
     </style>
+</head>
+<body>
+    <div class="content-wrapper">
+        <div class="facets-column">
+            <pb-custom-form class="facets" url="api/search/char-facets" event="pb-results-received" subscribe="transcription" emit="transcription"></pb-custom-form>
+        </div>
 
-    <pb-search id="search-form" subscribe="search" place-holder="Enter character" data-template="pages:parse-params"
-        value="${query}" subforms=".options" submit-on-load="submit-on-load">
-        <paper-button slot="searchButton">
-            <pb-i18n key="search.search" />
-        </paper-button>
-    </pb-search>
-    <pb-paginate per-page="33" range="10" subscribe="results" />
-    <pb-load url="api/characters_thumbnails" auto="auto" emit="results" />
-
-
-</main>
+        <div class="main-content-column">
+            <pb-search id="search-form" subscribe="search" place-holder="Enter character" data-template="pages:parse-params" value="${query}" subforms=".options" submit-on-load="submit-on-load">
+                <paper-button slot="searchButton">
+                    <pb-i18n key="search.search"/>
+                </paper-button>
+            </pb-search>
+            <pb-paginate per-page="33" range="10" subscribe="transcription"/>
+            <pb-load url="api/characters_thumbnails" auto="" event="pb-search-resubmit" emit="transcription" subscribe="transcription"/>
+        </div>
+    </div>
+</body>
+</html>

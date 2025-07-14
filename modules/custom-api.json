@@ -528,6 +528,26 @@
 				}
 			}
 		},
+		"/api/search/char-facets": {
+			"get": {
+				"summary": "List facets",
+				"description": "Return a list of facet counts for current search results",
+				"operationId": "custom:char-facets",
+				"tags": ["search"],
+				"responses": {
+					"200": {
+						"description": "Facets returned",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/api/search/place-facets": {
 			"get": {
 				"summary": "List facets",

@@ -301,16 +301,18 @@ declare function api:characters_thumbnails($request as map(*)) {
     let $query := $request?parameters?query
     let $start := if (exists($request?parameters?start)) then xs:double($request?parameters?start) else 1
     let $per-page := if (exists($request?parameters?per-page)) then xs:double($request?parameters?per-page) else 55
+    let $options := query:options(())
 
-    let $character-table :=
+    let $chars :=
         try {
-            doc($config:data-root || '/catalog/characters_table.xml')/character/char
+            collection($config:data-catalog)/character/char-entry[ft:query(., $query, $options)]
         } catch * {
             error(xs:QName("file-not-found"), "The precomputed character file does not exist.")
         }
+   let $nil := session:set-attribute($config:session-prefix || ".characters", $chars)
 
     let $filtered-characters :=
-        for $char in $character-table
+        for $char in $chars
         let $character := fn:string($char/char)
         let $image := fn:string($char/image)
         let $source := fn:string($char/source)
@@ -593,6 +595,20 @@ declare function api:catalog-facets($request as map(*)) {
         <div>
         {
             for $config in $config:catalog-facets?*
+            return
+                facets:display($config, $hits)
+        }
+        </div>
+};
+
+declare function api:char-facets($request as map(*)) {
+    
+    let $hits := session:get-attribute($config:session-prefix || ".characters")
+    where count($hits) > 0
+    return
+        <div>
+        {
+            for $config in $config:char-facets?*
             return
                 facets:display($config, $hits)
         }

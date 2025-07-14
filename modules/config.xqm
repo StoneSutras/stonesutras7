@@ -355,6 +355,33 @@ declare variable $config:reign-facets := [
         }
     }
 ];
+
+declare variable $config:char-facets := [
+    map {
+        "dimension": "province",
+        "heading": "facets.province",
+        "max": 10,
+        "hierarchical": false(),
+        "output": function($label, $lang) {
+            let $lang := replace($lang, "^([^_]+)_.*$", "$1")
+            return
+                $label
+
+        }
+    },
+    map {
+        "dimension": "source",
+        "heading": "facets.source",
+        "hierarchical": false(),
+        "output": function($label, $lang) {
+            let $lang := replace($lang, "^([^_]+)_.*$", "$1")
+            return
+                $label
+
+        }
+    }
+];
+
 (:
  : The function to be called to determine the next content chunk to display.
  : It takes two parameters:
