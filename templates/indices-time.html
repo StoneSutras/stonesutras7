@@ -19,9 +19,13 @@
         #reignInfoContainer {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             width: 800px;
+            /* Adjust this value as needed to match your layout */
             margin-left: 40px;
+            /* Keep it left-aligned */
             margin-right: 20px;
+            /* Allow auto margin on the right */
             padding: 0;
+            /* Add some vertical padding for overall spacing if needed */
         }
 
         /* Styles for the loaded content within reignInfoContainer */
@@ -248,9 +252,9 @@
     <pb-load url="api/reigns" auto="" event="pb-search-resubmit" use-language="" subscribe="places"
         emit="transcription" />
     <div id="reignInfoContainer">
-        <pb-load id="reignInfoLoader" url="" expand="" auto="">
-            <p>Listed are the reigns mentioned in inscriptions. </p> 
-            <p> Please click on a specific reign to view detailed information</p> 
-        </pb-load>
+        <pb-load id="reignInfoLoader" url="" expand="" auto="">Listed are the reigns mentioned in inscriptions. Please
+            click on a specific reign to view detailed information</pb-load>
+
+
     </div>
 </main>

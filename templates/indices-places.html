@@ -19,7 +19,7 @@
 
 #place-info-container {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  width: 800px; /* Adjust this value as needed */
+  width: 600px; /* Adjust this value as needed */
   margin-left: 40px; /* Keep it left-aligned */
   margin-right: 20px; /* Allow auto margin on the right */
   padding: 0; /* Add some vertical padding for overall spacing if needed */
@@ -212,8 +212,8 @@ pb-leaflet-map {
 </head>
 <body class="place">
     <main class="places-content">
-        <pb-custom-form class="facets" url="api/search/place-facets" event="pb-results-received" subscribe="transcription" emit="places"></pb-custom-form>
-        <pb-load id="placeListLoader" url="api/places" auto="" event="pb-search-resubmit" use-language="" subscribe="places" emit="transcription"></pb-load>
+        <pb-custom-form class="facets" url="api/search/place-facets" event="pb-results-received" subscribe="transcription" emit="places"/>
+        <pb-load id="placeListLoader" url="api/places" auto="" event="pb-search-resubmit" use-language="" subscribe="places" emit="transcription"/>
 
         <div id="place-info-container">
             <pb-load id="infoLoader" url="" expand="" auto="">Please click on a specific location to view detailed information, including external links and map coordinates.</pb-load>

@@ -1,41 +1,35 @@
 <html>
-
 <head>
     <style>
-        #content-area {
-            width: 100%;
+      #content-area {
+  width: 100%; 
 
-            margin-left: auto;
-            margin-right: auto;
-            margin: 0 auto;
-            display: block;
-        }
+  margin-left: auto;
+  margin-right: auto;
+    margin: 0 auto; 
+  display: block; 
+}
+main {
+    display: flex;
+    justify-content: center; 
+    align-items: flex-start; 
 
-        main {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-
-        }
+}
 
 
         .facets {
-            padding-right: 30px;
+            padding-right: 30px; 
             margin-left: 20px;
         }
 
         #image-gallery-container {
 
             margin: 0;
-            padding-left: 20px;
-            width: 100%;
+            padding-left: 20px; 
+            width: 100%; 
         }
 
-        #image-gallery-container &gt;
-        pb-load &gt;
-        div[slot] &gt;
-
-        div.volume-group-for-grid {
+        #image-gallery-container &gt; pb-load &gt; div[slot] &gt; div.volume-group-for-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
@@ -85,12 +79,7 @@
             max-height: 200px;
         }
 
-        #image-gallery-container &gt;
-        pb-load &gt;
-        div[slot] &gt;
-        div.volume-group-for-grid &gt;
-
-        h2 {
+        #image-gallery-container &gt; pb-load &gt; div[slot] &gt; div.volume-group-for-grid &gt; h2 {
             grid-column: 1 / -1;
             text-align: center;
             color: #2c3e50;
@@ -101,21 +90,17 @@
 
         @media (max-width: 768px) {
             main {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr; 
                 margin: 10px auto;
                 padding: 0 10px;
             }
 
             .facets {
-                padding-right: 0;
-                margin-bottom: 20px;
+                padding-right: 0; 
+                margin-bottom: 20px; 
             }
 
-            #image-gallery-container &gt;
-            pb-load &gt;
-            div[slot] &gt;
-
-            div.volume-group-for-grid {
+            #image-gallery-container &gt; pb-load &gt; div[slot] &gt; div.volume-group-for-grid {
                 grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
                 gap: 15px;
             }
@@ -126,24 +111,17 @@
         }
 
         @media (max-width: 480px) {
-            #image-gallery-container &gt;
-            pb-load &gt;
-            div[slot] &gt;
-
-            div.volume-group-for-grid {
+            #image-gallery-container &gt; pb-load &gt; div[slot] &gt; div.volume-group-for-grid {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
-<main>
-    <pb-custom-form class="facets" url="api/search/image-facets" event="pb-results-received" subscribe="transcription"
-        emit="images" />
+    <main>
+        <pb-custom-form class="facets" url="api/search/image-facets" event="pb-results-received" subscribe="transcription" emit="images"/>
 
-    <div id="image-gallery-container">
-        <pb-load url="api/images" auto="" event="pb-search-resubmit" use-language="" subscribe="images"
-            emit="transcription" />
-    </div>
-</main>
-
+        <div id="image-gallery-container">
+            <pb-load url="api/figures" auto="" event="pb-search-resubmit" use-language="" subscribe="images" emit="transcription"/>
+        </div>
+    </main>
 </html>
