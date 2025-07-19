@@ -1,250 +1,437 @@
 <main>
     <style>
+        /* 全局样式和基础设置 */
+        body {
+            line-height: 1.6;
+            color: #333;
+            background-color: #f0f2f5;
+            /* 整体背景色，更柔和 */
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        /* 主内容区域 */
         #content-area {
             width: 100%;
-
-            margin-left: auto;
-            margin-right: auto;
+            max-width: 1200px;
+            /* 限制最大宽度，提升阅读体验 */
             margin: 0 auto;
             display: block;
+            box-sizing: border-box;
         }
 
         main {
             display: flex;
+            flex-wrap: wrap;
+            /* 允许在小屏幕上换行 */
             justify-content: center;
             align-items: flex-start;
+            gap: 30px;
+            /* 增加主要区域之间的间距 */
         }
 
-        /* Container for reign information */
+        .facets {
+            min-width: 250px;
+        }
+
+        /* 朝代信息容器 */
         #reignInfoContainer {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            width: 800px;
-            /* Adjust this value as needed to match your layout */
-            margin-left: 40px;
-            /* Keep it left-aligned */
-            margin-right: 20px;
-            /* Allow auto margin on the right */
-            padding: 0;
-            /* Add some vertical padding for overall spacing if needed */
+            flex: 2;
+            /* 让这个容器占据更多空间 */
+            min-width: 350px;
+            /* 最小宽度 */
+            max-width: 800px;
+            /* 限制最大宽度 */
+            background-color: #ffffff;
+            /* 白色背景 */
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            /* 更明显的阴影 */
+            padding: 30px;
+            box-sizing: border-box;
+            margin: 0;
+            /* 移除原来的margin，由main的gap控制 */
         }
 
-        /* Styles for the loaded content within reignInfoContainer */
+        .top-nav {
+            margin: 0;
+        }
+
+        /* Reign Details 卡片样式 */
         .reign-details {
-            background-color: #f8f8f8;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            margin-bottom: 20px;
-            /* Space if there are other elements below */
-            border: 1px solid #eee;
-            overflow: hidden;
+            /* 继承 #reignInfoContainer 的样式，此处可省略或用于局部覆盖 */
+            padding: 0;
+            /* 内部内容不再需要额外的padding，由容器提供 */
+            border: none;
+            /* 移除内部边框 */
+            box-shadow: none;
+            /* 移除内部阴影 */
         }
 
-        /* Styling for the main heading (reign name) */
+        /* 主标题（reign name） */
         .reign-head h1 {
-            color: #333;
-            font-size: 2em;
-            /* Slightly larger for main heading */
+            font-family: 'Playfair Display', serif;
+            /* 更具设计感的字体 */
+            color: #2c3e50;
+            /* 深色文字 */
+            font-size: 2.8em;
+            /* 更大 */
             margin-top: 0;
-            margin-bottom: 5px;
-            /* Less space between heading and period */
+            margin-bottom: 8px;
             text-align: left;
             position: relative;
-            padding-bottom: 10px;
-            /* Space for the underline */
+            padding-bottom: 15px;
+            /* 增加下划线空间 */
+            letter-spacing: -0.02em;
+            /* 字间距微调 */
         }
 
-        /* Decoration line for the main heading */
+        /* 主标题下划线 */
         .reign-head h1::after {
             content: '';
             position: absolute;
             left: 0;
             bottom: 0;
-            /* Align with the bottom of the padding */
-            width: 100%;
-            /* Slightly longer line for main heading */
-            height: 3px;
+            width: 80px;
+            /* 更短、更精致的下划线 */
+            height: 4px;
+            /* 粗一点 */
             background-color: #5a5a5a;
             border-radius: 2px;
+            transition: width 0.3s ease;
+            /* 添加过渡效果 */
         }
 
-        /* Style for the reign period */
+        .reign-head h1:hover::after {
+            width: 120px;
+            /* 鼠标悬停时加长 */
+        }
+
+        /* Reign Period */
         .reign-head .reign-period {
-            color: #666;
-            font-size: 0.8em;
-            /* Smaller size for the period */
-            margin-left: 5px;
-            /* Space between reign name and period */
+            color: #7f8c8d;
+            /* 柔和的灰色 */
+            font-size: 0.9em;
+            margin-left: 10px;
+            /* 增加与标题的距离 */
+            font-weight: 500;
         }
 
-        /* Style for the dynasty information paragraph */
+        /* Dynasty Info */
         .reign-head p.dynasty-info {
-            color: #666;
+            color: #555;
             font-size: 1.1em;
-            margin-top: 0;
-            margin-bottom: 20px;
-            text-align: left;
-            /* Example: make the type italic */
+            margin-top: 15px;
+            /* 增加上边距 */
+            margin-bottom: 25px;
+            line-height: 1.5;
         }
 
         .dynasty-info span:first-of-type {
-            font-weight: bold;
-            /* Make the Chinese dynasty name bold */
+            font-weight: 700;
+            /* 更粗的字体 */
+            color: #34495e;
+            /* 更深的颜色 */
         }
 
         .dynasty-info .dynasty-en {
-            font-style: normal;
-            /* Override italic for English name if needed */
-            margin-left: 5px;
-            margin-right: 5px;
+            font-style: italic;
+            /* 英文名斜体 */
+            margin-left: 8px;
+            margin-right: 8px;
+            color: #666;
         }
 
         .dynasty-info .dynasty-period {
-            font-weight: normal;
+            font-weight: 400;
+            color: #777;
         }
 
-        /* Styling for the "Mentioned in" heading */
+        /* "Mentioned in" 标题 */
         .reign-data h2 {
-            color: #333;
-            font-size: 1.5em;
-            margin-top: 20px;
-            /* Space above sub-heading */
-            margin-bottom: 10px;
-            padding-top: 8px;
-            padding-bottom: 4px;
+            color: #2c3e50;
+            font-size: 1.8em;
+            /* 适当放大 */
+            margin-top: 40px;
+            /* 更多空间 */
+            margin-bottom: 5px;
+            padding-bottom: 5px;
             text-align: left;
-            border-bottom: 0px solid #e0e0e0;
-            /* Lighter border for sub-heading */
-        }
-
-        /* Styling for the list of mentioned items */
-        .reign-data ul {
-            list-style: none;
-            /* Remove default bullet points */
-            padding: 0;
-            margin-bottom: 4px;
-        }
-
-        /* Styling for individual list items */
-        .reign-data li {
-            margin-bottom: 8px;
-        }
-
-        /* Styling for links within the list */
-        .reign-data a {
-            display: inline-block;
-            color: #5a5a5a;
-            padding: 5px 0;
-            /* Padding for links */
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 1em;
-            transition: color 0.3s ease, transform 0.2s ease;
+            border-bottom: 1px solid #e0e0e0;
+            /* 更细的下划线 */
             position: relative;
         }
 
-        /* Hover effect for links */
-        .reign-data a:hover {
-            color: #000;
-            transform: translateX(3px);
-            /* Subtle shift on hover */
+
+        /* 次级标题 */
+        .reign-data h3 {
+            color: #34495e;
+            font-size: 1.4em;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            padding-left: 0;
+            /* 移除左侧内边距 */
+            padding-top: 10px;
+            padding-bottom: 5px;
+            text-align: left;
+            font-weight: 600;
         }
 
-        /* Underline effect for links in the list */
+        /* 列表样式 */
+        .reign-data ul {
+            list-style: none;
+            padding-left: 0;
+            /* 移除默认内边距 */
+            margin-bottom: 20px;
+        }
+
+        .reign-data li {
+            margin-bottom: 12px;
+            /* 增加行间距 */
+        }
+
+        /* 链接样式 */
+        .reign-data a {
+            display: inline-block;
+            color: #3498db;
+            /* 更鲜明的蓝色链接 */
+            padding: 5px 0;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.05em;
+            transition: color 0.3s ease, transform 0.2s ease, background-color 0.3s ease;
+            position: relative;
+            padding-right: 15px;
+            /* 为箭头留出空间 */
+        }
+
+        /* 链接悬停效果 */
+        .reign-data a:hover {
+            color: #2980b9;
+            transform: translateX(5px);
+            /* 更明显的偏移 */
+        }
+
+        /* 链接下划线效果 */
         .reign-data a::after {
             content: '';
             position: absolute;
             width: 0;
             height: 2px;
-            /* Thinner underline */
             bottom: 0;
             left: 0;
-            background-color: #5a5a5a;
+            background-color: #3498db;
             transition: width 0.3s ease;
         }
 
-        /* Expand underline on hover */
         .reign-data a:hover::after {
-            width: 100%;
+            width: calc(100% - 15px);
+            /* 悬停时展开，减去箭头部分宽度 */
         }
 
+        /* 链接右侧箭头 */
+        .reign-data a::before {
+            content: '→';
+            /* 添加箭头 */
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.9em;
+            opacity: 0;
+            transition: opacity 0.3s ease, right 0.3s ease;
+        }
+
+        .reign-data a:hover::before {
+            opacity: 1;
+            right: 5px;
+            /* 箭头向右移动 */
+        }
+
+        /* 所有朝代列表容器 */
         .all-reigns {
-            width: 90%;
-            margin-left: 60px;
-            padding-right: 20px;
-            padding-left: 20px;
+            flex: 1;
+            /* 让这个容器占据剩余空间 */
+            min-width: 250px;
+            /* 最小宽度 */
+            max-width: 350px;
+            /* 限制最大宽度 */
+            padding-right: 10px;
+            padding-left: 10px;
             box-sizing: border-box;
             overflow-y: auto;
-            max-height: calc(200vh - 180px);
+            max-height: calc(100vh + 100px);
+            /* 视口高度减去body padding */
+            margin: 10;
+            /* 移除，由main的gap控制 */
         }
 
+        /* 朝代分类卡片 */
         .dynasty-category {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            border-radius: 10px;
-            background-color: #f8f8f8;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid #eee;
-            width: 80%;
+            font-family: 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            border-radius: 12px;
+            background-color: #ffffff;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            padding: 25px;
+            margin-bottom: 25px;
+            /* 增加卡片间距 */
+            border: 1px;
+            /* 移除边框 */
+            width: 100%;
+            /* 占据父容器全部宽度 */
+            box-sizing: border-box;
             overflow: hidden;
-            /* 防止内容溢出 */
         }
 
         .dynasty-category h2 {
-            color: #333;
-            font-size: 1.2em;
-            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1.4em;
+            /* 适当放大 */
+            font-weight: 700;
             margin-top: 0;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             border-bottom: 2px solid #e0e0e0;
-            padding-bottom: 10px;
+            padding-bottom: 12px;
             position: relative;
+            text-align: left;
+            /* 左对齐 */
         }
 
+        /* 朝代分类标题下划线 */
         .dynasty-category h2::after {
             content: '';
             position: absolute;
-            left: 50%;
+            left: 0;
+            /* 左对齐 */
             bottom: -2px;
-            transform: translateX(-50%);
+            width: 60px;
+            /* 更短、更精致的下划线 */
+            height: 3px;
             background-color: #5a5a5a;
             border-radius: 2px;
+            transform: none;
+            /* 移除translateX */
         }
 
+        /* 朝代列表容器 */
         .reign {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
-            padding-top: 10px;
+            gap: 6px;
+            /* 减小间距，使更多元素在一行 */
+            padding-top: 15px;
         }
 
+        /* 朝代链接项 */
         .reign-item-link {
             display: inline-block;
-            color: #5a5a5a;
-            padding: 8px 15px;
+            color: #555;
+            padding: 9px 18px;
+            /* 增加内边距 */
             text-decoration: none;
             font-weight: 500;
-            font-size: 1.05em;
-            transition: color 0.3s ease, background-color 0.3s ease, transform 0.2s ease;
-            border-radius: 5px;
+            font-size: 1em;
+            transition: color 0.3s ease, background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            border-radius: 6px;
+            /* 更圆润的边角 */
             position: relative;
+
         }
 
+        /* 朝代链接悬停效果 */
         .reign-item-link:hover {
-            color: #000;
-            background-color: #e9e9e9;
-            transform: translateY(-1px);
-            /* 轻微上浮效果 */
+            color: #2c3e50;
+            background-color: #DCDCDC;
+            /* 悬停时更深一点的背景 */
+            transform: translateY(-2px);
+            /* 更明显的上浮 */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            /* 悬停时阴影更明显 */
         }
 
+        /* 调整特定ID的宽度，确保响应式行为 */
         #reignInfoContainer {
-            width: 500px;
+            width: auto;
+            /* 让flex box控制宽度 */
+            max-width: 800px;
+            /* 保持最大宽度 */
         }
 
         #reignInfoLoader {
-            padding-left: 10px;
-            width: 500px;
+            padding-left: 0;
+            /* 移除 */
+            width: auto;
+            /* 让flex box控制宽度 */
+        }
+
+
+        /* 媒体查询 - 响应式设计 */
+        @media (max-width: 992px) {
+            main {
+                flex-direction: column;
+                /* 小屏幕堆叠 */
+                align-items: center;
+                /* 居中对齐 */
+            }
+
+            #reignInfoContainer,
+            .all-reigns {
+                width: 100%;
+                max-width: 600px;
+                /* 调整最大宽度 */
+                margin-bottom: 25px;
+                /* 堆叠时增加底部间距 */
+            }
+
+            #reignInfoContainer {
+                padding: 25px;
+            }
+
+            .dynasty-category {
+                padding: 25px;
+            }
+
+            .reign-head h1 {
+                font-size: 2.2em;
+            }
+
+            .reign-data h2 {
+                font-size: 1.6em;
+            }
+        }
+
+        @media (max-width: 576px) {
+            body {
+                padding: 15px;
+            }
+
+            #content-area {
+                padding: 0 10px;
+            }
+
+            #reignInfoContainer,
+            .all-reigns {
+                max-width: 100%;
+                /* 更小屏幕下全宽 */
+                padding: 20px;
+            }
+
+            .reign-head h1 {
+                font-size: 1.8em;
+            }
+
+            .reign-head .reign-period {
+                font-size: 0.75em;
+            }
+
+            .reign-data h2 {
+                font-size: 1.4em;
+            }
+
+            .reign-item-link {
+                padding: 7px 12px;
+                font-size: 0.95em;
+            }
         }
     </style>
     <pb-custom-form class="facets" url="api/search/reign-facets" event="pb-results-received" subscribe="transcription"

@@ -416,16 +416,17 @@ declare function api:characters_new($request as map(*)) {
     let $query := $request?parameters?search
     let $start := if (exists($request?parameters?start)) then xs:double($request?parameters?start) else 1
     let $limit := if (exists($request?parameters?limit)) then xs:double($request?parameters?limit) else 50
-    
-    let $character-table :=
+    let $options := query:options(())
+
+    let $chars :=
         try {
-            doc($config:data-root || '/catalog/characters_table.xml')/character/char
+            collection($config:data-catalog)/character/char-entry
         } catch * {
             error(xs:QName("file-not-found"), "The precomputed character file does not exist.")
         }
-    
+
     let $filtered-characters :=
-        for $char in $character-table
+        for $char in $chars
         let $character := fn:string($char/char)
         let $inscription_title := fn:string($char/title_zh) || fn:string($char/title_en)
         let $image := fn:string($char/image)
@@ -604,6 +605,20 @@ declare function api:catalog-facets($request as map(*)) {
 declare function api:char-facets($request as map(*)) {
     
     let $hits := session:get-attribute($config:session-prefix || ".characters")
+    where count($hits) > 0
+    return
+        <div>
+        {
+            for $config in $config:char-facets?*
+            return
+                facets:display($config, $hits)
+        }
+        </div>
+};
+
+declare function api:char-table-facets($request as map(*)) {
+    
+    let $hits := session:get-attribute($config:session-prefix || ".characters-table")
     where count($hits) > 0
     return
         <div>
@@ -1250,8 +1265,8 @@ declare function api:place-info($request as map(*)) {
                 {
                   if ($wiki-link) then
                     <div class="wiki-link">
-                      <h2>Wikipedia:</h2>
-                      <p><a href="{$wiki-link}" target="_blank">{$name_zh}</a></p>
+                      <h2>Authority Links:</h2>
+                      <p><a href="{$wiki-link}" target="_blank">Wikipedia</a></p>
                     </div>
                   else ()
                 }
@@ -1310,47 +1325,75 @@ declare function api:reign-info($request as map(*)) {
             concat('(? - ', $dynasty_to, ')')
         else
             ''
+let $mentioned_in_catalog_raw := string($reign/mentioned_in_catalog)
+let $catalog_sources := tokenize($mentioned_in_catalog_raw, ',') ! normalize-space(.)
 
-    let $mentioned_in_raw := string($reign/mentioned_in)
-    let $sources := tokenize($mentioned_in_raw, ',') ! normalize-space(.)
+let $mentioned_in_TEI_raw := string($reign/mentioned_in_TEI)
+let $tei_sources := tokenize($mentioned_in_TEI_raw, ',') ! normalize-space(.)
 
-    return
-        <div class="reign-details">
-            <div class="reign-head">
-                <h1>
-                    {$reign_name_zh} 
-                    {if ($reign_period != '') then <span class="reign-period">{$reign_period}</span> else ()}
-                </h1>
-                {if ($dynasty_name_zh != '' or $dynasty_name_en != '') then
-                    <p class="dynasty-info">
-                        Dynasty: 
-                        {if ($dynasty_name_zh != '') then <span>{$dynasty_name_zh} </span> else ()}
-                        {if ($dynasty_name_en != '') then <span class="dynasty-en">({$dynasty_name_en}) </span> else ()}
-                        {if ($dynasty_period != '') then <span class="dynasty-period">{$dynasty_period}</span> else ()}
-                    </p>
-                else ()}
-            </div>
-
-            <div class="reign-data">
-                <h2>Mentioned in:</h2>
-                {
-                    if (exists($sources) and $sources[1] != '') then
-                        <ul>
-                        {
-                            for $source in $sources
-                            let $doc := collection($config:data-catalog)/catalog:object[@xml:id=string($source)]
-                            let $title := $doc/catalog:header/catalog:title[1] 
-                            let $label := if (exists($title)) then string($title) else $source 
-                            return <li><a href="inscriptions/{$source}" target="_blank">{$label}</a></li> 
-                        }
-                        </ul>
-                    else
-                        <p>Never mentioned</p>
-                }
-            </div>
-            
-           
+return
+    <div class="reign-details">
+        <div class="reign-head">
+            <h1>
+                {$reign_name_zh}
+                {if ($reign_period != '') then <span class="reign-period">{$reign_period}</span> else ()}
+            </h1>
+            {if ($dynasty_name_zh != '' or $dynasty_name_en != '') then
+                <p class="dynasty-info">
+                    Dynasty:
+                    {if ($dynasty_name_zh != '') then <span>{$dynasty_name_zh} </span> else ()}
+                    {if ($dynasty_name_en != '') then <span class="dynasty-en">({$dynasty_name_en}) </span> else ()}
+                    {if ($dynasty_period != '') then <span class="dynasty-period">{$dynasty_period}</span> else ()}
+                </p>
+            else ()}
         </div>
+
+        <div class="reign-data">
+            <h2>Mentioned in:</h2>
+
+            <h3>Inscription catalogs:</h3>
+            {
+                if (exists($catalog_sources) and $catalog_sources[1] != '') then
+                    <ul>
+                    {
+                        for $source in $catalog_sources
+                        let $doc := collection($config:data-catalog)/catalog:object[@xml:id=string($source)]
+                        let $title := $doc/catalog:header/catalog:title[1]
+                        let $label := if (exists($title)) then string($title) else $source
+                        return <li><a href="inscriptions/{$source}" target="_blank">{$label} ({$source})</a></li>
+                    }
+                    </ul>
+                else
+                    <ul>None</ul>
+            }
+
+            <h3>Research articles:</h3>
+            {
+                if (exists($tei_sources) and $tei_sources[1] != '') then
+                    <ul>
+                    {
+                        for $source in $tei_sources
+                        let $title_en := collection($config:data-publication)//tei:text[@xml:id = string($source)]/tei:body/tei:div[@xml:lang="en"]/tei:head[1]
+                        let $title_zh := collection($config:data-publication)//tei:text[@xml:id = string($source)]/tei:body/tei:div[@xml:lang="zh"]/tei:head[1]
+                        let $title :=
+                        if (exists($title_en)) then
+                            if (exists($title_zh)) then
+                                string($title_en) || " " || string($title_zh)
+                            else
+                                string($title_en)
+                        else if (exists($title_zh)) then
+                            string($title_zh)
+                        else
+                            ()
+                        let $label := if (exists($title)) then string($title) else $source
+                        return <li><a href="articles/{$source}" target="_blank">{$label}</a></li>
+                    }
+                    </ul>
+                else
+                    <ul>None</ul>
+            }
+        </div>
+    </div>
 };
 
 declare function api:impressum($request as map(*)) {
