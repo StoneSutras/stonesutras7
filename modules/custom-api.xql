@@ -1701,28 +1701,11 @@ declare function api:sutras($request as map(*)) {
         order by lower-case($final_title)
 
         return <li>{$final_title} (ID is {$id})</li>
-};
-
-declare function api:texts($request as map(*)) {
-  let $docs := collection($config:data-docs)//tei:text
-  for $doc in $docs
-    let $text-id := string($doc/@xml:id)
-    for $witness in $doc//tei:witness
-      where $witness/@sigil[starts-with(., 'T_')]
-      let $witDetail := $witness/tei:witDetail
-      let $witness-content := normalize-space($witDetail/string())
-      let $sigil := string($witness/@sigil)
-      return
-        <div>
-          <rdg-wit-attribute>{$sigil}, </rdg-wit-attribute>
-          <text-xml-id>{$text-id}, </text-xml-id>
-          <related-witnesses>{$witDetail}</related-witnesses>
-        </div>
 };:)
 
 declare function api:texts-table($request as map(*)) {
     let $lang := replace($request?parameters?language, "^([^_-]+)[_-].*$", "$1")
-    let $query := $request?parameters?search
+    let $query := normalize-space(lower-case($request?parameters?search))
     let $start := if (exists($request?parameters?start)) then xs:integer($request?parameters?start) else 1
     let $limit := if (exists($request?parameters?limit)) then xs:integer($request?parameters?limit) else 100
 
@@ -1769,6 +1752,12 @@ declare function api:texts-table($request as map(*)) {
             let $formatted-Tnumber := upper-case(concat($padded-number, $suffix))
             let $Tnumber := "T_" || string($formatted-Tnumber)
             let $heading-text := $heading-map(upper-case($formatted-Tnumber))
+            
+            where starts-with($taisho-id, 'T_') and (
+            empty($query) or
+            contains(lower-case($Tnumber), $query) or
+            contains(lower-case(string($heading-text)), $query)
+        )
             return map {
                 "Tnumber": $taisho-id,
                 "inscription_item": concat('<a href="inscriptions/', $entry?xml-id, '" target="_blank" rel="noopener noreferrer">', $entry?xml-id, '</a>'),
