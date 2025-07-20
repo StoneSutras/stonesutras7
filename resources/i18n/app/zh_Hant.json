@@ -23,7 +23,13 @@
         "characters": "刻字",
         "persons": "人物",
         "indices":"索引",
-        "about": "關於"
+        "about": "關於",
+        "places":"地點",
+        "texts": "文本",
+        "time": "時代",
+        "images": "圖像",
+        "research-images":"研究圖像",
+        "catalog-images":"編目圖像"
     },
     "inscriptions":"銘刻",
     "errors": {

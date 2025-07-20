@@ -1,9 +1,27 @@
-<main>
-    <pb-custom-form id="options" auto-submit="paper-input,paper-icon-button" emit="transcription">
-        <paper-input id="query" name="search" label="Search for persons">
-            <paper-icon-button icon="search" slot="suffix" />
-        </paper-input>
-    </pb-custom-form>
-    <pb-split-list url="api/persons" subforms="#options" selected="All" emit="transcription"
-        subscribe="transcription" />
-</main>
+<div>
+    <style>
+        main {
+            align-items: center;
+        }
+        
+        #content-area{
+            margin: 0 0;
+        }
+        
+        #options {
+            margin-bottom: 15px;
+        }
+        
+    
+        #list span {
+            line-height: 2; 
+            display: inline-block; 
+        }
+    </style>
+        <pb-custom-form id="options" auto-submit="paper-input,paper-icon-button" emit="transcription">
+            <paper-input id="query" name="search" label="Search for persons">
+                <paper-icon-button icon="search" slot="suffix"/>
+            </paper-input>
+        </pb-custom-form>
+        <pb-split-list id="list" url="api/persons" subforms="#options" selected="All" emit="transcription" subscribe="transcription"/>
+    </div>

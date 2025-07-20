@@ -340,18 +340,17 @@ declare variable $config:clinks-facets := [
     }
 ];
 
-
 declare variable $config:reign-facets := [
     map {
-        "dimension": "dynasty_en",
-        "heading": "Dynasty",
+        "dimension": "period_en",
+        "heading": "Period",
         "max": 50,
         "hierarchical": false(),
         "output": function($label, $lang) {
             let $lang := replace($lang, "^([^_]+)_.*$", "$1")
+            let $display-label := replace($label, "^\d{2}_", "")
             return
-                $label
-
+                $display-label
         }
     }
 ];

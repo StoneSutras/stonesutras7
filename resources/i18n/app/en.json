@@ -22,7 +22,12 @@
         "persons": "Persons",
         "indices":"Indices",
         "about": "About",
-        "places":"Places"
+        "places":"Places",
+        "texts": "Texts",
+        "time": "Time",
+        "images": "Images",
+        "research-images":"Research Images",
+        "catalog-images":"Cataalog Images"
     },
     "inscriptions": "Inscriptions",
     "errors": {

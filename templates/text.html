@@ -15,13 +15,13 @@
         <link rel="stylesheet" type="text/css" href="resources/fonts/font.css"/>
         <link rel="stylesheet" href="resources/css/stonesutras-theme.css"/>
         <script type="module" src="pb-components-bundle.js" data-template="pages:load-components"/>
-        <style>
-        :root {
-    --primary-color: #555;
-    --secondary-color: #2ecc71;
+        <style>/* Custom Properties for easy theming */
+:root {
+    --primary-color: #555; 
+    --secondary-color: #2ecc71; 
     --text-color: #333;
     --heading-color: #2c3e50;
-    --background-color: #f0f2f5;
+    --background-color: #f9f9f9;
     --card-background: #ffffff;
     --border-color: #e0e0e0;
     --spacing-xs: 8px;
@@ -41,101 +41,48 @@ body {
     color: var(--text-color);
     background-color: var(--background-color);
     margin: 0;
-    padding: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
 }
 
-[unresolved] {
-    opacity: 0;
+#TextLoader {
+    margin: 0 auto;
 }
-
-pb-page {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-main {
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-    padding: var(--spacing-lg);
-    box-sizing: border-box;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    
-}
-
-pb-load {
-    margin: auto;
-    display: block;
-    min-height: unset;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #999;
-    background-color: var(--card-background);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-light);
-    padding: var(--spacing-md);
-    max-width: 1200px;
-}
-
-.person.body > div:first-of-type {
-    max-width: 800px;
-    margin: var(--spacing-lg) auto;
+/* --- Container Layout --- */
+.text-details-container {
+    max-width: 900px; 
+    margin: var(--spacing-lg) auto; 
     background-color: var(--card-background);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-medium);
     padding: var(--spacing-lg);
     display: flex;
-    flex-direction: column;
-    gap: var(--spacing-lg);
+    flex-direction: column; /* Stack sections vertically */
+    gap: var(--spacing-lg); /* Space between sections */
 }
 
-.person-head {
+/* --- Header Styling --- */
+.text-details-header {
     padding-bottom: var(--spacing-sm);
     border-bottom: 1px solid var(--border-color);
-    margin-bottom: var(--spacing-md);
-    text-align: center;
+    margin-bottom: var(--spacing-md); /* Space below header */
 }
 
-.person-head h1 {
-    font-size: 2.8em;
+.t-number-title {
+    font-size: 2.2em; /* Larger title */
     color: var(--heading-color);
-    margin: 0 0 var(--spacing-xs);
+    margin: 0; /* Remove default margin */
     line-height: 1.2;
-    font-family: var(--font-family-serif);
+    font-family: var(--font-family-serif); /* Use a serif font for titles */
 }
 
-.person-head p {
-    font-size: 1em;
-    color: #666;
-    margin: 0;
-}
-
-.person-details {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-lg);
-}
-
-.person-links,
-.person-mentions,
-.person-variants,
-.person-date  {
+/* --- Section Styling --- */
+.external-links-section,
+.details-section {
     background-color: var(--card-background);
     border-radius: var(--border-radius);
     padding: var(--spacing-md);
-    border: 1px solid var(--border-color);
-    box-shadow: var(--shadow-light);
-    max-height: 5000px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--border-color); /* Subtle border for sections */
 }
 
 h2 {
@@ -143,61 +90,69 @@ h2 {
     color: var(--heading-color);
     margin-top: 0;
     margin-bottom: var(--spacing-sm);
-    border-bottom: 2px solid var(--primary-color);
-    display: inline-block;
+    border-bottom: 2px solid var(--primary-color); /* Highlight section titles */
+    display: inline-block; /* Shrink border to text width */
     padding-bottom: 4px;
     font-family: var(--font-family-sans);
 }
 
-ul {
-    list-style: none;
+/* --- List Styling --- */
+.link-list,
+.inscriptions-list {
+    list-style: none; /* Remove default bullet points */
     padding: 0;
     margin: 0;
+    display: grid; /* Use grid for flexible list layout */
+    gap: var(--spacing-xs); /* Space between list items */
 }
 
-li {
+.link-list li,
+.inscriptions-list li {
     padding: var(--spacing-xs) 0;
-    border-bottom: 1px dashed var(--border-color);
+    border-bottom: 1px dashed var(--border-color); /* Subtle separator */
 }
 
-li:last-child {
-    border-bottom: none;
+.link-list li:last-child,
+.inscriptions-list li:last-child {
+    border-bottom: none; /* No border for the last item */
 }
 
+/* --- Link Styling --- */
 a {
     color: var(--primary-color);
-    text-decoration: none;
+    text-decoration: none; /* Remove underline */
     transition: color 0.3s ease, text-decoration 0.3s ease;
 }
 
 a:hover,
 a:focus {
+    color: var(--secondary-color);
+    text-decoration: underline; /* Underline on hover for clarity */
 }
 
-.person-links p {
-    margin: var(--spacing-xs) 0;
+.inscription-item-label {
+    font-weight: bold;
+    color: var(--heading-color);
 }
 
+/* --- Responsive Adjustments --- */
 @media (max-width: 768px) {
-    main {
-        padding: var(--spacing-md) var(--spacing-sm);
-    }
-
-    .person.body > div:first-of-type {
-        margin: var(--spacing-md) var(--spacing-sm);
+    .text-details-container {
+        margin: var(--spacing-md) var(--spacing-sm); /* Smaller margins on smaller screens */
         padding: var(--spacing-md);
     }
 
-    .person-head h1 {
-        font-size: 2.2em;
-    }
-
-    .person-details {
-        flex-direction: column;
+    .t-number-title {
+        font-size: 1.8em;
     }
 
     h2 {
         font-size: 1.4em;
+    }
+
+    .link-list,
+    .inscriptions-list {
+        grid-template-columns: 1fr; /* Stack items vertically on small screens */
     }
 }
 
@@ -206,17 +161,17 @@ a:focus {
         padding: var(--spacing-sm);
     }
 
-    .person.body > div:first-of-type {
+    .text-details-container {
         padding: var(--spacing-sm);
     }
 
-    .person-head h1 {
-        font-size: 1.8em;
+    .t-number-title {
+        font-size: 1.6em;
     }
-}
-</style>
-    </head>
+}</style>
 
+    </head>
+    
     <body class="person">
         <pb-page data-template="pages:pb-page" unresolved="unresolved" locales="resources/i18n/{{ns}}/{{lng}}.json" require-language="" supported-languages="en, zh_Hant">
             <script id="appConfig" type="application/json" data-template="pages:parse-params">
@@ -224,25 +179,24 @@ a:focus {
                     "app": "${app}"
                 }
             </script>
-
             <script>
                 const urlParams = new URLSearchParams(window.location.search);
-                const id = urlParams.get('id'); 
-                if (id) {
+                const Tnumber = urlParams.get('Tnumber'); 
+                if (Tnumber) {
                     const pbLoad = document.querySelector('pb-load');
                     if (pbLoad) {
-                        pbLoad.setAttribute('url', `person/${id}`);
+                        pbLoad.setAttribute('url', `text/${Tnumber}`);
                     }
                 }
             </script>
             <script>
               document.addEventListener('DOMContentLoaded', function () {
                 const urlParams = new URLSearchParams(window.location.search);
-                const id = urlParams.get('id');
+                const Tnumber = urlParams.get('Tnumber');
                 
-                if (id) {
-                  const loader = document.getElementById('personLoader');
-                  loader.url = `person/${id}`; 
+                if (Tnumber) {
+                  const loader = document.getElementById('TextLoader');
+                  loader.url = `text/${Tnumber}`; 
 
                 }
               });
@@ -255,17 +209,16 @@ a:focus {
                         <app-toolbar data-template="lib:include" data-template-path="templates/menu.html"/>
                         <app-toolbar data-template="lib:include" data-template-path="templates/toolbar.html">
                             <p data-target="breadcrumbs" class="breadcrumbs">
-                                <pb-i18n key="menu.persons">Person</pb-i18n>
+                                <pb-i18n key="menu.text">Text</pb-i18n>
                             </p>
                         </app-toolbar>
                     </app-header>
                     <main>
-                        <pb-load id="personLoader" url="" expand="" auto="">Loading...
+                        <pb-load id="TextLoader" url="" expand="" auto="">Loading...
                         </pb-load>
                     </main>
                     </app-header-layout>
             </app-drawer-layout>
         </pb-page>
-        <div class="splash"/>
     </body>
 </html>

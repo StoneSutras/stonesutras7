@@ -1024,10 +1024,10 @@ declare function api:person-info($request as map(*)) {
                 <p>(Language: {$name_lang})</p>
             </div>
             <div class="person-details">
-                <div class="person-variants">
+                
                 {
                     if (exists($variants)) then
-                        <div>
+                        <div class="person-variants">
                             <h2>Other Names:</h2>
                             <ul>
                                 {for $v in $variants return <li>{$v}</li>}
@@ -1035,17 +1035,15 @@ declare function api:person-info($request as map(*)) {
                         </div>
                     else ()
                 }
-                </div>
-                <div class="person-date">
                 {
                     if (exists($dates)) then
-                            <div>
+                            <div class="person-date">
                                 <h2>Date:</h2>
                                 <p>{string-join($dates, ", ")}</p>
                             </div>
                     else ()
                 }
-                </div>
+                
                 { api:person-links($id) } 
                 { api:get-mentioned-info($id) }
             </div>
@@ -1075,9 +1073,9 @@ declare function api:person-links($id as xs:string) as element(div)? {
     
     return 
         if ($has_links) then
-            <div>
+            <div class="person-links">
             <h2>Links:</h2>
-                <div class="person-links">
+                <div>
                     <div>
                     {
                         if (string-length($viaf_id) > 0) then
@@ -1170,7 +1168,7 @@ declare function api:get-mentioned-info($id as xs:string) as element(div) {
                 </a>
             </li>
     return
-        <div>
+        <div class="person-mentions">
             {
                 if ($is_mentioned_in_biblio = 'Y') then
                     <div>
@@ -1502,7 +1500,7 @@ declare function api:tei-figures($request as map(*)) {
       return
         <div class="image-container">
           <pb-popover theme="light">
-            <img src="{$image-url}" alt="Figure" loading="lazy"/>
+            <a href="{$image-url}" target="_blank"><img src="{$image-url}" alt="Figure" loading="lazy"/></a>
             <template slot="alternate">
               <div class="character-details">
                 <p>See: { $links }</p>
@@ -1529,18 +1527,47 @@ declare function api:catalog-links($request as map(*)) {
   let $lang := replace($request?parameters?language, "^([^_-]+)[_-].*$", "$1")
   let $options := query:options(())
 
-  let $links := collection($config:data-catalog)//catalog:link[ (@type = "rubbing" or @type = "stone") and
-    ancestor::catalog:object  and
+  let $links := collection($config:data-catalog)//catalog:link[
+    (@type = "rubbing" or @type = "stone") and
+    ancestor::catalog:object and
     ft:query(., "type:*", $options) and
     not(ends-with(lower-case(@xlink:href), '.swf')) and
     not(ends-with(lower-case(@xlink:href), '.svg')) and
-    string(@xlink:href) != "" and 
+    string(@xlink:href) != "" and
     (
-        normalize-space(self::catalog:link/catalog:caption[@xml:lang='en']) ne '' or 
-        normalize-space(self::catalog:link/catalog:caption[@xml:lang='zh']) ne ''   
+      normalize-space(self::catalog:link/catalog:caption[@xml:lang='en']) ne '' or
+      normalize-space(self::catalog:link/catalog:caption[@xml:lang='zh']) ne ''
+    ) and
+    (: rule out those unpublished yet and old :)
+    not(
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'DF') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'CS') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'Yi') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'JKB') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'JY') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'LJ') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'MD') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'XL') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'GM') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'SF') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'JCh') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'CW') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'LGj') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'GQ') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'BSS') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'QH') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'QL') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'DAI') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'TP') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'YYS') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'TP') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'FM') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'HR') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'TM') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'NY') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'XH') or
+      ends-with(lower-case(ancestor::catalog:object/@xml:id/string()), 'old')
     )
-   
-
   ]
   let $nil := session:set-attribute($config:session-prefix || ".clinks", $links)
 
@@ -1560,14 +1587,14 @@ declare function api:catalog-links($request as map(*)) {
         else if (ends-with(lower-case($original-href), '.jpeg')) then 'jpg'
         else if (ends-with(lower-case($original-href), '.png')) then 'png'
         else if (ends-with(lower-case($original-href), '.gif')) then 'gif'
-        else 'jpg' 
-        
+        else 'jpg'
+
       let $effective-href := concat($base-filename, '.', $extension)
 
       let $xlink := string($effective-href) (: DEBUG 用，显示有效 href :)
       let $xml-id := $link/ancestor::catalog:object/@xml:id/string()
 
-      let $image-url := concat($image-base-url, $effective-href) 
+      let $image-url := concat($image-base-url, $effective-href)
 
       let $caption-zh := $link/catalog:caption[@xml:lang = 'zh']/string()
       let $caption-en := $link/catalog:caption[@xml:lang = 'en']/string()
@@ -1577,7 +1604,7 @@ declare function api:catalog-links($request as map(*)) {
       return
         <div class="image-container">
           <pb-popover theme="light">
-            <img src="{$image-url}" alt="Figure for {$xml-id}" loading="lazy"/>
+            <a href="{$image-url}" target="_blank"><img src="{$image-url}" alt="Figure for {$xml-id}" loading="lazy"/></a>
             <template slot="alternate">
               <div class="image-details">
                 <p>DEBUG xlink:href: {$xlink}</p>
@@ -1705,7 +1732,7 @@ declare function api:texts-table($request as map(*)) {
         return map:entry(upper-case($h/@number), string($h))
     )
 
-    let $refs := 
+    let $refs :=
         for $object in collection($config:data-catalog)/catalog:object
         let $xml-id := string($object/@xml:id)
         for $ref in $object/catalog:references/catalog:ref[@type="taisho"]
@@ -1714,68 +1741,160 @@ declare function api:texts-table($request as map(*)) {
             "xml-id": $xml-id
         }
 
-    let $filtered-references :=
+    let $processed-references :=
         for $entry in $refs
             let $ref := $entry?ref
             let $taisho-id := upper-case(string($ref/@xlink:href))
             let $num-part := replace($taisho-id, "^T_([^0-9]*)([0-9.]+).*", "$2")
-            let $number-sort-key := 
+            let $number-sort-key :=
                 if (matches($num-part, "^[0-9.]+$")) then xs:double($num-part) else 9999999
             order by $number-sort-key
             where starts-with($taisho-id, 'T_')
-            let $page := string-join($ref/catalog:pages ! normalize-space(.), ", ")
             let $cleaned-Tnumber := replace($taisho-id, "^T_", "")
             (: 提取前面的整数部分，不包括小数点或字母 :)
             let $int-part := replace($cleaned-Tnumber, "^([0-9]+).*", "$1")
             (: 提取字母后缀（如有），忽略小数部分 :)
-            let $suffix := 
-                if (matches($cleaned-Tnumber, "^[0-9]+(?:\.[0-9]+)?([A-Z])$")) 
-                then replace($cleaned-Tnumber, "^[0-9]+(?:\.[0-9]+)?([A-Z])$", "$1") 
+            let $suffix :=
+                if (matches($cleaned-Tnumber, "^[0-9]+(?:\.[0-9]+)?([A-Z])$"))
+                then replace($cleaned-Tnumber, "^[0-9]+(?:\.[0-9]+)?([A-Z])$", "$1")
                 else ""
-            
+
             let $padded-number :=
                 if (string-length($int-part) = 4) then $int-part
                 else if (string-length($int-part) = 3) then concat("0", $int-part)
                 else if (string-length($int-part) = 2) then concat("00", $int-part)
                 else if (string-length($int-part) = 1) then concat("000", $int-part)
                 else $int-part
-            
+
             let $formatted-Tnumber := upper-case(concat($padded-number, $suffix))
-
+            let $Tnumber := "T_" || string($formatted-Tnumber)
             let $heading-text := $heading-map(upper-case($formatted-Tnumber))
-
             return map {
                 "Tnumber": $taisho-id,
-                "inscription": concat('<a href="inscriptions/', $entry?xml-id, '" target="_blank" rel="noopener noreferrer">', $entry?xml-id, '</a>'),
-                "page": $page,
-                "sutras_title":  <pb-popover theme="light">
-                              <span>
-                                {$heading-text}  <svg xmlns="http://www.w3.org/2000/svg" 
-                                     style="width: 14px; height: 14px; margin-left: 4px; vertical-align: middle;" 
-                                     fill="currentColor" viewBox="0 0 16 16">
-                                  <path d="M6.354 5.5H4a2.5 2.5 0 0 0 0 5h2.354a.5.5 0 0 1 0 1H4a3.5 3.5 0 0 1 0-7h2.354a.5.5 0 0 1 0 1z"/>
-                                  <path d="M9.646 10.5H12a2.5 2.5 0 0 0 0-5H9.646a.5.5 0 0 1 0-1H12a3.5 3.5 0 0 1 0 7H9.646a.5.5 0 0 1 0-1z"/>
-                                  <path d="M4.879 8.5a.5.5 0 0 1 0-1h6.242a.5.5 0 0 1 0 1H4.879z"/>
-                                </svg>
-                              </span>
-                              <template slot="alternate">
-                                <div class="popover-links">
-                                  <p><a href="http://21dzk.l.u-tokyo.ac.jp/SAT/T{$formatted-Tnumber}.html" target="_blank" rel="noopener noreferrer">SAT</a></p>
-                                  <p><a href="https://mbingenheimer.net/tools/bibls/transbibl.html#T{$formatted-Tnumber}" target="_blank" rel="noopener noreferrer">Western transl.</a></p>
-                                  <p><a href="https://dazangthings.nz/cbc/text/T{$formatted-Tnumber}" target="_blank" rel="noopener noreferrer">CBC@</a></p>
-                                  <p><a href="https://cbetaonline.dila.edu.tw/zh/T{$formatted-Tnumber}" target="_blank" rel="noopener noreferrer">Cbeta</a></p>
-                                </div>
-                              </template>
-                            </pb-popover>
-
+                "inscription_item": concat('<a href="inscriptions/', $entry?xml-id, '" target="_blank" rel="noopener noreferrer">', $entry?xml-id, '</a>'),
+                "sutras_title":
+                    <pb-popover theme="light">
+                        <span>
+                            <a href="text.html?Tnumber={$Tnumber}" target="_blank">{$heading-text}</a> <svg xmlns="http://www.w3.org/2000/svg"
+                                style="width: 14px; height: 14px; margin-left: 4px; vertical-align: middle;"
+                                fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M6.354 5.5H4a2.5 2.5 0 0 0 0 5h2.354a.5.5 0 0 1 0 1H4a3.5 3.5 0 0 1 0-7h2.354a.5.5 0 0 1 0 1z"/>
+                                <path d="M9.646 10.5H12a2.5 2.5 0 0 0 0-5H9.646a.5.5 0 0 1 0-1H12a3.5 3.5 0 0 1 0 7H9.646a.5.5 0 0 1 0-1z"/>
+                                <path d="M4.879 8.5a.5.5 0 0 1 0-1h6.242a.5.5 0 0 1 0 1H4.879z"/>
+                            </svg>
+                        </span>
+                        <template slot="alternate">
+                            <div class="popover-links">
+                                <p><a href="https://cbetaonline.dila.edu.tw/zh/T{$formatted-Tnumber}" target="_blank" rel="noopener noreferrer">Cbeta</a></p>
+                                <p><a href="http://21dzk.l.u-tokyo.ac.jp/SAT/T{$formatted-Tnumber}.html" target="_blank" rel="noopener noreferrer">SAT</a></p>
+                                <p><a href="https://dazangthings.nz/cbc/text/T{$formatted-Tnumber}" target="_blank" rel="noopener noreferrer">CBC@</a></p>
+                                <p><a href="https://mbingenheimer.net/tools/bibls/transbibl.html#T{$formatted-Tnumber}" target="_blank" rel="noopener noreferrer">Western transl.</a></p>
+                            </div>
+                        </template>
+                    </pb-popover>
             }
 
-    let $sorted-references := subsequence($filtered-references, $start, $limit)
+    let $grouped-references :=
+        for $ref-map in $processed-references
+        group by $t := $ref-map?Tnumber, $s := $ref-map?sutras_title
+        order by xs:decimal(replace($t, '^.*?([0-9.]+).*$', '$1'))
+        return map {
+            "Tnumber": $t,
+            "sutras_title": $s,
+            "inscription": string-join(distinct-values($ref-map?inscription_item), ", ")
+        }
+
+    let $sorted-and-paginated-results := subsequence($grouped-references, $start, $limit)
 
     return map {
-        "count": count($filtered-references),
-        "results": array { $sorted-references }
+        "count": count($grouped-references),
+        "results": array { $sorted-and-paginated-results }
     }
+};
+
+declare function api:text-details($request as map(*)) {
+    let $target-tnumber := upper-case($request?parameters?Tnumber)
+    let $Tnumber-without-T_ := replace($target-tnumber, '^T_', '')
+
+    let $heading := collection($config:data-docs)/Taisho/heading[@number=$Tnumber-without-T_]
+
+    let $target-int-part := replace($Tnumber-without-T_, "^([0-9]+).*", "$1")
+    let $target-suffix :=
+        if (matches($Tnumber-without-T_, "^[0-9]+(?:\.[0-9]+)?([A-Z])$"))
+        then replace($Tnumber-without-T_, "^[0-9]+(?:\.[0-9]+)?([A-Z])$", "$1")
+        else ""
+    let $target-padded-number :=
+        if (string-length($target-int-part) = 4) then $target-int-part
+        else if (string-length($target-int-part) = 3) then concat("0", $target-int-part)
+        else if (string-length($target-int-part) = 2) then concat("00", $target-int-part)
+        else if (string-length($target-int-part) = 1) then concat("000", $target-int-part)
+        else $target-int-part
+    let $formatted-target-tnumber := upper-case(concat($target-padded-number, $target-suffix))
+
+    let $refs :=
+        for $object in collection($config:data-catalog)/catalog:object
+        let $xml-id := string($object/@xml:id)
+        for $ref in $object/catalog:references/catalog:ref[@type="taisho"]
+
+        let $current-ref-href := upper-case(string($ref/@xlink:href))
+        let $cleaned-ref-href := replace($current-ref-href, "^T_", "")
+        let $ref-int-part := replace($cleaned-ref-href, "^([0-9]+).*", "$1")
+        let $ref-suffix :=
+            if (matches($cleaned-ref-href, "^[0-9]+(?:\.[0-9]+)?([A-Z])$"))
+            then replace($cleaned-ref-href, "^[0-9]+(?:\.[0-9]+)?([A-Z])$", "$1")
+            else ""
+        let $ref-padded-number :=
+            if (string-length($ref-int-part) = 4) then $ref-int-part
+            else if (string-length($ref-int-part) = 3) then concat("0", $ref-int-part)
+            else if (string-length($ref-int-part) = 2) then concat("00", $ref-int-part)
+            else if (string-length($ref-int-part) = 1) then concat("000", $ref-int-part)
+            else $ref-int-part
+        let $normalized-ref-tnumber := upper-case(concat("T_", $ref-padded-number, $ref-suffix))
+        where $normalized-ref-tnumber = $target-tnumber
+
+        return map {
+            "ref": $ref,
+            "xml-id": $xml-id
+        }
+
+    let $title-text := $heading
+
+    return
+        <div class="text-details-container">
+            <header class="text-details-header">
+                <h1 class="t-number-title">{$target-tnumber} - {$title-text}</h1>
+            </header>
+
+            <section class="external-links-section">
+                <h2>External links</h2>
+                <ul class="link-list">
+                    <li><a href="{concat('https://cbetaonline.dila.edu.tw/zh/', $formatted-target-tnumber)}" target="_blank" rel="noopener noreferrer">Cbeta</a></li>
+                    <li><a href="{concat('http://21dzk.l.u-tokyo.ac.jp/SAT/', $formatted-target-tnumber, '.html')}" target="_blank" rel="noopener noreferrer">SAT</a></li>
+                    <li><a href="{concat('https://dazangthings.nz/cbc/text/', $formatted-target-tnumber)}" target="_blank" rel="noopener noreferrer">CBC@</a></li>
+                    <li><a href="{concat('https://mbingenheimer.net/tools/bibls/transbibl.html#T', $formatted-target-tnumber)}" target="_blank" rel="noopener noreferrer">Western transl.</a></li>
+                </ul>
+            </section>
+
+            <section class="details-section">
+                <h2>Inscription</h2>
+                <ul class="inscriptions-list">
+                {
+                    for $item in $refs 
+                    let $inscription-xml-id := $item?xml-id 
+                    let $ref-node := $item?ref 
+                    let $page := string-join($ref-node/catalog:pages ! normalize-space(.), ", ") 
+                    let $doc := collection($config:data-catalog)/catalog:object[@xml:id=string($inscription-xml-id)]
+                    let $title := $doc/catalog:header/catalog:title[1]
+                    return
+                        <li>
+                            <span class="inscription-item-label">Page: {$page}, </span>
+                            <a href="{concat('inscriptions/', $inscription-xml-id)}" target="_blank" rel="noopener noreferrer">{$title} ({$inscription-xml-id})</a>
+                        </li>
+                }
+                </ul>
+            </section>
+        </div>
+
 };
 
 declare function api:reigns($request as map(*)) {
