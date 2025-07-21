@@ -1,35 +1,37 @@
 {
-    "openapi": "3.0.0",
-    "info": {
-        "version": "1.0.0",
-        "title": "Custom API",
-        "description": "This is the place to add your own path endpoints"
-    },
-    "servers": [
-        {
-            "description": "Endpoint for testing on localhost",
-            "url":"http://localhost:8080/exist/apps/stonesutras7"
-        }
-    ],
-    "components": {
-        "securitySchemes": {
-            "basicAuth": {
-                "type": "http",
-                "scheme": "basic"
-            },
-            "cookieAuth": {
-                "type": "apiKey",
-                "name": "teipublisher.com.login",
-                "in": "cookie"
-            }
-        }
-    },
-    "paths": {
+	"openapi": "3.0.0",
+	"info": {
+		"version": "1.0.0",
+		"title": "Custom API",
+		"description": "This is the place to add your own path endpoints"
+	},
+	"servers": [
+		{
+			"description": "Endpoint for testing on localhost",
+			"url": "http://localhost:8080/exist/apps/stonesutras7"
+		}
+	],
+	"components": {
+		"securitySchemes": {
+			"basicAuth": {
+				"type": "http",
+				"scheme": "basic"
+			},
+			"cookieAuth": {
+				"type": "apiKey",
+				"name": "teipublisher.com.login",
+				"in": "cookie"
+			}
+		}
+	},
+	"paths": {
 		"/{id}": {
 			"get": {
 				"summary": "Retrieve the HTML template used for displaying a document",
 				"description": "Get the HTML template associated with the given document. This is called whenever the users tries to view a document. The actual content of the document will then be loaded by the template.",
-				"tags": ["view"],
+				"tags": [
+					"view"
+				],
 				"operationId": "custom:resolve",
 				"x-error-handler": "vapi:handle-error",
 				"parameters": [
@@ -57,7 +59,11 @@
 						"in": "query",
 						"schema": {
 							"type": "string",
-							"enum": ["page", "div", "single"]
+							"enum": [
+								"page",
+								"div",
+								"single"
+							]
 						},
 						"example": "div",
 						"description": "The view type used by the main view which displays the document, e.g. 'page' or 'div'. This has an influence on the generated links, which need to differ when linking to a page rather than a section."
@@ -111,11 +117,13 @@
 				}
 			}
 		},
-        "/inscriptions/{id}": {
+		"/inscriptions/{id}": {
 			"get": {
 				"summary": "Retrieve the HTML template used for displaying a document",
 				"description": "Get the HTML template associated with the given document. This is called whenever the users tries to view a document. The actual content of the document will then be loaded by the template.",
-				"tags": ["view"],
+				"tags": [
+					"view"
+				],
 				"operationId": "custom:resolve",
 				"x-error-handler": "vapi:handle-error",
 				"parameters": [
@@ -143,7 +151,11 @@
 						"in": "query",
 						"schema": {
 							"type": "string",
-							"enum": ["page", "div", "single"]
+							"enum": [
+								"page",
+								"div",
+								"single"
+							]
 						},
 						"example": "div",
 						"description": "The view type used by the main view which displays the document, e.g. 'page' or 'div'. This has an influence on the generated links, which need to differ when linking to a page rather than a section."
@@ -197,29 +209,31 @@
 				}
 			}
 		},
-        "/sites/{site}": {
+		"/sites/{site}": {
 			"get": {
 				"summary": "Retrieve HTML page",
 				"description": "Retrieve an HTML page expanded through eXist templating. This is used to load the top-level HTML pages, e.g. `index.html`.",
-				"tags": ["view"],
+				"tags": [
+					"view"
+				],
 				"operationId": "vapi:html",
 				"x-error-handler": "vapi:handle-error",
 				"parameters": [
-                    {
-                        "name": "site",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
+					{
+						"name": "site",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
 					{
 						"name": "file",
 						"in": "query",
 						"required": true,
 						"schema": {
 							"type": "string",
-                            "default": "site"
+							"default": "site"
 						}
 					}
 				],
@@ -247,11 +261,13 @@
 				}
 			}
 		},
-        "/characters": {
+		"/characters": {
 			"get": {
 				"summary": "Retrieve the HTML template used for displaying a document",
 				"description": "Get the HTML template associated with the given document. This is called whenever the users tries to view a document. The actual content of the document will then be loaded by the template.",
-				"tags": ["view"],
+				"tags": [
+					"view"
+				],
 				"operationId": "vapi:html",
 				"x-error-handler": "vapi:handle-error",
 				"parameters": [
@@ -261,7 +277,7 @@
 						"required": true,
 						"schema": {
 							"type": "string",
-                            "default": "characters"
+							"default": "characters"
 						}
 					}
 				],
@@ -299,11 +315,13 @@
 				}
 			}
 		},
-        "/characters/{id}": {
+		"/characters/{id}": {
 			"get": {
 				"summary": "Retrieve the HTML template used for displaying a document",
 				"description": "Get the HTML template associated with the given document. This is called whenever the users tries to view a document. The actual content of the document will then be loaded by the template.",
-				"tags": ["view"],
+				"tags": [
+					"view"
+				],
 				"operationId": "vapi:html",
 				"x-error-handler": "vapi:handle-error",
 				"parameters": [
@@ -324,7 +342,7 @@
 						"required": true,
 						"schema": {
 							"type": "string",
-                            "default": "char"
+							"default": "char"
 						}
 					}
 				],
@@ -362,10 +380,10 @@
 				}
 			}
 		},
-        "/api/sites": {
-            "get": {
-                "summary": "Get list of sites",
-                "operationId": "api:sites",
+		"/api/sites": {
+			"get": {
+				"summary": "Get list of sites",
+				"operationId": "api:sites",
 				"parameters": [
 					{
 						"name": "language",
@@ -375,24 +393,24 @@
 						}
 					}
 				],
-                "responses": {
-                    "200":{
-                        "description": "List of sites",
-                        "content": {
-                            "text/html":{
-                                "schema": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
+				"responses": {
+					"200": {
+						"description": "List of sites",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/api/articles": {
-            "get": {
-                "summary": "Get list of sites",
-                "operationId": "api:research-articles",
+			"get": {
+				"summary": "Get list of sites",
+				"operationId": "api:research-articles",
 				"parameters": [
 					{
 						"name": "language",
@@ -412,25 +430,27 @@
 						}
 					}
 				],
-                "responses": {
-                    "200":{
-                        "description": "List of sites",
-                        "content": {
-                            "text/html":{
-                                "schema": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
+				"responses": {
+					"200": {
+						"description": "List of sites",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/articles/{id}": {
 			"get": {
 				"summary": "Retrieve the HTML template used for displaying a document",
 				"description": "Get the HTML template associated with the given document. This is called whenever the users tries to view a document. The actual content of the document will then be loaded by the template.",
-				"tags": ["view"],
+				"tags": [
+					"view"
+				],
 				"operationId": "custom:resolve",
 				"parameters": [
 					{
@@ -450,7 +470,7 @@
 						"required": true,
 						"schema": {
 							"type": "string",
-                            "default": "article.html"
+							"default": "article.html"
 						}
 					}
 				],
@@ -493,7 +513,9 @@
 				"summary": "List facets",
 				"description": "Return a list of facet counts for current search results",
 				"operationId": "custom:article-facets",
-				"tags": ["search"],
+				"tags": [
+					"search"
+				],
 				"responses": {
 					"200": {
 						"description": "Facets returned",
@@ -513,7 +535,9 @@
 				"summary": "List facets",
 				"description": "Return a list of facet counts for current search results",
 				"operationId": "custom:catalog-facets",
-				"tags": ["search"],
+				"tags": [
+					"search"
+				],
 				"responses": {
 					"200": {
 						"description": "Facets returned",
@@ -533,7 +557,9 @@
 				"summary": "List facets",
 				"description": "Return a list of facet counts for current search results",
 				"operationId": "custom:char-facets",
-				"tags": ["search"],
+				"tags": [
+					"search"
+				],
 				"responses": {
 					"200": {
 						"description": "Facets returned",
@@ -553,7 +579,9 @@
 				"summary": "List facets",
 				"description": "Return a list of facet counts for current search results",
 				"operationId": "custom:char-facets",
-				"tags": ["search"],
+				"tags": [
+					"search"
+				],
 				"responses": {
 					"200": {
 						"description": "Facets returned",
@@ -573,7 +601,9 @@
 				"summary": "List facets",
 				"description": "Return a list of facet counts for current search results",
 				"operationId": "custom:place-facets",
-				"tags": ["search"],
+				"tags": [
+					"search"
+				],
 				"responses": {
 					"200": {
 						"description": "Facets returned",
@@ -593,7 +623,9 @@
 				"summary": "List facets",
 				"description": "Return a list of facet counts for current search results",
 				"operationId": "custom:image-facets",
-				"tags": ["search"],
+				"tags": [
+					"search"
+				],
 				"responses": {
 					"200": {
 						"description": "Facets returned",
@@ -613,7 +645,9 @@
 				"summary": "List facets",
 				"description": "Return a list of facet counts for current search results",
 				"operationId": "custom:clinks-facets",
-				"tags": ["search"],
+				"tags": [
+					"search"
+				],
 				"responses": {
 					"200": {
 						"description": "Facets returned",
@@ -633,7 +667,9 @@
 				"summary": "List facets",
 				"description": "Return a list of facet counts for current search results",
 				"operationId": "custom:reign-facets",
-				"tags": ["search"],
+				"tags": [
+					"search"
+				],
 				"responses": {
 					"200": {
 						"description": "Facets returned",
@@ -648,25 +684,25 @@
 				}
 			}
 		},
-        "/api/inscriptions/json": {
-            "get": {
-                "summary": "Get list of inscriptions for site",
-                "operationId": "api:inscription-table",
-                "parameters": [
-                    {
-                        "name": "start",
-                        "in": "query",
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "limit",
-                        "in": "query",
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
+		"/api/inscriptions/json": {
+			"get": {
+				"summary": "Get list of inscriptions for site",
+				"operationId": "api:inscription-table",
+				"parameters": [
+					{
+						"name": "start",
+						"in": "query",
+						"schema": {
+							"type": "integer"
+						}
+					},
+					{
+						"name": "limit",
+						"in": "query",
+						"schema": {
+							"type": "integer"
+						}
+					},
 					{
 						"name": "language",
 						"in": "query",
@@ -681,213 +717,213 @@
 							"type": "string"
 						}
 					}
-                ],
-                "responses": {
-                    "200":{
-                        "description": "List of inscriptions",
-                        "content": {
-                            "application/json":{
-                                "schema": {
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/inscriptions/{site}": {
-            "get": {
-                "summary": "Get list of inscriptions for site",
-                "operationId": "api:inscriptions",
-                "parameters": [
-                    {
-                        "name": "site",
-                        "in": "path",
-                        "required": true,
-                        "schema":{
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200":{
-                        "description": "List of inscriptions",
-                        "content": {
-                            "text/html":{
-                                "schema": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/layout/{id}": {
-            "get": {
-                "summary": "Retrieve a layout view of the text",
-                "operationId": "layout:svg",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema":{
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200":{
-                        "description": "List of inscriptions",
-                        "content": {
-                            "image/svg+xml":{
-                                "schema": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-		"/api/iiif/{id}.manifest": {
-            "get": {
-                "summary": "Retrieve IIIF presentation manifest for inscription",
-                "operationId": "iiif:manifest",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema":{
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200":{
-                        "description": "IIIF manifest",
-                        "content": {
-                            "application/ld+json":{
-                                "schema": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/variants": {
-            "get": {
-                "summary": "Retrieve a layout view of the text",
-                "operationId": "api:variants",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "query",
-                        "required": true,
-                        "schema":{
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200":{
-                        "description": "List of inscriptions",
-                        "content": {
-                            "application/xml":{
-                                "schema": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/characters": {
-            "get": {
-                "summary": "Get list of characters",
-                "operationId": "api:characters",
+				],
+				"responses": {
+					"200": {
+						"description": "List of inscriptions",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/inscriptions/{site}": {
+			"get": {
+				"summary": "Get list of inscriptions for site",
+				"operationId": "api:inscriptions",
 				"parameters": [
 					{
-						"name": "query",
-						"in": "query",
-						"schema":{
+						"name": "site",
+						"in": "path",
+						"required": true,
+						"schema": {
 							"type": "string"
 						}
 					}
 				],
-                "responses": {
-                    "200":{
-                        "description": "List of sites",
-                        "content": {
-                            "text/html":{
-                                "schema": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },	  
-        
-        "/api/characters_thumbnails": {
-            "get": {
-                "summary": "Get list of characters",
-                "operationId": "api:characters_thumbnails",
+				"responses": {
+					"200": {
+						"description": "List of inscriptions",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/layout/{id}": {
+			"get": {
+				"summary": "Retrieve a layout view of the text",
+				"operationId": "layout:svg",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List of inscriptions",
+						"content": {
+							"image/svg+xml": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/iiif/{id}.manifest": {
+			"get": {
+				"summary": "Retrieve IIIF presentation manifest for inscription",
+				"operationId": "iiif:manifest",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "IIIF manifest",
+						"content": {
+							"application/ld+json": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/variants": {
+			"get": {
+				"summary": "Retrieve a layout view of the text",
+				"operationId": "api:variants",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "query",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List of inscriptions",
+						"content": {
+							"application/xml": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/characters": {
+			"get": {
+				"summary": "Get list of characters",
+				"operationId": "api:characters",
 				"parameters": [
 					{
 						"name": "query",
 						"in": "query",
-						"schema":{
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List of sites",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/characters_thumbnails": {
+			"get": {
+				"summary": "Get list of characters",
+				"operationId": "api:characters_thumbnails",
+				"parameters": [
+					{
+						"name": "query",
+						"in": "query",
+						"schema": {
 							"type": "string"
 						},
-						 "description": "Query"
-					}, 
+						"description": "Query"
+					},
 					{
-			        "name": "start",
-			        "in": "query",
-			        "schema": {
-			          "type": "string",
-			          "default": 1
-			        },
-			        "description": "Pagination start offset (1-based)"
-			      },
-			      {
-			        "name": "per-page",
-			        "in": "query",
-			        "schema": {
-			          "type": "string",
-			          "default": 50
-			        },
-			        "description": "Number of results per page"
-			      }
+						"name": "start",
+						"in": "query",
+						"schema": {
+							"type": "string",
+							"default": 1
+						},
+						"description": "Pagination start offset (1-based)"
+					},
+					{
+						"name": "per-page",
+						"in": "query",
+						"schema": {
+							"type": "string",
+							"default": 50
+						},
+						"description": "Number of results per page"
+					}
 				],
-                "responses": {
-                    "200":{
-                        "description": "List of sites",
-                        "content": {
-                            "text/html":{
-                                "schema": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },	
-        
-        "/bibliography-details": {
+				"responses": {
+					"200": {
+						"description": "List of sites",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/bibliography-details": {
 			"get": {
 				"summary": "Retrieve details of a bibliography entry",
 				"description": "Retrieve the HTML representation of a bibliography entry based on its ID.",
-				"tags": ["bibliography"],
+				"tags": [
+					"bibliography"
+				],
 				"operationId": "custom:bibliography-details",
 				"parameters": [
 					{
@@ -924,11 +960,13 @@
 				}
 			}
 		},
-		 "/biblio-test": {
+		"/biblio-test": {
 			"get": {
 				"summary": "For testing the XQL code",
 				"description": "Retrieve the text of a bibliography entry based on its ID.",
-				"tags": ["bibliography"],
+				"tags": [
+					"bibliography"
+				],
 				"operationId": "custom:biblio-test",
 				"parameters": [
 					{
@@ -964,48 +1002,47 @@
 					}
 				}
 			}
-		},	
+		},
 		"/api/persons": {
-		    "get": {
-		        "summary": "Retrieve sorted list of persons",
-		        "description": "Retrieve a sorted and filtered list of persons with optional search and pagination.",
-		        "operationId": "custom:persons",
-		        "parameters": [
-		            {
-		                "name": "search",
-		                "in": "query",
-		                "schema": {
-		                    "type": "string"
-		                },
-		                "description": "Keyword to search for persons."
-		            },
-		            {
-		                "name": "category",
-		                "in": "query",
-		                "schema": {
-		                    "type": "string"
-		                },
-		                "description": "Filter results by initial character of the sorted name."
-		            }
-		        ],
-	        "responses": {
-                "200": {
-                    "description": "List of register entries",
-                    "content": {
-                        "application/json": {
-                            "schema":{
-                                "type": "object"
-                            	}
-                            }
-                        }
-                    }
-                }
-            }
-        },
-			
+			"get": {
+				"summary": "Retrieve sorted list of persons",
+				"description": "Retrieve a sorted and filtered list of persons with optional search and pagination.",
+				"operationId": "custom:persons",
+				"parameters": [
+					{
+						"name": "search",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						},
+						"description": "Keyword to search for persons."
+					},
+					{
+						"name": "category",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						},
+						"description": "Filter results by initial character of the sorted name."
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List of register entries",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/person/{id}": {
 			"get": {
-			    "summary": "Retrieve the HTML template used for displaying a person",
+				"summary": "Retrieve the HTML template used for displaying a person",
 				"description": "Get the HTML template associated with the given document. This is called whenever the users tries to view a document. The actual content of the document will then be loaded by the template.",
 				"operationId": "api:person-info",
 				"x-error-handler": "vapi:handle-error",
@@ -1022,23 +1059,23 @@
 						"allowReserved": true
 					}
 				],
-			"responses": {
-                    "200":{
-                        "description": "Person infomation",
-                        "content": {
-                            "text/html":{
-                                "schema": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },	
-        "/text/{Tnumber}": {
+				"responses": {
+					"200": {
+						"description": "Person infomation",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/text/{Tnumber}": {
 			"get": {
-			    "summary": "Retrieve the HTML template used for displaying a text",
+				"summary": "Retrieve the HTML template used for displaying a text",
 				"description": "Get the HTML template associated with the given document. This is called whenever the users tries to view a document. The actual content of the document will then be loaded by the template.",
 				"operationId": "api:text-details",
 				"x-error-handler": "vapi:handle-error",
@@ -1055,62 +1092,61 @@
 						"allowReserved": true
 					}
 				],
-			"responses": {
-                    "200":{
-                        "description": "Taisho infomation",
-                        "content": {
-                            "text/html":{
-                                "schema": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },	
+				"responses": {
+					"200": {
+						"description": "Taisho infomation",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/api/places": {
-		    "get": {
-		        "summary": "Retrieve sorted list of places",
-		        "description": "Retrieve a sorted and filtered list of places with optional search and pagination.",
-		        "operationId": "custom:places",
-		        "parameters": [
-		            {
-		                "name": "search",
-		                "in": "query",
-		                "schema": {
-		                    "type": "string"
-		                },
-		                "description": "Keyword to search for places."
-		            },
-		            {
-		                "name": "category",
-		                "in": "query",
-		                "schema": {
-		                    "type": "string",
-		                    "default": "all"
-		                },
-		                "description": "Filter results by type of place."
-		            }
-		        ],
-	        "responses": {
-                "200": {
-                    "description": "List of places",
-                    "content": {
-                        "text/html": {
-                            "schema":{
-                                "type": "string"
-                            	}
-                            }
-                        }
-                    }
-                }
-            }
-        },
-
+			"get": {
+				"summary": "Retrieve sorted list of places",
+				"description": "Retrieve a sorted and filtered list of places with optional search and pagination.",
+				"operationId": "custom:places",
+				"parameters": [
+					{
+						"name": "search",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						},
+						"description": "Keyword to search for places."
+					},
+					{
+						"name": "category",
+						"in": "query",
+						"schema": {
+							"type": "string",
+							"default": "all"
+						},
+						"description": "Filter results by type of place."
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List of places",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/place/{id}/name": {
 			"get": {
-			    "summary": "Retrieve the HTML template used for displaying a place",
+				"summary": "Retrieve the HTML template used for displaying a place",
 				"description": "Get the HTML template associated with the given document. This is called whenever the users tries to view a document. The actual content of the document will then be loaded by the template.",
 				"operationId": "api:place-name",
 				"x-error-handler": "vapi:handle-error",
@@ -1127,24 +1163,23 @@
 						"allowReserved": true
 					}
 				],
-			"responses": {
-                    "200":{
-                        "description": "place name",
-                        "content": {
-                            "text/html":{
-                                "schema": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        
-        	"/place/{id}/info": {
+				"responses": {
+					"200": {
+						"description": "place name",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/place/{id}/info": {
 			"get": {
-			    "summary": "Retrieve the HTML template used for displaying a place",
+				"summary": "Retrieve the HTML template used for displaying a place",
 				"description": "Get the HTML template associated with the given document. This is called whenever the users tries to view a document. The actual content of the document will then be loaded by the template.",
 				"operationId": "api:place-info",
 				"x-error-handler": "vapi:handle-error",
@@ -1161,68 +1196,67 @@
 						"allowReserved": true
 					}
 				],
-			"responses": {
-                    "200":{
-                        "description": "place infomation",
-                        "content": {
-                            "text/html":{
-                                "schema": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        
-        "/place/{id}/coordinates": {
-		    "get": {
-		        "summary": "Getting the coordinates of a place",
-		        "description": "This is used for leaflet element",
-		        "operationId": "custom:place-coordinates",
+				"responses": {
+					"200": {
+						"description": "place infomation",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/place/{id}/coordinates": {
+			"get": {
+				"summary": "Getting the coordinates of a place",
+				"description": "This is used for leaflet element",
+				"operationId": "custom:place-coordinates",
 				"x-error-handler": "vapi:handle-error",
 				"parameters": [
-									{
-										"name": "id",
-										"in": "path",
-										"description": "ID of place",
-										"required": true,
-										"schema": {
-											"type": "string",
-											"example": "Jingshiyu"
+					{
+						"name": "id",
+						"in": "path",
+						"description": "ID of place",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"example": "Jingshiyu"
+						},
+						"allowReserved": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Coordinates and label for a single place",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"latitude": {
+											"type": "string"
 										},
-										"allowReserved": true
+										"longitude": {
+											"type": "string"
+										},
+										"label": {
+											"type": "string"
+										}
 									}
-								],
-		        "responses": {
-		            "200": {
-		                "description": "Coordinates and label for a single place",
-		                "content": {
-		                    "application/json": {
-		                        "schema": {
-		                            "type": "object",
-		                            "properties": {
-	                                    "latitude":{
-	                                        "type": "string"
-	                                    },
-	                                    "longitude":{
-	                                        "type": "string"
-	                                    },
-	                                    "label": {
-	                                        "type": "string"
-		                                }
-		                            }
-		                        }
-		                    }
-		                }
-		            }
-		        }
-		    }			
+								}
+							}
+						}
+					}
+				}
+			}
 		},
-		"/reign/{id}/info":  {
+		"/reign/{id}/info": {
 			"get": {
-			    "summary": "Retrieve the HTML template used for displaying a reign",
+				"summary": "Retrieve the HTML template used for displaying a reign",
 				"description": "Get the HTML template associated with the given document. This is called whenever the users tries to view a document. The actual content of the document will then be loaded by the template.",
 				"operationId": "api:reign-info",
 				"x-error-handler": "vapi:handle-error",
@@ -1239,193 +1273,180 @@
 						"allowReserved": true
 					}
 				],
-			"responses": {
-                    "200":{
-                        "description": "reign infomation",
-                        "content": {
-                            "text/html":{
-                                "schema": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-			
-		
+				"responses": {
+					"200": {
+						"description": "reign infomation",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/api/reigns": {
-		    "get": {
-		        "summary": "Retrieve sorted list of reigns",
-		        "description": "Retrieve a sorted and filtered list of places with optional search and pagination.",
-		        "operationId": "custom:reigns",
-		        "parameters": [
-		            {
-		                "name": "search",
-		                "in": "query",
-		                "schema": {
-		                    "type": "string"
-		                },
-		                "description": "Keyword to search for reigns."
-		            },
-		            {
-		                "name": "category",
-		                "in": "query",
-		                "schema": {
-		                    "type": "string",
-		                    "default": "all"
-		                },
-		                "description": "Filter results by type of reign."
-		            }
-		        ],
-	        "responses": {
-                "200": {
-                    "description": "List of reigns",
-                    "content": {
-                        "text/html": {
-                            "schema":{
-                                "type": "string"
-                            	}
-                            }
-                        }
-                    }
-                }
-            }
-        },
-			  
-        "/api/figures": {
-		    "get": {
-		        "summary": "Getting a list of all figures",
-		        "description": "This will make a list of all figures",
-		        "operationId": "custom:tei-figures",
+			"get": {
+				"summary": "Retrieve sorted list of reigns",
+				"description": "Retrieve a sorted and filtered list of places with optional search and pagination.",
+				"operationId": "custom:reigns",
+				"parameters": [
+					{
+						"name": "search",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						},
+						"description": "Keyword to search for reigns."
+					},
+					{
+						"name": "category",
+						"in": "query",
+						"schema": {
+							"type": "string",
+							"default": "all"
+						},
+						"description": "Filter results by type of reign."
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List of reigns",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/figures": {
+			"get": {
+				"summary": "Getting a list of all figures",
+				"description": "This will make a list of all figures",
+				"operationId": "custom:tei-figures",
 				"x-error-handler": "vapi:handle-error",
 				"parameters": [
-									{
-										"name": "search",
-										"in": "query",
-										"description": "",
-										"schema": {
-											"type": "string",
-											"example": ""
-										},
-										"allowReserved": true
-									}
-								],
-    			"responses": {
-                        "200":{
-                            "description": "figures",
-                            "content": {
-                                "text/html":{
-                                    "schema": {
-                                        "type": "string"
-    			                                
-			                            }
-			                        }
-			                    }
-			                }
-			            }
-			        }
-	
-			},
-
-
-        "/api/clinks": {
-		    "get": {
-		        "summary": "Getting a list of all images in c:links",
-		        "description": "This will make a list of all images",
-		        "operationId": "custom:catalog-links",
+					{
+						"name": "search",
+						"in": "query",
+						"description": "",
+						"schema": {
+							"type": "string",
+							"example": ""
+						},
+						"allowReserved": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "figures",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/clinks": {
+			"get": {
+				"summary": "Getting a list of all images in c:links",
+				"description": "This will make a list of all images",
+				"operationId": "custom:catalog-links",
 				"x-error-handler": "vapi:handle-error",
 				"parameters": [
-									{
-										"name": "search",
-										"in": "query",
-										"description": "",
-										"schema": {
-											"type": "string",
-											"example": ""
-										},
-										"allowReserved": true
-									}
-								],
-    			"responses": {
-                        "200":{
-                            "description": "images",
-                            "content": {
-                                "text/html":{
-                                    "schema": {
-                                        "type": "string"
-    			                                
-			                            }
-			                        }
-			                    }
-			                }
-			            }
-			        }
-	
-			},
-
+					{
+						"name": "search",
+						"in": "query",
+						"description": "",
+						"schema": {
+							"type": "string",
+							"example": ""
+						},
+						"allowReserved": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "images",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/api/temples": {
-		    "get": {
-		        "summary": "Retrieve sorted list of places",
-		        "description": "Retrieve a sorted and filtered list of places with optional search and pagination.",
-		        "operationId": "custom:temples",
-		        "parameters": [
-		            {
-		                "name": "search",
-		                "in": "query",
-		                "schema": {
-		                    "type": "string"
-		                },
-		                "description": "Keyword to search for places."
-		            }
-		        ],
-	        "responses": {
-                "200": {
-                    "description": "List of places",
-                    "content": {
-                        "text/html": {
-                            "schema":{
-                                "type": "string"
-                            	}
-                            }
-                        }
-                    }
-                }
-            }
-        },
-
+			"get": {
+				"summary": "Retrieve sorted list of places",
+				"description": "Retrieve a sorted and filtered list of places with optional search and pagination.",
+				"operationId": "custom:temples",
+				"parameters": [
+					{
+						"name": "search",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						},
+						"description": "Keyword to search for places."
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List of places",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/api/sutras": {
-		    "get": {
-		        "summary": "Retrieve sorted list of places",
-		        "description": "Retrieve a sorted and filtered list of places with optional search and pagination.",
-		        "operationId": "custom:sutras",
-		        "parameters": [
-		            {
-		                "name": "search",
-		                "in": "query",
-		                "schema": {
-		                    "type": "string"
-		                },
-		                "description": "Keyword to search for places."
-		            }
-		        ],
-	        "responses": {
-                "200": {
-                    "description": "List of places",
-                    "content": {
-                        "text/html": {
-                            "schema":{
-                                "type": "string"
-                            	}
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        
-        
+			"get": {
+				"summary": "Retrieve sorted list of places",
+				"description": "Retrieve a sorted and filtered list of places with optional search and pagination.",
+				"operationId": "custom:sutras",
+				"parameters": [
+					{
+						"name": "search",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						},
+						"description": "Keyword to search for places."
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List of places",
+						"content": {
+							"text/html": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/api/texts/json": {
 			"get": {
 				"summary": "For the Texts-Table",
@@ -1482,7 +1503,7 @@
 														"type": "string",
 														"description": "Taisho Number"
 													},
-													"sutras_title":{
+													"sutras_title": {
 														"type": "string",
 														"description": "Sutras Title"
 													},
@@ -1505,8 +1526,6 @@
 				}
 			}
 		},
-        
-        
 		"/api/bibliography/json": {
 			"get": {
 				"summary": "Search for Bibliography",
@@ -1582,7 +1601,6 @@
 				}
 			}
 		},
-
 		"/api/character_new": {
 			"get": {
 				"summary": "character-table",
@@ -1631,90 +1649,86 @@
 													"character": {
 														"type": "string",
 														"description": "The character or symbol."
-													  },
-													  "image": {
+													},
+													"image": {
 														"type": "string",
 														"description": "The URL of the image representing the character."
-													  },
-													  "title": {
+													},
+													"title": {
 														"type": "string",
 														"description": "The title of the inscription, combining both Chinese and English titles."
-													  },
-													  "source": {
+													},
+													"source": {
 														"type": "string",
 														"description": "The source or origin of the character."
-													  },
-													  "date": {
+													},
+													"date": {
 														"type": "string",
 														"description": "The date associated with the character, either as a single point or a range."
-													  },
-													  "columnrow": {
+													},
+													"columnrow": {
 														"type": "string",
 														"description": "The column and row of the character."
-													  },
-													  "heightwidth": {
+													},
+													"heightwidth": {
 														"type": "string",
 														"description": "The height and width of the character."
-													  },
-													  "condition": {
+													},
+													"condition": {
 														"type": "string",
 														"description": "The condition of the character."
-													  }
-    												}
-    											}
-    										}
-    									}
-    								}
-    							}
-    						}
-    					}
-    				}
-    			}
-    		}
-    
-        },
-        
-    
-        "/api/impressum/{id}/": {
-    			"get": {
-    			    "summary": "Retrieve the HTML template used for displaying the impressum",
-    				"description": "Get the HTML template associated with the given document. This is called whenever the users tries to view a document. The actual content of the document will then be loaded by the template.",
-    				"operationId": "api:impressum",
-    				"x-error-handler": "vapi:handle-error",
-    				"parameters": [
-    					{
-    						"name": "id",
-    						"in": "path",
-    						"description": "ID of impressum",
-    						"required": true,
-    						"schema": {
-    							"type": "string",
-    							"example": "impressum_Shandong_1"
-    						},
-    						"allowReserved": true
-    					}
-    				],
-    			"responses": {
-                        "200":{
-                            "description": "impressum page",
-                            "content": {
-                                "text/html":{
-                                    "schema": {
-                                        "type": "string"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-        
-    "security": [
-        {
-            "cookieAuth": []
-        },
-        {
-            "basicAuth": []
-        }
-    ]
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/api/impressum/{id}/": {
+		"get": {
+			"summary": "Retrieve the HTML template used for displaying the impressum",
+			"description": "Get the HTML template associated with the given document. This is called whenever the users tries to view a document. The actual content of the document will then be loaded by the template.",
+			"operationId": "api:impressum",
+			"x-error-handler": "vapi:handle-error",
+			"parameters": [
+				{
+					"name": "id",
+					"in": "path",
+					"description": "ID of impressum",
+					"required": true,
+					"schema": {
+						"type": "string",
+						"example": "impressum_Shandong_1"
+					},
+					"allowReserved": true
+				}
+			],
+			"responses": {
+				"200": {
+					"description": "impressum page",
+					"content": {
+						"text/html": {
+							"schema": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"security": [
+		{
+			"cookieAuth": []
+		},
+		{
+			"basicAuth": []
+		}
+	]
 }

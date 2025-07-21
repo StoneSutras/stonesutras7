@@ -313,7 +313,7 @@ declare variable $config:clinks-facets := [
                         case "stone" return "石刻"                        
                         default return $label
         }
-    },    
+    },   
     map {
         "dimension": "province_en",
         "heading": "facets.province",
@@ -369,7 +369,7 @@ declare variable $config:char-facets := [
         "hierarchical": false(),
         "output": function($label, $lang) {
             let $lang := replace($lang, "^([^_]+)_.*$", "$1")
-            return                 
+            return
                 if ($lang = "en") then
                     $label
                 else
@@ -377,20 +377,19 @@ declare variable $config:char-facets := [
                         case "Shandong Province" return "山東省"
                         case "Sichuan Province" return "四川省"
                         case "Shaanxi Province" return "陝西省"
-                        case "Sichuan" return "四川省"
                         default return $label
 
         }
     },
-    map {
-        "dimension": "source",
-        "heading": "facets.source",
+map {
+        "dimension": "site",
+        "heading": "facets.site",
         "hierarchical": false(),
         "output": function($label, $lang) {
             let $lang := replace($lang, "^([^_]+)_.*$", "$1")
+            let $catalog := collection($config:data-catalog)/id($label)[@type=('site', 'cave')]
             return
-                $label
-
+                ($catalog/c:header/c:title[@*:lang=$lang][@type="given"])[1]/string()
         }
     }
 ];

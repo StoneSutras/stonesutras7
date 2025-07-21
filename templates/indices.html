@@ -26,7 +26,7 @@
             border-radius: 8px;
             overflow: hidden;
             justify-content: center;
-            margin: 20px;
+            margin: 0px;
         }
 
         .top-nav {
@@ -279,8 +279,8 @@
                 facets.addEventListener('pb-custom-form-loaded', function (ev) {
                     const elems = ev.detail.querySelectorAll('.facet');
 
-                    elems.forEach(facet =& gt; {
-                        facet.addEventListener('change', () =& gt; {
+                    elems.forEach(facet =&gt; {
+                        facet.addEventListener('change', () =&gt; {
                             if (facet.checked === false) {
                                 if (typeof pbRegistry !== 'undefined') {
                                     if (pbRegistry.state) {
@@ -291,7 +291,7 @@
 
                             const table = facet.closest('table');
                             if (table) {
-                                table.querySelectorAll('.nested .facet').forEach(nested =& gt; {
+                                table.querySelectorAll('.nested .facet').forEach(nested =&gt; {
                                     if (nested !== facet) {
                                         nested.checked = false;
                                     }
@@ -402,8 +402,8 @@
         }
         function loadContent(url, type = null) {
             return fetch(url)
-                .then(response =& gt; response.text())
-            .then(data =& gt; {
+                .then(response =&gt; response.text())
+            .then(data =&gt; {
                 const contentArea = document.getElementById('content-area');
                 contentArea.innerHTML = '';
 
