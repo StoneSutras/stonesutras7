@@ -305,7 +305,13 @@ declare variable $config:clinks-facets := [
         "output": function($label, $lang) {
             let $lang := replace($lang, "^([^_]+)_.*$", "$1")
             return
-                $label
+                if ($lang = "en") then
+                    $label
+                else
+                    switch($label)
+                        case "rubbing" return "拓印"
+                        case "stone" return "石刻"                        
+                        default return $label
         }
     },    
     map {
@@ -363,8 +369,16 @@ declare variable $config:char-facets := [
         "hierarchical": false(),
         "output": function($label, $lang) {
             let $lang := replace($lang, "^([^_]+)_.*$", "$1")
-            return
-                $label
+            return                 
+                if ($lang = "en") then
+                    $label
+                else
+                    switch($label)
+                        case "Shandong Province" return "山東省"
+                        case "Sichuan Province" return "四川省"
+                        case "Shaanxi Province" return "陝西省"
+                        case "Sichuan" return "四川省"
+                        default return $label
 
         }
     },
