@@ -1786,8 +1786,14 @@ declare function api:texts-table($request as map(*)) {
     let $grouped-references :=
         for $ref-map in $processed-references
         group by $t := $ref-map?Tnumber, $s := $ref-map?sutras_title
-        order by xs:decimal(replace($t, '^.*?([0-9.]+).*$', '$1'))
-        return map {
+order by
+    let $extracted-num-str := replace($t, '^.*?([0-9.]+).*$', '$1')
+    return
+        if (matches($extracted-num-str, '^[0-9.]+$')) then
+            xs:decimal($extracted-num-str)
+        else
+            0 
+            return map {
             "Tnumber": $t,
             "sutras_title": $s,
             "inscription": string-join(distinct-values($ref-map?inscription_item), ", ")
