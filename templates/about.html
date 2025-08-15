@@ -20,66 +20,67 @@
 
 
 <style>
-    .main-content {
-        display: flex;
-        min-height: 500px;
-        border-radius: 8px;
-        overflow: hidden;
-        margin: 20px;
-    }
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            min-height: 500px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 0px;
+        }
 
-    .sidebar {
-        width: 180px;
-        background-color: #fff;
-        padding: 20px;
-        border-right: 1px solid #ccc;
-        position: fixed;
-        top: 140px;
-        left: 20px;
-        bottom: 0;
-        overflow-y: auto;
-    }
+        .top-nav {
+            width: 100%;
+            background-color: #fff;
+            padding: 10px 0;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            justify-content: center;
+        }
 
-    .sidebar ul {
-        list-style: none;
-        padding: 0;
-    }
+        .top-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 15px;
+        }
 
-    .sidebar li {
-        margin-bottom: 15px;
-    }
+        .top-nav li {
+            margin-bottom: 0;
+        }
 
-    .sidebar a {
-        display: block;
-        text-decoration: none;
-        color: #333;
-        padding: 10px 15px;
-        border-radius: 5px;
-        transition: background-color 0.3s ease, color 0.3s ease;
-    }
+        .top-nav a {
+            display: block;
+            text-decoration: none;
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
 
-    .sidebar a:hover {
-        background-color: #eee;
-        color: #690404;
-    }
+        .top-nav a:hover {
+            background-color: #eee;
+            color: #690404;
+        }
 
-    .sidebar a.active {
-        background-color: rgba(105, 4, 4, 0.8);
-        color: #ffffff;
-        font-weight: bold;
-    }
+        .top-nav a.active {
+            background-color: rgba(105, 4, 4, 0.8);
+            color: #ffffff;
+            font-weight: bold;
+        }
 
-    .sidebar a.active:hover {
-        background-color: #690404;
-        color: #ffffff;
-    }
+        .top-nav a.active:hover {
+            background-color: #690404;
+            color: #ffffff;
+        }
 
-    #content-area {
-        flex-grow: 1;
-        padding-top: 0px;
-        padding-left: 240px;
-    }
-</style>
+        #content-area {
+            flex-grow: 1;
+            padding-top: 20px;
+            padding-left: 0;
+        }
+    </style>
 
     <script>
         <![CDATA[
@@ -113,24 +114,17 @@
         }
         let appBasePath = ''; // Initialize it, will be set from appConfig
 
-        /**
-         * Loads content into the #content-area and updates the URL.
-         * @param {string} pageName The name of the page (e.g., 'project', 'acknowledgement').
-         * @param {string} relativeContentUrl The RELATIVE URL of the content to load (e.g., 'about-project.html').
-         * @param {boolean} pushState Whether to push a new state to the history. Defaults to true.
-         */
         function loadContent(pageName, relativeContentUrl, pushState = true) {
-            // **核心修改：将相对URL与appBasePath组合成绝对URL进行fetch**
             const fullFetchUrl = `${appBasePath}/${relativeContentUrl}`;
 
-            fetch(fullFetchUrl) // 使用绝对 URL 进行 fetch
+            fetch(fullFetchUrl)
                 .then(response => response.text())
                 .then(data => {
                     const contentArea = document.getElementById('content-area');
                     contentArea.innerHTML = data;
 
-                    const sidebarLinks = document.querySelectorAll('.sidebar ul li a');
-                    sidebarLinks.forEach(sLink => {
+                    const navLinks = document.querySelectorAll('.top-nav ul li a');
+                    navLinks.forEach(sLink => {
                         sLink.classList.remove('active');
                         if (sLink.dataset.page === pageName) {
                             sLink.classList.add('active');
@@ -138,7 +132,6 @@
                     });
 
                     if (pushState) {
-                        // 推送的URL保持一致的 about.html?page= 结构，不受 pb-view 影响
                         const newUrl = `${window.location.origin}${appBasePath}/about.html?page=${pageName}`;
                         history.pushState({ page: pageName, contentUrl: relativeContentUrl }, pageName, newUrl);
                     }
@@ -154,14 +147,12 @@
 
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Extract 'app' variable from the appConfig JSON
             const appConfigScript = document.getElementById('appConfig');
             if (appConfigScript) {
                 try {
                     const config = JSON.parse(appConfigScript.textContent);
                     if (config.app) {
                         appBasePath = config.app;
-                        // Remove trailing slash if present, for consistency
                         if (appBasePath.endsWith('/')) {
                             appBasePath = appBasePath.slice(0, -1);
                         }
@@ -171,39 +162,24 @@
                 }
             }
 
+            const navLinks = document.querySelectorAll('.top-nav ul li a');
 
-            const sidebarLinks = document.querySelectorAll('.sidebar ul li a');
-
-            sidebarLinks.forEach(function(link) {
+            navLinks.forEach(function(link) {
                 link.addEventListener('click', function (event) {
                     event.preventDefault();
-
                     const pageName = this.dataset.page;
                     const contentUrl = this.dataset.contentUrl; 
-
-               
-                    if (pageName) {
-                        if (contentUrl) {
-                           
-                            loadContent(pageName, contentUrl);
-                        }
+                    if (pageName && contentUrl) {
+                        loadContent(pageName, contentUrl);
                     }
                 });
             });
 
-            // Handle browser back/forward buttons
             window.addEventListener('popstate', (event) => {
-              
-                if (event.state) {
-                    if (event.state.page) {
-                        if (event.state.contentUrl) {
-                           
-                            loadContent(event.state.page, event.state.contentUrl, false);
-                        }
-                    }
+                if (event.state && event.state.page && event.state.contentUrl) {
+                    loadContent(event.state.page, event.state.contentUrl, false);
                 } else {
-                    // Default to Project if no specific state
-                    loadContent('project', 'about-project.html', false);
+                    loadContent('introduction', 'about-introduction.html', false);
                 }
             });
 
@@ -211,20 +187,17 @@
             const initialPage = urlParams.get('page');
 
             const pageMap = {
+                'introduction': 'about-introduction.html',
                 'project': 'about-project.html',
                 'acknowledgement': 'about-acknowledgement.html', 
                 'partners': 'about-partners.html',
                 'impressum': 'about-impressum.html'
             };
 
-            if (initialPage) {
-                if (pageMap[initialPage]) {
-                    loadContent(initialPage, pageMap[initialPage], false); 
-                } else {
-                    loadContent('project', 'about-project.html');
-                }
+            if (initialPage && pageMap[initialPage]) {
+                loadContent(initialPage, pageMap[initialPage], false);
             } else {
-                loadContent('project', 'about-project.html');
+                loadContent('introduction', 'about-introduction.html');
             }
         });
 
@@ -273,28 +246,32 @@
                     <app-toolbar data-template="templates:include" data-template-path="templates/menu.html"/>
                     <app-toolbar data-template="templates:include" data-template-path="templates/toolbar.html">
                         <p data-target="breadcrumbs" class="breadcrumbs">
-                            <pb-i18n key="menu.indices">Indices</pb-i18n>
+                            <pb-i18n key="menu.about">About</pb-i18n>
                         </p>
                     </app-toolbar>
                 </app-header>
-                <main class="main-content">
-                    <aside class="sidebar">
-                        <ul>
-                            <li>
-                                <a href="${app}/about.html?page=project" data-page="project" data-content-url="about-project.html">Project</a>
-                            </li>
-                            <li>
-                                <a href="${app}/about.html?page=partners" data-page="partners" data-content-url="about-partners.html">Partners</a>
-                            </li>
-                            <li>
-                                <a href="${app}/about.html?page=acknowledgement" data-page="acknowledgement" data-content-url="about-acknowledgement.html">Acknowledgements</a>
-                            </li>                            
-                            <li>
-                                <a href="${app}/about.html?page=impressum" data-page="impressum" data-content-url="about-impressum.html">Impressum</a>
-                            </li>
-                        </ul>
-                    </aside>
 
+                <nav class="top-nav">
+                    <ul>
+                        <li>
+                            <a href="#" data-page="introduction" data-content-url="about-introduction.html">Introduction</a>
+                        </li>
+                        <li>
+                            <a href="#" data-page="project" data-content-url="about-project.html">Project</a>
+                        </li>
+                        <li>
+                            <a href="#" data-page="partners" data-content-url="about-partners.html">Partners</a>
+                        </li>
+                        <li>
+                            <a href="#" data-page="acknowledgement" data-content-url="about-acknowledgement.html">Acknowledgements</a>
+                        </li>
+                        <li>
+                            <a href="#" data-page="impressum" data-content-url="about-impressum.html">Impressum</a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <main class="main-content">
                     <div id="content-area">
                     </div>
                 </main>
