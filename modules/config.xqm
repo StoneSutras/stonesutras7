@@ -283,7 +283,7 @@ declare variable $config:place-facets := [
 
 declare variable $config:image-facets := [
     map {
-        "dimension": "volume",
+        "dimension": "volume_figures",
         "heading": "facets.volume",
         "max": 20,
         "hierarchical": false(),

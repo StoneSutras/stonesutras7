@@ -544,34 +544,38 @@ declare function api:translate-type($params as map(*)) as xs:string {
       $type
 };
 
-
-
 declare function api:research-articles($request as map(*)) {
-    let $lang := replace($request?parameters?language, "^([^_-]+)[_-].*$", "$1")
-    let $options := query:options(())
-    let $volumes := 
-        collection($config:data-publication)//tei:body[ft:query(., "volume:*", $options)][ancestor::tei:TEI//tei:seriesStmt]
-    let $nil := session:set-attribute($config:session-prefix || ".articles", $volumes)
-    for $volume in $volumes
-    group by $id := $volume/ancestor::tei:TEI//tei:seriesStmt/tei:title[1]/@n
-    order by $id
-    let $seriesStmt := head($volume/ancestor::tei:TEI)/tei:teiHeader//tei:seriesStmt
-    return
-        <div class="volume">
-            <h2>{$seriesStmt/tei:title[@xml:lang=$lang]/string()}</h2>
-            {
-                for $article in $volume
-                let $div := ($article/tei:div[@xml:lang=$lang], $article/tei:div)[1]
-                let $id := $article/parent::tei:text/@xml:id
-                let $head := $pm-config:web-transform($div/tei:head[1], map { "mode": "articles" }, "stonesutras.odd")
-                order by number(root($article)//tei:seriesStmt//tei:biblScope/@n)
-                return
-                    <div class="article">
-                        <a href="articles/{$id}">{$head}</a>
-                        <p>{$div/tei:head[@type="author"]/string()}</p>
-                    </div>
-            }
-        </div>
+  let $lang := replace($request?parameters?language, "^([^_-]+)[_-].*$", "$1")
+  let $options := query:options(())
+  let $query := "volume:*"
+  let $volumes :=
+    collection($config:data-publication)//tei:body[ancestor::tei:TEI//tei:seriesStmt/tei:title[1]/@n][ft:query(., $query, $options)]
+  let $nil := session:set-attribute($config:session-prefix || ".articles", $volumes)
+  for $volume in $volumes
+  group by $id := $volume/ancestor::tei:TEI//tei:seriesStmt/tei:title[1]/@n
+  order by $id
+  let $seriesStmt := head($volume/ancestor::tei:TEI)/tei:teiHeader//tei:seriesStmt
+  return
+    <div class="volume">
+      <h2>{$seriesStmt/tei:title[@xml:lang=$lang]/string()}</h2>
+      {
+        for $article in $volume
+        let $div := ($article/tei:div[@xml:lang=$lang], $article/tei:div)[1]
+        let $id := $article/parent::tei:text/@xml:id
+        let $head := $pm-config:web-transform($div/tei:head[1], map { "mode": "articles" }, "stonesutras.odd")
+        order by number(root($article)//tei:seriesStmt//tei:biblScope/@n)
+        return
+          <div class="article">
+            <a href="{
+                                if (starts-with($id, 'Site_')) then
+                                    concat('sites/', substring-after($id, 'Site_'))
+                                else
+                                    concat('articles/', $id)
+                            }">{$head}</a>
+            <p>{$div/tei:head[@type="author"]/string()}</p>
+          </div>
+      }
+    </div>
 };
 
 declare function api:article-facets($request as map(*)) {
@@ -1451,7 +1455,7 @@ declare function api:tei-figures($request as map(*)) {
 
   let $figures := collection($config:data-publication)//tei:figure[
     ancestor::tei:TEI//tei:seriesStmt and
-    ft:query(., "volume:*", $options) and
+    ft:query(., "volume_figures:*", $options) and
     not(ends-with(lower-case(tei:graphic/@url), '.swf')) and
     not(ends-with(lower-case(tei:graphic/@url), '.svg'))
   ]
@@ -1786,14 +1790,8 @@ declare function api:texts-table($request as map(*)) {
     let $grouped-references :=
         for $ref-map in $processed-references
         group by $t := $ref-map?Tnumber, $s := $ref-map?sutras_title
-order by
-    let $extracted-num-str := replace($t, '^.*?([0-9.]+).*$', '$1')
-    return
-        if (matches($extracted-num-str, '^[0-9.]+$')) then
-            xs:decimal($extracted-num-str)
-        else
-            0 
-            return map {
+        order by xs:decimal(replace($t, '^.*?([0-9.]+).*$', '$1'))
+        return map {
             "Tnumber": $t,
             "sutras_title": $s,
             "inscription": string-join(distinct-values($ref-map?inscription_item), ", ")
