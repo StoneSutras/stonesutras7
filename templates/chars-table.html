@@ -1,20 +1,63 @@
-<main class="characters">
+<html lang="en">
+<head>
     <style>
-    /* Main container of the table */
-    .characters .table-grid {
-        margin: 20px auto; 
-        max-width: 1200px; 
-        box-shadow: none !important;
-        border: none !important; 
-    }
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .content-wrapper {
+            display: flex;
+            flex-grow: 1;
+            margin-left: 10%;
+            margin-right: 0;
+        }
+        .facets-column {
+            flex-shrink: 0;
+            width: 250px;
+            padding: 15px;
+            background-color: #f8f8f8;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-right: 20px;
+            box-sizing: border-box;
+        }
+        .main-content-column {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding-right: 10%;
+            box-sizing: border-box;
+        }
+        .characters .table-grid {
+            margin: 0;
+            max-width: none;
+            box-shadow: none !important;
+            border: none !important;
+        }
     </style>
-    <pb-table-grid class="table-grid" source="api/character_new" css-path="../css/gridjs" resizable="" fixed-header="" search="" subscribe="transcription" emit="transcription" per-page="50">
-        <pb-table-column label="Char" property="character" sort="" width="10%"/>
-        <pb-table-column label="Image" property="image" sort="" width="10%"/>
-        <pb-table-column label="Column/Row" property="columnrow" sort="" width="15%"/>
-        <pb-table-column label="Height/Width" property="heightwidth" sort="" width="15%"/>
-        <pb-table-column label="condition" property="condition" sort="" width="15%"/>
-        <pb-table-column label="Source" property="source" sort="" width="15%"/>
-        <pb-table-column label="Date" property="date" sort="" width="10%"/>
-    </pb-table-grid>
-</main>
+</head>
+<body>
+    <div class="content-wrapper">
+        <div class="facets-column">
+            <pb-custom-form class="facets" url="api/search/char-facets" event="pb-results-received"
+                subscribe="transcription" emit="transcription" />
+        </div>
+        <div class="main-content-column">
+            <main class="characters">
+                <pb-table-grid class="table-grid" source="api/character_new" css-path="../css/gridjs" resizable="" fixed-header="" search="" subscribe="transcription" emit="transcription" per-page="50">
+                    <pb-table-column label="Char" property="character" sort="" width="10%"/>
+                    <pb-table-column label="Image" property="image" sort="" width="10%"/>
+                    <pb-table-column label="Column/Row" property="columnrow" sort="" width="15%"/>
+                    <pb-table-column label="Height/Width" property="heightwidth" sort="" width="15%"/>
+                    <pb-table-column label="condition" property="condition" sort="" width="15%"/>
+                    <pb-table-column label="Source" property="source" sort="" width="15%"/>
+                    <pb-table-column label="Date" property="date" sort="" width="10%"/>
+                </pb-table-grid>
+            </main>
+        </div>
+    </div>
+</body>
+</html>
