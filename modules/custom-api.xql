@@ -1507,7 +1507,6 @@ declare function api:tei-figures($request as map(*)) {
             <a href="{$image-url}" target="_blank"><img src="{$image-url}" alt="Figure" loading="lazy"/></a>
             <template slot="alternate">
               <div class="character-details">
-                <p>See: { $links }</p>
                 {
                   let $head_en := $first-entry/tei:head[2]
                   where string($head_en) ne ""
@@ -1518,6 +1517,7 @@ declare function api:tei-figures($request as map(*)) {
                   where string($head_zh) ne ""
                   return <p>{$head_zh}</p>
                 }
+                <p>See: { $links }</p>
               </div>
             </template>
           </pb-popover>
