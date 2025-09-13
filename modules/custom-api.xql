@@ -1113,10 +1113,11 @@ declare function api:person-links($id as xs:string) as element(div)? {
         else ()
 };
 
-declare function api:get-mentioned-info($id as xs:string) as element(div) {
+declare function api:get-mentioned-info($id as xs:string) as element(div)? {
     let $record := doc($config:data-root || '/biblio/authorities.xml')/Records/Record[ID = $id]
     let $is_mentioned_in_biblio := $record/Mentioned/Is_Mentioned_in_Biblio
     let $is_mentioned_in_articles := $record/Mentioned/Is_Mentioned_in_Articles
+
     let $mods_ids := 
         for $mod_id in $record//*[starts-with(name(), 'MODS_ID')]
         let $mod := collection($config:data-biblio)/*:mods[@ID = $mod_id]
@@ -1172,30 +1173,33 @@ declare function api:get-mentioned-info($id as xs:string) as element(div) {
                 </a>
             </li>
     return
-        <div class="person-mentions">
-            {
-                if ($is_mentioned_in_biblio = 'Y') then
-                    <div>
-                        <h2>Mentioned in Bibliography:</h2>
-                        <ul>
-                            { $mods_ids }
-                        </ul>
-                    </div>
-                else 
-                    ()
-            }
-            {
-                if ($is_mentioned_in_articles = 'Y') then
-                    <div>
-                        <h2>Mentioned in Articles:</h2>
-                        <ul>
-                            { $tei_xml_ids }
-                        </ul>
-                    </div>
-                else 
-                    ()
-            }
-        </div>
+        if ($is_mentioned_in_biblio = 'Y' or $is_mentioned_in_articles = 'Y') then
+            <div class="person-mentions">
+                {
+                    if ($is_mentioned_in_biblio = 'Y') then
+                        <div>
+                            <h2>Mentioned in Bibliography:</h2>
+                            <ul>
+                                { $mods_ids }
+                            </ul>
+                        </div>
+                    else 
+                        ()
+                }
+                {
+                    if ($is_mentioned_in_articles = 'Y') then
+                        <div>
+                            <h2>Mentioned in Articles:</h2>
+                            <ul>
+                                { $tei_xml_ids }
+                            </ul>
+                        </div>
+                    else 
+                        ()
+                }
+            </div>
+        else
+            <div></div>
     };
 
 (:  
