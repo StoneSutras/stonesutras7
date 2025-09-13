@@ -1570,6 +1570,14 @@ declare function api:catalog-links($request as map(*)) {
       starts-with(ancestor::catalog:object/@xml:id/string(), 'TM') or
       starts-with(ancestor::catalog:object/@xml:id/string(), 'NY') or
       starts-with(ancestor::catalog:object/@xml:id/string(), 'XH') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'BSY') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'WLS') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'BL') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'JX') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'WS') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'SG') or
+      starts-with(ancestor::catalog:object/@xml:id/string(), 'Beilin-Diamond') or
+
       ends-with(lower-case(ancestor::catalog:object/@xml:id/string()), 'old')
     )
   ]
@@ -1611,14 +1619,13 @@ declare function api:catalog-links($request as map(*)) {
             <a href="{$image-url}" target="_blank"><img src="{$image-url}" alt="Figure for {$xml-id}" loading="lazy"/></a>
             <template slot="alternate">
               <div class="image-details">
-                <p>DEBUG xlink:href: {$xlink}</p>
-                <p>See: { $anchor }</p>
                 {
                   if (string($caption-en) ne "") then <p>{$caption-en}</p> else ()
                 }
                 {
                   if (string($caption-zh) ne "") then <p>{$caption-zh}</p> else ()
                 }
+                <p>See: { $anchor }</p>
               </div>
             </template>
           </pb-popover>
