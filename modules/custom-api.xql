@@ -303,46 +303,49 @@ declare function api:characters_thumbnails($request as map(*)) {
     let $per-page := if (exists($request?parameters?per-page)) then xs:double($request?parameters?per-page) else 55
     let $options := query:options(())
 
-    let $chars :=
-        try {
-            collection($config:data-catalog)/character/char-entry[ft:query(., $query, $options)]
-        } catch * {
-            error(xs:QName("file-not-found"), "The precomputed character file does not exist.")
-        }
-   let $nil := session:set-attribute($config:session-prefix || ".characters", $chars)
+let $chars :=
+   try {
+      collection($config:data-catalog)/character/char-entry[ft:query(., $query, $options)]
+   } catch * {
+      error(xs:QName("file-not-found"), "The precomputed character file does not exist.")
+   }
+let $nil := session:set-attribute($config:session-prefix || ".characters", $chars)
 
-    let $filtered-characters :=
-        for $char in $chars
-        let $character := fn:string($char/char)
-        let $image := fn:string($char/image)
-        let $source := fn:string($char/source)
-        let $column := fn:string($char/column)
-        let $row := fn:string($char/row)
-        let $height := fn:string($char/height)
-        let $width := fn:string($char/width)
-        let $condition := fn:string($char/condition)
-        let $date := 
-            if ($char/date_point) then
-                fn:string($char/date_point)
-            else if ($char/date_range_lower or $char/date_range_upper) then
-                fn:string($char/date_range_lower) || "–" || fn:string($char/date_range_upper)
-            else
-                ""
-        where normalize-space($image) ne "" and (not($query) or 
-              contains(lower-case($character), lower-case($query)))
-        order by $char/Source_column_row
-        return map {
-            "character": $character,
-            "imageUrl": "https://sutras.adw.uni-heidelberg.de/images/characters/" || $image,
-            "altText": $character,
-            "source": replace($source, '_', ' '),
-            "column": $column,
-            "row": $row,
-            "height": $height,
-            "width": $width,
-            "condition": $condition,
-            "date": $date
-        }
+let $filtered-characters :=
+   for $char in $chars
+   let $character := fn:string($char/char)
+   let $image := fn:string($char/image)
+   let $source := fn:string($char/source)
+   let $column := fn:string($char/column)
+   let $row := fn:string($char/row)
+   let $height := fn:string($char/height)
+   let $width := fn:string($char/width)
+   let $condition := fn:string($char/condition)
+   let $date :=
+      if ($char/date_point) then
+         fn:string($char/date_point)
+      else if ($char/date_range_lower or $char/date_range_upper) then
+         fn:string($char/date_range_lower) || "–" || fn:string($char/date_range_upper)
+      else
+         ""
+   let $image-path := if ($char/province = 'Shaanxi Province') then 'characters_shaanxi' 
+               else if ($char/province = 'Sichuan Province') then 'characters_sichuan'
+               else 'characters'
+   where normalize-space($image) ne "" and (not($query) or
+         contains(lower-case($character), lower-case($query)))
+   order by $char/Source_column_row
+   return map {
+      "character": $character,
+      "imageUrl": "https://sutras.adw.uni-heidelberg.de/images/" || $image-path || "/" || $image,
+      "altText": $character,
+      "source": replace($source, '_', ' '),
+      "column": $column,
+      "row": $row,
+      "height": $height,
+      "width": $width,
+      "condition": $condition,
+      "date": $date
+   }
 
     let $total-characters := count($filtered-characters)
     let $paginated-characters := subsequence($filtered-characters, $start, $per-page) 
@@ -434,30 +437,33 @@ declare function api:characters_new($request as map(*)) {
         let $columnrow := fn:string($char/column) || "/" || fn:string($char/row)
         let $heightwidth := fn:string($char/height) || "/" || fn:string($char/width)
         let $condition := fn:string($char/condition)
-        let $date := 
+        let $date :=
             if ($char/date_point) then
                 fn:string($char/date_point)
             else if ($char/date_range_lower or $char/date_range_upper) then
                 fn:string($char/date_range_lower) || "–" || fn:string($char/date_range_upper)
             else
                 ""
-        where normalize-space($image) ne "" and (not($query) or 
-              contains(lower-case($character), lower-case($query)))
+        let $image-path := if ($char/province = 'Shandong Province') then 'characters'
+                        else if ($char/province = 'Shaanxi Province') then 'characters_shaanxi' 
+                        else 'characters_sichuan'
+        where normalize-space($image) ne "" and (not($query) or
+            contains(lower-case($character), lower-case($query)))
         order by $char/Source_column_row
         return map {
             "character": $character,
-            "image": <a href="https://sutras.adw.uni-heidelberg.de/images/characters/{$image}" target="_blank">
-                        <img src="https://sutras.adw.uni-heidelberg.de/images/characters/{$image}" alt="{$character}" style="width: 100px; height: auto;"/>
-                     </a>,
+            "image": <a href="https://sutras.adw.uni-heidelberg.de/images/{$image-path}/{$image}" target="_blank">
+                        <img src="https://sutras.adw.uni-heidelberg.de/images/{$image-path}/{$image}" alt="{$character}" style="width: 100px; height: auto;"/>
+                    </a>,
             "columnrow": $columnrow,
             "heightwidth": $heightwidth,
             "source": <a href="https://stonesutras.org/inscriptions/{$source}" target="_blank">{$source}</a>,
             "date": $date,
             "condition": $condition
         }
-    
+
     let $sorted-characters := subsequence($filtered-characters, $start, $limit)
-    
+
     return map {
         "count": count($filtered-characters),
         "results": array { $sorted-characters }
@@ -1522,6 +1528,7 @@ declare function api:tei-figures($request as map(*)) {
                   return <p>{$head_zh}</p>
                 }
                 <p>See: { $links }</p>
+
               </div>
             </template>
           </pb-popover>
