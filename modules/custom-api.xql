@@ -366,7 +366,7 @@ let $filtered-characters :=
                         <div class="thumbnail-item">
                             <a href="{$item?imageUrl}" target="_blank">
                                 <pb-popover theme="light">
-                                    <img src="{$item?imageUrl}" alt="{$item?altText}" style="width: 100px; height: 100px;"/>
+                                    <img src="{$item?imageUrl}" alt="{$item?altText}" style="width: 100px; height: 100px;" loading="lazy"/>
                                     <template slot="alternate">
                                         <div class="character-details">
                                             { 

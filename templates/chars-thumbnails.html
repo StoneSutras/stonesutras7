@@ -166,13 +166,13 @@
         </div>
 
         <div class="main-content-column">
-            <pb-search id="search-form" subscribe="search" place-holder="Enter character"
+            <!--<pb-search id="search-form" subscribe="search" place-holder="Enter character"
                 data-template="pages:parse-params" value="${query}" subforms=".options" submit-on-load="submit-on-load">
                 <paper-button slot="searchButton">
                     <pb-i18n key="search.search" />
                 </paper-button>
             </pb-search>
-            <pb-paginate per-page="33" range="10" subscribe="transcription" />
+            <pb-paginate per-page="33" range="10" subscribe="transcription" />-->
             <pb-load url="api/characters_thumbnails" auto="" event="pb-search-resubmit" emit="transcription"
                 subscribe="transcription" />
         </div>

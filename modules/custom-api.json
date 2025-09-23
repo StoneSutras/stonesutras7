@@ -898,7 +898,7 @@
 						"in": "query",
 						"schema": {
 							"type": "string",
-							"default": 50
+							"default": 10974
 						},
 						"description": "Number of results per page"
 					}
