@@ -1,5 +1,5 @@
 <?teipublisher output="web"?>
-<TEI xmlns:pb="http://teipublisher.com/1.0" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:cb="http://www.cbeta.org/ns/1.0" xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:pb="http://teipublisher.com/1.0" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:cb="http://www.cbeta.org/ns/1.0" xml:lang="en">
     <teiHeader>
         <fileDesc>
             <titleStmt>
@@ -39,7 +39,146 @@
     <rendition source="stonesutras.css"/>
 
     <elementSpec ident="abbr" mode="change">
-                    <model behaviour="inline" cssClass="abbr"/>
+                    <model predicate="text() = 'LF, TSL'" behaviour="inline">
+            <pb:template xmlns="" xml:space="preserve"><pb-popover theme="light" position="right">
+    LF, TSL
+  <template slot="alternate">
+              <div>
+               <p>Lai Fei and Tsai Suey-Ling	</p>
+               <p>賴非、蔡穗玲</p>
+              </div>
+            </template>
+</pb-popover></pb:template>
+            <outputRendition xml:space="preserve">
+            null
+            </outputRendition>
+        </model>
+                    <model predicate="text() = 'TS, LL'" behaviour="inline">
+            <pb:template xmlns="" xml:space="preserve"><pb-popover theme="light" position="right">
+    TS, LL
+  <template slot="alternate">
+              <div>
+               <p>Thorsten Schwing and Lothar Ledderose	</p>
+               <p>史英、雷德侯</p>
+              </div>
+            </template>
+</pb-popover></pb:template>
+            <outputRendition xml:space="preserve">
+            null
+            </outputRendition>
+        </model>
+                    <model predicate="text() = 'TS'" behaviour="inline">
+            <pb:template xmlns="" xml:space="preserve"><pb-popover theme="light" position="right">
+    TS
+  <template slot="alternate">
+              <div>
+               <p>Thorsten Schwing</p>
+               <p>史英</p>
+              </div>
+            </template>
+</pb-popover></pb:template>
+            <outputRendition xml:space="preserve">
+            null
+            </outputRendition>
+        </model>
+                    <model predicate="text() = 'CW'" behaviour="inline">
+            <pb:template xmlns="" xml:space="preserve"><pb-popover theme="light" position="right">
+    CW
+  <template slot="alternate">
+              <div>
+               <p>Claudia Wenzel</p>
+               <p>温狄婭</p>
+              </div>
+            </template>
+</pb-popover></pb:template>
+            <outputRendition xml:space="preserve">
+            null
+            </outputRendition>
+        </model>
+                    <model predicate="text() = 'TS, MB'" behaviour="inline">
+            <pb:template xmlns="" xml:space="preserve"><pb-popover theme="light" position="right">
+    TS, MB
+  <template slot="alternate">
+              <div>
+               <p>Thorsten Schwing and Martin Bemmann</p>
+               <p>史英、馬本漢</p>
+              </div>
+            </template>
+</pb-popover></pb:template>
+            <outputRendition xml:space="preserve">
+            null
+            </outputRendition>
+        </model>
+                    <model predicate="text() = 'CW, TSL'" behaviour="inline">
+            <pb:template xmlns="" xml:space="preserve"><pb-popover theme="light" position="right">
+    CW, TSL
+  <template slot="alternate">
+              <div>
+               <p>Claudia Wenzel and Tsai Suey-Ling	</p>
+               <p>温狄婭、蔡穗玲</p>
+              </div>
+            </template>
+</pb-popover></pb:template>
+            <outputRendition xml:space="preserve">
+            null
+            </outputRendition>
+        </model>
+                    <model predicate="text() = 'TSL'" behaviour="inline">
+            <pb:template xmlns="" xml:space="preserve"><pb-popover theme="light" position="right">
+    TSL
+  <template slot="alternate">
+              <div>
+               <p>Tsai Suey-Ling</p>
+               <p>蔡穗玲</p>
+              </div>
+            </template>
+</pb-popover></pb:template>
+            <outputRendition xml:space="preserve">
+            null
+            </outputRendition>
+        </model>
+                    <model predicate="text() = 'MS'" behaviour="inline">
+            <pb:template xmlns="" xml:space="preserve"><pb-popover theme="light" position="right">
+    MS
+  <template slot="alternate">
+              <div>
+               <p>Manuel Sassmann</p>
+               <p>王平國</p>
+              </div>
+            </template>
+</pb-popover></pb:template>
+            <outputRendition xml:space="preserve">
+            null
+            </outputRendition>
+        </model>
+                    <model predicate="text() = 'LL'" behaviour="inline">
+            <pb:template xmlns="" xml:space="preserve"><pb-popover theme="light" position="right">
+    LL
+  <template slot="alternate">
+              <div>
+               <p>Lothar Ledderose</p>
+               <p>雷德侯</p>
+              </div>
+            </template>
+</pb-popover></pb:template>
+            <outputRendition xml:space="preserve">
+            text-align: right;
+            </outputRendition>
+        </model>
+                    <model predicate="text() = 'LF'" behaviour="inline">
+            <pb:template xmlns="" xml:space="preserve"><pb-popover theme="light" position="right">
+    LF
+  <template slot="alternate">
+              <div>
+               <p>Lai Fei</p>
+               <p>賴非</p>
+              </div>
+            </template>
+</pb-popover></pb:template>
+            <outputRendition xml:space="preserve">
+            null
+            </outputRendition>
+        </model>
                 </elementSpec>
     <elementSpec ident="app" mode="add">
                     <model predicate="$parameters?mode='synopsis' and rdg[starts-with(@wit, 'T_')]" behaviour="inline">
@@ -181,6 +320,7 @@
                     <model predicate="$parameters?mode='toc' and parent::body" behaviour="block" cssClass="toc">
             <param name="content" value="./div"/>
             <outputRendition xml:space="preserve">
+            
             position: fixed;
 top: 120px;
 left: 20px;
@@ -190,6 +330,7 @@ height: auto;
 overflow-y: auto;
 padding: 20px;
 flex: none;
+            
             </outputRendition>
         </model>
                     <model predicate="$parameters?mode='toc'" behaviour="block" cssClass="toc">
@@ -382,9 +523,11 @@ flex: none;
                     <model behaviour="inline" useSourceRendition="true">
             <param name="content" value="('/', @n, '/')"/>
             <outputRendition xml:space="preserve">
+            
             color: var(--bss-color-gold);
 padding-left: .5em;
 padding-right: .5em;
+            
             </outputRendition>
         </model>
                 </elementSpec>
@@ -445,8 +588,10 @@ padding-right: .5em;
             
             
             
+            
             margin-left: 1em; 
 font-family: var(--bss-serif-font-family);
+            
             
             
             
@@ -591,6 +736,13 @@ font-family: var(--bss-serif-font-family);
         </model>
                 </elementSpec>
 <elementSpec ident="TEI" mode="change"/>
+            <elementSpec ident="ab" mode="change">
+                    <model behaviour="paragraph">
+            <outputRendition xml:space="preserve">
+            text-align: right;
+            </outputRendition>
+        </model>
+                </elementSpec>
             </schemaSpec>
         </body>
     </text>
