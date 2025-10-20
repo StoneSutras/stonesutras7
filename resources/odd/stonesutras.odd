@@ -39,6 +39,48 @@
     <rendition source="stonesutras.css"/>
 
     <elementSpec ident="abbr" mode="change">
+                    <model predicate="text() = 'ZZ'" behaviour="inline">
+            <pb:template xmlns="" xml:space="preserve"><pb-popover theme="light" position="right">
+    ZZ
+  <template slot="alternate">
+              <div>
+               <p>Zhang Zong</p>
+               <p>張總</p>
+              </div>
+            </template>
+</pb-popover></pb:template>
+            <outputRendition xml:space="preserve">
+            null
+            </outputRendition>
+        </model>
+                    <model predicate="text() = 'KB'" behaviour="inline">
+            <pb:template xmlns="" xml:space="preserve"><pb-popover theme="light" position="right">
+    KB
+  <template slot="alternate">
+              <div>
+               <p>Kong Bei</p>
+               <p>孔蓓</p>
+              </div>
+            </template>
+</pb-popover></pb:template>
+            <outputRendition xml:space="preserve">
+            null
+            </outputRendition>
+        </model>
+                    <model predicate="text() = 'LL, TSL'" behaviour="inline">
+            <pb:template xmlns="" xml:space="preserve"><pb-popover theme="light" position="right">
+    LL, TSL
+  <template slot="alternate">
+              <div>
+               <p>Lothar Ledderose and Tsai Suey-Ling	</p>
+               <p>雷德侯、蔡穗玲</p>
+              </div>
+            </template>
+</pb-popover></pb:template>
+            <outputRendition xml:space="preserve">
+            null
+            </outputRendition>
+        </model>
                     <model predicate="text() = 'LF, TSL'" behaviour="inline">
             <pb:template xmlns="" xml:space="preserve"><pb-popover theme="light" position="right">
     LF, TSL
