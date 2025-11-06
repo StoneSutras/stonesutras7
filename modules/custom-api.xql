@@ -842,10 +842,74 @@ declare function api:bibliography-table($request as map(*)) as map(*)* {
         }
 };
 
+declare function api:get-base-id($id as xs:string) as xs:string {
+    replace($id, "_(enzh|en|zh|ja|enjp|j|2)$", "")
+};
+
+declare function api:get-display-name-from-mad($mad as element(mads:mads)) as xs:string {
+    let $lang := string($mad/mads:authority/@lang)
+    let $transliterationVariants := 
+    (:if authority lang is CJK, usually it will have at least a trasliteration or a lang arribute, therefore we find the first valid variant to display:)
+        if ($mad/mads:variant[(@transliteration or (@lang and not(@lang = 'zh')))]) then
+            let $filteredVariants := 
+                for $v in $mad/mads:variant[(@transliteration or (@lang and not(@lang = 'zh')))]
+                let $variantNameParts := 
+                    for $namePart in $v/mads:name/mads:namePart
+                    where 
+                        (not($namePart/@type) or $namePart/@type != "date") and
+                        string-length(normalize-space(string($namePart))) > 0
+                    return string($namePart)
+                let $variantText := 
+                    if (empty($variantNameParts)) then normalize-space(string($v/mads:name)) 
+                    else string-join($variantNameParts, " ")
+                (:in several cases, the text is not in <namePart> element but in <name> element...:)
+                return 
+                    if (empty($variantText) or normalize-space($variantText) = "") then () else $variantText
+            return 
+                if (empty($filteredVariants)) then () 
+                else subsequence($filteredVariants, 1, 1)
+        else
+            for $namePart in $mad/mads:authority/mads:name/mads:namePart
+            where 
+                (not($namePart/@type) or $namePart/@type != "date") and
+                string-length(normalize-space(string($namePart))) > 0
+            return string($namePart)
+    let $name_to_display := 
+        if ($lang = "zh" or $lang = "ja" or $lang = "ko") then
+            let $additionalNameParts := 
+            (:if language is CJK, then the original name should be shown, which is ($additionalNameParts):)
+                for $namePart in $mad/mads:authority/mads:name/mads:namePart
+                where (not($namePart/@type) or $namePart/@type != "date")  and string-length(string($namePart)) > 0
+                return string($namePart)
+            return 
+                if ((exists($transliterationVariants)) and $transliterationVariants !='') then
+                    concat($transliterationVariants[1], " ", string-join($additionalNameParts, ""))
+                else
+                    concat($mad/mads:authority/string(), " ", string-join($additionalNameParts, " "))
+        else
+            let $authorityNameParts := 
+                for $namePart in $mad/mads:authority/mads:name/mads:namePart
+                where $namePart/@type != "date" and string-length(string($namePart)) > 0
+                return string($namePart)
+            return string-join($authorityNameParts, ", ")     
+    let $dateParts := 
+    (:the date with parenthesis is the last part to add to the name to display:)
+        for $namePart in $mad//mads:namePart
+        where $namePart/@type = "date" and string-length(string($namePart)) > 0
+        return concat("(", string($namePart), ")")
+    let $final_name_with_dates := 
+        if (exists($dateParts)) then
+            concat($name_to_display, " ", string-join($dateParts, " "))
+        else
+            $name_to_display
+    return string($final_name_with_dates)
+};
+
 
 declare function api:persons($request as map(*)) {
     let $search := normalize-space($request?parameters?search)
     let $letterParam := $request?parameters?category
+    (: CHANGED: api:persons-name-to-display deduplicated :)
     let $persons := api:persons-name-to-display($search)
     let $sortedPersons := 
         for $person in $persons
@@ -893,6 +957,7 @@ declare function api:persons($request as map(*)) {
 
 declare function api:persons-name-to-display($search) {
     let $query := string($search)
+    
     let $mads := 
         if ($query and $query != "") then
             collection($config:data-authority)/mads:mads[
@@ -913,172 +978,171 @@ declare function api:persons-name-to-display($search) {
             collection($config:data-authority)/mads:mads[
                 mads:authority[mads:name[@type = "personal"]]
             ] 
-    for $mad in $mads
-    let $lang := string($mad/mads:authority/@lang)
-    let $transliterationVariants := 
-    (:if authority lang is CJK, usually it will have at least a trasliteration or a lang arribute, therefore we find the first valid variant to display:)
-        if ($mad/mads:variant[(@transliteration or (@lang and not(@lang = 'zh')))]) then
-            let $filteredVariants := 
-                for $v in $mad/mads:variant[(@transliteration or (@lang and not(@lang = 'zh')))]
-                let $variantNameParts := 
-                    for $namePart in $v/mads:name/mads:namePart
-                    where 
-                        (not($namePart/@type) or $namePart/@type != "date") and
-                        string-length(normalize-space(string($namePart))) > 0
-                    return string($namePart)
-                let $variantText := 
-                    if (empty($variantNameParts)) then normalize-space(string($v/mads:name)) 
-                    else string-join($variantNameParts, " ")
-                (:in several cases, the text is not in <namePart> element but in <name> element...:)
-                return 
-                    if (empty($variantText) or normalize-space($variantText) = "") then () else $variantText
-            return 
-                if (empty($filteredVariants)) then () 
-                else subsequence($filteredVariants, 1, 1)
-        else
-            for $namePart in $mad/mads:authority/mads:name/mads:namePart
-            where 
-                (not($namePart/@type) or $namePart/@type != "date") and
-                string-length(normalize-space(string($namePart))) > 0
-            return string($namePart)
-    let $name_to_display := 
-        if ($lang = "zh" or $lang = "ja" or $lang = "ko") then
-            let $additionalNameParts := 
-            (:if language is CJK, then the original name should be shown, which is ($additionalNameParts):)
-                for $namePart in $mad/mads:authority/mads:name/mads:namePart
-                where (not($namePart/@type) or $namePart/@type != "date")  and string-length(string($namePart)) > 0
-                return string($namePart)
-            return 
-                if ((exists($transliterationVariants)) and $transliterationVariants !='') then
-                    concat($transliterationVariants[1], " ", string-join($additionalNameParts, ""))
-                else
-                    concat($mad/authority/string(), " ", string-join($additionalNameParts, " "))
-        else
-            let $authorityNameParts := 
-                for $namePart in $mad/mads:authority/mads:name/mads:namePart
-                where $namePart/@type != "date" and string-length(string($namePart)) > 0
-                return string($namePart)
-            return string-join($authorityNameParts, ", ")      
-    let $dateParts := 
-    (:the date with parenthesis is the last part to add to the name to display:)
-        for $namePart in $mad//mads:namePart
-        where $namePart/@type = "date" and string-length(string($namePart)) > 0
-        return concat("(", string($namePart), ")")
-    let $final_name_with_dates := 
-        if (exists($dateParts)) then
-            concat($name_to_display, " ", string-join($dateParts, " "))
-        else
-            $name_to_display
+    
+    for $madGroup in $mads
+    let $baseId := api:get-base-id(string($madGroup/@ID))
+    group by $baseId
+    
+    (: $madGroup 现在是一个序列，包含所有共享相同 $baseId 的 mads 记录 :)
+    
+
+    let $suffixRegex := "_(enzh|en|zh|ja|enjp|j|2)$"
+    let $baseRecord := $madGroup[not(matches(string(@ID), $suffixRegex))][1]
+    
+    let $chosenMad := 
+        if (exists($baseRecord)) then $baseRecord
+        else $madGroup[1]
+    
+    let $name_to_display := api:get-display-name-from-mad($chosenMad)
+
     return 
         map {
-            "id": string($mad/@ID),
-            "name_to_display": string($final_name_with_dates)
+            "id": $baseId,
+            "name_to_display": $name_to_display
         }
 };
 
-declare function api:person-info($request as map(*)) {
-    let $id := $request?parameters?id
-    let $mads := collection($config:data-authority)/mads:mads[@ID = $id]
-    let $authority := $mads/mads:authority
-    
-    let $nameParts := 
-        for $namePart in $authority/mads:name/mads:namePart
-        where (not($namePart/@type) or $namePart/@type != "date")  and string-length(string($namePart)) > 0
-        return normalize-space(string($namePart))
-    
-    let $name := 
-        if (exists($nameParts)) then
-            if (matches($nameParts[1], "^[a-zA-Z]")) then
-            string-join($nameParts, ", ")
-            else
-            string-join($nameParts, "")
-        else
-            string-join($authority//mads:namePart[not(@type) or @type != 'date'], " ")
-    
-    let $lang := $authority/@lang
-    let $name_lang := 
-        if ($lang = "en") then "English"
-        else if ($lang = "zh") then "Chinese"
-        else if ($lang = "ja") then "Japanese"
-        else if ($lang = "ko") then "Korean"
-        else if ($lang = "de") then "German"
-        else if ($lang = "ru") then "Russian"
-        else if ($lang = "fr") then "French"
-        else "Others"
 
-    let $variants :=
-        for $variant in collection($config:data-authority)/mads:mads[@ID = $id]/mads:variant
-        let $variantNameParts := 
-            for $namePart in $variant/mads:name/mads:namePart
-            where (not($namePart/@type) or $namePart/@type != "date") and string-length(normalize-space(string($namePart))) > 0
-            return normalize-space(string($namePart))
-        let $variantText := 
-            if (empty($variantNameParts)) then
-                normalize-space(string($variant))
-            else if (matches($variantNameParts[1], "^[a-zA-Z]")) then
-                string-join($variantNameParts, ", ")
-            else
-                string-join($variantNameParts, "")
-        where string-length($variantText) > 0
-        return $variantText
+declare function api:person-info($request as map(*)) {
+    let $baseId := $request?parameters?id
+    let $allMads := collection($config:data-authority)/mads:mads[
+        api:get-base-id(string(@ID)) = $baseId
+    ]
     
-    let $dates := 
-        for $date in $mads//mads:namePart[@type = "date"]
-        where string-length(normalize-space(string($date))) > 0
-        return normalize-space(string($date))
-    
-    return 
-        <div>
-            <div class="person-head">
-                <h1>{$name}</h1>
-                <p>(Language: {$name_lang})</p>
-            </div>
-            <div class="person-details">
-                
-                {
-                    if (exists($variants)) then
-                        <div class="person-variants">
-                            <h2>Other Names:</h2>
-                            <ul>
-                                {for $v in $variants return <li>{$v}</li>}
-                            </ul>
-                        </div>
-                    else ()
-                }
-                {
-                    if (exists($dates)) then
-                            <div class="person-date">
-                                <h2>Date:</h2>
-                                <p>{string-join($dates, ", ")}</p>
-                            </div>
-                    else ()
-                }
-                
-                { api:person-links($id) } 
-                { api:get-mentioned-info($id) }
-            </div>
-        </div>
+    return
+    if (not(exists($allMads))) then 
+            <div>Person not found (ID: {$baseId}).</div>
+        else
+            let $suffixRegex := "_(enzh|en|zh|ja|enjp|j|2)$"
+            let $baseRecord := $allMads[not(matches(string(@ID), $suffixRegex))][1]
+            let $chosenMad := 
+                if (exists($baseRecord)) then $baseRecord
+                else $allMads[1]
+            
+            let $authority := $chosenMad/mads:authority
+            let $nameParts := 
+                for $namePart in $authority/mads:name/mads:namePart
+                where (not($namePart/@type) or $namePart/@type != "date")  and string-length(string($namePart)) > 0
+                return normalize-space(string($namePart))
+            
+            let $name := 
+                if (exists($nameParts)) then
+                    if (matches($nameParts[1], "^[a-zA-Z]")) then
+                    string-join($nameParts, ", ")
+                    else
+                    string-join($nameParts, "")
+                else
+                    string-join($authority//mads:namePart[not(@type) or @type != 'date'], " ")
+            
+            let $lang := $authority/@lang
+            let $name_lang := 
+                if ($lang = "en") then "English"
+                else if ($lang = "zh") then "Chinese"
+                else if ($lang = "ja") then "Japanese"
+                else if ($lang = "ko") then "Korean"
+                else if ($lang = "de") then "German"
+                else if ($lang = "ru") then "Russian"
+                else if ($lang = "fr") then "French"
+                else "Others"
+        
+            let $variants :=
+                distinct-values(
+                    for $variant in $allMads/mads:variant
+                    let $variantNameParts := 
+                        for $namePart in $variant/mads:name/mads:namePart
+                        where (not($namePart/@type) or $namePart/@type != "date") and string-length(normalize-space(string($namePart))) > 0
+                        return normalize-space(string($namePart))
+                    let $variantText := 
+                        if (empty($variantNameParts)) then
+                            normalize-space(string($variant))
+                        else if (matches($variantNameParts[1], "^[a-zA-Z]")) then
+                            string-join($variantNameParts, ", ")
+                        else
+                            string-join($variantNameParts, "")
+                    where string-length($variantText) > 0
+                    return $variantText
+                )
+            
+            let $dates := 
+                distinct-values(
+                    for $date in $allMads//mads:namePart[@type = "date"]
+                    where string-length(normalize-space(string($date))) > 0
+                    return normalize-space(string($date))
+                )
+            
+            return 
+                <div>
+                    <div class="person-head">
+                        <h1>{$name}</h1>
+                        <p>(Language: {$name_lang})</p>
+                    </div>
+                    <div class="person-details">
+                        
+                        {
+                            if (exists($variants)) then
+                                <div class="person-variants">
+                                    <h2>Other Names:</h2>
+                                    <ul>
+                                        {for $v in $variants return <li>{$v}</li>}
+                                    </ul>
+                                </div>
+                            else ()
+                        }
+                        {
+                            if (exists($dates)) then
+                                    <div class="person-date">
+                                        <h2>Date:</h2>
+                                        <p>{string-join($dates, ", ")}</p>
+                                    </div>
+                            else ()
+                        }
+                        
+                        { api:person-links($baseId) } 
+                        { api:get-mentioned-info($baseId) }
+                    </div>
+                </div>
 };
 
 declare function api:person-links($id as xs:string) as element(div)? {
-    let $record := doc($config:data-root || '/biblio/authorities.xml')/Records/Record[ID = $id]
+    let $baseId := $id
     
-    let $viaf_id := $record/VIAF_ID
-    let $viaf_link := $record/VIAF_Link
-    let $cbdb_id := $record/CBDB_ID
-    let $cbdb_link := $record/CBDB_link
-    let $ddbc_id := $record/DDBC_id
-    let $ddbc_link := $record/DDBC_link
-    let $wiki_links := 
-        for $lang in ('en', 'zh', 'ja', 'fr', 'de', 'ko')
-        let $link := $record/*[name() = concat('Wikipedia_Link_', $lang)]
-        where string-length($link) > 0
-        return <a href="{$link}" target="_blank">{$lang} 　</a>
+    let $records := doc($config:data-root || '/biblio/authorities.xml')/Records/Record[
+        api:get-base-id(string(ID)) = $baseId
+    ]
     
+  
+    let $viaf_links := 
+        for $r in $records
+        where string-length($r/VIAF_ID) > 0
+        group by $vid := string($r/VIAF_ID)
+        let $link := $r[1]/VIAF_Link 
+        return <p>VIAF: <a href="{$link}" target="_blank">{$vid}</a></p>
+    
+    let $cbdb_links := 
+        for $r in $records
+        where string-length($r/CBDB_ID) > 0
+        group by $cid := string($r/CBDB_ID)
+        let $link := $r[1]/CBDB_link
+        return <p>CBDB: <a href="{$link}" target="_blank">{$cid}</a></p>
+     
+    let $ddbc_links := 
+        for $r in $records
+        where string-length($r/DDBC_id) > 0
+        group by $did := string($r/DDBC_id)
+        let $link := $r[1]/DDBC_link
+        return <p>DDBC: <a href="{$link}" target="_blank">{$did}</a></p>
+
+let $wiki_links := 
+    for $lang in ('en', 'zh', 'ja', 'fr', 'de', 'ko')
+    
+    let $link_element := $records/*[name() = concat('Wikipedia_Link_', $lang)][string-length(.) > 0][1]
+    
+    where exists($link_element)
+    return <a href="{$link_element}" target="_blank">{$lang} 　</a>
     let $has_links := 
-        string-length($viaf_id) > 0 or
-        string-length($cbdb_id) > 0 or
-        string-length($ddbc_id) > 0 or
+        count($viaf_links) > 0 or
+        count($cbdb_links) > 0 or
+        count($ddbc_links) > 0 or
         count($wiki_links) > 0
     
     return 
@@ -1086,27 +1150,9 @@ declare function api:person-links($id as xs:string) as element(div)? {
             <div class="person-links">
             <h2>Links:</h2>
                 <div>
-                    <div>
-                    {
-                        if (string-length($viaf_id) > 0) then
-                            <p>VIAF: <a href="{$viaf_link}" target="_blank">{$viaf_id}</a></p>
-                        else ()
-                    }
-                    </div>
-                    <div>
-                    {
-                        if (string-length($cbdb_id) > 0) then
-                            <p>CBDB: <a href="{$cbdb_link}" target="_blank">{$cbdb_id}</a></p>
-                        else ()
-                    }
-                    </div>
-                    <div>
-                    {
-                        if (string-length($ddbc_id) > 0) then
-                            <p>DDBC: <a href="{$ddbc_link}" target="_blank">{$ddbc_id}</a></p>
-                        else ()
-                    }
-                    </div>
+                    <div>{ $viaf_links }</div>
+                    <div>{ $cbdb_links }</div>
+                    <div>{ $ddbc_links }</div>
                     <div>
                     {
                         if (count($wiki_links) > 0) then
@@ -1119,13 +1165,18 @@ declare function api:person-links($id as xs:string) as element(div)? {
         else ()
 };
 
+
 declare function api:get-mentioned-info($id as xs:string) as element(div)? {
-    let $record := doc($config:data-root || '/biblio/authorities.xml')/Records/Record[ID = $id]
-    let $is_mentioned_in_biblio := $record/Mentioned/Is_Mentioned_in_Biblio
-    let $is_mentioned_in_articles := $record/Mentioned/Is_Mentioned_in_Articles
+    let $baseId := $id
+        let $records := doc($config:data-root || '/biblio/authorities.xml')/Records/Record[
+        api:get-base-id(string(ID)) = $baseId
+    ]
+    
+    let $is_mentioned_in_biblio := if (exists($records/Mentioned/Is_Mentioned_in_Biblio[. = 'Y'])) then 'Y' else 'N'
+    let $is_mentioned_in_articles := if (exists($records/Mentioned/Is_Mentioned_in_Articles[. = 'Y'])) then 'Y' else 'N'
 
     let $mods_ids := 
-        for $mod_id in $record//*[starts-with(name(), 'MODS_ID')]
+        for $mod_id in distinct-values($records//*[starts-with(name(), 'MODS_ID')])
         let $mod := collection($config:data-biblio)/*:mods[@ID = $mod_id]
         return 
             <li>
@@ -1139,8 +1190,9 @@ declare function api:get-mentioned-info($id as xs:string) as element(div)? {
                 }
                 </a>
             </li>
+    
     let $tei_xml_ids :=
-        for $tei_xml_id in $record//*[starts-with(name(), 'TEI_XML_ID')]
+        for $tei_xml_id in distinct-values($records//*[starts-with(name(), 'TEI_XML_ID')])
         let $is_site := starts-with($tei_xml_id, 'Site_') or starts-with($tei_xml_id, 'Stele_')
 
         let $title_en := 
@@ -1188,7 +1240,7 @@ declare function api:get-mentioned-info($id as xs:string) as element(div)? {
                             <ul>
                                 { $mods_ids }
                             </ul>
-                        </div>
+                     </div>
                     else 
                         ()
                 }
@@ -1196,7 +1248,7 @@ declare function api:get-mentioned-info($id as xs:string) as element(div)? {
                     if ($is_mentioned_in_articles = 'Y') then
                         <div>
                             <h2>Mentioned in Articles:</h2>
-                            <ul>
+                          <ul>
                                 { $tei_xml_ids }
                             </ul>
                         </div>
