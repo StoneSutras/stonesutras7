@@ -303,54 +303,53 @@ declare function api:characters_thumbnails($request as map(*)) {
     let $per-page := if (exists($request?parameters?per-page)) then xs:double($request?parameters?per-page) else 55
     let $options := query:options(())
 
-let $chars :=
-   try {
-      collection($config:data-catalog)/character/char-entry[ft:query(., $query, $options)]
-   } catch * {
-      error(xs:QName("file-not-found"), "The precomputed character file does not exist.")
-   }
-let $nil := session:set-attribute($config:session-prefix || ".characters", $chars)
+    let $query := if ($query = "") then "*" else $query
+    let $base-query :=
+    
+        try {
+            collection($config:data-catalog)/character/char-entry
+                [ft:query(., $query, $options)]
+                [normalize-space(image) ne ""]
+        } catch * {
+            error(xs:QName("file-not-found"), "The precomputed character file does not exist.")
+        }
+    
+    let $total-characters := count($base-query)
 
-let $filtered-characters :=
-   for $char in $chars
-   let $character := fn:string($char/char)
-   let $image := fn:string($char/image)
-   let $source := fn:string($char/source)
-   let $column := fn:string($char/column)
-   let $row := fn:string($char/row)
-   let $height := fn:string($char/height)
-   let $width := fn:string($char/width)
-   let $condition := fn:string($char/condition)
-   let $date :=
-      if ($char/date_point) then
-         fn:string($char/date_point)
-      else if ($char/date_range_lower or $char/date_range_upper) then
-         fn:string($char/date_range_lower) || "–" || fn:string($char/date_range_upper)
-      else
-         ""
-   let $image-path := if ($char/province = 'Shaanxi Province') then 'characters_shaanxi' 
-               else if ($char/province = 'Sichuan Province') then 'characters_sichuan'
-               else 'characters'
-   where normalize-space($image) ne "" and (not($query) or
-         contains(lower-case($character), lower-case($query)))
-   order by $char/Source_column_row
-   return map {
-      "character": $character,
-      "imageUrl": "https://sutras.adw.uni-heidelberg.de/images/" || $image-path || "/" || $image,
-      "altText": $character,
-      "source": replace($source, '_', ' '),
-      "column": $column,
-      "row": $row,
-      "height": $height,
-      "width": $width,
-      "condition": $condition,
-      "date": $date
-   }
+    let $paginated-characters := 
+        subsequence(
+            for $char in $base-query
+            order by $char/Source_column_row
+            return 
+                let $image := fn:string($char/image)
+                let $province := fn:string($char/province)
+                let $image-path := 
+                    if ($province = 'Shaanxi Province') then 'characters_shaanxi' 
+                    else if ($province = 'Sichuan Province') then 'characters_sichuan'
+                    else 'characters'
+                return map {
+                    "character": fn:string($char/char),
+                    "imageUrl": "https://sutras.adw.uni-heidelberg.de/images/" || $image-path || "/" || $image,
+                    "altText": fn:string($char/char),
+                    "source": replace(fn:string($char/source), '_', ' '),
+                    "column": fn:string($char/column),
+                    "row": fn:string($char/row),
+                    "height": fn:string($char/height),
+                    "width": fn:string($char/width),
+                    "condition": fn:string($char/condition),
+                    "date": if ($char/date_point) then
+                                fn:string($char/date_point)
+                            else if ($char/date_range_lower or $char/date_range_upper) then
+                                fn:string($char/date_range_lower) || "–" || fn:string($char/date_range_upper)
+                            else
+                                ""
+                },
+            $start,
+            $per-page
+        )
 
-    let $total-characters := count($filtered-characters)
-    let $paginated-characters := subsequence($filtered-characters, $start, $per-page) 
+    let $nil := session:set-attribute($config:session-prefix || ".characters", $base-query)
 
-    (: Set HTTP headers for pagination consistency with sapi:search :)
     let $set-headers := (
         response:set-header("pb-total", xs:string($total-characters)),
         response:set-header("pb-start", xs:string($start))
@@ -359,7 +358,7 @@ let $filtered-characters :=
     return
         <div id="thumbnails-container">
         {
-            for $item at $p in $paginated-characters  
+            for $item in $paginated-characters
             return
                 <paper-card class="character-card">
                     <div class="matches">
@@ -369,7 +368,7 @@ let $filtered-characters :=
                                     <img src="{$item?imageUrl}" alt="{$item?altText}" style="width: 100px; height: 100px;" loading="lazy"/>
                                     <template slot="alternate">
                                         <div class="character-details">
-                                            { 
+                                            {
                                                 if (normalize-space($item?source) ne "") then
                                                     <p><strong>Source: </strong> <a href="https://stonesutras.org/inscriptions/{$item?source}" target="_blank">{$item?source}</a>
                                                     </p>
@@ -407,7 +406,6 @@ let $filtered-characters :=
                                     else () 
                                 }
                             </p>
-                            
                         </div>
                     </div>
                 </paper-card>

@@ -162,19 +162,18 @@
     <div class="content-wrapper">
         <div class="facets-column">
             <pb-custom-form class="facets" url="api/search/char-facets" event="pb-results-received"
-                subscribe="transcription" emit="transcription" />
+            subscribe="results" emit="search"/>
         </div>
-
+        
         <div class="main-content-column">
-            <!--<pb-search id="search-form" subscribe="search" place-holder="Enter character"
-                data-template="pages:parse-params" value="${query}" subforms=".options" submit-on-load="submit-on-load">
+            <pb-search id="search-form" subscribe="search" place-holder="Enter character"
+            data-template="pages:parse-params" value="${query}" subforms=".facets" submit-on-load="submit-on-load">
                 <paper-button slot="searchButton">
                     <pb-i18n key="search.search" />
                 </paper-button>
             </pb-search>
-            <pb-paginate per-page="33" range="10" subscribe="transcription" />-->
-            <pb-load url="api/characters_thumbnails" auto="" event="pb-search-resubmit" emit="transcription"
-                subscribe="transcription" />
+            <pb-paginate per-page="50" range="10" subscribe="results"></pb-paginate>
+            <pb-load url="api/characters_thumbnails" auto="auto" emit="results" />
         </div>
     </div>
 </body>
