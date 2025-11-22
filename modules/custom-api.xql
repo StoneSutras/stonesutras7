@@ -367,31 +367,31 @@ declare function api:characters_thumbnails($request as map(*)) {
                                 <pb-popover theme="light">
                                     <img src="{$item?imageUrl}" alt="{$item?altText}" style="width: 100px; height: 100px;" loading="lazy"/>
                                     <template slot="alternate">
-                                        <div class="character-details">
-                                            {
-                                                if (normalize-space($item?source) ne "") then
-                                                    <p><strong>Source: </strong> <a href="https://stonesutras.org/inscriptions/{$item?source}" target="_blank">{$item?source}</a>
-                                                    </p>
-                                                else ()
-                                            }
-                                            {
-                                                if (normalize-space($item?date) ne "") then
-                                                    <p><strong>Date: </strong> {$item?date}</p>
-                                                else ()
-                                            }
-                                            {
-                                                if (normalize-space($item?column) ne "" and normalize-space($item?row) ne "") then
-                                                    <p><strong>Column/Row: </strong> {$item?column}/{$item?row}</p>
-                                                else ()
-                                            }
+                                        <div class="character-details">                                            
                                             {
                                                 if (normalize-space($item?height) ne "" and normalize-space($item?width) ne "") then
                                                     <p><strong>Height/Width: </strong> {$item?height}/{$item?width}</p>
                                                 else ()
                                             }
                                             {
+                                                if (normalize-space($item?source) ne "") then
+                                                    <p><strong>Source: </strong> <a href="https://stonesutras.org/inscriptions/{$item?source}" target="_blank">{$item?source}</a>
+                                                    </p>
+                                                else ()
+                                            }                                            
+                                            {
+                                                if (normalize-space($item?column) ne "" and normalize-space($item?row) ne "") then
+                                                    <p><strong>Column/Row: </strong> {$item?column}/{$item?row}</p>
+                                                else ()
+                                            }
+                                            {
                                                 if (normalize-space($item?condition) ne "") then
                                                     <p><strong>Condition: </strong> {$item?condition}</p>
+                                                else ()
+                                            }
+                                            {
+                                                if (normalize-space($item?date) ne "") then
+                                                    <p><strong>Date: </strong> {$item?date}</p>
                                                 else ()
                                             }
                                         </div> 
