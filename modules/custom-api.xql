@@ -378,15 +378,15 @@ declare function api:characters_thumbnails($request as map(*)) {
                                                     <p><strong>Source: </strong> <a href="https://stonesutras.org/inscriptions/{$item?source}" target="_blank">{$item?source}</a>
                                                     </p>
                                                 else ()
-                                            }                                            
-                                            {
-                                                if (normalize-space($item?column) ne "" and normalize-space($item?row) ne "") then
-                                                    <p><strong>Column/Row: </strong> {$item?column}/{$item?row}</p>
-                                                else ()
-                                            }
+                                            } 
                                             {
                                                 if (normalize-space($item?condition) ne "") then
                                                     <p><strong>Condition: </strong> {$item?condition}</p>
+                                                else ()
+                                            }
+                                                                                        {
+                                                if (normalize-space($item?column) ne "" and normalize-space($item?row) ne "") then
+                                                    <p><strong>Column/Row: </strong> {$item?column}/{$item?row}</p>
                                                 else ()
                                             }
                                             {
