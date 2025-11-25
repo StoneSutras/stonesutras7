@@ -510,7 +510,7 @@ flex: none;
             <param name="level" value="count(ancestor::div)"/>
             <param name="content" value="text()"/>
             <param name="foreign" value="foreign"/>
-            <pb:template xmlns="" xml:space="preserve"><span>[[content]]　[[foreign]]</span></pb:template>
+            <pb:template xmlns="" xml:space="preserve"><span>[[content]]</span></pb:template>
             <outputRendition xml:space="preserve">
             color: #a69933;
             </outputRendition>
