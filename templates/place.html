@@ -43,7 +43,8 @@
 
     #map {
         height: 600px;
-        flex: 1; 
+        flex: 1;
+        display: none;
     }
 </style>
 </head>
@@ -77,22 +78,53 @@
                 pbEvents.subscribe('pb-page-ready', null, function () {
                     const endpoint = document.querySelector("pb-page").getEndpoint();
                     const placeId = new URLSearchParams(window.location.search).get('id');
+                    const mapElement = document.getElementById('map'); 
+                    let shouldShowMap = false; 
+
+                    if (!placeId || !mapElement) {
+                        return;
+                    }
+
                     const url = `${endpoint}/place/${placeId}/coordinates`;
 
                     console.log(`Fetching coordinates from: ${url}`);
 
                     fetch(url)
                         .then(function (response) {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
                             return response.json();
                         })
                         .then(function (json) {
                             console.log("Fetched coordinates:", json);
-                            pbEvents.emit("pb-update-map", "map", [json]);
+
+                          
+                            if (json) {
+                                if (Array.isArray(json)) {
+                                    if (json.length > 0) {
+                                        shouldShowMap = true;
+                                    }
+                                } else {
+                                    shouldShowMap = true;
+                                }
+                            }
+                            
+                            if (shouldShowMap) {
+                                mapElement.style.display = 'block'; 
+                                pbEvents.emit("pb-update-map", "map", [json]);
+                            } else {
+                                console.log("No valid coordinates received, hiding map.");
+                                mapElement.style.display = 'none';
+                            }
+                        })
+                        .catch(function (error) {
+                            console.error("Error fetching coordinates:", error);
+                            mapElement.style.display = 'none';
                         });
                 });
             });
         </script>
-
 
 
 
