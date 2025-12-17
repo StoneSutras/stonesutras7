@@ -358,6 +358,28 @@ declare variable $config:reign-facets := [
             return
                 $display-label
         }
+    },
+    map {
+        "dimension": "mentioned_in_inscriptions",
+        "heading": "facets.mentioned_in_inscriptions",
+        "hierarchical": false(),
+        "output": function($label, $lang) {
+            let $lang := replace($lang, "^([^_]+)_.*$", "$1")
+            let $catalog := collection($config:data-catalog)/id($label)[@type=('site', 'cave')]
+            return
+                ($catalog/c:header/c:title[@*:lang=$lang][@type="given"])[1]/string()
+        }
+    },
+    map {
+        "dimension": "mentioned_in_articles",
+        "heading": "facets.mentioned_in_articles",
+        "hierarchical": false(),
+        "output": function($label, $lang) {
+            let $lang := replace($lang, "^([^_]+)_.*$", "$1")
+            let $catalog := collection($config:data-catalog)/id($label)[@type=('site', 'cave')]
+            return
+                ($catalog/c:header/c:title[@*:lang=$lang][@type="given"])[1]/string()
+        }
     }
 ];
 
@@ -381,7 +403,7 @@ declare variable $config:char-facets := [
 
         }
     },
-map {
+    map {
         "dimension": "site",
         "heading": "facets.site",
         "hierarchical": false(),
