@@ -543,6 +543,8 @@ declare function api:translate-type($params as map(*)) as xs:string {
         case "Park" return "公園"
         case "Pool" return "水池"
         case "Canyon" return "峽谷"
+        case "Continent" return "大洲"
+        case "Heaven (Mythological)" return "天（神話）"
         default return ""
     else
       $type
@@ -1289,9 +1291,8 @@ declare function api:place-info($request as map(*)) {
     let $id := $request?parameters?id
     let $places := collection($config:data-biblio)/places
     let $place := $places/place[@id = $id] 
-    let $sources := $place/*[starts-with(name(), 'source')] ! string()
+    let $source-ids := tokenize($place/mentioned_in_TEI, ',\s*')
     let $wiki-link := $place/Wikipedia_link/string()
-    
     let $name_zh := string($place/name_zh)
     let $name_en := string($place/name_en)
     let $type := string($place/@type)
@@ -1304,35 +1305,52 @@ declare function api:place-info($request as map(*)) {
         else
             $name_en
             
-        return 
-            <div class="place-details">
-                <div class="place-head">
-                    <h1>{$name}</h1>
-                    <p>(Type: {$type})</p>
-                </div>
-
-                <div class="place-data">                
-                    <h2>Mentioned in:</h2>
-                    <ul>
-                    {
-                        for $source in $sources
-                        let $doc := doc(concat($config:data-publication, '/', $source))
-                        let $title := ($doc//tei:title)[1]
-                        let $label := if (exists($title)) then string($title) else "title unavailable"
-                        return <li><a href="Publication/{$source}" target="_blank">{$label}</a></li>
-                    }
-                    </ul>                
-                </div>
-                
-                {
-                  if ($wiki-link) then
-                    <div class="wiki-link">
-                      <h2>Authority Links:</h2>
-                      <p><a href="{$wiki-link}" target="_blank">Wikipedia</a></p>
-                    </div>
-                  else ()
-                }
+    return 
+        <div class="place-details">
+            <div class="place-head">
+                <h1>{$name}</h1>
+                <p>(Type: {$type})</p>
             </div>
+
+            <div class="place-data">                
+                <h2>Mentioned in:</h2>
+                <ul>
+                {
+                    for $tei-id in $source-ids
+                    where $tei-id != ""
+                    
+                    let $is_site := starts-with($tei-id, 'Site_') or starts-with($tei-id, 'Stele_')
+                    
+                    let $href := 
+                        if ($is_site) then
+                            concat("sites/", substring-after($tei-id, '_'))
+                        else 
+                            concat("articles/", $tei-id)
+                    
+                    let $tei-doc := collection($config:data-publication)//tei:text[@xml:id = $tei-id]
+                    
+                    let $title := 
+                        if ($is_site) then
+                            $tei-doc/tei:body/tei:div[@xml:lang="en"]/tei:head[1]
+                        else
+                            $tei-doc/tei:body/tei:div[@xml:lang="en"]/tei:head[@type="subtitle"][1]
+          
+                    let $label := if (exists($title)) then string($title) else concat("ID: ", $tei-id)
+                    
+                    return <li><a href="{$href}" target="_blank">{$label}</a></li>
+                }
+                </ul>                
+            </div>
+            
+            {
+              if ($wiki-link) then
+                <div class="wiki-link">
+                  <h2>Authority Links:</h2>
+                  <p><a href="{$wiki-link}" target="_blank">Wikipedia</a></p>
+                </div>
+              else ()
+            }
+        </div>
 };
 
 

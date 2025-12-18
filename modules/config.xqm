@@ -276,7 +276,21 @@ declare variable $config:place-facets := [
                         case "Park" return "公園"
                         case "Pool" return "水池"
                         case "Canyon" return "峽谷"
+                        case "Continent" return "大洲"
+                        case "Heaven (Mythological)" return "天（神話）"
                         default return $label
+        }
+    },
+    map {
+        "dimension": "mentioned_in_TEI",
+        "heading": "mentioned in articles",
+        "max": 50,
+        "hierarchical": false(),
+        "output": function($label, $lang) {
+            let $lang := replace($lang, "^([^_]+)_.*$", "$1")
+            let $display-label := replace($label, "^\d{2}_", "")
+            return
+                $display-label
         }
     }
 ];
@@ -356,31 +370,43 @@ declare variable $config:reign-facets := [
             let $lang := replace($lang, "^([^_]+)_.*$", "$1")
             let $display-label := replace($label, "^\d{2}_", "")
             return
+                if ($lang = "en") then
+                    $display-label
+                else
+                    switch($display-label)
+                        case "Han Dynasty" return "漢代"
+                        case "Wei, Jin, Southern and Northern Dynasties" return "魏晉南北朝"
+                        case "Tang Dynasty" return "唐代"
+                        case "5 Dynasties and 10 States" return "五代十國"
+                        case "Song Dynasty to Qing Dynasty" return "宋元明清"
+                        default return $display-label
+        }
+    },
+    map {
+        "dimension": "mentioned_in_catalog",
+        "heading": "mentioned in Inscriptions",
+        "max": 50,
+        "hierarchical": false(),
+        "output": function($label, $lang) {
+            let $lang := replace($lang, "^([^_]+)_.*$", "$1")
+            let $display-label := replace($label, "^\d{2}_", "")
+            return
                 $display-label
         }
     },
     map {
-        "dimension": "mentioned_in_inscriptions",
-        "heading": "facets.mentioned_in_inscriptions",
+        "dimension": "mentioned_in_TEI",
+        "heading": "mentioned in articles",
+        "max": 50,
         "hierarchical": false(),
         "output": function($label, $lang) {
             let $lang := replace($lang, "^([^_]+)_.*$", "$1")
-            let $catalog := collection($config:data-catalog)/id($label)[@type=('site', 'cave')]
+            let $display-label := replace($label, "^\d{2}_", "")
             return
-                ($catalog/c:header/c:title[@*:lang=$lang][@type="given"])[1]/string()
-        }
-    },
-    map {
-        "dimension": "mentioned_in_articles",
-        "heading": "facets.mentioned_in_articles",
-        "hierarchical": false(),
-        "output": function($label, $lang) {
-            let $lang := replace($lang, "^([^_]+)_.*$", "$1")
-            let $catalog := collection($config:data-catalog)/id($label)[@type=('site', 'cave')]
-            return
-                ($catalog/c:header/c:title[@*:lang=$lang][@type="given"])[1]/string()
+                $display-label
         }
     }
+    
 ];
 
 declare variable $config:char-facets := [
@@ -403,7 +429,7 @@ declare variable $config:char-facets := [
 
         }
     },
-    map {
+map {
         "dimension": "site",
         "heading": "facets.site",
         "hierarchical": false(),

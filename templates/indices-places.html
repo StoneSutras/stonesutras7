@@ -1,368 +1,227 @@
 <html>
 <head>
     <style>
-/* 全局样式和基础设置 - 沿用第一个设计的理念 */
-body {
-    line-height: 1.6;
-    color: #333;
-    background-color: #f0f2f5; /* 整体背景色，更柔和 */
-    margin: 0;
-    box-sizing: border-box;
-}
+        body {
+            line-height: 1.6;
+            color: #333;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-/* 主内容区域 - 沿用第一个设计的理念 */
-#content-area {
-    width: 100%;
-    max-width: 1200px; /* 限制最大宽度，提升阅读体验 */
-    margin: 0 auto;
-    display: block;
-    box-sizing: border-box;
-}
+        #content-area {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: block;
+            box-sizing: border-box;
+        }
 
-main {
-    display: flex;
-    flex-wrap: wrap; /* 允许在小屏幕上换行 */
-    justify-content: center; /* 居中对齐主要内容区域 */
-    align-items: flex-start;
-    gap: 30px; /* 增加主要区域之间的间距 */
-}
+        main {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 30px;
+            padding: 0 20px 20px 20px;
+        }
 
-.facets {
-    min-width:160px;
-}
+        .facets {
+            min-width: 160px;
+            margin-right: 20px;
+        }
 
-/* 地点列表容器 - 对应 reignInfoContainer 的布局角色 */
-#placeListLoader {
-    flex: 1; /* 让这个容器占据剩余空间 */
-    min-width: 360px; /* 最小宽度 */
-    max-width: 500px; /* 限制最大宽度 */
-    box-sizing: border-box;
-    overflow-y: auto;
-    max-height: calc(100vh - 40px); /* 视口高度减去body padding，保持滚动 */
-    margin-left: 20px; 
-}
+        #placeListLoader {
+            flex: 1;
+            min-width: 360px;
+            max-width: 500px;
+            box-sizing: border-box;
+            max-height: none;
+            overflow-y: visible;
+        }
 
-/* 地点信息容器 - 对应 reignInfoContainer 的布局角色 */
-#place-info-container {
-    flex: 2; /* 让这个容器占据更多空间 */
-    min-width: 300px; /* 最小宽度 */
-    max-width: 800px; /* 限制最大宽度 */
-    background-color: #ffffff; /* 白色背景 */
-    border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); /* 更明显的阴影 */
-    padding: 30px;
-    box-sizing: border-box;
-    margin: 0; /* 移除原来的margin，由main的gap控制 */
-}
+        #place-info-container {
+            flex: 2;
+            min-width: 300px;
+            max-width: 800px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            padding: 10px 30px 30px 30px;
+            box-sizing: border-box;
+            margin-top: 0;
+        }
 
-/* 统一加载器内的内容样式 */
-#infoLoader {
-    padding-top: 0;
-}
+        #infoLoader {
+            padding-top: 0;
+        }
 
-/* 地点详情卡片样式 - 对应 reign-details */
-.place-details {
-    background-color: transparent; /* 容器背景色已由 #place-info-container 提供 */
-    border-radius: 0; /* 容器已提供圆角 */
-    padding: 0; /* 内部内容不再需要额外的padding，由容器提供 */
-    box-shadow: none; /* 容器已提供阴影 */
-    margin-bottom: 0; /* 由容器控制间距 */
-    border: none; /* 移除内部边框 */
-    overflow: visible; /* 允许内容溢出，例如链接的hover效果 */
-}
+        .place-details {
+            background-color: transparent;
+            padding: 0;
+            margin-bottom: 0;
+            border: none;
+        }
 
-/* 主标题 (place name) - 对应 reign-head h1 */
-.place-head h1 {
-    font-family: 'Playfair Display', serif; /* 更具设计感的字体 */
-    color: #2c3e50; /* 深色文字 */
-    font-size: 2.8em; /* 更大 */
-    margin-top: 0;
-    margin-bottom: 8px;
-    text-align: left;
-    position: relative;
-    padding-bottom: 15px; /* 增加下划线空间 */
-    letter-spacing: -0.02em; /* 字间距微调 */
-}
+        .place-head h1 {
+            font-family: 'Playfair Display', serif;
+            color: #2c3e50;
+            font-size: 2.8em;
+            margin-top: 0;
+            margin-bottom: 8px;
+            text-align: left;
+            position: relative;
+            padding-bottom: 10px;
+        }
 
-/* 主标题下划线 - 对应 reign-head h1::after */
-.place-head h1::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 80px; /* 更短、更精致的下划线 */
-    height: 4px; /* 粗一点 */
-    background-color: #5a5a5a;
-    border-radius: 2px;
-    transition: width 0.3s ease; /* 添加过渡效果 */
-}
+        .place-head h1::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 80px;
+            height: 4px;
+            background-color: #5a5a5a;
+            border-radius: 2px;
+        }
 
-.place-head h1:hover::after {
-    width: 120px; /* 鼠标悬停时加长 */
-}
+        .place-head p {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
 
-/* Place Type - 对应 reign-head p */
-.place-head p {
-    color: #7f8c8d; /* 柔和的灰色 */
-    font-size: 0.9em;
-    margin-left: 10px; /* 增加与标题的距离 */
-    font-weight: 500;
-    margin-top: 0;
-    margin-bottom: 25px; /* 增加下边距 */
-    text-align: left;
-    font-style: normal; /* 保持一致，移除斜体 */
-}
+        .place-data h2 {
+            color: #2c3e50;
+            font-size: 1.5em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #e0e0e0;
+        }
 
-/* 次级标题 - 对应 reign-data h2 */
-.place-data h2 {
-    color: #2c3e50;
-    font-size: 1.8em; /* 适当放大 */
-    margin-top: 40px; /* 更多空间 */
-    margin-bottom: 5px;
-    padding-bottom: 5px;
-    text-align: left;
-    border-bottom: 1px solid #e0e0e0; /* 更细的下划线 */
-    position: relative;
-}
+        .place-data ul {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 15px;
+        }
 
-/* 列表样式 */
-.place-data ul {
-    list-style: none; /* 移除默认的项目符号 */
-    padding-left: 0; /* 移除默认内边距 */
-    margin-bottom: 20px;
-    border-bottom: none; /* 移除原来的底部边框 */
-}
+        .place-data a,
+        .wiki-link a,
+        [class*="wiki"] a {
+            display: inline-block;
+            color: #007bff !important;
+            padding: 2px 0;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
 
-.place-data li {
-    margin-bottom: 12px; /* 增加行间距 */
-}
+        .place-data a:hover,
+        .wiki-link a:hover,
+        [class*="wiki"] a:hover {
+            color: #0056b3 !important;
+            transform: translateX(5px);
+        }
 
-/* 链接样式 - 对应 reign-data a */
-.place-data a {
-    display: inline-block;
-    color: #3498db; /* 更鲜明的蓝色链接 */
-    padding: 5px 0;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 1.05em;
-    transition: color 0.3s ease, transform 0.2s ease, background-color 0.3s ease;
-    position: relative;
-    padding-right: 15px; /* 为箭头留出空间 */
-}
+        .place-category {
+            font-family: 'Inter', sans-serif;
+            border-radius: 12px;
+            background-color: #ffffff;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            padding: 15px 25px 25px 25px;
+            margin-bottom: 25px;
+            width: 100%;
+            box-sizing: border-box;
+        }
 
-/* 链接悬停效果 - 对应 reign-data a:hover */
-.place-data a:hover {
-    color: #2980b9;
-    transform: translateX(5px); /* 更明显的偏移 */
-}
+        .place-category h2 {
+            color: #2c3e50;
+            font-size: 1.4em;
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 8px;
+            position: relative;
+        }
 
-/* 链接下划线效果 - 对应 reign-data a::after */
-.place-data a::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px; /* 粗一点 */
-    bottom: 0;
-    left: 0;
-    background-color: #3498db;
-    transition: width 0.3s ease;
-}
+        .place-item-link {
+            display: inline-block;
+            color: #555;
+            padding: 8px 15px;
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
 
-.place-data a:hover::after {
-    width: calc(100% - 15px); /* 悬停时展开，减去箭头部分宽度 */
-}
+        .place-item-link:hover {
+            color: #007bff;
+            background-color: #eef6ff;
+            transform: translateY(-2px);
+        }
 
-/* 链接右侧箭头 - 对应 reign-data a::before */
-.place-data a::before {
-    content: '→'; /* 添加箭头 */
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 0.9em;
-    opacity: 0;
-    transition: opacity 0.3s ease, right 0.3s ease;
-}
+        pb-leaflet-map {
+            width: 100%;
+            height: 400px;
+            border-radius: 12px;
+            margin-top: 25px;
+        }
 
-.place-data a:hover::before {
-    opacity: 1;
-    right: 5px; /* 箭头向右移动 */
-}
+        @media (max-width: 992px) {
+            main {
+                padding: 10px;
+            }
 
-/* 所有地点列表容器 - 对应 all-reigns */
-.all-places {
-    display: block; /* 保持块级，但由父flex控制布局 */
-    width: 100%; /* 占据父容器宽度 */
-    margin: 0; /* 移除原有的边距，由父容器的gap控制 */
-}
-
-/* 地点分类卡片 - 对应 dynasty-category */
-.place-category {
-    font-family: 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    border-radius: 12px;
-    background-color: #ffffff; /* 白色背景 */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-    padding: 25px;
-    margin-bottom: 25px; /* 增加卡片间距 */
-    border: none; /* 移除边框 */
-    width: 100%; /* 占据父容器全部宽度 */
-    box-sizing: border-box;
-    overflow: hidden;
-}
-
-.place-category h2 {
-    color: #2c3e50;
-    font-size: 1.4em; /* 适当放大 */
-    font-weight: 700;
-    margin-top: 0;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #e0e0e0;
-    padding-bottom: 12px;
-    position: relative;
-    text-align: left; /* 左对齐 */
-}
-
-/* 地点分类标题下划线 - 对应 dynasty-category h2::after */
-.place-category h2::after {
-    content: '';
-    position: absolute;
-    left: 0; /* 左对齐 */
-    bottom: -2px;
-    width: 60px; /* 更短、更精致的下划线 */
-    height: 3px;
-    background-color: #5a5a5a;
-    border-radius: 2px;
-    transform: none; /* 移除translateX */
-}
-
-/* 地点列表容器 - 对应 reign */
-.place {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px; /* 减小间距，使更多元素在一行 */
-    padding-top: 15px;
-}
-
-/* 地点链接项 - 对应 reign-item-link */
-.place-item-link {
-    display: inline-block;
-    color: #555;
-    padding: 9px 18px; /* 增加内边距 */
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 1em;
-    transition: color 0.3s ease, background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-    border-radius: 6px; /* 更圆润的边角 */
-    position: relative;
-}
-
-/* 地点链接悬停效果 - 对应 reign-item-link:hover */
-.place-item-link:hover {
-    color: #2c3e50;
-    background-color: #DCDCDC; /* 悬停时更深一点的背景 */
-    transform: translateY(-2px); /* 更明显的上浮 */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 悬停时阴影更明显 */
-}
-
-/* 地图组件样式 - 沿用并调整 */
-pb-leaflet-map {
-    width: 100%; /* 使地图填充容器宽度 */
-    height: 400px; /* 设置固定高度 */
-    border-radius: 12px; /* 与卡片统一的圆角 */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); /* 与卡片统一的阴影 */
-    overflow: hidden;
-    border: none; /* 移除边框，由阴影和背景色突出 */
-    margin-top: 30px; /* 增加与上方内容的间距 */
-}
-
-#map {
-    width: 100%;
-}
-
-
-/* 媒体查询 - 响应式设计 */
-@media (max-width: 992px) {
-    main {
-        flex-direction: column; /* 小屏幕堆叠 */
-        align-items: center; /* 居中对齐 */
-    }
-
-    #place-info-container,
-    #placeListLoader {
-        width: 100%;
-        max-width: 600px; /* 调整最大宽度 */
-        margin-bottom: 25px; /* 堆叠时增加底部间距 */
-    }
-
-    #place-info-container {
-        padding: 25px;
-    }
-
-    .place-category {
-        padding: 25px;
-    }
-
-    .place-head h1 {
-        font-size: 2.2em;
-    }
-
-    .place-data h2 {
-        font-size: 1.6em;
-    }
-}
-
-@media (max-width: 576px) {
-    body {
-        padding: 15px;
-    }
-
-    #content-area {
-        padding: 0 10px;
-    }
-
-    #place-info-container,
-    #placeListLoader {
-        max-width: 100%; /* 更小屏幕下全宽 */
-        padding: 20px;
-    }
-
-    .place-head h1 {
-        font-size: 1.8em;
-    }
-
-    .place-head p {
-        font-size: 0.75em;
-    }
-
-    .place-data h2 {
-        font-size: 1.4em;
-    }
-
-    .place-item-link {
-        padding: 7px 12px;
-        font-size: 0.95em;
-    }
-}
-</style>
+            #place-info-container,
+            #placeListLoader {
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+    </style>
 </head>
+
 <body class="place">
     <main class="places-content">
-        <pb-custom-form class="facets" url="api/search/place-facets" event="pb-results-received" subscribe="transcription" emit="places"/>
-        <pb-load id="placeListLoader" url="api/places" auto="" event="pb-search-resubmit" use-language="" subscribe="places" emit="transcription"/>
+        <pb-custom-form class="facets" url="api/search/place-facets" event="pb-results-received"
+            subscribe="transcription" emit="places" />
+        <pb-load id="placeListLoader" url="api/places" auto="" event="pb-search-resubmit" use-language=""
+            subscribe="places" emit="transcription" />
 
         <div id="place-info-container">
-            <pb-load id="infoLoader" url="" expand="" auto="">Please click on a specific location to view detailed information, including external links and map coordinates.</pb-load>
-             <pb-leaflet-map id="map" subscribe="map" zoom="14" crs="EPSG3857" fit-markers="" cluster="">
-                        <pb-map-layer base="" show="" label="Mapbox OSM" url="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoid29sZmdhbmdtbSIsImEiOiJjam1kMjVpMnUwNm9wM3JwMzdsNGhhcnZ0In0.v65crewF-dkNsPF3o1Q4uw" attribution="© &lt;a href=&#34;https://www.mapbox.com/about/maps/&#34;&gt;Mapbox&lt;/a&gt; © &lt;a href=&#34;http://www.openstreetmap.org/copyright&#34;&gt;OpenStreetMap&lt;/a&gt; &lt;strong&gt;&lt;a href=&#34;https://www.mapbox.com/map-feedback/&#34; target=&#34;_blank&#34;&gt;Improve this map&lt;/a&gt;&lt;/strong&gt;" max-zoom="18" zoom="13" tile-size="512"/>
-                        <pb-map-layer base="" label="ESRI World Imagery" url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" attribution="© Esri - © Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"/>
-                        <pb-map-layer base="" label="OpenStreetMap" url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="©&lt;a href=&#34;https://www.openstreetmap.org/copyright&#34;&gt;OpenStreetMap&lt;/a&gt; contributors"/>
-                        <pb-map-layer label="Southern and Northern Dynasties" url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=ad0497-png-{z}-{x}-{y}" attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space"/>
-                        <pb-map-layer label="Sui Dynasty" url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=ad0612-png-{z}-{x}-{y}" attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space"/>
-                        <pb-map-layer label="Tang Dynasty" url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=ad0741-png-{z}-{x}-{y}" attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space"/>
-                        <pb-map-layer label="Tang Admin" url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=Tang_Admin-png-{z}-{x}-{y}" attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space"/>
-                        <pb-map-layer label="Tang Traffic" url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=Tang_TrafficRoute-png-{z}-{x}-{y}" attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space"/>
-                    </pb-leaflet-map>
-            
+            <pb-load id="infoLoader" url="" expand="" auto="">Please click on a specific location to view detailed
+                information, including external links and map coordinates.</pb-load>
+            <pb-leaflet-map id="map" subscribe="map" zoom="14" crs="EPSG3857" fit-markers="" cluster="">
+                <pb-map-layer base="" show="" label="Mapbox OSM"
+                    url="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoid29sZmdhbmdtbSIsImEiOiJjam1kMjVpMnUwNm9wM3JwMzdsNGhhcnZ0In0.v65crewF-dkNsPF3o1Q4uw"
+                    attribution="© &lt;a href=&#34;https://www.mapbox.com/about/maps/&#34;&gt;Mapbox&lt;/a&gt; © &lt;a href=&#34;http://www.openstreetmap.org/copyright&#34;&gt;OpenStreetMap&lt;/a&gt; &lt;strong&gt;&lt;a href=&#34;https://www.mapbox.com/map-feedback/&#34; target=&#34;_blank&#34;&gt;Improve this map&lt;/a&gt;&lt;/strong&gt;"
+                    max-zoom="18" zoom="13" tile-size="512" />
+                <pb-map-layer base="" label="ESRI World Imagery"
+                    url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                    attribution="© Esri - © Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community" />
+                <pb-map-layer base="" label="OpenStreetMap" url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution="©&lt;a href=&#34;https://www.openstreetmap.org/copyright&#34;&gt;OpenStreetMap&lt;/a&gt; contributors" />
+                <pb-map-layer label="Southern and Northern Dynasties"
+                    url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=ad0497-png-{z}-{x}-{y}"
+                    attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space" />
+                <pb-map-layer label="Sui Dynasty"
+                    url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=ad0612-png-{z}-{x}-{y}"
+                    attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space" />
+                <pb-map-layer label="Tang Dynasty"
+                    url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=ad0741-png-{z}-{x}-{y}"
+                    attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space" />
+                <pb-map-layer label="Tang Admin"
+                    url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=Tang_Admin-png-{z}-{x}-{y}"
+                    attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space" />
+                <pb-map-layer label="Tang Traffic"
+                    url="https://gis.sinica.edu.tw/ccts/file-exists.php?img=Tang_TrafficRoute-png-{z}-{x}-{y}"
+                    attribution="Map tiles © Academia Sinica - Chinese Civilization in Time and Space" />
+            </pb-leaflet-map>
+
         </div>
     </main>
 </body>
