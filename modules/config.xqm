@@ -288,9 +288,12 @@ declare variable $config:place-facets := [
         "hierarchical": false(),
         "output": function($label, $lang) {
             let $lang := replace($lang, "^([^_]+)_.*$", "$1")
-            let $display-label := replace($label, "^\d{2}_", "")
+            let $articles := collection($config:data-publication)
+            let $head := $articles/tei:TEI/tei:text[@xml:id=$label]/tei:body/tei:div[@xml:lang=$lang]/tei:head[1]
             return
-                $display-label
+                if (exists($head)) 
+                then $head/string() 
+                else concat("Error: Cannot find head for ", $label, " in ", $lang)
         }
     }
 ];
@@ -384,14 +387,17 @@ declare variable $config:reign-facets := [
     },
     map {
         "dimension": "mentioned_in_catalog",
-        "heading": "mentioned in Inscriptions",
+        "heading": "mentioned in inscriptions",
         "max": 50,
         "hierarchical": false(),
         "output": function($label, $lang) {
             let $lang := replace($lang, "^([^_]+)_.*$", "$1")
-            let $display-label := replace($label, "^\d{2}_", "")
+            let $catalogs := collection($config:data-catalog)/id($label)
+            let $head := $catalogs/c:header/c:title[@lang=$lang]
             return
-                $display-label
+                if (exists($head)) 
+                then $head/string() 
+                else concat("Error: Cannot find head for ", $label, " in ", $lang)
         }
     },
     map {
@@ -401,9 +407,12 @@ declare variable $config:reign-facets := [
         "hierarchical": false(),
         "output": function($label, $lang) {
             let $lang := replace($lang, "^([^_]+)_.*$", "$1")
-            let $display-label := replace($label, "^\d{2}_", "")
+            let $articles := collection($config:data-publication)
+            let $head := $articles/tei:TEI/tei:text[@xml:id=$label]/tei:body/tei:div[@xml:lang=$lang]/tei:head[1]
             return
-                $display-label
+                if (exists($head)) 
+                then $head/string() 
+                else concat("Error: Cannot find head for ", $label, " in ", $lang)
         }
     }
     
